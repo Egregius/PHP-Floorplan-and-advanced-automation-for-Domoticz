@@ -15,26 +15,112 @@ window.addEventListener('error', (e) => {
 window.addEventListener('unhandledrejection', (e) => {
     log('PROMISE REJECT '+ e.reason);
 });
-function getElem(id){
-    let vid=id
-    if (!(vid in deviceElems)){
-        deviceElems[vid]=document.getElementById(vid) || null
+let updateQueue = new Map();
+let rafScheduled = false;
+function getElem(id) {
+    if (!(id in deviceElems)) {
+        deviceElems[id] = document.getElementById(id) || null;
     }
-    return deviceElems[vid]
+    return deviceElems[id];
 }
-let rafQueue=[]
-let rafScheduled=false
-function schedule(fn){
-    rafQueue.push(fn)
-    if (!rafScheduled){
-        rafScheduled=true
-        requestAnimationFrame(()=>{
-            for (const f of rafQueue) f()
-            rafQueue=[]
-            rafScheduled=false
-        });
+function getUpdateEntry(id) {
+    if (!updateQueue.has(id)) {
+        updateQueue.set(id, { styles: {}, attrs: {}, classes: {} });
+    }
+    return updateQueue.get(id);
+}
+function requestTick() {
+    if (!rafScheduled) {
+        rafScheduled = true;
+        requestAnimationFrame(processQueue);
     }
 }
+function processQueue() {
+    updateQueue.forEach((u, id) => {
+        const el = getElem(id);
+        if (!el) return;
+        if (u.text !== undefined) el.textContent = u.text;
+        else if (u.html !== undefined) el.innerHTML = u.html;
+        if (u.logs && u.logs.length > 0) {
+            el.textContent += u.logs.join('\n') + '\n';
+            el.scrollTop = el.scrollHeight;
+        }
+        for (const [prop, val] of Object.entries(u.styles)) {
+            if (val === null) el.style.removeProperty(prop);
+            else el.style[prop] = val;
+        }
+        for (const [attr, val] of Object.entries(u.attrs)) {
+            el.setAttribute(attr, val);
+        }
+        for (const [cls, action] of Object.entries(u.classes)) {
+            if (action === 'add') el.classList.add(cls);
+            else el.classList.remove(cls);
+        }
+    });
+    updateQueue.clear();
+    rafScheduled = false;
+}
+function setText(id, text) {
+    if (lastValues[id] === text) return false;
+    lastValues[id] = text;
+    let entry = getUpdateEntry(id);
+    entry.text = text;
+    delete entry.html;
+    requestTick();
+    return true;
+}
+function setHTML(id, html) {
+    const key = id + ':html';
+    if (lastValues[key] === html) return false;
+    lastValues[key] = html;
+    let entry = getUpdateEntry(id);
+    entry.html = html;
+    delete entry.text;
+    requestTick();
+    return true;
+}
+
+function setStyle(id, prop, value) {
+    const key = id + ':style:' + prop;
+    if (value === null) {
+        if (!(key in lastValues)) return;
+        delete lastValues[key];
+    } else {
+        if (lastValues[key] === value) return;
+        lastValues[key] = value;
+    }
+    getUpdateEntry(id).styles[prop] = value;
+    requestTick();
+}
+
+function setAttr(id, attr, value) {
+    const key = id + ':attr:' + attr;
+    if (lastValues[key] === value) return;
+    lastValues[key] = value;
+    getUpdateEntry(id).attrs[attr] = value;
+    requestTick();
+}
+
+function addClass(id, cls) {
+    const key = id + ':cls:' + cls;
+    if (lastValues['a' + key] === cls) return;
+    lastValues['a' + key] = cls;
+    delete lastValues['r' + key];
+
+    getUpdateEntry(id).classes[cls] = 'add';
+    requestTick();
+}
+
+function removeClass(id, cls) {
+    const key = id + ':cls:' + cls;
+    if (lastValues['r' + key] === cls) return;
+    lastValues['r' + key] = cls;
+    delete lastValues['a' + key];
+
+    getUpdateEntry(id).classes[cls] = 'remove';
+    requestTick();
+}
+
 function setTime(){
     const date = new Date(Date.now());
 	const hours = date.getHours();
@@ -88,77 +174,6 @@ function setTime(){
 			forceTimes = false;
 		}
 	}
-}
-function setText(id,text){
-    if (lastValues[id]===text) return false
-    lastValues[id]=text
-    schedule(()=>{
-        const el=getElem(id)
-        if (el) {
-        	el.textContent=text
-        }
-    });
-    return true
-}
-function setHTML(id,html){
-    const key=id + ':html'
-    if (lastValues[key]===html) return false
-    lastValues[key]=html
-    schedule(()=>{
-        const el=getElem(id)
-        if (el) el.innerHTML=html
-    });
-    return true
-}
-function setStyle(id,prop,value){
-    const key=id + ':style:' + prop
-    if (value == null){
-        delete lastValues[key]
-        schedule(()=>{
-            const el=getElem(id)
-            if (el) el.style.removeProperty(prop)
-        })
-        return
-    }
-    if (lastValues[key]===value) return
-    lastValues[key]=value
-    schedule(()=>{
-        const el=getElem(id)
-        if (el) el.style[prop]=value
-    })
-}
-function setAttr(id,attr,value){
-    const key=id + ':attr:' + attr
-    if (lastValues[key]===value) return
-    lastValues[key]=value
-    schedule(()=>{
-        const el=getElem(id)
-        if (el) el.setAttribute(attr,value)
-    })
-}
-function addClass(id,cls){
-    const key=id + ':cls:' + cls
-    if (lastValues['a'+key]===cls) return
-    lastValues['a'+key]=cls
-    delete lastValues['r'+key]
-    schedule(()=>{
-        const el=getElem(id)
-        if (el&&!el.classList.contains(cls)){
-            el.classList.add(cls)
-        }
-    })
-}
-function removeClass(id,cls){
-	const key=id + ':cls:' + cls
-    if (lastValues['r'+key]===cls) return
-    lastValues['r'+key]=cls
-    delete lastValues['a'+key]
-    schedule(()=>{
-        const el=getElem(id)
-        if (el&&el.classList.contains(cls)){
-            el.classList.remove(cls)
-        }
-    })
 }
 async function ajaxJSON(url){
     const controller=new AbortController()
@@ -1398,20 +1413,21 @@ function updateDeviceTime(id) {
 }
 function updateAllDeviceTimes(deviceList){deviceList.forEach(id=>updateDeviceTime(id))}
 function log(msg) {
-    schedule(() => {
-        const el = getElem('log');
-        if (!el) return;
-        let ts = Date.now();
-        const d  = new Date(ts);
-        const hh = d.getHours().toString().padStart(2,'0');
-        const mm = d.getMinutes().toString().padStart(2,'0');
-        const ss = d.getSeconds().toString().padStart(2,'0');
-        el.textContent +=
-            `${hh}:${mm}:${ss} ${msg}\n`;
+    const id = 'log';
+    let entry = getUpdateEntry(id);
+    if (!entry.logs) entry.logs = [];
 
-//        el.scrollTop = el.scrollHeight;
-    });
+    const d = new Date();
+    const hh = d.getHours().toString().padStart(2, '0');
+    const mm = d.getMinutes().toString().padStart(2, '0');
+    const ss = d.getSeconds().toString().padStart(2, '0');
+
+    // Voeg de nieuwe regel toe aan de wachtrij voor dit frame
+    entry.logs.push(`${hh}:${mm}:${ss} ${msg}`);
+
+    requestTick();
 }
+
 function shouldRedraw(prev,curr,circleMax,degrees=2){
 //	if (forceRedraw) return true;
 	if (prev===undefined) return true;
@@ -1527,10 +1543,12 @@ function onMessage(topic, payload) {
     if (!batchTimeout) {
 		batchTimeout = setTimeout(() => {
 			const batchKeys = Object.keys(messageBatch);
-           if(batchKeys.length>1) log(`📊 ${batchKeys.length} devices uit ${totalMessagesReceived} berichten`);
+            if(batchKeys.length>1) log(`📊 ${batchKeys.length} devices uit ${totalMessagesReceived} berichten`);
             totalMessagesReceived = 0;
             for (const [deviceId, data] of Object.entries(messageBatch)) {
-				handleResponse(deviceId, data);
+				requestAnimationFrame(() => {
+					handleResponse(deviceId, data);
+				});
 			}
 			messageBatch = {};
 			batchTimeout = null;
