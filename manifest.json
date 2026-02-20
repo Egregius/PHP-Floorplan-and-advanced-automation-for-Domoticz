@@ -8,11 +8,6 @@
       "type": "image/png"
     }
   ],
-  "serviceworker": {
-      "src": "/index.php",
-      "scope": "/index.php",
-      "update_via_cache": "none"
-    },
   "start_url": "/index.php",
   "display": "fullscreen",
   "orientation": "portrait"

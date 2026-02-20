@@ -192,27 +192,27 @@
 							<canvas id="avgcircle" width="120" height="120"></canvas>
 						</div>
 					</a>
-					<div id="net" onclick="location.href='https://hwenergy.app/dashboard?dashboard=6310D647-E7B5-4280-8D07-F829707D2D12'">
+					<div id="net">
 						<span id="nettitle">Net</span>
 						<span id="netvalue"></span>
 						<canvas id="netcircle" width="120" height="120"></canvas>
 					</div>
-					<div id="total" onclick="location.href='https://verbruik.egregius.be/dag.php?Guy=on#elec'">
+					<div id="total">
 						<span id="totaltitle">Verbruik</span>
 						<span id="totalvalue"></span>
 						<canvas id="totalcircle" width="120" height="120"></canvas>
 					</div>
-					<div id="elec" onclick="location.href='https://verbruik.egregius.be/dag.php?Guy=on#elec'">
+					<div id="elec">
 						<span id="electitle">Elec</span>
 						<span id="elecvalue"></span>
 						<canvas id="eleccircle" width="120" height="120"></canvas>
 					</div>
-					<div id="gas" onclick="location.href='https://verbruik.egregius.be/dag.php?Guy=on#gas'">
+					<div id="gas">
 						<span id="gastitle">Gas</span>
 						<span id="gasvalue"></span>
 						<canvas id="gascircle" width="120" height="120"></canvas>
 					</div>
-					<div id="bat" onclick="location.href='https://hwenergy.app/dashboard?dashboard=48AE6FA2-2D9E-486D-8AC5-9E14A2A1D391'">
+					<div id="bat">
 						<span id="battitle">Bat</span>
 						<span id="batvalue"></span>
 						<span id="batcharge"></span>
@@ -220,7 +220,7 @@
 						<canvas id="chargecircle" width="120" height="120"></canvas>
 					</div>
 				</div>
-				<div class="abs zonurl" onclick="location.href='https://zon.egregius.be'">
+				<div class="abs zonurl">
 					<div id="zon">
 						<span id="zontitle">Zon</span>
 						<span id="zonvalue"></span>
@@ -317,5 +317,28 @@
 			</div>
 			<div id="floorplantemp" class="view"></div>
 		</div>
+<script>
+console.log('SW Script start check...');
+
+function registerSW() {
+    navigator.serviceWorker.register('/sw.js?v=<?=filemtime("sw.js")?>')
+    .then(function(reg) {
+        console.log('SW succes! Scope:', reg.scope);
+    }).catch(function(err) {
+        console.warn('SW falen:', err);
+    });
+}
+
+if ('serviceWorker' in navigator) {
+    console.log('Service Worker is ondersteund');
+    if (document.readyState === 'complete') {
+        registerSW();
+    } else {
+        window.addEventListener('load', registerSW);
+    }
+} else {
+    console.log('Service Worker wordt NIET ondersteund door deze browser');
+}
+</script>
 </body>
 </html>
