@@ -1088,8 +1088,8 @@ function navigator_Go(n){
 	if(socket) socket.end(true);
 	window.location.assign(n)
 }
-function ajaxcontrol(a,o,n){fetch(`http://192.168.2.2/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
-function ajaxcontrolbose(a,o,n){fetch(`http://192.168.2.2/ajax.php?boseip=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
+function ajaxcontrol(a,o,n){fetch(`https://home.egregius.be/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
+function ajaxcontrolbose(a,o,n){fetch(`https://home.egregius.be/ajax.php?boseip=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
 function floorplanbose(){ajaxbose($ip)(),myAjaxmedia=$.setInterval((function(){ajaxbose($ip)}),1e3)}
 function pad(e,n){return len=n-(""+e).length,(len>0?new Array(++len).join("0"):"")+e}
 function fix(){var e=this,n=e.parentNode,i=e.nextSibling;n.removeChild(e),setTimeout((function(){n.insertBefore(e,i)}),0)}
@@ -1427,38 +1427,70 @@ let isConnecting = false
 let initialConnectDone = false  // ← NIEUW
 const DEAD_TIMEOUT = 2900
 const MONITOR_INTERVAL = 1000
-
+let initialDataReceived = false;
+let messageBatch = {};
+let batchTimeout = null;
+let reconnectAttempts = 0;
 function connect() {
-    if (socket || isConnecting) return;
-	ajax()
-    isConnecting = true;
-    log("🔌 MQTT connect...");
+    // 1. Start DIRECT de AJAX-call. Wacht niet op MQTT.
+    // Dit vult je dashboard binnen 100-300ms.
+    ajax();
 
-    const doConnect = () => {
-        socket = mqtt.connect("ws://192.168.2.22:9001/mqtt", {
-            protocolVersion: 4,
-            reconnectPeriod: 0,
-            connectTimeout: 1200,
-            clean: false,
-            clientId: getClientId()
-        });
-
-        socket.on("connect", onConnect);
-        socket.on("message", onMessage);
-        socket.on("close", () => hardReconnect("close"));
-        socket.on("error", () => hardReconnect("error"));
-    };
-
-    // iPad WebKit workaround
-    if (isIPad()) {
-        requestAnimationFrame(() =>
-            setTimeout(doConnect, 50)
-        );
-    } else {
-        doConnect();
+    if (!navigator.onLine) {
+        setTimeout(connect, 2000);
+        return;
     }
+
+    // 2. Verbind met MQTT voor de LIVE updates
+    client = mqtt.connect('wss://home.egregius.be/mqtt');
+
+    client.on('connect', function () {
+        console.log("MQTT Verbonden voor live updates");
+        client.subscribe("d/#");
+    });
+
+    client.on('message', function (topic, payload) {
+        // Gebruik de batching die we eerder bespraken om de iPhone te ontlasten
+        onMessage({
+            destinationName: topic,
+            payloadString: payload.toString()
+        });
+    });
+}
+// 2. De onSuccess handler
+function onConnect() {
+    console.log("MQTT Verbonden. Subscribing...");
+    reconnectAttempts = 0;
+    client.subscribe("d/#");
+
+    // FALLBACK MECHANISME
+    // Als we na 2.5 seconden nog geen data hebben, doen we de AJAX call
+    setTimeout(() => {
+        if (!initialDataReceived) {
+            console.log("MQTT te traag of geen data. Start AJAX fallback...");
+            ajax();
+        }
+    }, 2500);
 }
 
+// 3. De gebatchte onMessage (ontlast de CPU op iPhone)
+function onMessage(m) {
+    initialDataReceived = true; // Markeer dat we data hebben
+
+    // Verzamel berichten in een batch
+    messageBatch[m.destinationName] = m.payloadString;
+
+    if (!batchTimeout) {
+        batchTimeout = setTimeout(() => {
+            // Verwerk alle verzamelde updates in één keer
+            for (const [topic, payload] of Object.entries(messageBatch)) {
+                handleResponse(topic, payload);
+            }
+            messageBatch = {};
+            batchTimeout = null;
+        }, 100); // 100ms is de 'sweet spot' voor UI responsiviteit
+    }
+}
 function isIPad() {
     return (
         navigator.platform === "MacIntel" &&
@@ -1493,48 +1525,6 @@ function getClientId() {
         localStorage.setItem("mqttClientId", id)
     }
     return id
-}
-
-function onConnect() {
-
-    isConnecting = false
-    initialConnectDone = true  // ← MARKEER als gedaan
-    lastMessageReceived = Date.now()
-
-    socket.subscribe("d/#", { qos: 0 }, err => {
-        if (err) {
-            log("✗ Subscribe fout")
-            hardReconnect("subscribe")
-            return
-        }
-        log("✅ Verbonden")
-        startMonitor()
-    })
-}
-
-function onMessage(topic, payload) {
-    lastMessageReceived = Date.now()
-    const device = topic.split("/").pop()
-    if (payload && typeof payload === "object") {
-        if (payload.type === "Buffer" && Array.isArray(payload.data)) {
-            payload = String.fromCharCode(...payload.data)
-        } else if (payload instanceof Uint8Array) {
-            payload = new TextDecoder().decode(payload)
-        }
-    }
-    if (typeof payload === "string" && (payload.startsWith("{") || payload.startsWith("["))) {
-        try {
-            payload = JSON.parse(payload)
-        } catch {
-            log(`⚠️ Invalid JSON: ${topic} ${payload}`)
-            return
-        }
-    }
-    if (typeof payload === "string") {
-        const n = Number(payload)
-        if (!Number.isNaN(n)) payload = n
-    }
-    handleResponse(device,payload)
 }
 
 function startMonitor() {
@@ -1813,4 +1803,33 @@ function handleAjaxResponse(response){
 		}
 		d[device]=v
 	})
+}
+async function forceAppUpdate() {
+    console.log("Forceer update van de PWA...");
+
+    if ('serviceWorker' in navigator) {
+        try {
+            // 1. Zoek de registratie en dwing een update check af
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (registration) {
+                await registration.update();
+                console.log("SW update check uitgevoerd");
+            }
+
+            // 2. Gooi alle caches handmatig leeg
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames.map(name => caches.delete(name))
+            );
+            console.log("Caches geleegd");
+
+        } catch (err) {
+            console.error("Fout tijdens force update:", err);
+        }
+    }
+
+    // 3. Harde reload van de server (true forceert herladen van server, niet cache)
+    // Let op: location.reload(true) is deprecated in sommige browsers,
+    // maar een cache-bust URL werkt altijd:
+    window.location.href = window.location.pathname + '?rel=' + Date.now();
 }

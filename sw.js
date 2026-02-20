@@ -41,32 +41,32 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', e => {
-    const url = e.request.url;
+    const url = new URL(e.request.url);
 
-    // 1. Sluit jouw specifieke API calls uit!
-    // Je gebruikt 'ajax.php' en 'd.php' in je js, niet 'api.php'.
-    if (url.includes('ajax.php') || url.includes('d.php') || e.request.method !== 'GET') {
-        return; // Laat de browser dit oplossen via het netwerk
+    // Strategie: Network-First voor de HTML pagina zelf
+    if (e.request.mode === 'navigate' || url.pathname.endsWith('index.php') || url.pathname === '/') {
+        e.respondWith(
+            fetch(e.request)
+                .then(response => {
+                    // Update de cache met de nieuwste index
+                    const copy = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
+                    return response;
+                })
+                .catch(() => caches.match(e.request)) // Fallback naar cache als internet plat ligt
+        );
+        return;
     }
 
+    // Bestaande logica voor rest (scripts, images, etc.) - Cache-First
+    if (url.pathname.includes('ajax.php') || url.pathname.includes('d.php')) return;
+
     e.respondWith(
-        // 2. ignoreSearch is cruciaal!
-        caches.match(e.request, { ignoreSearch: true }).then(cachedResponse => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-            return fetch(e.request).then(networkResponse => {
-                // Sla alleen geldige responses op
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                    return networkResponse;
-                }
-                const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME).then(cache => {
-                    cache.put(e.request, responseToCache);
-                });
-                return networkResponse;
-            }).catch(() => {
-                // Hier zou je evt. een offline afbeelding kunnen teruggeven
+        caches.match(e.request, { ignoreSearch: true }).then(cached => {
+            return cached || fetch(e.request).then(response => {
+                const copy = response.clone();
+                caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
+                return response;
             });
         })
     );

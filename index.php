@@ -2,18 +2,11 @@
 <!DOCTYPE HTML>
 <html lang="nl">
 	<head>
-		<link rel="dns-prefetch" href="//192.168.2.22">
-		<link rel="preconnect" href="ws://192.168.2.22:9001">
+		<link rel="dns-prefetch" href="//home.egregius.be">
+		<link rel="preconnect" href="wss://home.egregius.be">
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<title>Floorplan</title>
-		<meta name="viewport" content="width=device-width,initial-scale=<?= $scale ?>,user-scalable=yes,minimal-ui">
-		<meta name="viewport"
-      		content="width=device-width,
-               initial-scale=<?= $scale ?>,
-               minimum-scale=<?= $scale ?>,
-               maximum-scale=1.5,
-               user-scalable=yes">
-
+		<meta name="viewport" content="width=device-width,initial-scale=<?= $scale ?>,minimum-scale=<?= $scale ?>,maximum-scale=<?= $scale * 1.2 ?>,user-scalable=yes,minimal-ui">
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,7 +22,7 @@
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="location.reload();"><?= date("G:i:s");?></a></div>
+		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="forceAppUpdate();"><?= date("G:i:s");?></a></div>
 		<div class="abs center zon">
 			<div class="sun-times">
 				☀️ <span id="dag"></span><br>
@@ -257,10 +250,10 @@
 						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b3">Garmin GPX</button>
 						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b3">Garmin Badges</button>
 						<button class="btn b3" id="verlof" onclick="verlof();">Verlof</button>
-						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b3"">Weegschaal</button>
+						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b3">Weegschaal</button>
 						<button onclick="ajaxcontrol('runsync','runsync','trakt');setView('floorplan');" class="btn b3">trakt.tv</button>
 					</div>
-					<div class="abs z2" id="log"></div>
+					<div class="abs z2" id="log">Log:</div>
 				</div>
 				<div class="fix" id="mediasidebar">
 					<!--<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48" alt="Films"><br>Films</a><br><br>
