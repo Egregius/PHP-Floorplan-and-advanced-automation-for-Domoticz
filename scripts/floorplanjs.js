@@ -1429,6 +1429,11 @@ let messageBatch = {};
 let batchTimeout = null;
 const DEAD_TIMEOUT = 2900;
 const MONITOR_INTERVAL = 1000;
+let totalMessagesReceived = 0;
+let totalHandleCalls = 0;
+let currentVersion = null;
+let offlineTimeout = null;
+
 function connect() {
 //    ajax();
     if (client && client.connected) return;
@@ -1445,7 +1450,11 @@ function connect() {
     });
     client.on('connect', function () {
         const duration = Date.now() - lastWakeUp;
-    	log(`✅ MQTT Verbonden in ${duration}ms`);
+    	if (offlineTimeout) {
+			clearTimeout(offlineTimeout);
+			offlineTimeout = null;
+		}
+		log(`✅ MQTT Verbonden in ${duration}ms`);
         initialConnectDone = true;
         isReconnecting = false;
         client.subscribe("d/#");
@@ -1458,31 +1467,39 @@ function connect() {
 		lastWakeUp = Date.now();
 		log("🔄 MQTT herverbinden...");
 	});
-
 	client.on('close', () => {
 		log("ℹ️ MQTT Verbinding gesloten (Close)");
 		setTimeout(() => {
 			if (!client || !client.connected) stopMonitor();
-		}, 200);
+		}, 350);
 	});
-
 	client.on('offline', () => {
 		log("⚠️ MQTT Client is offline");
 		setTimeout(() => {
 			if (!client || !client.connected) stopMonitor();
-		}, 200);
+		}, 350);
 	});
-
 	client.on('error', (err) => {
 		log("❌ MQTT Fout: " + err.message);
 		stopMonitor();
 	});
 }
-let totalMessagesReceived = 0;
-let totalHandleCalls = 0;
 function onMessage(topic, payload) {
     totalMessagesReceived++;
     lastMessageReceived = Date.now();
+    if (topic === "d/floorplan_version") {
+		const serverVersion = parseInt(payload);
+		const s = serverVersion.toString();
+		const readable = `${s.substring(6,8)}/${s.substring(4,6)} ${s.substring(8,10)}:${s.substring(10,12)}:${s.substring(12,14)}`;
+		if (currentVersion === null) {
+			currentVersion = serverVersion;
+			log(`📌 App Versie: ${readable}`);
+		} else if (serverVersion > currentVersion) {
+			log(`🚀 Update gevonden (${readable}), herladen...`);
+			forceAppUpdate();
+		}
+		return;
+	}
     const device = topic.split("/").pop();
     if (payload && typeof payload === "object") {
         if (payload.type === "Buffer" && Array.isArray(payload.data)) {
@@ -1535,6 +1552,10 @@ function cleanup(reason = "") {
 }
 function hardReconnect(reason = "") {
 	log('hardReconnect '+reason)
+	if (offlineTimeout) {
+        clearTimeout(offlineTimeout);
+        offlineTimeout = null;
+    }
     isReconnecting = true;
     cleanup(reason);
     connect();
@@ -1563,9 +1584,15 @@ function stopMonitor() {
         clearInterval(monitorTimer);
         monitorTimer = null;
     }
-	if (!isReconnecting && (!client || !client.connected)) {
-        removeClass('clock', 'online');
-        addClass('clock', 'offline');
+    if (!offlineTimeout) {
+        offlineTimeout = setTimeout(() => {
+            if (!isReconnecting && (!client || !client.connected)) {
+                removeClass('clock', 'online');
+                addClass('clock', 'offline');
+                log("🔴 Status: Echt offline (Grace period verlopen)");
+            }
+            offlineTimeout = null;
+        }, 300);
     }
 }
 document.addEventListener("DOMContentLoaded", () => {
@@ -1681,7 +1708,6 @@ function handleAjaxResponse(response){
 			if(v.s=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">'
 			else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">'
 			setHTML('brander',html)
-
 			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
 			if(heatingmode==0)html+=''
 			else if(heatingmode==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'

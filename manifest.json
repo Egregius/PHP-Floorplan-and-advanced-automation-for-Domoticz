@@ -3,7 +3,7 @@
   "short_name": "Floorplan",
   "start_url": "index.php",
   "display": "fullscreen",
-  "orientation": "portrait"
+  "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#000000",
   "icons": [{
