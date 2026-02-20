@@ -1085,7 +1085,10 @@ function confirmSwitch(device){
 }
 const circleStates={};
 function navigator_Go(n){
-	if(socket) socket.end(true);
+	if (client) {
+        client.end(true);
+        client = null;
+    }
 	window.location.assign(n)
 }
 function ajaxcontrol(a,o,n){fetch(`https://home.egregius.be/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
@@ -1107,19 +1110,15 @@ function initDimmerSlider(e){
 	const n = document.getElementById("sliderThumb");
 	const o = document.getElementById("sliderFill");
 	const s = document.getElementById("dimmerValue");
-
 	if (!t || !n || !o) return;
-
-	let i = false; // dragging
+	let i = false;
 	let d = parseInt(sessionStorage.getItem(e)) || 0;
 	let c = null;
-
 	function getClientX(ev){
 		if (ev.touches && ev.touches.length) return ev.touches[0].clientX;
 		if (ev.changedTouches && ev.changedTouches.length) return ev.changedTouches[0].clientX;
 		return ev.clientX ?? null;
 	}
-
 	function r(val){
 		const t = Math.round(val);
 		if (s){
@@ -1420,47 +1419,40 @@ function shouldRedraw(prev,curr,circleMax,degrees=2){
 	const threshold=circleMax * (degrees / 360);
 	return Math.abs(curr - prev) >= threshold;
 }
-let socket = null
-let monitorTimer = null
-let lastMessageReceived = 0
-let isConnecting = false
-let initialConnectDone = false  // ← NIEUW
-const DEAD_TIMEOUT = 2900
-const MONITOR_INTERVAL = 1000
-let initialDataReceived = false;
+let client = null;
+let monitorTimer = null;
+let lastMessageReceived = Date.now();
+let initialConnectDone = false
 let messageBatch = {};
 let batchTimeout = null;
-let reconnectAttempts = 0;
+const DEAD_TIMEOUT = 2900;
+const MONITOR_INTERVAL = 1000;
 function connect() {
     ajax();
+    if (client && client.connected) return;
     if (!navigator.onLine) {
-        setTimeout(connect, 2000);
+        setTimeout(connect, 1000);
         return;
     }
-    try {
-        client = mqtt.connect('wss://home.egregius.be/mqtt');
-    } catch (e) {
-        console.error("❌ MQTT connect error:", e);
-    }
+    client = mqtt.connect('wss://home.egregius.be/mqtt', {
+        clientId: getClientId(),
+        clean: true,
+        connectTimeout: 2000,
+        reconnectPeriod: 2000
+    });
     client.on('connect', function () {
-        console.log("✅ MQTT Verbonden");
+        log("✅ MQTT Verbonden");
+        initialConnectDone = true;
         client.subscribe("d/#");
-
+        startMonitor();
         setTimeout(() => {
-            if (Object.keys(lastState).length === 0) {
-                console.log("MQTT te traag. Start AJAX fallback...");
+            if (typeof lastState === 'undefined' || Object.keys(lastState).length === 0) {
                 ajax();
             }
         }, 2500);
     });
-
-    client.on('message', function (topic, payload) {
-        onMessage(String(topic), payload);
-    });
-
-    client.on('error', function (err) {
-        console.error("❌ MQTT Client Error:", err);
-    });
+    client.on('message', (topic, payload) => onMessage(String(topic), payload));
+    client.on('close', () => stopMonitor());
 }
 let totalMessagesReceived = 0;
 let totalHandleCalls = 0;
@@ -1494,17 +1486,14 @@ function onMessage(topic, payload) {
     if (!batchTimeout) {
 		batchTimeout = setTimeout(() => {
 			const batchKeys = Object.keys(messageBatch);
-            // Log hoevel berichten er SINDS de vorige batch zijn binnengekomen
-            console.log(`📊 Batch: ${batchKeys.length} unieke devices geupdate uit ${totalMessagesReceived} inkomende berichten.`);
-
-            // Reset teller voor de volgende 100ms periode
+           if(batchKeys.length>1) log(`📊 ${batchKeys.length} devices uit ${totalMessagesReceived} berichten`);
             totalMessagesReceived = 0;
             for (const [deviceId, data] of Object.entries(messageBatch)) {
 				handleResponse(deviceId, data);
 			}
 			messageBatch = {};
 			batchTimeout = null;
-		}, 50);
+		}, 150);
 	}
 }
 function isIPad() {
@@ -1513,27 +1502,18 @@ function isIPad() {
         navigator.maxTouchPoints > 1
     );
 }
-
 function cleanup(reason = "") {
-//    log("🧹 Cleanup " + reason)
-    fetchajax=true
-    stopMonitor()
-    if (socket) {
-        try {
-            socket.removeAllListeners()
-            socket.end(true)
-        } catch {}
-        socket = null
+    stopMonitor();
+    if (client) {
+        client.end(true);
+        client = null;
     }
-    isConnecting = false
 }
-
 function hardReconnect(reason = "") {
-//    log("💀 " + reason)
-    cleanup(reason)
-    connect()
+	log('hardReconnect '+reason)
+    cleanup(reason);
+    connect();
 }
-
 function getClientId() {
     let id = localStorage.getItem("mqttClientId")
     if (!id) {
@@ -1542,77 +1522,42 @@ function getClientId() {
     }
     return id
 }
-
 function startMonitor() {
-    stopMonitor()
+    stopMonitor();
     monitorTimer = setInterval(() => {
-        if (document.hidden || !socket) return
-        const silence = Date.now() - lastMessageReceived
+        if (document.hidden || !client || !client.connected) return;
+        const silence = Date.now() - lastMessageReceived;
         if (silence > DEAD_TIMEOUT) {
-            log(`⚠️ Stilte ${Math.round(silence / 1000)}s`)
-            hardReconnect("stale")
+            console.warn(`⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...`);
+            hardReconnect("⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...");
         }
-    }, MONITOR_INTERVAL)
+    }, MONITOR_INTERVAL);
 }
-
 function stopMonitor() {
     if (monitorTimer) {
-        clearInterval(monitorTimer)
-        monitorTimer = null
+        clearInterval(monitorTimer);
+        monitorTimer = null;
     }
 }
-
 document.addEventListener("DOMContentLoaded", () => {
     lastMessageReceived = Date.now()
     connect()
 })
-
-
-
-function initPlaceholders() {
-    console.log("🎨 Tekenen placeholders...");
-    if (typeof drawCircle !== "function") {
-        console.warn("drawCircle nog niet geladen, retry...");
-        setTimeout(initPlaceholders, 100);
-        return;
-    }
-	drawCircle('avgtimecircle', 0, 900, 82, 'gray')
-	drawCircle('avgcircle', 0, 2500, 90, 'purple')
-	drawCircle('eleccircle', 0, 100, 90, 'purple')
-	drawCircle('zonvcircle', 0, 10, 90, 'green')
-	drawCircle('gascircle', 0, 10, 90, 'red')
-	drawCircle('netcircle', 0, 10, 90, 'purple')
-	drawCircle('chargecircle', 0, 100, 82, 'gray')
-	drawCircle('zoncircle', 0, 0, 90, 'green')
-	drawCircle('batcircle', 0, 800, 90, 'purple')
-	drawCircle('totalcircle', 0, 2500, 90, 'purple')
-}
-
-// Gebruik onload voor de zekerheid dat alle layout-berekeningen klaar zijn
-window.onload = initPlaceholders;
-
-
 window.addEventListener("pageshow", e => {
-    // ← BLOKKEER tijdens initiële connect op iPad
     if (!initialConnectDone && isIPad()) {
-//        log("📄 Pageshow genegeerd (initiële connect bezig)")
         hardReconnect("pageshow")
         return
     }
-
     if (e.persisted) {
-//        log("📄 bfcache restore")
         hardReconnect("bfcache")
     } else {
         const ua = navigator.userAgent || navigator.vendor || window.opera
         const isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
         if (isiOS) {
-//            log("📄 Pageshow iOS")
             hardReconnect("pageshow")
         }
     }
 })
-
 window.addEventListener("offline", () => {
     log("🌐 Offline")
     cleanup("offline")
@@ -1630,7 +1575,19 @@ window.addEventListener("pagehide", () => {
     fetchajax=true
 })
 
-
+function initPlaceholders() {
+	drawCircle('avgtimecircle', 0, 0, 82, 'gray')
+	drawCircle('avgcircle', 0, 0, 90, 'purple')
+	drawCircle('eleccircle', 0, 0, 90, 'purple')
+	drawCircle('zonvcircle', 0, 0, 90, 'green')
+	drawCircle('gascircle', 0, 0, 90, 'red')
+	drawCircle('netcircle', 0, 0, 90, 'purple')
+	drawCircle('chargecircle', 0, 100, 82, 'gray')
+	drawCircle('zoncircle', 0, 0, 90, 'green')
+	drawCircle('batcircle', 0, 0, 90, 'purple')
+	drawCircle('totalcircle', 0, 0, 90, 'purple')
+}
+window.onload = initPlaceholders;
 function ajax(){
 	setTime()
 	if(!fetchajax) return
@@ -1640,6 +1597,10 @@ function ajax(){
         if (!e || e.aborted){
 	        setTimeout(()=>ajax(),1000)
 	        return
+	    }
+	    if(e.reload_now===true) {
+	    	forceAppUpdate();
+	    	return;
 	    }
 		handleAjaxResponse(e);
     })
@@ -1845,32 +1806,17 @@ function handleAjaxResponse(response){
 		d[device]=v
 	})
 }
-async function forceAppUpdate() {
-    console.log("Forceer update van de PWA...");
-
+function forceAppUpdate() {
     if ('serviceWorker' in navigator) {
-        try {
-            // 1. Zoek de registratie en dwing een update check af
-            const registration = await navigator.serviceWorker.getRegistration();
-            if (registration) {
-                await registration.update();
-                console.log("SW update check uitgevoerd");
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            for (let registration of registrations) {
+                registration.unregister();
             }
-
-            // 2. Gooi alle caches handmatig leeg
-            const cacheNames = await caches.keys();
-            await Promise.all(
-                cacheNames.map(name => caches.delete(name))
-            );
-            console.log("Caches geleegd");
-
-        } catch (err) {
-            console.error("Fout tijdens force update:", err);
-        }
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 400);
+        });
+    } else {
+        window.location.reload(true);
     }
-
-    // 3. Harde reload van de server (true forceert herladen van server, niet cache)
-    // Let op: location.reload(true) is deprecated in sommige browsers,
-    // maar een cache-bust URL werkt altijd:
-    window.location.href = window.location.pathname + '?rel=' + Date.now();
 }

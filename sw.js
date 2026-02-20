@@ -39,31 +39,16 @@ self.addEventListener('activate', (event) => {
         })
     );
 });
-
 self.addEventListener('fetch', e => {
     const url = new URL(e.request.url);
-
-    // Strategie: Network-First voor de HTML pagina zelf
-    if (e.request.mode === 'navigate' || url.pathname.endsWith('index.php') || url.pathname === '/') {
-        e.respondWith(
-            fetch(e.request)
-                .then(response => {
-                    // Update de cache met de nieuwste index
-                    const copy = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
-                    return response;
-                })
-                .catch(() => caches.match(e.request)) // Fallback naar cache als internet plat ligt
-        );
-        return;
-    }
-
-    // Bestaande logica voor rest (scripts, images, etc.) - Cache-First
     if (url.pathname.includes('ajax.php') || url.pathname.includes('d.php')) return;
-
     e.respondWith(
         caches.match(e.request, { ignoreSearch: true }).then(cached => {
-            return cached || fetch(e.request).then(response => {
+            if (cached) return cached;
+            return fetch(e.request).then(response => {
+                if (!response || response.status !== 200 || response.type !== 'basic') {
+                    return response;
+                }
                 const copy = response.clone();
                 caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
                 return response;

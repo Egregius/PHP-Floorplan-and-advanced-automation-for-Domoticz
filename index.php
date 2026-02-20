@@ -253,7 +253,7 @@
 						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b3">Weegschaal</button>
 						<button onclick="ajaxcontrol('runsync','runsync','trakt');setView('floorplan');" class="btn b3">trakt.tv</button>
 					</div>
-					<div class="abs z2" id="log">Log:</div>
+					<div class="abs z2" id="log"></div>
 				</div>
 				<div class="fix" id="mediasidebar">
 					<!--<a href="javascript:navigator_Go('https://films.egregius.be/films.php');"><img src="/images/kodi.png" class="i48" alt="Films"><br>Films</a><br><br>

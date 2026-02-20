@@ -23,6 +23,21 @@ foreach ($rows as [$n, $s, $t_val, $m, $device, $i, $rt, $p]) {
     }
     $p !== null && $d[$n]['p'] = $p;
 }
+$ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
+$current_disk_time = filemtime('/var/www/html/index.php');
+$current_disk_time += filemtime('/var/www/html/scripts/floorplanjs.js.gz');
+$current_disk_time += filemtime('/var/www/html/styles/floorplan.css.gz');
+$cached_version = apcu_fetch('floorplan_version_trigger_'.$ip);
+$needs_reload = false;
+
+if ($cached_version === false) {
+    apcu_store('floorplan_version_trigger_'.$ip, $current_disk_time);
+} elseif ($current_disk_time > $cached_version) {
+    $needs_reload = true;
+    apcu_store('floorplan_version_trigger_'.$ip, $current_disk_time);
+}
+if ($needs_reload) $d['reload_now'] = true;
+
 
 $data=json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 header('Content-Type: application/json');
