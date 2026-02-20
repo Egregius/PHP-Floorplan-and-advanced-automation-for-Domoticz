@@ -4,13 +4,22 @@ const CACHE_NAME = 'floorplan-cache-' + VERSION;
 const PRE_CACHE_ASSETS = [
     '/',
     '/index.php',
+    '/icon.png',
     '/scripts/mqtt.min.js',
     '/scripts/floorplanjs.js',
     '/styles/floorplan.css',
-    '/images/domoticzphp48.png',
-    '/images/domoticzphp144.png',
-    // We laten dynamische statussen zoals _On.png hier uit,
-    // die pakt de 'fetch' handler on-the-fly wel op.
+    '/images/HomeZw.png',
+	'/images/temp.png',
+	'/images/l_On.png',
+	'/images/l_Off.png',
+	'/images/p_On.png',
+	'/images/p_Off.png',
+	'/images/ST30_On.png',
+	'/images/ST30_Off.png',
+	'/images/Thuis.png',
+	'/images/weg.png',
+	'/images/slapen.png',
+	'/images/arrowdown.png'
 ];
 
 self.addEventListener('install', e => {

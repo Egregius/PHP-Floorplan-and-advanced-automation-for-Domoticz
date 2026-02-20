@@ -10,19 +10,18 @@
 		<meta name="HandheldFriendly" content="true">
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 		<meta name="theme-color" content="#000">
 		<link rel="manifest" href="/manifest.json">
-		<link rel="shortcut icon" href="images/domoticzphp48.png">
-		<link rel="apple-touch-icon" href="images/domoticzphp48.png">
-		<link rel="apple-touch-startup-image" href="images/domoticzphp144.png">
+		<link rel="icon" type="image/png" href="icon.png">
+		<link rel="apple-touch-icon" href="icon.png">
 		<link rel="stylesheet" type="text/css" href="/styles/floorplan.css?v=<?=filemtime('styles/floorplan.css.gz')?>">
 		<script src="/scripts/mqtt.min.js?v=<?=filemtime('scripts/mqtt.min.js.gz')?>"></script>
 		<script src="/scripts/floorplanjs.js?v=<?=filemtime('scripts/floorplanjs.js.gz')?>"></script>
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs" id="clock" class="z2"><a href="#" id="time" onclick="forceAppUpdate();"><?= date("G:i:s");?></a></div>
+		<div class="abs z2" id="clock"><a href="#" id="time" onclick="forceAppUpdate();"><?= date("G:i:s");?></a></div>
 		<div class="abs center zon">
 			<div class="sun-times">
 				☀️ <span id="dag"></span><br>

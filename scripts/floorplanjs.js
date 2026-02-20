@@ -1444,6 +1444,8 @@ function connect() {
         log("✅ MQTT Verbonden");
         initialConnectDone = true;
         client.subscribe("d/#");
+        removeClass('clock','offline')
+        addClass('clock','online')
         startMonitor();
         setTimeout(() => {
             if (typeof lastState === 'undefined' || Object.keys(lastState).length === 0) {
@@ -1538,6 +1540,10 @@ function stopMonitor() {
         clearInterval(monitorTimer);
         monitorTimer = null;
     }
+	if (!client || !client.connected) {
+        removeClass('clock', 'online');
+        addClass('clock', 'offline');
+    }
 }
 document.addEventListener("DOMContentLoaded", () => {
     lastMessageReceived = Date.now()
@@ -1561,6 +1567,8 @@ window.addEventListener("pageshow", e => {
 window.addEventListener("offline", () => {
     log("🌐 Offline")
     cleanup("offline")
+	removeClass('clock','online')
+	addClass('clock','offline')
     fetchajax=true
 })
 
