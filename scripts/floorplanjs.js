@@ -1422,13 +1422,15 @@ function shouldRedraw(prev,curr,circleMax,degrees=2){
 let client = null;
 let monitorTimer = null;
 let lastMessageReceived = Date.now();
+let lastWakeUp = Date.now();
 let initialConnectDone = false
+let isReconnecting = false;
 let messageBatch = {};
 let batchTimeout = null;
 const DEAD_TIMEOUT = 2900;
 const MONITOR_INTERVAL = 1000;
 function connect() {
-    ajax();
+//    ajax();
     if (client && client.connected) return;
     if (!navigator.onLine) {
         setTimeout(connect, 1000);
@@ -1437,24 +1439,44 @@ function connect() {
     client = mqtt.connect('wss://home.egregius.be/mqtt', {
         clientId: getClientId(),
         clean: true,
-        connectTimeout: 2000,
-        reconnectPeriod: 2000
+        connectTimeout: 1000,
+        reconnectPeriod: 500,
+        keepalive: 30
     });
     client.on('connect', function () {
-        log("✅ MQTT Verbonden");
+        const duration = Date.now() - lastWakeUp;
+    	log(`✅ MQTT Verbonden in ${duration}ms`);
         initialConnectDone = true;
+        isReconnecting = false;
         client.subscribe("d/#");
         removeClass('clock','offline')
         addClass('clock','online')
         startMonitor();
-        setTimeout(() => {
-            if (typeof lastState === 'undefined' || Object.keys(lastState).length === 0) {
-                ajax();
-            }
-        }, 2500);
     });
     client.on('message', (topic, payload) => onMessage(String(topic), payload));
-    client.on('close', () => stopMonitor());
+    client.on('reconnect', () => {
+		lastWakeUp = Date.now();
+		log("🔄 MQTT herverbinden...");
+	});
+
+	client.on('close', () => {
+		log("ℹ️ MQTT Verbinding gesloten (Close)");
+		setTimeout(() => {
+			if (!client || !client.connected) stopMonitor();
+		}, 200);
+	});
+
+	client.on('offline', () => {
+		log("⚠️ MQTT Client is offline");
+		setTimeout(() => {
+			if (!client || !client.connected) stopMonitor();
+		}, 200);
+	});
+
+	client.on('error', (err) => {
+		log("❌ MQTT Fout: " + err.message);
+		stopMonitor();
+	});
 }
 let totalMessagesReceived = 0;
 let totalHandleCalls = 0;
@@ -1513,6 +1535,7 @@ function cleanup(reason = "") {
 }
 function hardReconnect(reason = "") {
 	log('hardReconnect '+reason)
+    isReconnecting = true;
     cleanup(reason);
     connect();
 }
@@ -1540,7 +1563,7 @@ function stopMonitor() {
         clearInterval(monitorTimer);
         monitorTimer = null;
     }
-	if (!client || !client.connected) {
+	if (!isReconnecting && (!client || !client.connected)) {
         removeClass('clock', 'online');
         addClass('clock', 'offline');
     }
@@ -1550,6 +1573,14 @@ document.addEventListener("DOMContentLoaded", () => {
     connect()
 })
 window.addEventListener("pageshow", e => {
+	lastWakeUp = Date.now();
+	if (client && client.connected) {
+        addClass('clock', 'online');
+        return;
+    } else {
+    	removeClass('clock', 'online');
+		removeClass('clock', 'offline');
+	}
     if (!initialConnectDone && isIPad()) {
         hardReconnect("pageshow")
         return
