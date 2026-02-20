@@ -1432,64 +1432,80 @@ let messageBatch = {};
 let batchTimeout = null;
 let reconnectAttempts = 0;
 function connect() {
-    // 1. Start DIRECT de AJAX-call. Wacht niet op MQTT.
-    // Dit vult je dashboard binnen 100-300ms.
     ajax();
-
     if (!navigator.onLine) {
         setTimeout(connect, 2000);
         return;
     }
-
-    // 2. Verbind met MQTT voor de LIVE updates
-    client = mqtt.connect('wss://home.egregius.be/mqtt');
-
+    try {
+        client = mqtt.connect('wss://home.egregius.be/mqtt');
+    } catch (e) {
+        console.error("❌ MQTT connect error:", e);
+    }
     client.on('connect', function () {
-        console.log("MQTT Verbonden voor live updates");
+        console.log("✅ MQTT Verbonden");
         client.subscribe("d/#");
+
+        setTimeout(() => {
+            if (Object.keys(lastState).length === 0) {
+                console.log("MQTT te traag. Start AJAX fallback...");
+                ajax();
+            }
+        }, 2500);
     });
 
     client.on('message', function (topic, payload) {
-        // Gebruik de batching die we eerder bespraken om de iPhone te ontlasten
-        onMessage({
-            destinationName: topic,
-            payloadString: payload.toString()
-        });
+        onMessage(String(topic), payload);
+    });
+
+    client.on('error', function (err) {
+        console.error("❌ MQTT Client Error:", err);
     });
 }
-// 2. De onSuccess handler
-function onConnect() {
-    console.log("MQTT Verbonden. Subscribing...");
-    reconnectAttempts = 0;
-    client.subscribe("d/#");
-
-    // FALLBACK MECHANISME
-    // Als we na 2.5 seconden nog geen data hebben, doen we de AJAX call
-    setTimeout(() => {
-        if (!initialDataReceived) {
-            console.log("MQTT te traag of geen data. Start AJAX fallback...");
-            ajax();
+let totalMessagesReceived = 0;
+let totalHandleCalls = 0;
+function onMessage(topic, payload) {
+    totalMessagesReceived++;
+    lastMessageReceived = Date.now();
+    const device = topic.split("/").pop();
+    if (payload && typeof payload === "object") {
+        if (payload.type === "Buffer" && Array.isArray(payload.data)) {
+            payload = String.fromCharCode(...payload.data);
+        } else if (payload instanceof Uint8Array) {
+            payload = new TextDecoder().decode(payload);
         }
-    }, 2500);
-}
-
-// 3. De gebatchte onMessage (ontlast de CPU op iPhone)
-function onMessage(m) {
-    initialDataReceived = true; // Markeer dat we data hebben
-
-    // Verzamel berichten in een batch
-    messageBatch[m.destinationName] = m.payloadString;
-
-    if (!batchTimeout) {
-        batchTimeout = setTimeout(() => {
-            // Verwerk alle verzamelde updates in één keer
-            for (const [topic, payload] of Object.entries(messageBatch)) {
-                handleResponse(topic, payload);
-            }
-            messageBatch = {};
-            batchTimeout = null;
-        }, 100); // 100ms is de 'sweet spot' voor UI responsiviteit
     }
+    if (typeof payload === "string" && (payload.startsWith("{") || payload.startsWith("["))) {
+        try {
+            const parsed = JSON.parse(payload);
+            payload = parsed.val || parsed.value || parsed.svalue || parsed;
+        } catch {
+            log(`⚠️ Invalid JSON: ${topic} ${payload}`);
+            return;
+        }
+    }
+    if (typeof payload === "string" || typeof payload === "number") {
+        const n = Number(payload);
+        if (!Number.isNaN(n)) {
+            payload = n;
+        }
+    }
+    messageBatch[device] = payload;
+    if (!batchTimeout) {
+		batchTimeout = setTimeout(() => {
+			const batchKeys = Object.keys(messageBatch);
+            // Log hoevel berichten er SINDS de vorige batch zijn binnengekomen
+            console.log(`📊 Batch: ${batchKeys.length} unieke devices geupdate uit ${totalMessagesReceived} inkomende berichten.`);
+
+            // Reset teller voor de volgende 100ms periode
+            totalMessagesReceived = 0;
+            for (const [deviceId, data] of Object.entries(messageBatch)) {
+				handleResponse(deviceId, data);
+			}
+			messageBatch = {};
+			batchTimeout = null;
+		}, 50);
+	}
 }
 function isIPad() {
     return (
@@ -1550,6 +1566,31 @@ document.addEventListener("DOMContentLoaded", () => {
     lastMessageReceived = Date.now()
     connect()
 })
+
+
+
+function initPlaceholders() {
+    console.log("🎨 Tekenen placeholders...");
+    if (typeof drawCircle !== "function") {
+        console.warn("drawCircle nog niet geladen, retry...");
+        setTimeout(initPlaceholders, 100);
+        return;
+    }
+	drawCircle('avgtimecircle', 0, 900, 82, 'gray')
+	drawCircle('avgcircle', 0, 2500, 90, 'purple')
+	drawCircle('eleccircle', 0, 100, 90, 'purple')
+	drawCircle('zonvcircle', 0, 10, 90, 'green')
+	drawCircle('gascircle', 0, 10, 90, 'red')
+	drawCircle('netcircle', 0, 10, 90, 'purple')
+	drawCircle('chargecircle', 0, 100, 82, 'gray')
+	drawCircle('zoncircle', 0, 0, 90, 'green')
+	drawCircle('batcircle', 0, 800, 90, 'purple')
+	drawCircle('totalcircle', 0, 2500, 90, 'purple')
+}
+
+// Gebruik onload voor de zekerheid dat alle layout-berekeningen klaar zijn
+window.onload = initPlaceholders;
+
 
 window.addEventListener("pageshow", e => {
     // ← BLOKKEER tijdens initiële connect op iPad

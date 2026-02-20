@@ -180,48 +180,48 @@
 					<a href="https://verbruik.egregius.be/kwartierpiek.php">
 						<div id="avg">
 							<span id="avgtitle">15'</span>
-							<span id="avgvalue"></span>
+							<span id="avgvalue">0</span>
 							<canvas id="avgtimecircle" width="120" height="120"></canvas>
 							<canvas id="avgcircle" width="120" height="120"></canvas>
 						</div>
 					</a>
 					<div id="net">
 						<span id="nettitle">Net</span>
-						<span id="netvalue"></span>
+						<span id="netvalue">0</span>
 						<canvas id="netcircle" width="120" height="120"></canvas>
 					</div>
 					<div id="total">
 						<span id="totaltitle">Verbruik</span>
-						<span id="totalvalue"></span>
+						<span id="totalvalue">0</span>
 						<canvas id="totalcircle" width="120" height="120"></canvas>
 					</div>
 					<div id="elec">
 						<span id="electitle">Elec</span>
-						<span id="elecvalue"></span>
+						<span id="elecvalue">0<br><span class="units">0,00</span></span>
 						<canvas id="eleccircle" width="120" height="120"></canvas>
 					</div>
 					<div id="gas">
 						<span id="gastitle">Gas</span>
-						<span id="gasvalue"></span>
+						<span id="gasvalue">0<br><span class="units">0,00</span></span>
 						<canvas id="gascircle" width="120" height="120"></canvas>
 					</div>
 					<div id="bat">
 						<span id="battitle">Bat</span>
-						<span id="batvalue"></span>
-						<span id="batcharge"></span>
+						<span id="batvalue">0</span>
+						<span id="batcharge">0</span>
 						<canvas id="batcircle" width="120" height="120"></canvas>
 						<canvas id="chargecircle" width="120" height="120"></canvas>
 					</div>
 				</div>
 				<div class="abs zonurl">
 					<div id="zon">
-						<span id="zontitle">Zon</span>
-						<span id="zonvalue"></span>
+						<span id="zontitle">Zon nu</span>
+						<span id="zonvalue">0</span>
 						<canvas id="zoncircle" width="120" height="120"></canvas>
 					</div>
 					<div id="zonv">
 						<span id="zonvtitle">Zon</span>
-						<span id="zonvvalue"></span>
+						<span id="zonvvalue">0<br><span class="units">0,00</span></span>
 						<canvas id="zonvcircle" width="120" height="120"></canvas>
 					</div>
 				</div>
@@ -311,19 +311,15 @@
 			<div id="floorplantemp" class="view"></div>
 		</div>
 <script>
-console.log('SW Script start check...');
-
 function registerSW() {
     navigator.serviceWorker.register('/sw.js?v=<?=filemtime("sw.js")?>')
     .then(function(reg) {
-        console.log('SW succes! Scope:', reg.scope);
     }).catch(function(err) {
         console.warn('SW falen:', err);
     });
 }
 
 if ('serviceWorker' in navigator) {
-    console.log('Service Worker is ondersteund');
     if (document.readyState === 'complete') {
         registerSW();
     } else {
