@@ -128,25 +128,25 @@ function setTime(){
 	const seconds = ("0" + date.getSeconds()).slice(-2);
 	if(setText('time',`${hours}:${minutes}:${seconds}`)) {
 		newTime=date/1000
-		rawSeconds = updateSecondsInQuarter(newTime);
-		avgTimeOffsetRaw = localStorage.getItem('avgTimeOffset');
+		const rawSeconds = updateSecondsInQuarter(newTime);
+		const avgTimeOffsetRaw = localStorage.getItem('avgTimeOffset');
 		avgTimeOffset = Number(avgTimeOffsetRaw);
 		if (avgTimeOffsetRaw === null || avgTimeOffsetRaw === "null" || !Number.isFinite(avgTimeOffset)) {
 			avgTimeOffset = -10;
 		}
 		if (lastAvgValue !== null && lastAvgValue > 0 && d.avg < lastAvgValue) {
-			expectedResetTime = avgTimeOffset < 0 ? 900 + avgTimeOffset : avgTimeOffset;
-			minResetTime = (expectedResetTime - 10 + 900) % 900;
-			maxResetTime = (expectedResetTime + 10) % 900;
-			inWindow = false;
+			const expectedResetTime = avgTimeOffset < 0 ? 900 + avgTimeOffset : avgTimeOffset;
+			const minResetTime = (expectedResetTime - 10 + 900) % 900;
+			const maxResetTime = (expectedResetTime + 10) % 900;
+			let inWindow = false;
 			if (minResetTime < maxResetTime) {
 				inWindow = rawSeconds >= minResetTime && rawSeconds <= maxResetTime;
 			} else {
 				inWindow = rawSeconds >= minResetTime || rawSeconds <= maxResetTime;
 			}
 			if (inWindow) {
-				proposedOffset = rawSeconds <= 20 ? rawSeconds : rawSeconds - 900;
-				offsetDifference = proposedOffset - avgTimeOffset;
+				const proposedOffset = rawSeconds <= 20 ? rawSeconds : rawSeconds - 900;
+				const offsetDifference = proposedOffset - avgTimeOffset;
 				if (Math.abs(offsetDifference) <= 3) {
 					avgTimeOffset = proposedOffset;
 					log(`Offset aangepast naar ${avgTimeOffset}s`);
@@ -158,7 +158,7 @@ function setTime(){
 			}
 		}
 		lastAvgValue = d.a;
-		correctedSeconds = (rawSeconds - avgTimeOffset + 900) % 900;
+		const correctedSeconds = (rawSeconds - avgTimeOffset + 900) % 900;
 		if (correctedSeconds % 5 == 0 || forceTimes) {
 			drawCircle('avgtimecircle', correctedSeconds, 900, 82, 'gray');
 		}
@@ -202,6 +202,129 @@ function setView(newView){
     if(newEl) newEl.classList.add('active')
 }
 function formatDate(t){return date=new Date(1e3*t),date.getDate()+"/"+(date.getMonth()+1)}
+// ── Heating render helpers ────────────────────────────────────────────────────
+const HEATING_ICONS = {
+    '-2': { img: 'Cooling',      alt: 'Cooling',  label: 'Airco<br>cooling'   },
+    '-1': { img: 'Cooling_grey', alt: 'Cooling',  label: 'Passive<br>cooling' },
+     '0': { img: 'close',        alt: 'Neutral',  label: 'Neutral'            },
+     '1': { img: 'Cooling_red',  alt: 'Elec',     label: 'Airco<br>heating'   },
+     '2': { img: 'GasAirco',     alt: 'AircoGas', label: 'Gas-Airco<br>heating' },
+     '3': { img: 'Gas',          alt: 'Gas',      label: 'Gas heating'        },
+     '4': { img: 'Gas',          alt: 'Gas',      label: 'Gas heating'        },
+};
+
+function renderHeatingButton(s) {
+    const cfg = HEATING_ICONS[String(s)];
+    let html = '<img src="/images/arrowdown.png" class="i60" alt="Open">';
+    if (cfg && s !== 0) html += `<img src="/images/${cfg.img}.png" class="i40" alt="${cfg.alt}">`;
+    setHTML('heatingbutton', html);
+    setHTML('oheatingbutton', html);
+}
+
+function renderHeatingRow(s) {
+    const cfg = HEATING_ICONS[String(s)];
+    if (!cfg) return;
+    const h = s === 0 ? '40' : '60';
+    const w = s === 0 ? '40' : '80';
+    const html = `<img src="images/${cfg.img}.png" onclick="heating();"></td>`
+               + `<td align="left" height="${h}" width="${w}px" style="line-height:18px" onclick="heating()">${cfg.label}</td>`;
+    setHTML('trheating', html);
+}
+
+function renderHeatingFloorplan(s, branderState) {
+    const cfg = HEATING_ICONS[String(s)];
+    let html = '<img src="/images/arrowdown.png" class="i60" alt="Open">';
+    if (s === 4) {
+        html += branderState === 1
+            ? '<img src="/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">'
+            : '<img src="/images/fire_Off.png" class="i40" alt="Gas">';
+    } else if (cfg && s !== 0) {
+        html += `<img src="/images/${cfg.img}.png" class="i40" alt="${cfg.alt}">`;
+    }
+    setHTML('heating', html);
+}
+
+// ── Switch/dimmer render helpers ──────────────────────────────────────────────
+const SVG_CIRCLE_PATH = 'M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831';
+
+function renderDimmerCircleSVG(dasharray) {
+    return `<svg viewBox="0 0 36 36">`
+         + `<path class="circle-bg" d="${SVG_CIRCLE_PATH}" />`
+         + `<path class="circle" stroke-dasharray="${dasharray},100" d="${SVG_CIRCLE_PATH}" />`
+         + `</svg>`;
+}
+
+function renderSwitchHTML(device, v, opts = {}) {
+    const isOn    = (v.s > 0);
+    const icon    = v.i || 'l';
+    const state   = isOn ? 'On' : 'Off';
+
+    const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort'];
+    const DIRECT   = ['regenpomp','nas'];
+    const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort'];
+    const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort'];
+
+    let onclick;
+    if (CONFIRM.includes(device)) {
+        onclick = `confirmSwitch('${device}')`;
+    } else if (DIRECT.includes(device)) {
+        onclick = `ajaxcontrol('${device}','sw','${isOn ? 'Off' : 'On'}');setView('floorplan');`;
+    } else {
+        onclick = `ajaxcontrol('${device}','sw','${isOn ? 'Off' : 'On'}')`;
+    }
+
+    let html;
+    if (isOn && icon === 'l') {
+        html = `<img src="/images/l_On.png" id="${device}" class="img100" />`
+             + `<div class="dimmercircle" onclick="${onclick}">`
+             + renderDimmerCircleSVG(100)
+             + `</div>`;
+    } else {
+        html = `<img src="/images/${icon}_${state}.png" id="${device}" onclick="${onclick}" />`;
+    }
+
+    if (SPECIAL.includes(device)) {
+        const naam = device === 'steenterras' ? 'steen' : device === 'tuintafel' ? 'hout' : device;
+        html += `<br>${naam}`;
+        if (TIMESTMP.includes(device)) {
+            if (v.t > (newTime - 82800)) {
+                const dt = new Date(v.t * 1000);
+                html += `<br>${dt.getHours()}:${String(dt.getMinutes()).padStart(2,'0')}`;
+                setStyle(device, 'color', '#CCC');
+            } else {
+                html += `<br>${formatDate(v.t)}`;
+                setStyle(device, 'color', '#777');
+            }
+        }
+    }
+    return html;
+}
+
+function renderDimmerHTML(device, v) {
+    const level = parseInt(v.s) || 0;
+    let html;
+    if (level === 0) {
+        html = '<img src="/images/l_Off.png" class="img100">';
+    } else {
+        html = '<img src="/images/l_On.png" class="img100">'
+             + `<div class="dimmercircle">`
+             + renderDimmerCircleSVG(level)
+             + `<div class="dimmer-percentage">${level}%</div>`
+             + `</div>`;
+    }
+    if (device === 'terras') html += 'terras';
+    return html;
+}
+
+function renderBoseHTML(device, v) {
+    if (v.m === 0) return '';
+    const img = (device === 'bose101' || device === 'bose106') ? 'ST30' : 'ST10';
+    const state = v.s === 1 ? 'On' : 'Off';
+    return `<a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">`
+         + `<img src="images/${img}_${state}.png" id="${device}" alt="bose"></a>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 function handleResponse(device,v){
 	d[device]=v
 	switch(device) {
@@ -217,17 +340,17 @@ function handleResponse(device,v){
 			setText('Sset',v.Ss)
 			setText('Tend',v.Te)
 			setText('playlist',v.pl)
-			mintemp=(Math.round(v.b.m * 100) / 100).toFixed(1);
-			maxtemp=(Math.round(v.b.x * 100) / 100).toFixed(1);
-			if(setText('mint',mintemp.toString().replace(/[.]/,","))===true) {
-				if (mintemp>0) mincolor=berekenKleurRood(mintemp,30,10)
-				else mincolor=berekenKleurBlauw(mintemp,-5,10)
-				setStyle('mint','color',mincolor)
-			}
-			if(setText('maxt',maxtemp.toString().replace(/[.]/,","))===true) {
-				if (maxtemp>0) maxcolor=berekenKleurRood(maxtemp,35,15)
-				else maxcolor=berekenKleurBlauw(maxtemp,5,10)
-				setStyle('maxt','color',maxcolor)
+			{
+				const mintemp=(Math.round(v.b.m * 100) / 100).toFixed(1);
+				const maxtemp=(Math.round(v.b.x * 100) / 100).toFixed(1);
+				if(setText('mint',mintemp.toString().replace(/[.]/,","))) {
+					const mincolor = mintemp>0 ? berekenKleurRood(mintemp,30,10) : berekenKleurBlauw(mintemp,-5,10);
+					setStyle('mint','color',mincolor)
+				}
+				if(setText('maxt',maxtemp.toString().replace(/[.]/,","))) {
+					const maxcolor = maxtemp>0 ? berekenKleurRood(maxtemp,35,15) : berekenKleurBlauw(maxtemp,5,10);
+					setStyle('maxt','color',maxcolor)
+				}
 			}
 			if(d.buiten_temp?.s!==undefined) renderThermometer('buiten_temp',d.buiten_temp)
 			return
@@ -242,20 +365,19 @@ function handleResponse(device,v){
 			sessionStorage.setItem('gasavg', v.gasavg)
 			return
 		case 'w':
-			el=getElem("wind")
 			if(setHTML('wind',v.w.toString().replace(/[.]/,","))===true) setStyle('wind','color',berekenKleurRood(v.w,50,20))
 			setAttr('icon','src',"/images/" + v.i + ".png")
-			mintemp=(Math.round(v.mint * 100) / 100).toFixed(1);
-			if(setText('mintemp',mintemp.toString().replace(/[.]/,","))===true) {
-				if (mintemp>0) mincolor=berekenKleurRood(mintemp,30,10)
-				else mincolor=berekenKleurBlauw(mintemp,-5,10)
-				setStyle('mintemp','color',mincolor)
-			}
-			maxtemp=(Math.round(v.maxt * 100) / 100).toFixed(1);
-			if(setText('maxtemp',maxtemp.toString().replace(/[.]/,","))) {
-				if (maxtemp>0) maxcolor=berekenKleurRood(maxtemp,35,15)
-				else maxcolor=berekenKleurBlauw(maxtemp,5,10)
-				setStyle('maxtemp','color',maxcolor)
+			{
+				const mintemp=(Math.round(v.mint * 100) / 100).toFixed(1);
+				if(setText('mintemp',mintemp.toString().replace(/[.]/,","))) {
+					const mincolor = mintemp>0 ? berekenKleurRood(mintemp,30,10) : berekenKleurBlauw(mintemp,-5,10);
+					setStyle('mintemp','color',mincolor)
+				}
+				const maxtemp=(Math.round(v.maxt * 100) / 100).toFixed(1);
+				if(setText('maxtemp',maxtemp.toString().replace(/[.]/,","))) {
+					const maxcolor = maxtemp>0 ? berekenKleurRood(maxtemp,35,15) : berekenKleurBlauw(maxtemp,5,10);
+					setStyle('maxtemp','color',maxcolor)
+				}
 			}
 			if(setText('uv',v.uv.toString().replace(/[.]/,","))===true) setStyle('uv','color',berekenKleurRood(v.uv,11,2))
 			if(setText('uvm',v.uvm.toString().replace(/[.]/,","))===true) setStyle('uv','color',berekenKleurRood(v.uvm,11,2))
@@ -269,38 +391,40 @@ function handleResponse(device,v){
 				}
 			}
 			return
-		case 'elec':
-			val = parseFloat(v);
-			avg = parseFloat(d.elecavg);
-			euro = val * euroelec;
-			html = euro.toFixed(2).toString().replace(/[.]/, ",");
+		case 'elec': {
+			const val = parseFloat(v);
+			const euro = val * euroelec;
+			const html = euro.toFixed(2).toString().replace(/[.]/, ",");
 			if (d.net > 0) setStyle('elecvalue', 'color', berekenKleurRood(v, d.elecavg * 2));
 			else setStyle('elecvalue', 'color', berekenKleurGroen(-v, d.elecavg * 2));
-			drawCircle('eleccircle', val, avg, 90, 'purple');
-			valStr = val.toFixed(2).toString().replace(/[.]/, ",");
+			drawCircle('eleccircle', val, d.elecavg, 90, 'purple');
+			const valStr = val.toFixed(2).toString().replace(/[.]/, ",");
 			setHTML('elecvalue', html + `<br><span class="units">${valStr}</span>`);
 			sessionStorage.setItem('elec', v)
 			return
+		}
 		case 'alwayson':
 			setText('alwayson', v + "W");
 			return
-		case 'zon':
-			val = parseFloat(v);
-			euro = val * (euroelec + 0.45);
-			html = euro.toFixed(2).toString().replace(/[.]/, ",");
+		case 'zon': {
+			const val = parseFloat(v);
+			const euro = val * (euroelec + 0.45);
+			const html = euro.toFixed(2).toString().replace(/[.]/, ",");
 			setStyle('zonvvalue', 'color', berekenKleurGroen(-val, d.zonref / 10));
 			drawCircle('zonvcircle', val, d.zonref, 90, 'green');
-			valStr = val.toFixed(2).toString().replace(/[.]/, ",");
+			const valStr = val.toFixed(2).toString().replace(/[.]/, ",");
 			setHTML('zonvvalue', html + `<br><span class="units">${valStr}</span>`);
 			return
-		case 'gas':
-			euro = v * 11.5 * eurogas;
-			html = euro.toFixed(2).toString().replace(/[.]/, ",");
+		}
+		case 'gas': {
+			const euro = v * 11.5 * eurogas;
+			const html = euro.toFixed(2).toString().replace(/[.]/, ",");
 			setStyle('gasvalue', 'color', berekenKleurRood(v, d.gasavg * 2000));
 			drawCircle('gascircle', v, d.gasavg, 90, 'red');
-			valStr = v.toFixed(2).toString().replace(/[.]/, ",");
+			const valStr = v.toFixed(2).toString().replace(/[.]/, ",");
 			setHTML('gasvalue', html + `<br><span class="units">${valStr}</span>`);
 			return
+		}
 		case 'verlof':
 			if(v.s==0)html='Normaal'
 			else if(v.s==1)html='Geen school'
@@ -340,7 +464,8 @@ function handleResponse(device,v){
 			if(v.s==0) setStyle('poort','display','block')
 			else setStyle('poort','display','none')
 			return
-		case 'alexslaapt':
+		case 'alexslaapt': {
+			let txt;
 			if(v.s==1) {
 				addClass('zalex','securedalex')
 				txt='Alex slaapt '
@@ -348,38 +473,24 @@ function handleResponse(device,v){
 				removeClass('zalex','securedalex')
 				txt='Alex wakker '
 			}
+			let timeHtml = '';
 			if(v.t>(newTime-82800)){
-				date=new Date(v.t*1000)
-				hours=date.getHours()
-				minutes="0"+date.getMinutes()
-				html=hours+':'+minutes.substr(-2)
-				txt+=html
-			}else html=""
-			setText("t"+device,html)
+				const dt=new Date(v.t*1000)
+				timeHtml=dt.getHours()+':'+String(dt.getMinutes()).padStart(2,'0')
+				txt+=timeHtml
+			}
+			setText("t"+device, timeHtml)
 			return
-		case 'dag':
-			s=v.s
+		}
+		case 'dag': {
+			let s=v.s
 			if (s < -10 || s > 10) s=Math.round(s)
 			setText('dag',s)
 			return
+		}
 		case 'heating':
-			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
-			if(v.s==0)html+=''
-			else if(v.s==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
-			else if(v.s==-1)html+='<img src="/images/Cooling_grey.png" class="i40" alt="Cooling">'
-			else if(v.s==1)html+='<img src="/images/Cooling_red.png" class="i40" alt="Elec">'
-			else if(v.s==2)html+='<img src="/images/AircoGas.png" class="i40" alt="AircoGas">'
-			else if(v.s==3)html+='<img src="/images/GasAirco.png" class="i40" alt="GasAirco">'
-			else if(v.s==4)html+='<img src="/images/Gas.png" class="i40" alt="Gas">'
-			setHTML('heatingbutton',html)
-			setHTML('oheatingbutton',html)
-			if(v.s==0)html='<img src="images/close.png" height="40" width="40px" onclick="heating();"></td><td align="left" height="40" width="40px" style="line-height:18px" onclick="heating()">Neutral</td>'
-			else if(v.s==-2)html='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>cooling</td>'
-			else if(v.s==-1)html='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive<br>cooling</td>'
-			else if(v.s==1)html='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>heating</td>'
-			else if(v.s==2)html='<img src="images/GasAirco.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas-Airco<br>heating</td>'
-			else if(v.s==3)html='<img src="images/Gas.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>'
-			setHTML('trheating',html)
+			renderHeatingButton(v.s)
+			renderHeatingRow(v.s)
 			return
 		case 'sirene':
 			if(v.s==1)html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device
@@ -388,27 +499,17 @@ function handleResponse(device,v){
 			return
 		case 'brander':
 			const heatingmode=d.heating?.s ?? 0;
-			if(v.s==0)html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">'
-			else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">'
-			setHTML('brander',html)
+			const branderOn = (v.s === 1 || v.s === 'On') ? 1 : 0;
+			const branderImg = branderOn ? 'fire_On' : 'fire_Off';
+			const branderToggle = branderOn ? 'Off' : 'On';
+			setHTML('brander', `<img src="images/${branderImg}.png" onclick="ajaxcontrol('brander','sw','${branderToggle}')">`)
 			updateDeviceTime(device)
-			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
-			if(heatingmode==0)html+=''
-			else if(heatingmode==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
-			else if(heatingmode==-1)html+='<img src="/images/Cooling_grey.png" class="i40" alt="Cooling">'
-			else if(heatingmode==1)html+='<img src="/images/Cooling_red.png" class="i40" alt="Elec">'
-			else if(heatingmode==4){
-				if(v.s==1)html+='<img src="/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">'
-				else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">'
+			renderHeatingFloorplan(heatingmode, branderOn)
+			if (heatingmode >= 1) {
+				setAttr('branderfloorplan', 'src', `/images/${branderImg}.png`)
+			} else {
+				setAttr('branderfloorplan', 'src', '')
 			}
-			setHTML('heating',html)
-			if(heatingmode>=1){
-				if(v.s==0) setAttr('branderfloorplan','src',"/images/fire_Off.png")
-				else setAttr('branderfloorplan','src',"/images/fire_On.png")
-			} else if(heatingmode>0){
-				if(v.s==0)setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
-				else setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
-			} else setAttr('branderfloorplan','src',"")
 			return
 		case 'luifel':
 			if(v.s==0)html='<img src="/images/arrowgreenup.png" class="i60">'
@@ -426,225 +527,125 @@ function handleResponse(device,v){
 			setTime()
 			switch(v?.d) {
 				case 's':
-	            case 'sc':
-	            	html='';
-					const isOn=(v.s > 0);
-					const iconName=v.i || 'l';
-					const specialDevices=["water","regenpomp","steenterras","tuintafel","terras","tuin","auto","media","nas","zetel","grohered","kookplaat","boseliving","bosekeuken","ipaddock","mac","poort"];
-					const confirmDevices=["ipaddcok","mac","daikin","grohered","kookplaat","media","boseliving","bosekeuken","poort"];
-					const directControlDevices=["regenpomp","nas"];
-					if (device == "daikin"){
-						if (!isOn){
-							setText('daikin_kwh','')
-						} else {
-							setText('daikin_kwh',v.p+" W")
-							setStyle('daikin_kwh','color',berekenKleurRood(v.p,2000,400))
+				case 'sc': {
+					if (device === 'daikin') {
+						const isOn = (v.s > 0);
+						if (!isOn) setText('daikin_kwh', '');
+						else {
+							setText('daikin_kwh', v.p + ' W');
+							setStyle('daikin_kwh', 'color', berekenKleurRood(v.p, 2000, 400));
 						}
 					}
-			//			if (device == "water"){
-			//				prev=localStorage.getItem('water');
-			//				if (prev!==v.s) localStorage.setItem('water',v.s);
-			//				prev=localStorage.getItem('watermode');
-			//				if (prev!==v.m) localStorage.setItem('watermode',v.m);
-			//			}
-					onclickHandler='';
-					if (confirmDevices.includes(device)){
-						onclickHandler=`confirmSwitch('${device}')`;
-					} else if (directControlDevices.includes(device)){
-						const newState=isOn ? 'Off' : 'On';
-						onclickHandler=`ajaxcontrol('${device}','sw','${newState}');setView('floorplan');`;
-					} else {
-						const newState=isOn ? 'Off' : 'On';
-						onclickHandler=`ajaxcontrol('${device}','sw','${newState}')`;
-					}
-					if (isOn){
-						if (iconName == 'l'){
-							html='<img src="/images/l_On.png" id="' + device + '" class="img100" />';
-							html += '<div class="dimmercircle" onclick="' + onclickHandler + '">';
-							html += '<svg viewBox="0 0 36 36">';
-							html += '<path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-							html += '<path class="circle" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-							html += '</svg>';
-							html += '</div>';
-						} else {
-							html='<img src="/images/' + iconName + '_On.png" id="' + device + '" onclick="' + onclickHandler + '" />';
-						}
-					} else {
-						html='<img src="/images/' + iconName + '_Off.png" id="' + device + '" onclick="' + onclickHandler + '" />';
-					}
-					if (specialDevices.includes(device)){
-						if(device=='steenterras') naam='steen'
-						else if(device=='tuintafel') naam='hout'
-						else naam=device
-						html += '<br>' + naam;
-						if (["water","regenpomp","auto","media","nas","mac","ipaddock","boseliving","bosekeuken","grohered","kookplaat","zetel","poort"].includes(device)){
-							if (v.t > (newTime - 82800)){
-								const date=new Date(v.t * 1000);
-								const hours=date.getHours();
-								const minutes=("0" + date.getMinutes()).substr(-2);
-								html += '<br>' + hours + ':' + minutes;
-								setStyle(device,'color','#CCC')
-							} else {
-								html += '<br>' + formatDate(v.t);
-								setStyle(device,'color','#777')
-							}
-						}
-					}
-					setHTML(device,html);
-					if (device=="poort"&&d.weg?.s>0) setStyle('poort','display','none')
-					else if (device=="weg"&&d.weg.s==0) setStyle('poort','display','block')
+					setHTML(device, renderSwitchHTML(device, v));
+					if (device === 'poort' && d.weg?.s > 0) setStyle('poort', 'display', 'none');
+					else if (device === 'weg' && d.weg?.s === 0) setStyle('poort', 'display', 'block');
 					return
+				}
 				case 'd':
-	            case 'hd':
-	            	html='';
-					level=parseInt(v.s) || 0;
-					if (level == 0){
-						html='<img src="/images/l_Off.png" class="img100">';
-					} else {
-						html='<img src="/images/l_On.png" class="img100">';
-						html += '<div class="dimmercircle">';
-						html += '<svg viewBox="0 0 36 36">';
-						html += '<path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-						html += '<path class="circle" stroke-dasharray="' + level + ',100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-						html += '</svg>';
-						html += '<div class="dimmer-percentage">' + level + '%</div>';
-						html += '</div>';
-					}
-					if (device == "terras"){
-						html += 'terras';
-					}
-					setHTML(device,html);
+				case 'hd':
+					setHTML(device, renderDimmerHTML(device, v));
 					return
 				case 'b':
-					if(device==="bose101"||device==="bose106"){
-						if(v.m==0)html=''
-						else{
-							if(v.s==1)html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
-							else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
-						}
-					}else{
-						if(v.m==0)html=''
-						else{
-							if(v.s==1)html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
-							else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
-						}
-					}
-					setHTML(device,html)
+					setHTML(device, renderBoseHTML(device, v));
 					return
-				case 'r':
-					status=100 - v.s;
-					perc=(status < 100) ? (status / 100) * 0.7 : 1;
-					if(device!='zoldertrap') {
-						const opts=v.i.split(",");
-						rollerTop=parseInt(opts[0]);
-						indicatorSize=0;
-						if (status == 0){
-							indicatorSize=0;
-						} else if (status > 0){
-							indicatorSize=(parseFloat(opts[2]) * perc) + 8;
-							if (indicatorSize > parseFloat(opts[2])){
-								indicatorSize=parseFloat(opts[2]);
-							}
-							rollerTop=parseInt(opts[0]) + parseInt(opts[2]) - indicatorSize;
-							addClass(device,'yellow')
-						} else {
-							indicatorSize=parseFloat(opts[2]);
+				case 'r': {
+					const status = 100 - v.s;
+					const perc = (status < 100) ? (status / 100) * 0.7 : 1;
+					if (device !== 'zoldertrap') {
+						const opts = v.i.split(',');
+						let rollerTop = parseInt(opts[0]);
+						let indicatorSize = 0;
+						if (status > 0) {
+							indicatorSize = Math.min((parseFloat(opts[2]) * perc) + 8, parseFloat(opts[2]));
+							rollerTop = parseInt(opts[0]) + parseInt(opts[2]) - indicatorSize;
+							addClass(device, 'yellow');
 						}
-						if (opts[3] == "P"){
-							setStyle(device,'top',rollerTop + 'px')
-							setStyle(device,'left',opts[1] + 'px')
-							setStyle(device,'width','8px')
-							setStyle(device,'height',indicatorSize + 'px')
-						} else if (opts[3] == "L"){
-							setStyle(device,'top',opts[0] + 'px')
-							setStyle(device,'left',opts[1] + 'px')
-							setStyle(device,'width',indicatorSize + 'px')
-							setStyle(device,'height','9px')
+						if (opts[3] === 'P') {
+							setStyle(device, 'top',    rollerTop + 'px');
+							setStyle(device, 'left',   opts[1] + 'px');
+							setStyle(device, 'width',  '8px');
+							setStyle(device, 'height', indicatorSize + 'px');
+						} else if (opts[3] === 'L') {
+							setStyle(device, 'top',    opts[0] + 'px');
+							setStyle(device, 'left',   opts[1] + 'px');
+							setStyle(device, 'width',  indicatorSize + 'px');
+							setStyle(device, 'height', '9px');
 						}
 					}
-					html='';
-					if (v.s == 100){
-						html='<img src="/images/arrowgreendown.png" class="i48">';
-					} else if (v.s == 0){
-						html='<img src="/images/arrowgreenup.png" class="i48">';
-					} else {
-						html='<img src="/images/circlegrey.png" class="i48">';
-						html += '<div class="fix center dimmerlevel" style="position:absolute;top:19px;left:1px;width:46px;letter-spacing:6px;">';
-						html += '<font size="5" color="#CCC">' + v.s + '</font>';
-						html += '</div>';
-					}
+					let html;
+					if (v.s === 100)     html = '<img src="/images/arrowgreendown.png" class="i48">';
+					else if (v.s === 0)  html = '<img src="/images/arrowgreenup.png" class="i48">';
+					else                 html = `<img src="/images/circlegrey.png" class="i48">`
+					                          + `<div class="fix center dimmerlevel" style="position:absolute;top:19px;left:1px;width:46px;letter-spacing:6px;">`
+					                          + `<font size="5" color="#CCC">${v.s}</font></div>`;
 					html += '</div>';
-					if (v.t > (newTime - 82800)){
-						const date=new Date(v.t * 1000);
-						const hours=date.getHours();
-						const minutes=("0" + date.getMinutes()).substr(-2);
-						html += '<br><div id="t' + device + '">' + hours + ':' + minutes + '</div>';
+					if (v.t > (newTime - 82800)) {
+						const dt = new Date(v.t * 1000);
+						html += `<br><div id="t${device}">${dt.getHours()}:${String(dt.getMinutes()).padStart(2,'0')}</div>`;
 					} else {
-						html += '<br><div id="t' + device + '">' + formatDate(v.t) + '</div>';
+						html += `<br><div id="t${device}">${formatDate(v.t)}</div>`;
 					}
-					setHTML('R'+device,html)
-				case 'p':
-					d[device]=v
-					temp=device.toString().replace("pir","")
-					updateDeviceTime(device)
-					if(temp=="hall"||temp=="living"){
-						if(v.s==1){
-							addClass('z'+temp+'a','motion')
-							addClass('z'+temp+'b','motion')
-						}else{
-							removeClass('z'+temp+'a','motion')
-							removeClass('z'+temp+'b','motion')
-						}
-					}else{
-						if(v.s==1) addClass('z'+temp,'motion')
-						else removeClass('z'+temp,'motion')
+					setHTML('R' + device, html);
+					return
+				}
+				case 'p': {
+					d[device] = v;
+					const pirZone = device.replace('pir', '');
+					updateDeviceTime(device);
+					if (pirZone === 'hall' || pirZone === 'living') {
+						if (v.s === 1) { addClass('z'+pirZone+'a','motion'); addClass('z'+pirZone+'b','motion'); }
+						else           { removeClass('z'+pirZone+'a','motion'); removeClass('z'+pirZone+'b','motion'); }
+					} else {
+						if (v.s === 1) addClass('z'+pirZone, 'motion');
+						else           removeClass('z'+pirZone, 'motion');
 					}
 					return
+				}
 				case 'c':
-					if(device!=='raamhall') {
-						d[device]=v
-						updateDeviceTime(device)
-						if(v.s==1) addClass(device,'red')
-						else removeClass(device,'red')
+					if (device !== 'raamhall') {
+						d[device] = v;
+						updateDeviceTime(device);
+						if (v.s === 1) addClass(device, 'red');
+						else           removeClass(device, 'red');
 					}
 					return
 				case 't':
-					if(device==='buiten_temp') {
-					 if(d.w?.mint!==undefined&&d.d?.b?.m!=undefined) renderThermometer(device,v)
-					}else renderThermometer(device,v)
+					if (device === 'buiten_temp') {
+						if (d.w?.mint !== undefined && d.d?.b?.m != undefined) renderThermometer(device, v);
+					} else {
+						renderThermometer(device, v);
+					}
 					return
-				case 'th':
-					temp=d[device.toString().replace("_set","_temp")]?.s ?? 0
-					dif=temp-v.s
-					if(dif>0.3)circle="hot"
-					else if(dif<-0.3)circle="cold"
-					else circle="grey"
-					if(v.s>=20)center="red"
-					else if(v.s>19)center="orange"
-					else if(v.s>14)center="grey"
-					else center="blue"
-					html='<img src="/images/thermo'+circle+center+'.png" class="i48" alt="">'
-					html+='<div class="abs center" style="top:35px;left:11px;width:26px;">'
-					if(v.m==1){
-						html+='<font size="2" color="#222">'+v.s.toString().replace(/[.]/,",")+'</font></div>'
-						html+='<div class="abs" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;"></div>'
-					}else html+='<font size="2" color="#CCC">'+v.s.toString().replace(/[.]/,",")+'</font></div>'
-					if(v.t>(newTime-82800)){
-						date=new Date(v.t*1000)
-						hours=date.getHours()
-						minutes="0"+date.getMinutes()
-						html+='<br><div id="t'+device+'">'+hours+':'+minutes.substr(-2)+'</div>'
-					}else html+='<br><div id="t'+device+'">'+formatDate(v.t)+'</div>';
-					setHTML(device,html)
+				case 'th': {
+					const thTemp = d[device.replace('_set','_temp')]?.s ?? 0;
+					const dif = thTemp - v.s;
+					const circle = dif > 0.3 ? 'hot' : dif < -0.3 ? 'cold' : 'grey';
+					const center = v.s >= 20 ? 'red' : v.s > 19 ? 'orange' : v.s > 14 ? 'grey' : 'blue';
+					const valStr = v.s.toString().replace('.', ',');
+					let html = `<img src="/images/thermo${circle}${center}.png" class="i48" alt="">`
+					         + `<div class="abs center" style="top:35px;left:11px;width:26px;">`;
+					if (v.m === 1) {
+						html += `<font size="2" color="#222">${valStr}</font></div>`
+						      + `<div class="abs" style="top:2px;left:2px;z-index:-100;background:#b08000;width:44px;height:44px;border-radius:45px;"></div>`;
+					} else {
+						html += `<font size="2" color="#CCC">${valStr}</font></div>`;
+					}
+					if (v.t > (newTime - 82800)) {
+						const dt = new Date(v.t * 1000);
+						html += `<br><div id="t${device}">${dt.getHours()}:${String(dt.getMinutes()).padStart(2,'0')}</div>`;
+					} else {
+						html += `<br><div id="t${device}">${formatDate(v.t)}</div>`;
+					}
+					setHTML(device, html);
 					return
+				}
 			}
 	}
 	if (device==='n') {
 		if(setText('netvalue', v)){
 			if (shouldRedraw(prevnet,v,2500,5)||v===0) {
 				prevnet=v
-				if (v < 0) kleur=berekenKleurGroen(-v, 5000)
-				else kleur=berekenKleurRood(v, 5000)
+				const kleur = v < 0 ? berekenKleurGroen(-v, 5000) : berekenKleurRood(v, 5000);
 				setStyle('net', 'color', kleur);
 				setStyle('nettitle', 'color', kleur);
 				drawCircle('netcircle', v, 2500, 90, 'purple')
@@ -677,12 +678,12 @@ function handleResponse(device,v){
 		}
 		return
 	}
-	total = d.n + d.z - d.b;
+	const total = d.n + d.z - d.b;
 	if (device==='n'||device==='z'||device==='b'){
 		if(setText('totalvalue', total)){
 			if (shouldRedraw(prevtotal,total,2500)||v===0) {
 				prevtotal=total
-				kleur=berekenKleurRood(d.n, 5000)
+				const kleur=berekenKleurRood(d.n, 5000)
 				setStyle('totaltitle', 'color', kleur);
 				setStyle('totalvalue', 'color', kleur);
 				drawCircle('totalcircle', total, 2500 + d.z, 90, 'purple');
@@ -773,22 +774,17 @@ async function ajaxbose(ip){
     }
 }
 function setpoint(device){
-	level=d[device+'_set'].s;
-	heatingset=d.heating.s
-	temp=d[device+'_temp'].s
-	$mode=d[device+'_set'].m
+	const level=d[device+'_set'].s;
+	const heatingset=d.heating.s
+	const temp=d[device+'_temp'].s
+	const $mode=d[device+'_set'].m
+	let min, avg, max;
 	if (device==='living'){
-		min=16;
-		avg=20;
-		max=23;
+		min=16; avg=20; max=23;
 	} else if (device==='badkamer'){
-		min=12;
-		avg=20;
-		max=22;
+		min=12; avg=20; max=22;
 	} else {
-		min=10;
-		avg=16;
-		max=22;
+		min=10; avg=16; max=22;
 		if (d.heating&&d.heating.s != null){
 			avg -= Number(d.heating.s);
 		}
@@ -869,7 +865,7 @@ function setpoint(device){
 window.dimmerLocked=window.dimmerLocked || {};
 function dimmer(device,floorplan='floorplan'){
 	if(window.dimmerLocked[device])return;
- 	current=d[device].s
+	const current=d[device].s
 	let html='<div class="dimmer"><div class="dimmer-container">';
 	html += '<div class="dimmer-header">';
 	html += '<h2 class="dimmer-title">'+ucfirst(device)+'</h2>';
@@ -937,8 +933,8 @@ function dimmer(device,floorplan='floorplan'){
 	setTimeout(function(){initDimmerSlider(device);},10);
 }
 function roller(device,floorplan='floorplanheating'){
-	current=d[device].s
-	let currentInt=parseInt(current);
+	const current=d[device].s
+	const currentInt=parseInt(current);
 	let html='<div class="dimmer"><div class="dimmer-container">';
 	html += '<div class="dimmer-header">';
 	html += '<h2 class="dimmer-title">'+ucfirst(device)+'</h2>';
@@ -1014,7 +1010,7 @@ function roller(device,floorplan='floorplanheating'){
 	setView('floorplantemp')
 }
 function verlof(){
-	html='<div class="dimmer" ><div style="min-height:220px">'
+	let html='<div class="dimmer" ><div style="min-height:220px">'
 	html+='<div id="message" class="dimmer">'
 	if (d.verlof.s==2)html+='<button class="btn btna huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'2\');setView(\'floorplanothers\');">Verlof</button>'
 	else html+='<button class="btn huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'2\');setView(\'floorplanothers\');">Verlof</button>'
@@ -1064,7 +1060,7 @@ function weg(){
 	setView('floorplantemp')
 }
 function heating(){
-	html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer">'
+	let html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer">'
 	if(d.heating.s==3) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');setView(\'floorplanheating\');">Gas heating</button>'
 	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');setView(\'floorplanheating\');">Gas heating</button>'
 	if(d.heating.s==2) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/GasAirco.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');setView(\'floorplanheating\');">Gas-Airco heating</button>'
@@ -1084,7 +1080,7 @@ function heating(){
 	setView('floorplantemp')
 }
 function confirmSwitch(device){
-	html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer"><br><h1>'+device+'</h1><br>'
+	let html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer"><br><h1>'+device+'</h1><br>'
 	if (d[device].s==1){
 		html+='<button class="btn btna huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');setView(\''+view+'\');">On</button>'
 		html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');setView(\''+view+'\');">Off</button>'
@@ -1373,9 +1369,9 @@ function getTrendArrow(t) {
     return "";
 }
 function updateDeviceTime(id) {
-    tijd = d[id]?.t ?? 0
-    status = d[id]?.s
-    delta = newTime - tijd
+    const tijd = d[id]?.t ?? 0
+    const status = d[id]?.s
+    const delta = newTime - tijd
     if (delta>=0) {
 		let kleur
 		if (delta < 300) {
@@ -1449,15 +1445,13 @@ let totalMessagesReceived = 0;
 let totalHandleCalls = 0;
 let currentVersion = null;
 let offlineTimeout = null;
-
 function connect() {
-//    ajax();
     if (client && client.connected) return;
     if (!navigator.onLine) {
         setTimeout(connect, 1000);
         return;
     }
-    client = mqtt.connect('wss://home.egregius.be/mqtt', {
+    client = mqtt.connect('wss://' + window.location.hostname + ':443/mqtt', {
         clientId: getClientId(),
         clean: true,
         connectTimeout: 1000,
@@ -1593,7 +1587,7 @@ function startMonitor() {
         const silence = Date.now() - lastMessageReceived;
         if (silence > DEAD_TIMEOUT) {
             console.warn(`⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...`);
-            hardReconnect("⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...");
+            hardReconnect(`⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...`);
         }
     }, MONITOR_INTERVAL);
 }
@@ -1672,223 +1666,6 @@ function initPlaceholders() {
 	drawCircle('totalcircle', 0, 0, 90, 'purple')
 }
 window.onload = initPlaceholders;
-function ajax(){
-	setTime()
-	if(!fetchajax) return
-   	fetchajax=false
-	log("🅰️ Ajax")
-    ajaxJSON('d.php').then(e=>{
-        if (!e || e.aborted){
-	        setTimeout(()=>ajax(),1000)
-	        return
-	    }
-	    if(e.reload_now===true) {
-	    	forceAppUpdate();
-	    	return;
-	    }
-		handleAjaxResponse(e);
-    })
-    .catch(err=>{
-        if (err.name==='AbortError'){
-	        setTimeout(()=>ajax(),1000);
-            return;
-        }
-        console.warn('ajax error',err);
-        setTimeout(()=>ajax(),1000);
-    });
-}
-function handleAjaxResponse(response){
-	newTime = response.t ?? newTime;
-	Object.entries(response).forEach(([device,v])=>{
-		if(device=="heating"){
-			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
-			if(v.s==0)html+=''
-			else if(v.s==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
-			else if(v.s==-1)html+='<img src="/images/Cooling_grey.png" class="i40" alt="Cooling">'
-			else if(v.s==1)html+='<img src="/images/Cooling_red.png" class="i40" alt="Elec">'
-			else if(v.s==2)html+='<img src="/images/AircoGas.png" class="i40" alt="AircoGas">'
-			else if(v.s==3)html+='<img src="/images/GasAirco.png" class="i40" alt="GasAirco">'
-			else if(v.s==4)html+='<img src="/images/Gas.png" class="i40" alt="Gas">'
-			setHTML('heatingbutton',html)
-			if(v.s==0)html='<img src="images/close.png" height="40" width="40px" onclick="heating();"></td><td align="left" height="40" width="40px" style="line-height:18px" onclick="heating()">Neutral</td>'
-			else if(v.s==-2)html='<img src="images/Cooling.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>cooling</td>'
-			else if(v.s==-1)html='<img src="images/Cooling_grey.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Passive<br>cooling</td>'
-			else if(v.s==1)html='<img src="images/Cooling_red.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Airco<br>heating</td>'
-			else if(v.s==2)html='<img src="images/GasAirco.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas-Airco<br>heating</td>'
-			else if(v.s==3)html='<img src="images/Gas.png" onclick="heating();"></td><td align="left" height="60" width="80px" style="line-height:18px" onclick="heating()">Gas heating</td>'
-			setHTML('trheating',html)
-		}else if(device=="sirene"){
-			if(v.s!="Off")html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device
-			else html=""
-			setHTML('sirene',html)
-		}else if(device=="brander"){
-			const heatingmode=d.heating?.s ?? 0;
-			if(v.s=="Off")html='<img src="images/fire_Off.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'On\')">'
-			else html='<img src="images/fire_On.png" onclick="ajaxcontrol(\'brander\',\'sw\',\'Off\')">'
-			setHTML('brander',html)
-			html='<img src="/images/arrowdown.png" class="i60" alt="Open">'
-			if(heatingmode==0)html+=''
-			else if(heatingmode==-2)html+='<img src="/images/Cooling.png" class="i40" alt="Cooling">'
-			else if(heatingmode==-1)html+='<img src="/images/Cooling_grey.png" class="i40" alt="Cooling">'
-			else if(heatingmode==1)html+='<img src="/images/Cooling_red.png" class="i40" alt="Elec">'
-			else if(heatingmode==4){
-				if(v.s=='On')html+='<img src="/images/fire_On.png" class="i40" id="branderfloorplan" alt="Gas">'
-				else html+='<img src="/images/fire_Off.png" class="i40" alt="Gas">'
-			}
-			setHTML('heating',html)
-			if(heatingmode>=1){
-				if(v.s=="Off") setAttr('branderfloorplan','src',"/images/fire_Off.png")
-				else setAttr('branderfloorplan','src',"/images/fire_On.png")
-			} else if(heatingmode>0){
-				if(v.s=="Off")setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
-				else setAttr('branderfloorplan','src',"/images/gaselec_Off.png")
-			} else setAttr('branderfloorplan','src',"")
-		} else if (["s","sc"].includes(v?.d)){
-			if (lastState[view+device] === v) return
-			lastState[view+device] = v
-			let html='';
-			const isOn=(v.s == "On");
-			const iconName=v.i || 'l';
-			const specialDevices=["water","regenpomp","steenterras","tuintafel","terras","tuin","auto","media","nas","zetel","grohered","kookplaat","boseliving","bosekeuken","ipaddock","mac"];
-			const confirmDevices=["ipaddcok","mac","daikin","grohered","kookplaat","media","boseliving","bosekeuken"];
-			const directControlDevices=["regenpomp","nas"];
-			let onclickHandler='';
-			if (confirmDevices.includes(device)){
-				onclickHandler=`confirmSwitch('${device}')`;
-			} else if (directControlDevices.includes(device)){
-				const newState=isOn ? 'Off' : 'On';
-				onclickHandler=`ajaxcontrol('${device}','sw','${newState}');setView('floorplan');`;
-			} else {
-				const newState=isOn ? 'Off' : 'On';
-				onclickHandler=`ajaxcontrol('${device}','sw','${newState}')`;
-			}
-			if (isOn){
-				if (iconName == 'l'){
-					html='<img src="/images/l_On.png" id="' + device + '" class="img100" />';
-					html += '<div class="dimmercircle" onclick="' + onclickHandler + '">';
-					html += '<svg viewBox="0 0 36 36">';
-					html += '<path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-					html += '<path class="circle" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-					html += '</svg>';
-					html += '</div>';
-				} else {
-					html='<img src="/images/' + iconName + '_On.png" id="' + device + '" onclick="' + onclickHandler + '" />';
-				}
-			} else {
-				html='<img src="/images/' + iconName + '_Off.png" id="' + device + '" onclick="' + onclickHandler + '" />';
-			}
-			setHTML(device,html);
-		} else if (["d","hd"].includes(v?.d)){
-			let html='';
-			const level=parseInt(v.s) || 0;
-			if (level == 0){
-				html='<img src="/images/l_Off.png" class="img100">';
-			} else {
-				html='<img src="/images/l_On.png" class="img100">';
-				html += '<div class="dimmercircle">';
-				html += '<svg viewBox="0 0 36 36">';
-				html += '<path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-				html += '<path class="circle" stroke-dasharray="' + level + ',100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />';
-				html += '</svg>';
-				html += '<div class="dimmer-percentage">' + level + '%</div>';
-				html += '</div>';
-			}
-			if (device == "terras"){
-				html += 'terras';
-			}
-			setHTML(device,html);
-		} else if (v.d==["b"]){
-			if(device=="bose101"||device=="bose106"){
-				if(v.m==0)html=''
-				else{
-					if(v.s=="On")html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
-					else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST30_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
-				}
-			}else{
-				if(v.m==0)html=''
-				else{
-					if(v.s=="On")html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_On.png\" id=\""+device+"\" alt=\"bose\"></a>"
-					else html="<a href='javascript:navigator_Go(\"floorplan.bose.php?ip="+device+"\");'><img src=\"images/ST10_Off.png\" id=\""+device+"\" alt=\"bose\"></a>"
-				}
-			}
-			setHTML(device,html)
-		} else if (v.d==["r"]){
-			const opts=v.i.split(",");
-			const status=100 - v.s;
-			let perc=(status < 100) ? (status / 100) * 0.7 : 1;
-			let rollerTop=parseInt(opts[0]);
-			let indicatorSize=0;
-			if (status == 0){
-				indicatorSize=0;
-			} else if (status > 0){
-				indicatorSize=(parseFloat(opts[2]) * perc) + 8;
-				if (indicatorSize > parseFloat(opts[2])){
-					indicatorSize=parseFloat(opts[2]);
-				}
-				rollerTop=parseInt(opts[0]) + parseInt(opts[2]) - indicatorSize;
-				addClass(device,'yellow')
-			} else {
-				indicatorSize=parseFloat(opts[2]);
-			}
-			if (opts[3] == "P"){
-				setStyle(device,'top',rollerTop + 'px')
-				setStyle(device,'left',opts[1] + 'px')
-				setStyle(device,'width','8px')
-				setStyle(device,'height',indicatorSize + 'px')
-			} else if (opts[3] == "L"){
-				setStyle(device,'top',opts[0] + 'px')
-				setStyle(device,'left',opts[1] + 'px')
-				setStyle(device,'width',indicatorSize + 'px')
-				setStyle(device,'height','9px')
-			}
-			let html='';
-			if (v.s == 100){
-				html='<img src="/images/arrowgreendown.png" class="i48">';
-			} else if (v.s == 0){
-				html='<img src="/images/arrowgreenup.png" class="i48">';
-			} else {
-				html='<img src="/images/circlegrey.png" class="i48">';
-				html += '<div class="fix center dimmerlevel" style="position:absolute;top:19px;left:1px;width:46px;letter-spacing:6px;">';
-				html += '<font size="5" color="#CCC">' + v.s + '</font>';
-				html += '</div>';
-			}
-			html += '</div>';
-			if (v.t > (newTime - 82800)){
-				const date=new Date(v.t * 1000);
-				const hours=date.getHours();
-				const minutes=("0" + date.getMinutes()).substr(-2);
-				html += '<br><div id="t' + device + '">' + hours + ':' + minutes + '</div>';
-			} else {
-				html += '<br><div id="t' + device + '">' + formatDate(v.t) + '</div>';
-			}
-			setHTML('R'+device,html)
-		} else if (v.d==["p"]){
-			temp=device.toString().replace("pir","")
-			if(temp=="hall"||temp=="living"){
-				if(v.s=="On"){
-					addClass('z'+temp+'a','motion')
-					addClass('z'+temp+'b','motion')
-				}else{
-					removeClass('z'+temp+'a','motion')
-					removeClass('z'+temp+'b','motion')
-				}
-			}else{
-				if(v.s=="On") addClass('z'+temp,'motion')
-				else removeClass('z'+temp,'motion')
-			}
-			updateDeviceTime(device)
-		} else if (v.d=='c'&&device!='raamhall'){
-			if (lastState[view+device+'C'] === v) return
-			lastState[view+device+'C'] = v
-			if(v.s=="Open") addClass(device,'red')
-			else removeClass(device,'red')
-			updateDeviceTime(device)
-		} else if (v.d=="t"){
-			renderThermometer(device,v);
-		}
-		d[device]=v
-	})
-}
 function forceAppUpdate() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -1902,4 +1679,10 @@ function forceAppUpdate() {
     } else {
         window.location.reload(true);
     }
+}
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log("Nieuwe versie gedetecteerd, herladen...");
+        window.location.reload();
+    });
 }

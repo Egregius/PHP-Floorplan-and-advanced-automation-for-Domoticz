@@ -1,5 +1,4 @@
-const urlParams = new URLSearchParams(self.location.search);
-const VERSION = urlParams.get('v') || '1.0';
+const VERSION = '1.3';
 const CACHE_NAME = 'floorplan-cache-' + VERSION;
 const PRE_CACHE_ASSETS = [
     '/',
@@ -18,7 +17,7 @@ const PRE_CACHE_ASSETS = [
 	'/images/ST30_Off.png',
 	'/images/Thuis.png',
 	'/images/weg.png',
-	'/images/slapen.png',
+	'/images/Slapen.png',
 	'/images/arrowdown.png'
 ];
 
@@ -26,7 +25,14 @@ self.addEventListener('install', e => {
     console.log('SW Install: Caching assets naar ' + CACHE_NAME);
     e.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
-            return cache.addAll(PRE_CACHE_ASSETS);
+            // We mappen elk bestand naar een individuele 'add' call
+            return Promise.all(
+                PRE_CACHE_ASSETS.map(url => {
+                    return cache.add(url).catch(err => {
+                        console.error('❌ SW Cache faal voor:', url, err);
+                    });
+                })
+            );
         })
     );
     self.skipWaiting();
@@ -50,7 +56,7 @@ self.addEventListener('activate', (event) => {
 });
 self.addEventListener('fetch', e => {
     const url = new URL(e.request.url);
-    if (url.pathname.includes('ajax.php') || url.pathname.includes('d.php')) return;
+    if (url.pathname.includes('ajax.php') || url.pathname.includes('d.php') || url.pathname.includes('/mqtt')) return;
     e.respondWith(
         caches.match(e.request, { ignoreSearch: true }).then(cached => {
             if (cached) return cached;
