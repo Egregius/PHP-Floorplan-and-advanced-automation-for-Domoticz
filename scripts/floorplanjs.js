@@ -1661,7 +1661,6 @@ function initPlaceholders() {
 	drawCircle('totalcircle', 0, 0, 90, 'purple')
 }
 window.onload = initPlaceholders;
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'] . "/sw.js") ?>').then(r=>{r.onupdatefound=()=>{const n=r.installing;n.onstatechange=()=>{n.state==='installed'&&navigator.serviceWorker.controller&&(sessionStorage.setItem('pwa_upd','1'),location.reload())}}});navigator.serviceWorker.oncontrollerchange=()=>{sessionStorage.getItem('pwa_upd')||(sessionStorage.setItem('pwa_upd','1'),location.reload())}}
 async function forceReset() {
 	const storageKey = 'app_version_' + window.location.hostname;
 	const localVersion = localStorage.getItem(storageKey);
@@ -1672,7 +1671,6 @@ async function forceReset() {
 			const keys = await caches.keys();
 			await Promise.all(keys.map(key => caches.delete(key)));
 		}
-		await db.delete();
 		localStorage.clear();
 		if (localVersion !== null) {
 			localStorage.setItem(storageKey, localVersion);

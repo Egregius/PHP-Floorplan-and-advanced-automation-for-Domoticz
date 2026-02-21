@@ -21,7 +21,7 @@
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs z2" id="clock"><a href="#" id="time" onclick="forceAppUpdate();"><?= date("G:i:s");?></a></div>
+		<div class="abs z2" id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
 		<div class="abs center zon">
 			<div class="sun-times">
 				☀️ <span id="dag"></span><br>
@@ -297,22 +297,13 @@
 			<div id="floorplantemp" class="view"></div>
 		</div>
 <script>
-function registerSW() {
-    navigator.serviceWorker.register('/sw.js?v=<?=filemtime("sw.js")?>')
-    .then(function(reg) {
-    }).catch(function(err) {
-        console.warn('SW falen:', err);
-    });
-}
-if ('serviceWorker' in navigator) {
-    if (document.readyState === 'complete') {
-        registerSW();
-    } else {
-        window.addEventListener('load', registerSW);
-    }
-} else {
-    console.log('Service Worker wordt NIET ondersteund door deze browser');
-}
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js?v=<?= max(
+        filemtime($_SERVER['DOCUMENT_ROOT'] . "/index.php"),
+        filemtime($_SERVER['DOCUMENT_ROOT'] . "/scripts/floorplanjs.js.gz")
+    ) ?>').then(r=>{
+        r.onupdatefound=()=>{const n=r.installing;n.onstatechange=()=>{n.state==='installed'&&navigator.serviceWorker.controller&&(sessionStorage.setItem('pwa_upd','1'),location.reload())}}});navigator.serviceWorker.oncontrollerchange=()=>{sessionStorage.getItem('pwa_upd')||(sessionStorage.setItem('pwa_upd','1'),location.reload())}}
+
 </script>
 </body>
 </html>

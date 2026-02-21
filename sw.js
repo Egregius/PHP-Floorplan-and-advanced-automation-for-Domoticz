@@ -22,24 +22,15 @@ const PRE_CACHE_ASSETS = [
 ];
 
 self.addEventListener('install', e => {
-    console.log('SW Install: Caching assets naar ' + CACHE_NAME);
     e.waitUntil(
-        caches.open(CACHE_NAME).then(cache => {
-            // We mappen elk bestand naar een individuele 'add' call
-            return Promise.all(
-                PRE_CACHE_ASSETS.map(url => {
-                    return cache.add(url).catch(err => {
-                        console.error('❌ SW Cache faal voor:', url, err);
-                    });
-                })
-            );
-        })
+        caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(PRE_CACHE_ASSETS))
+            .then(() => self.skipWaiting())
     );
-    self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('SW Activate: Schoonmaak...');
+    console.log('SW Activate: Oude caches verwijderen...');
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
@@ -54,20 +45,54 @@ self.addEventListener('activate', (event) => {
         })
     );
 });
+const NETWORK_FIRST = [
+	'index.php',
+    'temp.php',
+    'tempbig.php',
+    'hum.php',
+    'floorplan.cache.php',
+    'floorplan.doorsensors.php',
+    'kodi.php',
+    'kodicontrol.php',
+];
+const CACHE_EXCLUDED = [
+    'ajax.php',
+    'd.php',
+];
 self.addEventListener('fetch', e => {
-    const url = new URL(e.request.url);
-    if (url.pathname.includes('ajax.php') || url.pathname.includes('d.php') || url.pathname.includes('/mqtt')) return;
-    e.respondWith(
-        caches.match(e.request, { ignoreSearch: true }).then(cached => {
-            if (cached) return cached;
-            return fetch(e.request).then(response => {
-                if (!response || response.status !== 200 || response.type !== 'basic') {
-                    return response;
+    if (e.request.method !== 'GET') return;
+    const url = e.request.url;
+    if (CACHE_EXCLUDED.some(pattern => url.includes(pattern))) return;
+    if (NETWORK_FIRST.some(pattern => url.includes(pattern))) {
+        e.respondWith(
+            fetch(e.request).then(networkResponse => {
+                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                    return networkResponse;
                 }
-                const copy = response.clone();
-                caches.open(CACHE_NAME).then(cache => cache.put(e.request, copy));
-                return response;
-            });
+                const responseToCache = networkResponse.clone();
+                caches.open(CACHE_NAME).then(cache => {
+                    cache.put(e.request, responseToCache);
+                });
+                return networkResponse;
+            }).catch(() => {
+                return caches.match(e.request);
+            })
+        );
+        return;
+    }
+    e.respondWith(
+        caches.match(e.request).then(cachedResponse => {
+            if (cachedResponse) return cachedResponse;
+            return fetch(e.request).then(networkResponse => {
+                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                    return networkResponse;
+                }
+                const responseToCache = networkResponse.clone();
+                caches.open(CACHE_NAME).then(cache => {
+                    cache.put(e.request, responseToCache);
+                });
+                return networkResponse;
+            }).catch(() => {});
         })
     );
 });
