@@ -133,7 +133,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$comfortAfternoon = strtotime($comfortStart[$dow]);
 		}
 	}
- 	$comfortEnd = strtotime('22:00');
+ 	$comfortEnd = strtotime('20:30');
 //	$comfortAfternoon = strtotime('7:45');
 	$target = 21;
 	$tempDelta   = max(0, $target - $living);

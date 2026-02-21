@@ -1441,7 +1441,6 @@ let messageBatch = {};
 let batchTimeout = null;
 const DEAD_TIMEOUT = 2900;
 const MONITOR_INTERVAL = 1000;
-let totalMessagesReceived = 0;
 let totalHandleCalls = 0;
 let currentVersion = null;
 let offlineTimeout = null;
@@ -1495,7 +1494,6 @@ function connect() {
 	});
 }
 function onMessage(topic, payload) {
-    totalMessagesReceived++;
     lastMessageReceived = Date.now();
     if (topic === "d/floorplan_version") {
 		const serverVersion = parseInt(payload);
@@ -1536,9 +1534,6 @@ function onMessage(topic, payload) {
     messageBatch[device] = payload;
     if (!batchTimeout) {
 		batchTimeout = setTimeout(() => {
-			const batchKeys = Object.keys(messageBatch);
-            if(batchKeys.length>1) log(`📊 ${batchKeys.length} devices uit ${totalMessagesReceived} berichten`);
-            totalMessagesReceived = 0;
             for (const [deviceId, data] of Object.entries(messageBatch)) {
 				requestAnimationFrame(() => {
 					handleResponse(deviceId, data);
