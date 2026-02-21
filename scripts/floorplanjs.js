@@ -1661,23 +1661,24 @@ function initPlaceholders() {
 	drawCircle('totalcircle', 0, 0, 90, 'purple')
 }
 window.onload = initPlaceholders;
-function forceAppUpdate() {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(registrations => {
-            for (let registration of registrations) {
-                registration.unregister();
-            }
-            setTimeout(() => {
-                window.location.reload(true);
-            }, 400);
-        });
-    } else {
-        window.location.reload(true);
-    }
-}
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-        console.log("Nieuwe versie gedetecteerd, herladen...");
-        window.location.reload();
-    });
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'] . "/sw.js") ?>').then(r=>{r.onupdatefound=()=>{const n=r.installing;n.onstatechange=()=>{n.state==='installed'&&navigator.serviceWorker.controller&&(sessionStorage.setItem('pwa_upd','1'),location.reload())}}});navigator.serviceWorker.oncontrollerchange=()=>{sessionStorage.getItem('pwa_upd')||(sessionStorage.setItem('pwa_upd','1'),location.reload())}}
+async function forceReset() {
+	const storageKey = 'app_version_' + window.location.hostname;
+	const localVersion = localStorage.getItem(storageKey);
+	try {
+		const registrations = await navigator.serviceWorker.getRegistrations();
+		for (let reg of registrations) { await reg.unregister(); }
+		if ('caches' in window) {
+			const keys = await caches.keys();
+			await Promise.all(keys.map(key => caches.delete(key)));
+		}
+		await db.delete();
+		localStorage.clear();
+		if (localVersion !== null) {
+			localStorage.setItem(storageKey, localVersion);
+		}
+		window.location.href = window.location.pathname + '?clear=' + Date.now();
+	} catch (err) {
+		alert("Reset mislukt: " + err);
+	}
 }
