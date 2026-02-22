@@ -127,6 +127,7 @@ function setTime(){
 	const minutes = ("0" + date.getMinutes()).slice(-2);
 	const seconds = ("0" + date.getSeconds()).slice(-2);
 	if(setText('time',`${hours}:${minutes}:${seconds}`)) {
+		console.log(`${hours}:${minutes}:${seconds}`)
 		newTime=date/1000
 		const rawSeconds = updateSecondsInQuarter(newTime);
 		const avgTimeOffsetRaw = localStorage.getItem('avgTimeOffset');
@@ -163,7 +164,8 @@ function setTime(){
 			drawCircle('avgtimecircle', correctedSeconds, 900, 82, 'gray');
 		}
 
-		if (d.timestamps === undefined || (newTime >= d.timestamps + 5 && newTime % 10 == 0) || forceTimes === true) {
+		if (d.timestamps === undefined || newTime >= d.timestamps + 20 || forceTimes === true) {
+			console.log('Update times')
 			const items = [
 				...['living_set','badkamer_set','kamer_set','alex_set','brander','luifel'],
 				...['deurgarage','deurinkom','achterdeur','deurvoordeur','deurbadkamer','deurkamer','deurwaskamer','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamwaskamer','raamalex'],
@@ -327,9 +329,9 @@ function renderBoseHTML(device, v) {
 // ─────────────────────────────────────────────────────────────────────────────
 function handleResponse(device,v){
 	d[device]=v
+	setTime()
 	switch(device) {
 		case 't':
-			setTime()
 			return
 		case 'i':
 			setText('info',v)
@@ -524,7 +526,7 @@ function handleResponse(device,v){
 			log('💬 '+v)
 			return
 		default:
-			setTime()
+
 			switch(v?.d) {
 				case 's':
 				case 'sc': {
@@ -1504,7 +1506,7 @@ function onMessage(topic, payload) {
 			log(`📌 App Versie: ${readable}`);
 		} else if (serverVersion > currentVersion) {
 			log(`🚀 Update gevonden (${readable}), herladen...`);
-			forceAppUpdate();
+			forceReset();
 		}
 		return;
 	}
