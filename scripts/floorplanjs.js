@@ -106,7 +106,6 @@ function addClass(id, cls) {
     if (lastValues['a' + key] === cls) return;
     lastValues['a' + key] = cls;
     delete lastValues['r' + key];
-
     getUpdateEntry(id).classes[cls] = 'add';
     requestTick();
 }

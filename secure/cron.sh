@@ -6,7 +6,7 @@ SCRIPTS=(
   mqtt_light.php
   mqtt_media_player.php
   mqtt_sensor_switch.php
-  mqtt_time.php
+#  mqtt_time.php
   mqtt_zigbee2mqtt.php
   cron.php
   cron2.php
