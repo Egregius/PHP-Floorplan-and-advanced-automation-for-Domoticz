@@ -127,7 +127,6 @@ function setTime(){
 	const minutes = ("0" + date.getMinutes()).slice(-2);
 	const seconds = ("0" + date.getSeconds()).slice(-2);
 	if(setText('time',`${hours}:${minutes}:${seconds}`)) {
-		console.log(`${hours}:${minutes}:${seconds}`)
 		newTime=date/1000
 		const rawSeconds = updateSecondsInQuarter(newTime);
 		const avgTimeOffsetRaw = localStorage.getItem('avgTimeOffset');
@@ -165,7 +164,6 @@ function setTime(){
 		}
 
 		if (d.timestamps === undefined || newTime >= d.timestamps + 20 || forceTimes === true) {
-			console.log('Update times')
 			const items = [
 				...['living_set','badkamer_set','kamer_set','alex_set','brander','luifel'],
 				...['deurgarage','deurinkom','achterdeur','deurvoordeur','deurbadkamer','deurkamer','deurwaskamer','deuralex','deurwc','raamliving','raamkeuken','raamkamer','raamwaskamer','raamalex'],
