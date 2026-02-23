@@ -50,6 +50,7 @@ const NETWORK_FIRST = [
     'temp.php',
     'tempbig.php',
     'hum.php',
+    'log.php',
     'floorplan.cache.php',
     'floorplan.doorsensors.php',
     'kodi.php',
