@@ -124,17 +124,16 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
             $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
         }
     }
-
 	if ($prevavg > 2500) {
 		if ($newavg > $kwartierpiek - 200) {
-			//alert('Kwartierpiek', 'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 120, false);
+			alert('Kwartierpiek', 'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh');
 		}
 		if ($newavg < $prevavg) {
 			try {
 				$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
 				$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
 				if ($prevavg > $kwartierpiek - 200) {
-					//alert('KwartierpiekB', 'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh', 30, false);
+					alert('KwartierpiekB', 'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh');
 					$kwartierpiek = $prevavg;
 				}
 			} catch (Exception $e) {
@@ -279,6 +278,18 @@ function publishmqtt($topic,$msg) {
 	lg("🟢 {$topic} {$msg}");
 	return;
 }
+function alert($name,$msg) {
+	$last=0;
+	$db = new Database('192.168.2.23', 'dbuser', 'dbuser', 'domotica');
+	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
+	while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
+		if (isset($row[0])) $last=$row[0];
+	}
+	$time=time();
+	if ($last < $time-300) {
+		if(hassnotify('Alert!', $msg, 'mobile_app_iphone_guy')) $db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
+	}
+}
 class Database {
     private $host;
     private $user;
@@ -399,4 +410,55 @@ function stoploop() {
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
+}
+function hassnotify($title, $message, $target = 'mobile_app_iphone_guy') {
+    $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjNDk4ZDU1MTA2ZWI0MWJkYWE3ZWZjNTMwMmEyYzg3NiIsImlhdCI6MTc1MDE1MjQxMCwiZXhwIjoyMDY1NTEyNDEwfQ.kKqGJU4ALE6_HMQ5c4kwtcW8IeOVhhBc4Spg3lmheJs';
+	$ha_url_push = 'http://192.168.2.26:8123/api/services/notify/' . $target;
+	$push_data = [
+		"message" => $message,
+		"title"   => $title,
+		"data"    => [
+			"ttl"      => 0,
+			"priority" => "high",
+			"persistent" => true,
+			"push" => [
+				"sound" => [
+					"name"     => "default",
+					"critical" => 1,
+					"volume"   => 1.0
+				]
+			]
+		]
+	];
+	for ($x = 1; $x <= 10; $x++) {
+		$options = [
+			"http" => [
+				"method"  => "POST",
+				"header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
+				"content" => json_encode($push_data),
+				"timeout" => 3
+			]
+		];
+		$context = stream_context_create($options);
+		$response = @file_get_contents($ha_url_push, false, $context);
+		if ($response !== FALSE) break;
+		sleep($x);
+	}
+	$ha_url_dashboard = 'http://192.168.2.26:8123/api/services/persistent_notification/create';
+	$dashboard_data = [
+		"title" => $title,
+		"message" => $message,
+		"notification_id" => uniqid("notif_")
+	];
+	$options = [
+		"http" => [
+			"method"  => "POST",
+			"header"  => "Authorization: Bearer $token\r\nContent-Type: application/json\r\n",
+			"content" => json_encode($dashboard_data),
+			"timeout" => 10
+		]
+	];
+	$context = stream_context_create($options);
+	@file_get_contents($ha_url_dashboard, false, $context);
+    return true;
 }
