@@ -51,6 +51,8 @@ if ($d['weg']->s>0) {
 			if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>43200) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 		}
 	}
+} else {
+	if ($d['dysonlader']->s=='On'&&past('dysonlader')>3600) sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
 
