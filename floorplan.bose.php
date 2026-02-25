@@ -45,7 +45,21 @@ $boses=array(
 		.b2{margin:1px;}
 		.input{width:78px;}
 		.blackmedia{top:50px;left:0px;height:581px;width:100%;background-color:#000;text-align:center;}
-		#clock{top:0px;left:0px;width:100vw;text-align:center;}
+		#clockbose {top:0px;left:0px;width:100vw;text-align:center;
+    height: 44px;
+    line-height: 44px;
+    font-size: 33px;
+    font-weight: 500;
+    color: #FFF;
+    z-index: 5;
+    border-radius: 12px;
+    transition: background 0.5s ease, color 0.5s ease;
+}
+#clockbose a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
 		#volume{width:99vw;}
 		#bass{width:99vw;}
 		.volume{width:8.4%;height:50px;padding:0!important;margin:0 0.3%;}
@@ -66,14 +80,14 @@ $boses=array(
 	</script>
 </head>
 <body>
-	<div class="fix" id="clock">
-		<a href="javascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');" id="time"></a> 
+	<div class="fix" id="clockbose">
+		<a href="javascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');" id="time"></a>
 	</div>
 	<div class="fix" id="playlist">
-		<a href="javascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');"><?= boseplaylist();?></a> 
+		<a href="javascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');"><?= boseplaylist();?></a>
 	</div>
 	<div class="fix" id="bose">
-		<a href="avascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');"><?= $boses[$bose] ?></a> 
+		<a href="avascript:navigator_Go('floorplan.bose.php?ip=<?= $bose ?>');"><?= $boses[$bose] ?></a>
 	</div>
 	<div class="fix blackmedia bose" >
 			<input type="hidden" name="ip" value="'.$bose.'">

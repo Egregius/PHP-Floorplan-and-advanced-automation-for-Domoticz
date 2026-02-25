@@ -89,7 +89,7 @@ foreach (array('living','kamer','alex') as $k) {
 			if ($time>strtotime('18:30') && $d['media']->s=='On') {
 				$fan=$fanspeeds[clamp(round($dif*10)+2,0,2)];
 				$maxpow=40;
-			} else $fan=$fanspeeds[clamp(round($dif*10),-3,2)];
+			} else $fan=$fanspeeds[clamp(round($dif*10),-3,1)];
 
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;

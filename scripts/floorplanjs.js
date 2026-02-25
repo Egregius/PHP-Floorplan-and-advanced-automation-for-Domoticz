@@ -654,7 +654,7 @@ function handleResponse(device,v){
 	if (device==='c') {
 		if(setText('batcharge',v+' %')) {
 			drawCircle('chargecircle', v, 100, 82, 'gray');
-			setStyle('batcharge', 'color', berekenKleurGroen(v, 100));
+			setStyle('batcharge', 'color', berekenKleurGroen(v, 400));
 		}
 		return
 	}
@@ -756,6 +756,7 @@ async function ajaxbose(ip){
                     const cls=(data.playlist===playlistName) ? 'btn btna b3' : 'btn b3';
                     html += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}')">${playlistName.split(' ')[0]} - ${playlistName.split(' ')[3]}</button>`;
                 });
+
         } else {
             setText('artist','');
             setText('track','');
@@ -766,6 +767,7 @@ async function ajaxbose(ip){
         }
         setHTML('power',html);
         setHTML('playlist',data.playlisttoday ?? '');
+        removeClass('clock','offline')
     } catch(err){
         console.warn('ajaxbose error',err);
     } finally {
