@@ -9,14 +9,7 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-
-$contentBath = @file_get_contents('/var/www/leadDataBath.json');
-$leadDataBath = $contentBath ? json_decode($contentBath, true) ?? [] : [];
-print_r($leadDataBath[1]);
-foreach($leadDataBath[1] as $k=>$v) {
-	echo $k.'='.implode(',',$v).'<br>';
-}
-
+print_r($_SERVER);
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
