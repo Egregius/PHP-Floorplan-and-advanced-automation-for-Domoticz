@@ -1,6 +1,6 @@
 <?php
 require '/var/www/html/secure/functions.php';
-if ($_SERVER['REMOTE_ADDR']=='192.168.2.20'||$_SERVER['REMOTE_ADDR']=='192.168.2.201') {
+if ($_SERVER['REMOTE_ADDR']=='192.168.20.20'||$_SERVER['REMOTE_ADDR']=='192.168.2.201') {
 	if (isset($_GET['user'])) {
 		if ($_GET['user']=='Guy'||$_GET['user']=='Kirby') {
 			if (isset($_GET['event'])) {

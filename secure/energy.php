@@ -118,8 +118,8 @@ class Database {
         throw new Exception("Exec failed after {$this->maxRetries} attempts");
     }
 }
-$dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
-$dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
+$dbverbruik = new Database('192.168.20.20', 'home', 'H0m€', 'verbruik');
+$dbzonphp = new Database('192.168.20.20', 'home', 'H0m€', 'egregius_zonphp');
 lg("🟢 energy.php started");
 $force=true;
 
@@ -133,7 +133,7 @@ while (true) {
         $lastDayUpdate = $currentDay;
         lg("Forcing update at 23:59 for complete day totals");
     }
-    
+
     try {
         processEnergyData($dbverbruik, $dbzonphp, $force);
     } catch (Exception $e) {
@@ -217,7 +217,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			}
 		}
 	}
-	if (updateVerbruikCache($newData, $force)) {    
+	if (updateVerbruikCache($newData, $force)) {
 		$prevwater = getCache('water_meter');
 		if ($prevwater != $water && getCache('weg') > 2) {
 			setCache('water_meter', $water);
@@ -243,7 +243,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			lg("Error fetching zon data: " . $e->getMessage());
 		}
 		try {
-			$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`) 
+			$q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
 				  VALUES (:date, :gas, :elec, :injectie, :zon, :water)
 				  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, injectie = :injectie2, zon = :zon2, water = :water2";
 			$dbverbruik->query($q, [
@@ -277,7 +277,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			$injectie = round($injectie - $gisteren['injectie'], 3);
 			$verbruik = round($zonvandaag - $injectie + $elec, 3);
 			try {
-				$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`) 
+				$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
 					  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
 					  ON DUPLICATE KEY UPDATE gas = :gas2, elec = :elec2, verbruik = :verbruik2, zon = :zon2, water = :water2";
 				$dbverbruik->query($q, [
@@ -299,10 +299,10 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 		}
 		$since = date("Y-m-d", $time - (86400 * 30));
 		$avg = ['gas' => 0, 'elec' => 0];
-		
+
 		try {
 			$q = "
-				SELECT 
+				SELECT
 					AVG(gas)  AS gas,
 					AVG(elec) AS elec
 				FROM `Guydag`
@@ -329,8 +329,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			lg("Error fetching zonref: " . $e->getMessage());
 		}
 		try {
-			$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` 
-				  WHERE Datum_Dag LIKE :maand 
+			$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag`
+				  WHERE Datum_Dag LIKE :maand
 				  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
 			$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
 			if ($row = $stmt->fetch()) {
@@ -350,7 +350,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force) {
 			'zonavg' => round($zonavg),
 			'alwayson' => $alwayson
 		]);
-		
+
 //		lg('⚡️ '.$data);
 		echo $data . PHP_EOL;
 		setCache('energy_vandaag', $data);
@@ -439,10 +439,10 @@ function getCache(string $key, $default = false) {
 function publishmqtt($topic, $msg) {
     static $mqtt = null;
     static $lastPublish = 0;
-    
+
     // Check of we moeten reconnecten
     $needsReconnect = $mqtt === null || (time() - $lastPublish > 300);
-    
+
     if (!$needsReconnect && $mqtt !== null) {
         // Test of verbinding nog werkt
         try {
@@ -452,16 +452,16 @@ function publishmqtt($topic, $msg) {
             $needsReconnect = true;
         }
     }
-    
+
     if ($needsReconnect) {
         if($mqtt !== null) {
-            try { 
-                $mqtt->disconnect(); 
+            try {
+                $mqtt->disconnect();
             } catch(Exception $e) {
                 // Ignore disconnect errors
             }
         }
-        
+
         lg("🔌 Nieuwe MQTT verbinding maken...");
         $connectionSettings = (new ConnectionSettings)
             ->setUsername('mqtt')
@@ -470,9 +470,9 @@ function publishmqtt($topic, $msg) {
             ->setConnectTimeout(5)
             ->setSocketTimeout(5)
             ->setResendTimeout(10);
-        
+
         $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
-        
+
         try {
             $mqtt->connect($connectionSettings, true);
             lg("✅ MQTT verbonden");
@@ -482,7 +482,7 @@ function publishmqtt($topic, $msg) {
             throw $e;
         }
     }
-    
+
     try {
         $mqtt->publish($topic, $msg, 1, true);
         $lastPublish = time();
@@ -490,7 +490,7 @@ function publishmqtt($topic, $msg) {
     } catch(Exception $e) {
         lg("❌ MQTT publish failed: " . $e->getMessage());
         $mqtt = null; // Force reconnect bij volgende call
-        
+
         // Probeer één keer opnieuw met nieuwe connectie
         try {
             lg("🔄 Retry met nieuwe connectie...");
@@ -498,7 +498,7 @@ function publishmqtt($topic, $msg) {
                 ->setUsername('mqtt')
                 ->setPassword('mqtt')
                 ->setKeepAliveInterval(60);
-            
+
             $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
             $mqtt->connect($connectionSettings, true);
             $mqtt->publish($topic, $msg, 1, true);

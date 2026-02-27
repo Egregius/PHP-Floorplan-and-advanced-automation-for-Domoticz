@@ -12,7 +12,7 @@ if ($status=='On') {
 	}
 	if (!isset($weegschaal)||$weegschaal<$time-300) {
 		lg('Fetch weegschaal');
-		exec('curl -s http://192.168.2.20/secure/runsync.php?sync=weegschaal &');
+		exec('curl -s http://192.168.20.20/secure/runsync.php?sync=weegschaal &');
 		$weegschaal=$time;
 	}
 }

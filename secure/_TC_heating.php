@@ -210,7 +210,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(clamp($minPerDeg,$avgMinPerDeg - 5,$avgMinPerDeg +5),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
-			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -10);
+			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -20);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]),1);
 			ksort($leadDataLiving, SORT_NUMERIC);
 			foreach ($leadDataLiving as &$innerArray) {

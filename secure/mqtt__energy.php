@@ -35,8 +35,8 @@ $connectionSettings = (new ConnectionSettings)
 $mqtt = new MqttClient('192.168.2.22', 1883, basename(__FILE__), MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings, true);
 
-$dbverbruik = new Database('192.168.2.20', 'home', 'H0m€', 'verbruik');
-$dbzonphp = new Database('192.168.2.20', 'home', 'H0m€', 'egregius_zonphp');
+$dbverbruik = new Database('192.168.20.20', 'home', 'H0m€', 'verbruik');
+$dbzonphp = new Database('192.168.20.20', 'home', 'H0m€', 'egregius_zonphp');
 
 $force = true;
 
