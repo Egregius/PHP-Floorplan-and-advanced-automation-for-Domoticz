@@ -15,9 +15,10 @@ mkdir -p /var/log/nginx/
 chmod 755 /var/log/nginx
 touch /var/log/nginx/access.log
 touch /var/log/nginx/error.log
+touch /temp/mqttpublish.log
+chmod 777 /temp/*.log
 sleep 1
 /usr/sbin/service mysql start
 sleep 1
 /usr/sbin/service nginx start
 /usr/sbin/service domoticz start
-/var/www/read_p1.py
