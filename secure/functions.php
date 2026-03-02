@@ -745,7 +745,7 @@ function boseplaylist() {
 }
 function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
-	if ($d['weg']->s<=1) {
+	if ($d['weg']->s==0||$d['badkamerpower']->s=='On') {
 		if ($d['boseliving']->s=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 		if ($time<strtotime('21:00')&&$d['boseliving']->s=='On'&&past('boseliving')>60) {
 			if ($d['bose101']->s=='Off') {

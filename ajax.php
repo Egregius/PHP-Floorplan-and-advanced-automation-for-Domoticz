@@ -148,6 +148,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			store('sirene','Off');
 		} elseif ($_REQUEST['device']=='grohered') {
 			sw('grohered', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			store('8keuken_8', 'On', basename(__FILE__).':'.__LINE__);
 		} else {
 			if (str_ends_with($_REQUEST['device'], '_set')) {
 				call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action']);
