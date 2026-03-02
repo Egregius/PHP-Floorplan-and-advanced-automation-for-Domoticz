@@ -1,4 +1,4 @@
-var isSubmitting=!1,euroelec=.2698,eurogas=.092,eurowater=4.8166;const ucfirst=e=>e[0].toUpperCase()+e.slice(1);
+var isSubmitting=!1,euroelec=.2784,eurogas=.0889,eurowater=4.8166;const ucfirst=e=>e[0].toUpperCase()+e.slice(1);
 let avgTimeOffset=0,ftime=0,htime=0,otime=0,lastAvgValue=null,forceTimes=true,fetchajax=true,d={time:0},view=null,circleStates={},deviceElems={},lastValues={},lastLog={},lastState={},newTime=Math.floor(Date.now() / 1000),prevnet=null,prevzon=-1,prevtotal=null,prevavg=-1
 keys = ['n','c','b','a','z'];
 for (const k of keys) {
