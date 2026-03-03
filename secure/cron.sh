@@ -10,8 +10,8 @@ SCRIPTS=(
   mqtt_zigbee2mqtt.php
   cron.php
   cron2.php
-#  mqtt__energy.php
-#  mqtt__homewizard.py
+  mqtt__energy.php
+  mqtt__homewizard.py
 )
 
 i=1

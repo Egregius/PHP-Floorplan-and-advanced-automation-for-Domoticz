@@ -1,7 +1,5 @@
-#!/usr/bin/php
 <?php
 declare(strict_types=1);
-
 $lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
 $got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
 if ($lock_file === false || (!$got_lock && !$wouldblock)) {
@@ -35,8 +33,8 @@ $connectionSettings = (new ConnectionSettings)
 $mqtt = new MqttClient('192.168.30.22', 1883, basename(__FILE__), MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings, true);
 
-$dbverbruik = new Database('192.168.20.20', 'home', 'H0m€', 'verbruik');
-$dbzonphp = new Database('192.168.20.20', 'home', 'H0m€', 'egregius_zonphp');
+$dbverbruik = new Database('192.168.30.23', 'dbuser', 'dbuser', 'verbruik');
+$dbzonphp = new Database('192.168.30.23', 'dbuser', 'dbuser', 'zon');
 
 $force = true;
 
@@ -50,6 +48,7 @@ $newData = [
 ];
 
 $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$d, &$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
+	lg($topic.'	'.$status);
     $time = time();
     $changed = false;
 
@@ -257,6 +256,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     setCache('energy_prevavg', $newavg);
 }
 function lg($msg) {
+	echo $msg."\n";
 	$fp = fopen('/temp/domoticz.log', "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
