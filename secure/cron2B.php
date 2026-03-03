@@ -43,7 +43,7 @@ foreach ($devices as $ip => $vol) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__);
 					$d['bose'.$ip]->m=1;
 				}
-				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->=='On')) {
+				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
 					if ($ip==101) bosepreset(boseplaylist());
 					elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) bosezone($ip,$vol);
 					elseif ($ip!=105&&$d['time']<strtotime('20:00')) bosezone($ip,$vol);

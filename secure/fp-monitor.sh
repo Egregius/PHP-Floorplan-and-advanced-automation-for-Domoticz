@@ -1,6 +1,6 @@
 #!/bin/bash
 MONITOR_DIR="/var/www/html/"
-MQTT_HOST="192.168.2.22"
+MQTT_HOST="192.168.30.22"
 MQTT_TOPIC="d/floorplan_version"
 
 log_change() {

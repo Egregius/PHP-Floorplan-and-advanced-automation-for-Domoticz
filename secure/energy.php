@@ -471,7 +471,7 @@ function publishmqtt($topic, $msg) {
             ->setSocketTimeout(5)
             ->setResendTimeout(10);
 
-        $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
+        $mqtt = new MqttClient('192.168.30.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
 
         try {
             $mqtt->connect($connectionSettings, true);
@@ -499,7 +499,7 @@ function publishmqtt($topic, $msg) {
                 ->setPassword('mqtt')
                 ->setKeepAliveInterval(60);
 
-            $mqtt = new MqttClient('192.168.2.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
+            $mqtt = new MqttClient('192.168.30.22', 1883, 'php_' . getmypid(), MqttClient::MQTT_3_1);
             $mqtt->connect($connectionSettings, true);
             $mqtt->publish($topic, $msg, 1, true);
             $lastPublish = time();

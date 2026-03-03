@@ -32,7 +32,7 @@ $connectionSettings = (new ConnectionSettings)
     ->setUsername('mqtt')
     ->setPassword('mqtt');
 
-$mqtt = new MqttClient('192.168.2.22', 1883, basename(__FILE__), MqttClient::MQTT_3_1);
+$mqtt = new MqttClient('192.168.30.22', 1883, basename(__FILE__), MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings, true);
 
 $dbverbruik = new Database('192.168.20.20', 'home', 'H0m€', 'verbruik');
@@ -280,7 +280,7 @@ function publishmqtt($topic,$msg) {
 }
 function alert($name,$msg,$time) {
 	$last=0;
-	$db = new Database('192.168.2.23', 'dbuser', 'dbuser', 'domotica');
+	$db = new Database('192.168.30.23', 'dbuser', 'dbuser', 'domotica');
 	$stmt=$db->query("SELECT t FROM alerts WHERE n='$name';");
 	while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
 		if (isset($row[0])) $last=$row[0];

@@ -7,7 +7,7 @@ $dag = date("Y-m-d H:i:s", strtotime("-24 hours"));
 $week = date("Y-m-d H:i:s", strtotime("-7 days"));
 $maand = date("Y-m-d H:i:s", strtotime("-100 days"));
 
-$db = new mysqli('192.168.2.23', $dbuser, $dbpass, $dbname);
+$db = new mysqli('192.168.30.23', $dbuser, $dbpass, $dbname);
 if ($db->connect_errno > 0) die('Unable to connect to database [' . $db->connect_error . ']');
 
 $sensors = array(

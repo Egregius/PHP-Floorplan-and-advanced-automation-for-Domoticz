@@ -22,8 +22,7 @@ $boses=array(
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="preconnect" href="ws://192.168.2.22:9001">
-	<link rel="dns-prefetch" href="//192.168.2.22">
+	<link rel="dns-prefetch" href="//home.egregius.be">
 	<title>Floorplan Bose</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<meta name="HandheldFriendly" content="true">

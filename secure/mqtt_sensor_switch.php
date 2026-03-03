@@ -29,7 +29,7 @@ $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt');
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
+$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $validDevices = $alreadyProcessed = [];
 foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {

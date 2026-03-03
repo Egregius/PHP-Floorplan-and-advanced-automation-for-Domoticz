@@ -13,7 +13,7 @@ from math import floor
 from math import ceil
 import threading
 
-MQTT_HOST = "192.168.2.22"
+MQTT_HOST = "192.168.30.22"
 MQTT_PORT = 1883
 MQTT_USER = "mqtt"
 MQTT_PASS = "mqtt"

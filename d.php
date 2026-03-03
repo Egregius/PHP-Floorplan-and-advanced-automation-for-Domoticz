@@ -54,7 +54,7 @@ final class Database {
     private static function createConnection(): PDO {
         try {
             return new PDO(
-                dsn: "mysql:host=192.168.2.23;dbname=domotica;charset=latin1",
+                dsn: "mysql:host=192.168.30.23;dbname=domotica;charset=latin1",
                 username: 'dbuser',
                 password: 'dbuser',
                 options: [

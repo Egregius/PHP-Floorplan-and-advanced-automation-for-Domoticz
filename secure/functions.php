@@ -373,7 +373,7 @@ function publishmqtt($topic,$msg,$log='') {
 		$connectionSettings=(new ConnectionSettings)
 		->setUsername('mqtt')
 		->setPassword('mqtt');
-		$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
+		$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
 		lgmqtt("🛑 MQTT	".str_pad($user??'', 9, ' ', STR_PAD_RIGHT)." {$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
@@ -1066,7 +1066,7 @@ final class Database {
     private static function createConnection(): PDO {
         try {
             return new PDO(
-                dsn: "mysql:host=192.168.2.23;dbname=domotica;charset=latin1",
+                dsn: "mysql:host=192.168.30.23;dbname=domotica;charset=latin1",
                 username: 'dbuser',
                 password: 'dbuser',
                 options: [

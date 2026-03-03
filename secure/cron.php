@@ -27,7 +27,7 @@ $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt')
 	->setKeepAliveInterval(60);
-$mqtt=new MqttClient('192.168.2.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
+$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
 $mqtt->connect($connectionSettings,true);
 foreach (['badkamervuur2','badkamervuur1','water'] as $i) sw($i,'Off');
 if ($d['weg']->s>0) {
