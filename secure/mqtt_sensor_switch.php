@@ -208,18 +208,18 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 						$avgTemp   = round(($valZigbee + $valZwave) / 2, 2);
 						$currentStoredTemp = $d[$targetKey]->s ?? null;
 						if ($avgTemp != $currentStoredTemp) {
-							$diff = abs($avgTemp - $currentStoredTemp);
-							if ($diff <= 15) {
-								$logMsg = sprintf(
-									"Update %s: Zigbee=%s, Zwave=%s -> Avg=%s (%s)",
-									$room,
-									$valZigbee,
-									$valZwave,
-									$avgTemp,
-									$device
-								);
-								store($targetKey, $avgTemp, $logMsg);
-							}
+							$diff = $avgTemp - $currentStoredTemp;
+							if ($diff > 0.2) $avgTemp = $currentStoredTemp + 0.2;
+							elseif ($diff < -0.2) $avgTemp = $currentStoredTemp - 0.2;
+							$logMsg = sprintf(
+								"Update %s: Zigbee=%s, Zwave=%s -> Avg=%s (%s)",
+								$room,
+								$valZigbee,
+								$valZwave,
+								$avgTemp,
+								$device
+							);
+							store($targetKey, $avgTemp, $logMsg);
 						}
 					}
 					return;
