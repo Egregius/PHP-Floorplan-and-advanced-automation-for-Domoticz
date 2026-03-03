@@ -50,7 +50,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				storemode($_REQUEST['device'].'_set', 1, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
-			setpoint($_REQUEST['device'].'_set', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			if ($_REQUEST['device']=='living') {
 				if ($d['heating']->s==-2) {//airco cooling
 					if ($d['daikin']->s=='Off'&&$_REQUEST['action']!='D'&&$d['living_temp']->s>$_REQUEST['action']) sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
