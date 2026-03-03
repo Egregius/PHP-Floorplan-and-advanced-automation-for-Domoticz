@@ -120,7 +120,7 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
 				$lastlibraryupdate=$time;
 //				kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-				kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Scan","params": {"showdialogs": true}}');
+//				kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Scan","params": {"showdialogs": true}}');
 			}
 		}
 		if (
@@ -131,7 +131,7 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 		) {
 			$lastlibraryclean=$time;
 //			kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-			kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Clean","params": {"showdialogs": true}}');
+//			kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Clean","params": {"showdialogs": true}}');
 		}
 	}
 }
