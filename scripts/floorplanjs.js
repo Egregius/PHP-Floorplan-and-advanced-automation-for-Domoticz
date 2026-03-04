@@ -492,7 +492,7 @@ function handleResponse(device,v){
 			renderHeatingRow(v.s)
 			return
 		case 'sirene':
-			if(v.s==1)html='<img src="images/alarm_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device
+			if(v.s==1)html='<img src="images/z_On.png" width="500px" height="auto" alt="Sirene" onclick="ajaxcontrol(\'sirene\',\'sw\',\'Off\')"><br>'+device
 			else html=""
 			setHTML('sirene',html)
 			return
