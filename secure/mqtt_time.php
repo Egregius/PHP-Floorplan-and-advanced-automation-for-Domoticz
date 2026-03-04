@@ -23,6 +23,7 @@ $lasttimepub=$time;
 $lastSecond=$time;
 define('LOOP_START', $time);
 $rand = rand(100, 200);
+$d['rand']=5;
 $lastMessageReceived=true;
 
 $connectionSettings=(new ConnectionSettings)

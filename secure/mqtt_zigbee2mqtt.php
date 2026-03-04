@@ -38,6 +38,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 }
 $d=fetchdata();
 $d['rand']=rand(100,200);
+$d['rand']=5;
 updateWekker($t, $weekend, $dow, $d);
 $mqtt->subscribe('zigbee2mqtt/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, /*&$alreadyProcessed, &$lastEvent, */&$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {

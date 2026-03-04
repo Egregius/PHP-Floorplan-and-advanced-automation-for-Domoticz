@@ -25,7 +25,8 @@ date_default_timezone_set('Europe/Brussels');
 $startloop = microtime(true);
 define('LOOP_START', $startloop);
 
-$d['rand'] = rand(10, 20);
+$d['rand'] = rand(100, 200);
+$d['rand']=5;
 $connectionSettings = (new ConnectionSettings)
     ->setUsername('mqtt')
     ->setPassword('mqtt');

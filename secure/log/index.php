@@ -141,7 +141,7 @@ if (isset($_GET['action'])) {
     --orange:  #fb923c;
     --mono:    'JetBrains Mono','Fira Code','Cascadia Code','Consolas',monospace;
     --row-h:   24px;
-    --cols:    76px 26px 106px 1fr;
+    --cols:    82px 28px 112px 1fr;
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
 html,body { height:100%; overflow:hidden }
@@ -163,6 +163,7 @@ body { background:var(--bg); color:var(--text); font-family:var(--mono); font-si
     gap:8px; padding:3px 14px;
     font-size:8px; font-weight:900; text-transform:uppercase; letter-spacing:.1em; color:var(--muted)
 }
+#colHdr > div { min-width:0; overflow:hidden; }
 
 /* virtual scroll */
 #vsOuter { position:relative }
@@ -179,6 +180,8 @@ body { background:var(--bg); color:var(--text); font-family:var(--mono); font-si
     border-left:2px solid transparent;
     transition:background .07s;
 }
+/* every grid cell must have min-width:0 so content can't bleed into adjacent columns */
+.log-row > div { min-width:80px; overflow:hidden; }
 
 /* icon-colour tints — left border always, bg tint only where it helps readability */
 .ri-green  { border-left-color:rgba(45,220,142,.55) }
@@ -210,12 +213,12 @@ body { background:var(--bg); color:var(--text); font-family:var(--mono); font-si
 .ts-older { color:var(--muted) }
 
 /* icon cell */
-.ic { font-size:14px; line-height:1; display:flex; align-items:center; justify-content:center }
+.ic { font-size:14px; line-height:1; display:flex; align-items:center; /*justify-content:center; */min-width:80px; }
 
 /* type badge — bg from type auto-colour, border from icon colour */
 .tbadge {
     display:inline-block; padding:1px 5px; border-radius:3px;
-    font-size:8px; font-weight:800; letter-spacing:.04em;
+    font-size:8px; font-weight:600; letter-spacing:.04em;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:104px
 }
 

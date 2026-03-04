@@ -38,6 +38,7 @@ foreach (glob('/var/www/html/secure/pass2php/*.php') as $file) {
 }
 $d=fetchdata();
 $d['rand']=rand(100,200);
+$d['rand']=5;
 updateWekker($t, $weekend, $dow, $d);
 $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$lastEvent, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
 	try {
@@ -66,7 +67,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -106,7 +107,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("️‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -227,7 +228,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -254,7 +255,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;

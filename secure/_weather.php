@@ -242,9 +242,9 @@ if($weather['uvm']>$weather['uvm'])$weather['uvm']=$weather['uv'];
 $weather['uv']=round($weather['uv'],1);
 $weather['uvm']=round($weather['uvm'],1);
 //lg(print_r($uvs,true));
-if($temp!=$temps['prev']) lgtype('Temps',json_encode($temps).'='.$temp);
-if($rain!=$rains['prev']) lgtype('Rains',json_encode($rains).'='.$rain);
-if($wind!=$winds['prev']) lgtype('Winds',json_encode($winds).'='.$wind);
+if($temp!=$temps['prev']) lgtype('• Temps',json_encode($temps).'='.$temp);
+if($rain!=$rains['prev']) lgtype('• Rains',json_encode($rains).'='.$rain);
+if($wind!=$winds['prev']) lgtype('• Winds',json_encode($winds).'='.$wind);
 if (!isset($weathercache)||$weathercache!==$weather) {
 	publishmqtt('d/w',json_encode($weather));
 	$weathercache=$weather;
@@ -269,7 +269,7 @@ if ($d['auto']->s=='On') {
 		else $luifel=55;
 		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
-			lg(basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['zon'].' past='.past('luifel'));
+			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['zon'].' past='.past('luifel'));
 			if ($d['luifel']->s<$luifel&&$d['zon']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
