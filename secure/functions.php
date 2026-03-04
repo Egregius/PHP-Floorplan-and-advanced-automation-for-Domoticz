@@ -662,7 +662,7 @@ function lg($msg,$file='default') {
 	fclose($fp);
 }
 function lgmqtt($msg) {
-	$fp = fopen("/var/log/domotica/mqttpublish.log", "a+");
+	$fp = fopen("/var/log/mqtt/publish.log", "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
 	$mSecs = $time - floor($time);

@@ -19,6 +19,33 @@
       "limit": 2000
     },
     {
+      "name": "MQTT",
+      "type": "folder",
+      "path": "/var/log/mqtt/",
+      "pattern": "*.log",
+      "format": "domotica",
+      "active": false,
+      "limit": 2000
+    },
+    {
+      "name": "Vorige",
+      "type": "folder",
+      "path": "/var/log/mqtt/",
+      "pattern": "*.log.1",
+      "format": "domotica",
+      "active": false,
+      "limit": 2000
+    },
+    {
+      "name": "Access Logs",
+      "type": "folder",
+      "path": "/var/log/nginx/",
+      "pattern": "*access.log",
+      "format": "nginx_error",
+      "active": false,
+      "limit": 1000
+    },
+    {
       "name": "Error Logs",
       "type": "folder",
       "path": "/var/log/nginx/",
@@ -26,14 +53,6 @@
       "format": "nginx_error",
       "active": true,
       "limit": 1000
-    },
-    {
-      "name": "PHP Errors",
-      "type": "file",
-      "path": "/var/log/php8.2-fpm.log",
-      "format": "php_error",
-      "active": false,
-      "limit": 100
     }
   ],
   "ip_names": [

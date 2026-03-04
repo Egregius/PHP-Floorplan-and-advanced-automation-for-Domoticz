@@ -54,8 +54,7 @@ const NETWORK_FIRST = [
     'floorplan.cache.php',
     'floorplan.doorsensors.php',
     'kodi.php',
-    'kodicontrol.php',
-    '/secure/log/index.php',
+    'kodicontrol.php'
 ];
 const CACHE_EXCLUDED = [
     'ajax.php',
