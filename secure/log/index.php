@@ -124,6 +124,7 @@ if (isset($_GET['action'])) {
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Domo Logs</title>
 <style>
 :root {
@@ -141,7 +142,7 @@ if (isset($_GET['action'])) {
     --orange:  #fb923c;
     --mono:    'JetBrains Mono','Fira Code','Cascadia Code','Consolas',monospace;
     --row-h:   24px;
-    --cols:    82px 28px 112px 1fr;
+    --cols:    82px 1fr;
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
 html,body { height:100%; overflow:hidden }
@@ -179,9 +180,10 @@ body { background:var(--bg); color:var(--text); font-family:var(--mono); font-si
     contain:layout style;
     border-left:2px solid transparent;
     transition:background .07s;
+    cursor:pointer;
 }
 /* every grid cell must have min-width:0 so content can't bleed into adjacent columns */
-.log-row > div { min-width:80px; overflow:hidden; }
+.log-row > div { min-width:0; overflow:hidden; }
 
 /* icon-colour tints — left border always, bg tint only where it helps readability */
 .ri-green  { border-left-color:rgba(45,220,142,.55) }
@@ -199,8 +201,6 @@ body { background:var(--bg); color:var(--text); font-family:var(--mono); font-si
 .ri-dim    { border-left-color:rgba(74,94,120,.35) }
 .ri-dim:hover    { background:rgba(255,255,255,.02) }
 
-.log-row.clickable { cursor:pointer }
-.log-row.clickable:hover .mc::after { content:' ↗'; color:var(--muted); font-size:9px }
 
 .is-new { animation:flashIn 4s ease-out forwards }
 @keyframes flashIn { 0%{background:rgba(245,166,35,.18)} 100%{background:transparent} }
@@ -212,57 +212,8 @@ body { background:var(--bg); color:var(--text); font-family:var(--mono); font-si
 .ts-cool  { color:#5a7a95 }
 .ts-older { color:var(--muted) }
 
-/* icon cell */
-.ic { font-size:14px; line-height:1; display:flex; align-items:center; /*justify-content:center; */min-width:80px; }
-
-/* type badge — bg from type auto-colour, border from icon colour */
-.tbadge {
-    display:inline-block; padding:1px 5px; border-radius:3px;
-    font-size:8px; font-weight:600; letter-spacing:.04em;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:104px
-}
-
-/* message */
+/* message line */
 .mc { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; color:var(--text); line-height:1.4 }
-.jh { color:var(--muted); font-style:italic; font-size:10px; margin-left:4px }
-
-/* ── JSON POPUP ── */
-#jsBd {
-    display:none; position:fixed; inset:0; z-index:199; background:rgba(0,0,0,.45)
-}
-#jsBd.open { display:block }
-#jsPop {
-    display:none; position:fixed; z-index:200;
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:6px; box-shadow:0 12px 48px rgba(0,0,0,.75);
-    flex-direction:column; overflow:hidden;
-    min-width:300px; max-width:min(660px,92vw); max-height:72vh;
-}
-#jsPop.open { display:flex }
-.jp-head {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:8px 12px; border-bottom:1px solid var(--border); flex-shrink:0
-}
-.jp-head .jp-lbl { color:var(--accent); font-weight:800; font-size:10px }
-.jp-close {
-    background:none; border:none; color:var(--muted); cursor:pointer;
-    font-size:16px; line-height:1; padding:0; font-family:var(--mono); transition:color .12s
-}
-.jp-close:hover { color:var(--text) }
-.jp-ctx {
-    padding:6px 12px; font-size:10px; color:var(--dim);
-    border-bottom:1px solid var(--border); flex-shrink:0;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis
-}
-.jp-body {
-    overflow-y:auto; padding:10px 14px;
-    font-size:10.5px; line-height:1.7; white-space:pre; flex:1
-}
-/* JSON syntax */
-.jk { color:#9e78f0 }
-.js { color:#f5a623 }
-.jn { color:#5ba3f5 }
-.jb { color:#fb923c }
 
 /* highlight */
 .hl { background:rgba(245,166,35,.36); color:#fff; border-radius:2px; padding:0 1px }
@@ -320,11 +271,96 @@ input[type=checkbox] { accent-color:var(--accent) }
 ::-webkit-scrollbar { width:5px }
 ::-webkit-scrollbar-track { background:transparent }
 ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px }
+
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+    :root { --row-h: 28px; --cols: 58px 1fr; }
+    body { font-size:12px }
+
+    /* sidebar becomes a bottom drawer */
+    #sb {
+        position:fixed; left:0; right:0; bottom:0;
+        width:100% !important; height:70vh;
+        border-right:none; border-top:1px solid var(--border);
+        border-radius:16px 16px 0 0;
+        transform:translateY(100%);
+        transition:transform .28s cubic-bezier(.4,0,.2,1);
+        z-index:150; padding:0 14px calc(16px + env(safe-area-inset-bottom));
+        overflow-y:auto;
+    }
+    #sb.open { transform:translateY(0) }
+
+    /* drag handle */
+    #sb::before {
+        content:''; display:block; width:40px; height:4px;
+        background:var(--border); border-radius:2px;
+        margin:12px auto 16px; flex-shrink:0;
+    }
+
+    /* more breathing room in sidebar file list */
+    .flabel { padding:7px 4px; }
+    .flabel input[type=checkbox] { width:16px; height:16px; }
+    .fdot   { width:8px; height:8px; margin-right:9px; }
+
+    /* backdrop */
+    #sbBd {
+        display:none; position:fixed; inset:0; z-index:149;
+        background:rgba(0,0,0,.5);
+    }
+    #sbBd.open { display:block }
+
+    /* hamburger button */
+    #sbBtn { display:flex }
+
+    /* hide line count, shrink header */
+    #hdr { padding:6px 10px; gap:7px; }
+    #fi  { width:130px; font-size:11px }
+    #lc  { display:none }
+
+    /* rows */
+    .log-row { padding:3px 10px; font-size:12px }
+    #colHdr  { padding:3px 10px; font-size:7px }
+
+    /* jump button above iOS home bar */
+    #jumpBtn { bottom:calc(16px + env(safe-area-inset-bottom)) }
+}
+@media (min-width: 701px) {
+    #sbBtn { display:none }
+    #sbBd  { display:none !important }
+}
+
+/* ── LINE POPUP ── */
+#linePop {
+    display:none; position:fixed; inset:0; z-index:200;
+    align-items:flex-end; justify-content:stretch;
+    background:rgba(0,0,0,.55);
+}
+#linePop.open { display:flex }
+#linePop .lp-sheet {
+    background:var(--surface); border-top:1px solid var(--border);
+    border-radius:16px 16px 0 0; width:100%;
+    padding:0 16px calc(20px + env(safe-area-inset-bottom));
+    max-height:80vh; overflow-y:auto;
+    animation:sheetUp .2s ease-out;
+}
+@keyframes sheetUp { from{transform:translateY(40px);opacity:.6} to{transform:translateY(0);opacity:1} }
+#linePop .lp-handle {
+    width:40px; height:4px; background:var(--border);
+    border-radius:2px; margin:12px auto 14px;
+}
+#linePop .lp-ts {
+    font-size:9px; color:var(--muted); margin-bottom:8px;
+}
+#linePop .lp-body {
+    font-family:var(--mono); font-size:12px; line-height:1.7;
+    color:var(--text); white-space:pre-wrap; word-break:break-all;
+}
 </style>
 </head>
 <body>
 <div id="app">
   <div id="hdr">
+    <button id="sbBtn" onclick="toggleSb()" style="background:none;border:1px solid var(--border);color:var(--dim);font-size:14px;padding:4px 9px;border-radius:4px;cursor:pointer;line-height:1;flex-shrink:0;">☰</button>
     <h1>Domo_Logs</h1>
     <div id="chip">LIVE</div>
     <input type="text" id="fi" placeholder="Filter…" oninput="schedRender()">
@@ -340,28 +376,27 @@ input[type=checkbox] { accent-color:var(--accent) }
     </div>
   </div>
   <div id="body">
+    <div id="sbBd" onclick="toggleSb()"></div>
     <div id="sb"></div>
     <div id="wrap" onscroll="onScroll()">
       <div id="colHdr">
-        <div>Tijd</div><div></div><div>Type</div><div>Bericht</div>
+        <div>Tijd</div><div>Bericht</div>
       </div>
       <div id="vsOuter"><div id="vsInner"></div></div>
     </div>
   </div>
 </div>
 
-<!-- JSON popup — fixed overlay, NEVER touches virtual scroll layout -->
-<div id="jsBd" onclick="closeJson()"></div>
-<div id="jsPop">
-  <div class="jp-head">
-    <span class="jp-lbl" id="jpLbl"></span>
-    <button class="jp-close" onclick="closeJson()">✕</button>
-  </div>
-  <div class="jp-ctx" id="jpCtx"></div>
-  <div class="jp-body" id="jpBody"></div>
-</div>
-
 <button id="jumpBtn" onclick="jumpTop()">▲ Live top</button>
+
+<!-- Line popup — tap any row to see full text, zero re-render -->
+<div id="linePop" onclick="closeLinePop()">
+  <div class="lp-sheet" onclick="event.stopPropagation()">
+    <div class="lp-handle"></div>
+    <div class="lp-ts" id="lpTs"></div>
+    <div class="lp-body" id="lpBody"></div>
+  </div>
+</div>
 
 <script>
 'use strict';
@@ -384,15 +419,6 @@ const IMAP = {
 const IDEF = ['ri-dim','#7d94ab'];
 function iStyle(ic) { return IMAP[ic] || IDEF; }
 
-// ── TYPE AUTO-COLOUR ──────────────────────────────────────────────
-const TPAL = ['#5ba3f5','#2ddc8e','#f5a623','#a07af5','#fb923c','#22d4f5','#a3e635','#f06060','#f5c83a','#9e78f0'];
-const tcMap = Object.create(null); let tcIdx = 0;
-function tColor(t) {
-    if (!t) return '#7d94ab';
-    if (!tcMap[t]) tcMap[t] = TPAL[tcIdx++ % TPAL.length];
-    return tcMap[t];
-}
-
 // ── PATH INTERNING ────────────────────────────────────────────────
 const pArr = [], pMap = Object.create(null);
 function intern(p) { if (pMap[p] === undefined) { pMap[p] = pArr.length; pArr.push(p); } return pMap[p]; }
@@ -409,84 +435,30 @@ const ROW_H = 24, OVER = 8;
 let vsTop = 0, rafPend = false, hdrH = 0, vpH = 0, layoutDirty = true;
 
 // ── PARSE ─────────────────────────────────────────────────────────
-// Tab format:  DATE \t ICON \t TYPE \t MESSAGE
-// 3-tab:       DATE \t ICON \t MESSAGE
-// Unstructured: strip timestamp, look for leading emoji
+// Only extracts the leading emoji (for row colour).
+// The full raw line is shown as-is in the message column.
 function parseLine(line) {
     const raw = line.c;
-    const p   = { icon:'', type:'', msgDisplay:'', hasJson:false, jsonPayload:null, jsonRaw:'' };
-    const tabs = raw.split('\t');
+    let icon = '';
 
-    if (tabs.length >= 4) {
-        p.icon = tabs[1].trim();
-        p.type = tabs[2].trim();
-        p.msg  = tabs.slice(3).join('\t').trim();
-    } else if (tabs.length === 3) {
-        p.icon = tabs[1].trim();
-        p.msg  = tabs[2].trim();
-    } else {
+    // Tab format: DATE \t ICON \t ...  → icon is second field
+    const firstTab = raw.indexOf('\t');
+    if (firstTab !== -1) {
+        const secondTab = raw.indexOf('\t', firstTab + 1);
+        const candidate = (secondTab !== -1 ? raw.slice(firstTab+1, secondTab) : raw.slice(firstTab+1)).trim();
+        if (/^\p{Emoji_Presentation}$/u.test(candidate) || /^\p{Extended_Pictographic}$/u.test(candidate))
+            icon = candidate;
+    }
+
+    // Fallback: scan for emoji right after timestamp prefix
+    if (!icon) {
         const noTs = raw.replace(/^\d{1,2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?\s*/, '');
-        const em   = noTs.match(/^(\p{Emoji_Presentation}|\p{Extended_Pictographic})\s*/u);
-        p.msg = em ? (p.icon = em[1], noTs.slice(em[0].length)) : (noTs || raw);
+        const em   = noTs.match(/^(\p{Emoji_Presentation}|\p{Extended_Pictographic})/u);
+        if (em) icon = em[1];
     }
 
-    // Find first {...} or [...] JSON block
-    const jm = p.msg.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
-    if (jm) {
-        try {
-            p.jsonPayload = JSON.parse(jm[1]);
-            p.jsonRaw     = jm[1];
-            p.hasJson     = true;
-            p.msgDisplay  = (p.msg.slice(0, jm.index) + p.msg.slice(jm.index + jm[1].length)).trim();
-        } catch(e) { p.msgDisplay = p.msg; }
-    } else {
-        p.msgDisplay = p.msg;
-    }
-
-    line.parsed = p;
+    line.parsed = { icon };
 }
-
-// ── JSON PRETTY ───────────────────────────────────────────────────
-function prettyJson(obj) {
-    return JSON.stringify(obj, null, 2)
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-        .replace(/("(?:\\.|[^"\\])*"(?:\s*:)?|\b(?:true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
-            if (/^"/.test(m)) return /:$/.test(m) ? `<span class="jk">${m}</span>` : `<span class="js">${m}</span>`;
-            if (/true|false|null/.test(m)) return `<span class="jb">${m}</span>`;
-            return `<span class="jn">${m}</span>`;
-        });
-}
-
-// ── JSON POPUP (fixed overlay — never touches row layout) ─────────
-function openJson(line, anchorEl) {
-    const p = line.parsed;
-    if (!p.hasJson) return;
-
-    const lbl = (p.icon ? p.icon + '\u2009' : '') + (p.type || '');
-    document.getElementById('jpLbl').textContent  = lbl || line.d;
-    document.getElementById('jpCtx').textContent  = (line.d ? line.d + '  ' : '') + (p.msgDisplay || '');
-    document.getElementById('jpBody').innerHTML   = prettyJson(p.jsonPayload);
-
-    const pop = document.getElementById('jsPop');
-    pop.classList.add('open');
-    document.getElementById('jsBd').classList.add('open');
-
-    // Position: below anchor row, clamped to viewport
-    const r   = anchorEl.getBoundingClientRect();
-    const pw  = Math.min(660, window.innerWidth * 0.92);
-    let left  = r.left + 2;
-    let top   = r.bottom + 4;
-    if (left + pw  > window.innerWidth  - 12) left = window.innerWidth  - pw - 12;
-    if (top  + 320 > window.innerHeight - 12) top  = r.top - 326;
-    pop.style.left  = Math.max(8, left) + 'px';
-    pop.style.top   = Math.max(8, top)  + 'px';
-    pop.style.width = pw + 'px';
-}
-function closeJson() {
-    document.getElementById('jsPop').classList.remove('open');
-    document.getElementById('jsBd').classList.remove('open');
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeJson(); });
 
 // ── TIMESTAMP CLASS ───────────────────────────────────────────────
 function tsC(t) {
@@ -567,13 +539,17 @@ function rc(i) { if (!rCache[i]) rCache[i] = {}; return rCache[i]; }
 
 function mkRow(line, filt, i) {
     const row = document.createElement('div');
-    // 4 children: ts | icon | type | msg
-    for (let j = 0; j < 4; j++) row.appendChild(document.createElement('div'));
-    row.children[0].style.cssText = 'white-space:nowrap;font-variant-numeric:tabular-nums;';
-    row.children[1].className = 'ic';
-    row.children[3].className = 'mc';
-    // Click handler — immediate, no re-render
-    row.addEventListener('click', () => { if (line.parsed.hasJson) openJson(line, row); });
+    row.appendChild(document.createElement('div'));  // [0] timestamp
+    row.appendChild(document.createElement('div'));  // [1] full line
+    row.children[0].style.cssText = 'white-space:nowrap;font-variant-numeric:tabular-nums;flex-shrink:0;';
+    row.children[1].className = 'mc';
+    // Tap/click → show full line in popup
+    // On mobile always useful; on desktop only when text is truncated
+    row.addEventListener('click', () => {
+        if (isMobile() || row.children[1].scrollWidth > row.children[1].clientWidth) {
+            openLinePop(line);
+        }
+    });
     rCache[i] = {};
     updRow(row, line, filt, i);
     return row;
@@ -583,45 +559,26 @@ function updRow(row, line, filt, ri) {
     const p  = line.parsed;
     const ch = row.children;
     const c  = rc(ri);
-    const [rCls, iCol] = iStyle(p.icon);
+    const [rCls] = iStyle(p.icon);
 
-    // row class
-    const wantCls = 'log-row ' + rCls + (line.isNew ? ' is-new' : '') + (p.hasJson ? ' clickable' : '');
+    // row class — icon colour tints the left border + subtle bg
+    const wantCls = 'log-row ' + rCls + (line.isNew ? ' is-new' : '');
     if (row.className !== wantCls) row.className = wantCls;
 
-    // [0] timestamp
+    // [0] timestamp — on mobile show HH:MM only to save space
+    const dispTs = isMobile() && line.d && line.d.length === 8 ? line.d.slice(0,5) : line.d;
     const tc = tsC(line.t);
-    if (ch[0].className   !== tc)     ch[0].className   = tc;
-    if (ch[0].textContent !== line.d) ch[0].textContent = line.d;
+    if (ch[0].className   !== tc)      ch[0].className   = tc;
+    if (ch[0].textContent !== dispTs)  ch[0].textContent = dispTs;
 
-    // [1] icon
-    if (c.ic !== p.icon) { ch[1].textContent = p.icon; c.ic = p.icon; }
-
-    // [2] type badge
-    // bg + text = type auto-colour, border = icon colour → shows both dimensions at once
-    const tCol = tColor(p.type);
-    const tKey = p.type + tCol + iCol;
-    if (c.tk !== tKey) {
-        ch[2].innerHTML = p.type
-            ? `<span class="tbadge" style="background:${tCol}1f;color:${tCol};border:1px solid ${iCol}44;">${esc(p.type)}</span>`
-            : '';
-        c.tk = tKey;
-    }
-
-    // [3] message + JSON hint
-    const mKey = p.msgDisplay + filt + (p.hasJson ? 'J' : '');
-    if (c.mk !== mKey) {
-        let html = filt ? hilite(p.msgDisplay, filt) : esc(p.msgDisplay);
-        if (p.hasJson) {
-            // Compact structural hint without showing raw data
-            const obj  = p.jsonPayload;
-            const hint = Array.isArray(obj)
-                ? `[${obj.length} items]`
-                : `{${Object.keys(obj).slice(0,4).join(', ')}${Object.keys(obj).length > 4 ? '…' : ''}}`;
-            html += `<span class="jh">${esc(hint)}</span>`;
-        }
-        ch[3].innerHTML = html;
-        c.mk = mKey;
+    // [1] full raw line — strip only the leading timestamp, keep everything else
+    // Strip: DD-MM HH:MM:SS.mmm\t  or  DD-MM HH:MM:SS.mmm<space>
+    const raw     = line.c;
+    const lineStr = raw.replace(/^\d{1,2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?[\t ]/, '').trimStart();
+    const lKey    = lineStr + filt;
+    if (c.lk !== lKey) {
+        ch[1].innerHTML = filt ? hilite(lineStr, filt) : esc(lineStr);
+        c.lk = lKey;
     }
 }
 
@@ -647,7 +604,7 @@ async function fetchTree(hlPath) {
               </div>
               <div style="border-left:1px solid var(--border);padding-left:8px">`;
             g.children.forEach(f => {
-                const col = tColor(f.path);
+                const col = '#5ba3f5';   // file dots: static blue (no type colour needed)
                 const hit = f.path === hlPath;
                 const age = now - (f.mtime_ts || 0);
                 const mtC = age<30?'#fff':age<60?'var(--accent)':age<300?'var(--dim)':'var(--muted)';
@@ -730,12 +687,14 @@ function restartIvl() {
 }
 async function grpAct(name, mode) {
     await fetch('?action=group_selection', { method:'POST', body:JSON.stringify({ group:name, mode }) });
+    if (isMobile()) closeSb();
     reset();
 }
 async function selFile(cb) {
     await fetch('?action=update_selection', { method:'POST', body:JSON.stringify({
         path:cb.value, checked:cb.checked, limit:parseInt(cb.dataset.limit), format:cb.dataset.format
     })});
+    if (isMobile()) closeSb();
     reset();
 }
 
@@ -745,7 +704,7 @@ function reset() {
     allLines=[]; viewIdx=new Int32Array(0); viewCnt=0; hashes.clear();
     firstFetch=true; busy=false; highTs=0; userScrolled=false;
     dirty=true; vsTop=0; rafPend=false; rCache.length=0;
-    setChip(true); closeJson();
+    setChip(true);
     document.getElementById('wrap').scrollTop = 0;
     document.getElementById('vsInner').innerHTML = '';
     document.getElementById('vsOuter').style.height = '0px';
@@ -764,6 +723,31 @@ function hilite(str, term) {
     const safe = esc(String(str));
     const re   = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return safe.replace(new RegExp(re, 'gi'), m => `<span class="hl">${m}</span>`);
+}
+
+// ── LINE POPUP — instant, zero re-render ─────────────────────────
+// Opens a bottom sheet with the full raw line.
+// Only touches two .textContent assignments — nothing in virtual scroll.
+function openLinePop(line) {
+    document.getElementById('lpTs').textContent   = line.d || '';
+    document.getElementById('lpBody').textContent = line.c;
+    document.getElementById('linePop').classList.add('open');
+}
+function closeLinePop() {
+    document.getElementById('linePop').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLinePop(); });
+
+// ── MOBILE SIDEBAR DRAWER ─────────────────────────────────────────
+const isMobile = () => window.innerWidth <= 700;
+
+function toggleSb() {
+    document.getElementById('sb').classList.toggle('open');
+    document.getElementById('sbBd').classList.toggle('open');
+}
+function closeSb() {
+    document.getElementById('sb').classList.remove('open');
+    document.getElementById('sbBd').classList.remove('open');
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────

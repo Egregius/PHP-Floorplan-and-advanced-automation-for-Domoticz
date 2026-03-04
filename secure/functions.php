@@ -367,7 +367,7 @@ function isCli(): bool {
 function publishmqtt($topic,$msg,$log='') {
 	global $mqtt,$user;
 	if($mqtt&&$mqtt->isConnected()) {
-		lgmqtt("🟢 MQTT	".str_pad($user??'', 9, ' ', STR_PAD_RIGHT)." {$topic}	{$msg}	{$log}");
+		lgmqtt("🟢 MQTT	".($user??'')."	{$topic}	{$msg}	{$log}");
 	$mqtt->publish($topic,$msg,1,true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
@@ -375,7 +375,7 @@ function publishmqtt($topic,$msg,$log='') {
 		->setPassword('mqtt');
 		$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
-		lgmqtt("🛑 MQTT	".str_pad($user??'', 9, ' ', STR_PAD_RIGHT)." {$topic}	{$msg}	{$log}");
+		lgmqtt("🛑 MQTT	".($user??'')." {$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
@@ -405,7 +405,7 @@ function storemode($name,$mode,$msg='') {
 	}
 	if($affected>0&&!in_array($name,['dag'])) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STOREM	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STOREM	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -435,7 +435,7 @@ function storesm($name,$s,$m,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESM   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESM   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -466,7 +466,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
-		lg('💾 STORESMI  '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESMI  '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -498,7 +498,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESMIP '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESMIP '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -528,7 +528,7 @@ function storesp($name,$s,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESP   '.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESP   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -558,7 +558,7 @@ function storep($name,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STOREP	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STOREP	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
@@ -589,7 +589,7 @@ function storeicon($name,$i,$msg='') {
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		if (str_ends_with($name, '_temp')) return;
-		lg('💾 STOREIC	'.str_pad($user??'', 9, ' ', STR_PAD_RIGHT).' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STOREIC	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
 	}
 	return $affected ?? 0;
 }
