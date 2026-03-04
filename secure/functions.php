@@ -816,17 +816,25 @@ function bosepost($method, $xml, $ip=101, $log=false) {
         if ($log) lg("❌ Bose socket fout: $errstr ($errno)");
     }
 }
-
 function sirene($msg) {
-	lg(' >>> SIRENE '.$msg);
-	$last=getCache('sirene');
-	$time=time();
-	lg(' >>> last='.$last.'	time='.$time);
-	if ($last>$time-300) {
-		sw('sirene', 'On', basename(__FILE__).':'.__LINE__);
-		telegram($msg.' om '.date("G:i:s", $time), false, 3);
-	}
-	setCache('sirene', $time);
+    static $lastTime = 0;
+    static $lastMsg = '';
+    $currentTime = time();
+    lg(' >>> SIRENE CHECK: ' . $msg);
+    lg(' >>> Vorige melding: ' . ($lastMsg ?: 'geen') . ' om ' . ($lastTime ? date("G:i:s", $lastTime) : 'nooit'));
+    if ($lastTime > 0 && ($currentTime - $lastTime < 300) && $msg !== $lastMsg) {
+        sw('sirene', 'On', basename(__FILE__) . ':' . __LINE__);
+        $alert = "ALARM: Tweede trigger ontvangen binnen 5 minuten!\n";
+        $alert .= "1. " . $lastMsg . " (" . date("G:i:s", $lastTime) . ")\n";
+        $alert .= "2. " . $msg . " (" . date("G:i:s", $currentTime) . ")";
+        telegram($alert, false, 3);
+        $lastTime = 0;
+        $lastMsg = '';
+    } else {
+        $lastTime = $currentTime;
+        $lastMsg = $msg;
+        lg(' >>> Eerste trigger opgeslagen. Wachten op afwijkende tweede trigger...');
+    }
 }
 function http_get($url, $retries = 2, $timeout = 2) {
 	$ctx = stream_context_create(['http' => ['timeout' => $timeout]]);
