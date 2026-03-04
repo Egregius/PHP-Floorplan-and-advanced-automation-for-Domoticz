@@ -650,10 +650,10 @@ function telegram($msg,$silent=true,$to=1) {
 	if ($silent==true) $silent='true';
 	else $silent='false';
 	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "'.$silent.'" "'.$to.'" > /dev/null 2>/dev/null &');
-	lg('✉️  Telegram sent: '.$msg);
+	lg('✉️  Telegram sent: '.$msg,'telegram');
 }
-function lg($msg) {
-	$fp = fopen('/temp/domoticz.log', "a+");
+function lg($msg,$file='default') {
+	$fp = fopen("/var/log/domotica/$file.log", "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
 	$mSecs = $time - floor($time);
@@ -662,7 +662,7 @@ function lg($msg) {
 	fclose($fp);
 }
 function lgmqtt($msg) {
-	$fp = fopen('/temp/mqttpublish.log', "a+");
+	$fp = fopen("/var/log/domotica/mqttpublish.log", "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
 	$mSecs = $time - floor($time);
@@ -671,7 +671,7 @@ function lgmqtt($msg) {
 	fclose($fp);
 }
 function lgtype($type,$msg) {
-	$fp = fopen("/temp/$type.log", "a+");
+	$fp = fopen("/var/log/domotica/$type.log", "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
 	$mSecs = $time - floor($time);
