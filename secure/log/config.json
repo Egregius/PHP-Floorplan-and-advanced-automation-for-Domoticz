@@ -1,0 +1,54 @@
+{
+  "logs": [
+    {
+      "name": "Domotica",
+      "type": "folder",
+      "path": "/var/log/domotica/",
+      "pattern": "*.log",
+      "format": "domotica",
+      "active": true,
+      "limit": 2000
+    },
+    {
+      "name": "Vorige",
+      "type": "folder",
+      "path": "/var/log/domotica/",
+      "pattern": "*.log.1",
+      "format": "domotica",
+      "active": false,
+      "limit": 2000
+    },
+    {
+      "name": "Error Logs",
+      "type": "folder",
+      "path": "/var/log/nginx/",
+      "pattern": "*error.log",
+      "format": "nginx_error",
+      "active": true,
+      "limit": 1000
+    },
+    {
+      "name": "PHP Errors",
+      "type": "file",
+      "path": "/var/log/php8.2-fpm.log",
+      "format": "php_error",
+      "active": false,
+      "limit": 100
+    }
+  ],
+  "ip_names": [
+	  { "range": "10.112.112.0/24",	"name": "Netpay" },
+	  { "range": "192.168.2.1",		"name": "Proxmox" },
+	  { "range": "192.168.2.201",	"name": "Macbook" },
+	  { "range": "192.168.2.203",	"name": "iPhone Guy" },
+	  { "range": "192.168.2.0/24",	"name": "LAN" },
+	  { "range": "192.168.4.2", 	"name": "Macbook VPN"},
+	  { "range": "192.168.4.3", 	"name": "iPhone Guy VPN"},
+	  { "range": "192.168.4.4", 	"name": "iPad Guy VPN"},
+	  { "range": "192.168.4.5", 	"name": "iPhone Kirby VPN"},
+	  { "range": "192.168.20.20",	"name": "WWW" },
+	  { "range": "192.168.20.0/24",	"name": "VLAN20" },
+	  { "range": "192.168.30.0/24",	"name": "VLAN30" },
+	  { "range": "192.168.40.0/24",	"name": "VLAN40" }
+	]
+}
