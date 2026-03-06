@@ -202,7 +202,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 					$zigbeeKey = "{$room}_zigbee_temp";
 					$zwaveKey  = "{$room}_zwave_temp";
 					$targetKey = "{$room}_temp";
-					if (isset($d[$zigbeeKey], $d[$zwaveKey])) {
+					if (isset($d[$zigbeeKey], $d[$zwaveKey])&&$d[$zigbeeKey]!=0&&$d[$zwaveKey]!=0) {
 						$valZigbee = $d[$zigbeeKey];
 						$valZwave  = $d[$zwaveKey];
 						$avgTemp   = round(($valZigbee + $valZwave) / 2, 2);
