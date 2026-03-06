@@ -18,15 +18,11 @@ require_once '/var/www/vendor/autoload.php';
 
 $user = 'ENERGY';
 lg('🟢 Starting ' . $user . ' loop ');
-
 $time = time();
 $lastcheck = $time;
 date_default_timezone_set('Europe/Brussels');
 $startloop = microtime(true);
 define('LOOP_START', $startloop);
-
-$d['rand'] = rand(100, 200);
-$d['rand']=5;
 $connectionSettings = (new ConnectionSettings)
     ->setUsername('mqtt')
     ->setPassword('mqtt');
@@ -47,24 +43,26 @@ $newData = [
     'gas'    => $storedTeller['gas'] ?? 0,
     'water'  => $storedTeller['water'] ?? 0
 ];
+$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
+	try {
+		lg($topic.'	'.$status);
+		$time = time();
+		$changed = false;
 
-$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$d, &$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
-	lg($topic.'	'.$status);
-    $time = time();
-    $changed = false;
+		if ($topic == 't/import') { $newData['import'] = $status; $changed = true; }
+		elseif ($topic == 't/export') { $newData['export'] = $status; $changed = true; }
+		elseif ($topic == 't/gas') { $newData['gas'] = $status; $changed = true; }
+		elseif ($topic == 't/water') { $newData['water'] = $status; $changed = true; }
 
-    if ($topic == 't/import') { $newData['import'] = $status; $changed = true; }
-    elseif ($topic == 't/export') { $newData['export'] = $status; $changed = true; }
-    elseif ($topic == 't/gas') { $newData['gas'] = $status; $changed = true; }
-    elseif ($topic == 't/water') { $newData['water'] = $status; $changed = true; }
-
-    if ($changed) {
-        // Sla de laatste standen direct op in cache
-        setCache('teller', json_encode($newData));
-        processEnergyData($dbverbruik, $dbzonphp, $force, $newData, $mqtt, $time);
-    }
-
-    if ($lastcheck < $time - $d['rand']) {
+		if ($changed) {
+			// Sla de laatste standen direct op in cache
+			setCache('teller', json_encode($newData));
+			processEnergyData($dbverbruik, $dbzonphp, $force, $newData, $mqtt, $time);
+		}
+	} catch (Throwable $e) {
+		lg("‼️ Fout in MQTT_energy: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+	}
+    if ($lastcheck < $time - 5) {
         $lastcheck = $time;
         stoploop();
     }
@@ -166,10 +164,9 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     } catch (Exception $e) {
         lg("❌ Error Guy update: " . $e->getMessage());
     }
-
     // 6. Bereken Dagverbruik (Guydag)
-    $q = "SELECT gas, elec, injectie, water FROM `Guy` WHERE `date` = :gisteren";
-    $stmt = $dbverbruik->query($q, [':gisteren' => $gisterenDatum]);
+    $q = "SELECT gas, elec, injectie, water FROM `Guy` ORDER BY date DESC LIMIT 1,1";
+    $stmt = $dbverbruik->query($q);
     $gisteren = $stmt->fetch();
 
     $dagGas = 0; $dagElec = 0; $dagWater = 0; $dagVerbruik = 0;

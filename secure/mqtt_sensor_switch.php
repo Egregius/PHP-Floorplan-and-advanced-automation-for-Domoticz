@@ -16,7 +16,7 @@ use PhpMqtt\Client\ConnectionSettings;
 require_once '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 $user='SENSOR';
-lg('🟢 Starting '.$user.' loop ',-1);
+lg('🟢 Starting '.$user.' loop ','sensor');
 $time=time();
 $x=0;
 $lastcheck=$time;
@@ -67,7 +67,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 			}
 		}// else lg($device);
 	} catch (Throwable $e) {
-		lg("‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -107,7 +107,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			}
 		}
 	} catch (Throwable $e) {
-		lg("️‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("️‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -209,8 +209,8 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 						$currentStoredTemp = $d[$targetKey]->s ?? null;
 						if ($avgTemp != $currentStoredTemp) {
 							$diff = $avgTemp - $currentStoredTemp;
-							if ($diff > 0.2) $avgTemp = $currentStoredTemp + 0.2;
-							elseif ($diff < -0.2) $avgTemp = $currentStoredTemp - 0.2;
+							if ($diff > 0.5) $avgTemp = $currentStoredTemp + 0.5;
+							elseif ($diff < -0.5) $avgTemp = $currentStoredTemp - 0.5;
 							$logMsg = sprintf(
 								"Update %s: Zigbee=%s, Zwave=%s -> Avg=%s (%s)",
 								$room,
@@ -227,7 +227,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			}
 		}
 	} catch (Throwable $e) {
-		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -254,7 +254,7 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 			}
 		}
 	} catch (Throwable $e) {
-		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -270,7 +270,7 @@ while (true) {
     usleep(20000);
 }
 $mqtt->disconnect();
-lg("🛑 MQTT {$user} loop stopped ".__FILE__,1);
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,'sensor');
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;
@@ -282,7 +282,7 @@ function stoploop() {
     global $mqtt,$lock_file;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-        lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
+        lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...','sensor');
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
@@ -290,7 +290,7 @@ function stoploop() {
         exit;
     }
     if (filemtime($script) > LOOP_START) {
-        lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
+        lg('🛑 '.basename($script) . ' gewijzigd → restarting ...','sensor');
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);

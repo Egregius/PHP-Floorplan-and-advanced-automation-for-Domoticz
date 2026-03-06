@@ -16,20 +16,24 @@ if (!isset($_SESSION['domo_paths'])){
 		}
 	}
 }
-function parseTs(string $line): int{
-	if (preg_match('/^(\d{1,2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $line, $m))
-		return (int)mktime((int)$m[3],(int)$m[4],(int)$m[5],(int)$m[2],(int)$m[1],(int)date('Y'));
+function parseTs(string $line): float{
+	if (preg_match('/^(\d{1,2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?/', $line, $m)){
+		$sec = mktime((int)$m[3],(int)$m[4],(int)$m[5],(int)$m[2],(int)$m[1],(int)date('Y'));
+		$ms  = isset($m[6]) ? ('0.' . $m[6]) : 0;
+		return $sec !== false ? $sec + (float)$ms : 0;
+	}
 	if (preg_match('/(\d{4})\/(\d{2})\/(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $line, $m))
-		return (int)(strtotime("{$m[1]}-{$m[2]}-{$m[3]} {$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
+		return (float)(strtotime("{$m[1]}-{$m[2]}-{$m[3]} {$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
 	if (preg_match('/(\d{2})\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})/', $line, $m))
-		return (int)(strtotime("{$m[1]} {$m[2]} {$m[3]} {$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
+		return (float)(strtotime("{$m[1]} {$m[2]} {$m[3]} {$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
 	if (preg_match('/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/', $line, $m))
-		return (int)(strtotime($m[1]) ?: 0);
+		return (float)(strtotime($m[1]) ?: 0);
 	return 0;
 }
-function fmtTs(int $ts): string{
+function fmtTs(float $ts): string{
 	if (!$ts) return '';
-	return date('Ymd') === date('Ymd', $ts) ? date('H:i:s', $ts) : date('d/m H:i', $ts);
+	$s = (int)$ts;
+	return date('Ymd') === date('Ymd', $s) ? date('H:i:s', $s) : date('d/m H:i', $s);
 }
 if (isset($_GET['action'])){
 	header('Content-Type: application/json');
@@ -408,7 +412,7 @@ function updRow(row, line, filt, ri){
 	const lKey = lineStr + filt + (isMulti ? 'M' : '');
 	if (c.lk !== lKey){
 		let html = filt ? hilite(lineStr, filt) : esc(lineStr);
-		if (isMulti) html += ' <span style="color:#EEE;font-size:20px">▼</span>';
+		if (isMulti) html += ' <span style="color:#CCC;font-size:18px">▼</span>';
 		ch[1].innerHTML = html;
 		c.lk = lKey;
 	}
