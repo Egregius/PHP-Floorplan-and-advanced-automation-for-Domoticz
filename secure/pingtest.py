@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 
 # --- CONFIGURATIE ---
-ROUTER = "Velop" # Aanpassen bij wissel: "Velop", "Flint2"
+ROUTER = "Flint2" # Aanpassen bij wissel: "Velop", "Flint2"
 DEVICES = {
     "192.168.2.254": "pfSense",
     "192.168.2.101": "living",
