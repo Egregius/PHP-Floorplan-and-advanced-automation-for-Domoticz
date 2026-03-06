@@ -13,16 +13,16 @@ if (!isset($_SESSION['domo_paths'])){
 		foreach ($files as $f){
 			if ($entry['type'] === 'folder' && in_array(basename($f), $entry['exclude'] ?? [])) continue;
 			$_SESSION['domo_paths'][$f] = ['limit' => (int)$entry['limit'], 'format' => $entry['format'] ?? 'domotica'];
-	 }
- }
+		}
+	}
 }
 function parseTs(string $line): int{
 	if (preg_match('/^(\d{1,2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $line, $m))
 		return (int)mktime((int)$m[3],(int)$m[4],(int)$m[5],(int)$m[2],(int)$m[1],(int)date('Y'));
 	if (preg_match('/(\d{4})\/(\d{2})\/(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $line, $m))
-		return (int)(strtotime("{$m[1]}-{$m[2]}-{$m[3]}{$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
+		return (int)(strtotime("{$m[1]}-{$m[2]}-{$m[3]} {$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
 	if (preg_match('/(\d{2})\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})/', $line, $m))
-		return (int)(strtotime("{$m[1]}{$m[2]}{$m[3]}{$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
+		return (int)(strtotime("{$m[1]} {$m[2]} {$m[3]} {$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
 	if (preg_match('/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/', $line, $m))
 		return (int)(strtotime($m[1]) ?: 0);
 	return 0;
@@ -41,7 +41,7 @@ if (isset($_GET['action'])){
 		else
 			unset($_SESSION['domo_paths'][$d['path']]);
 		echo json_encode(['ok' => true]);exit;
- }
+	}
 	if ($_GET['action'] === 'group_selection'){
 		$d = json_decode(file_get_contents('php://input'), true);
 		foreach ($config['logs'] ?? [] as $entry){
@@ -55,10 +55,10 @@ if (isset($_GET['action'])){
 					$_SESSION['domo_paths'][$f] = ['limit' => (int)$entry['limit'], 'format' => $entry['format'] ?? 'domotica'];
 				else
 					unset($_SESSION['domo_paths'][$f]);
-		 }
-	 }
+			}
+		}
 		echo json_encode(['ok' => true]);exit;
- }
+	}
 	if ($_GET['action'] === 'list'){
 		$tree = [];
 		foreach ($config['logs'] ?? [] as $entry){
@@ -80,33 +80,50 @@ if (isset($_GET['action'])){
 					'mtime'	=> date('Ymd') == date('Ymd', $mt) ? date('H:i:s', $mt) : date('d/m H:i', $mt),
 					'mtime_ts' => $mt,
 				];
-		 }
+			}
 			$tree[] = $group;
-	 }
+		}
 		echo json_encode($tree);exit;
- }
+	}
 	if ($_GET['action'] === 'read'){
-		$since = max(0, (int)($_GET['since'] ?? 0));
+		$since   = max(0, (int)($_GET['since'] ?? 0));
 		$isDelta = $since > 0;
-		$grace = $since - 10;
+		$grace   = $since - 10;
 		$out = [];
 		foreach ($_SESSION['domo_paths'] ?? [] as $path => $meta){
 			if (!file_exists($path)) continue;
 			$limit = $isDelta ? 500 : max(1, min(200000, $meta['limit']));
 			$raw = shell_exec('tail -n ' . (int)$limit . ' ' . escapeshellarg($path));
 			if (!$raw) continue;
+
+			// Merge continuation lines (no leading timestamp) into the previous entry
+			$pending = null;
+			$entries = [];
 			foreach (explode("\n", trim($raw)) as $line){
-				$line = trim($line);
+				$line = rtrim($line);
 				if ($line === '') continue;
 				$ts = parseTs($line);
-				if ($isDelta && $ts > 0 && $ts < $grace) continue;
-				$out[] = ['c' => $line, 'f' => basename($path), 'p' => $path,
-						 't' => $ts, 'd' => fmtTs($ts), 'x' => $meta['format']];
-		 }
-	 }
+				if ($ts > 0){
+					if ($pending !== null) $entries[] = $pending;
+					$pending = ['text' => $line, 'ts' => $ts];
+				} else {
+					if ($pending !== null)
+						$pending['text'] .= "\n" . $line;
+					else
+						$pending = ['text' => $line, 'ts' => 0];
+				}
+			}
+			if ($pending !== null) $entries[] = $pending;
+
+			foreach ($entries as $e){
+				if ($isDelta && $e['ts'] > 0 && $e['ts'] < $grace) continue;
+				$out[] = ['c' => $e['text'], 'f' => basename($path), 'p' => $path,
+						 't' => $e['ts'], 'd' => fmtTs($e['ts']), 'x' => $meta['format']];
+			}
+		}
 		usort($out, fn($a, $b) => $b['t'] <=> $a['t']);
 		echo json_encode(['lines' => $out]);exit;
- }
+	}
 }
 ?><!DOCTYPE html>
 <html lang="nl">
@@ -289,12 +306,12 @@ function parseLine(line){
 		const candidate = (secondTab !== -1 ? raw.slice(firstTab+1, secondTab) : raw.slice(firstTab+1)).trim();
 		if (/^\p{Emoji_Presentation}$/u.test(candidate) || /^\p{Extended_Pictographic}$/u.test(candidate))
 			icon = candidate;
- }
+	}
 	if (!icon){
 		const noTs = raw.replace(/^\d{1,2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?\s*/, '');
 		const em = noTs.match(/^(\p{Emoji_Presentation}|\p{Extended_Pictographic})/u);
 		if (em) icon = em[1];
- }
+	}
 	line.parsed ={icon};
 }
 function tsC(t){
@@ -308,7 +325,7 @@ function getLayout(){
 		hdrH = document.getElementById('colHdr').offsetHeight;
 		vpH = document.getElementById('wrap').clientHeight - hdrH;
 		layoutDirty = false;
- }
+	}
 	return{hdrH, vpH};
 }
 new ResizeObserver(() =>{layoutDirty = true;}).observe(document.getElementById('wrap'));
@@ -329,7 +346,7 @@ function rebuildIdx(){
 	for (let i = 0;i < n;i++){
 		if (f && !allLines[i].c.toLowerCase().includes(f)) continue;
 		viewIdx[viewCnt++] = i;
- }
+	}
 	dirty = false;
 }
 function renderVs(){
@@ -345,17 +362,15 @@ function paintVs(){
 	const first = Math.max(0, Math.floor(s0 / ROW_H) - OVER);
 	const last = Math.min(viewCnt, first + Math.ceil(vh / ROW_H) + OVER * 2);
 	const needed = last - first;
-
 	const inner = document.getElementById('vsInner');
 	const filt = document.getElementById('fi').value.toLowerCase();
 	inner.style.top = (first * ROW_H) + 'px';
-
 	while (inner.children.length > needed) inner.removeChild(inner.lastChild);
 	for (let i = 0;i < needed;i++){
 		const line = allLines[viewIdx[first + i]];
 		if (i < inner.children.length) updRow(inner.children[i], line, filt, i);
 		else inner.appendChild(mkRow(line, filt, i));
- }
+	}
 }
 const rCache = [];
 function rc(i){if (!rCache[i]) rCache[i] ={};return rCache[i];}
@@ -365,16 +380,17 @@ function mkRow(line, filt, i){
 	row.appendChild(document.createElement('div'));
 	row.children[0].style.cssText = 'white-space:nowrap;font-variant-numeric:tabular-nums;flex-shrink:0;';
 	row.children[1].className = 'mc';
-	row.addEventListener('click', () =>{
-//		if (isMobile() || row.children[1].scrollWidth > row.children[1].clientWidth){
-			openLinePop(line);
-//	 }
- });
+	row.addEventListener('click', () => {
+		const l = row._line;
+		if (!l) return;
+		openLinePop(l);
+	});
 	rCache[i] ={};
 	updRow(row, line, filt, i);
 	return row;
 }
 function updRow(row, line, filt, ri){
+	row._line = line;  // always keep current — fixes stale closure bug
 	const p = line.parsed;
 	const ch = row.children;
 	const c = rc(ri);
@@ -383,18 +399,21 @@ function updRow(row, line, filt, ri){
 	if (row.className !== wantCls) row.className = wantCls;
 	const dispTs = isMobile() && line.d && line.d.length === 8 ? line.d.slice(0,5) : line.d;
 	const tc = tsC(line.t);
-	if (ch[0].className !== tc)	 ch[0].className = tc;
+	if (ch[0].className !== tc) ch[0].className = tc;
 	if (ch[0].textContent !== dispTs) ch[0].textContent = dispTs;
-	const raw	 = line.c;
-	const lineStr = raw.replace(/^\d{1,2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?[\t ]/, '').trimStart();
-	const lKey	= lineStr + filt;
+	// Show first line in row; ▼ marks multi-line entries
+	const firstLine = line.c.split('\n')[0];
+	const lineStr = firstLine.replace(/^\d{1,2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?[\t ]/, '').trimStart();
+	const isMulti = line.c.includes('\n');
+	const lKey = lineStr + filt + (isMulti ? 'M' : '');
 	if (c.lk !== lKey){
-		ch[1].innerHTML = filt ? hilite(lineStr, filt) : esc(lineStr);
+		let html = filt ? hilite(lineStr, filt) : esc(lineStr);
+		if (isMulti) html += ' <span style="color:#EEE;font-size:20px">▼</span>';
+		ch[1].innerHTML = html;
 		c.lk = lKey;
- }
+	}
 }
 async function fetchTree(hlPath){
-	console.log('fetchtree')
 	try{
 		const data = await (await fetch('?action=list')).json();
 		if (!Array.isArray(data)) return;
@@ -425,29 +444,28 @@ async function fetchTree(hlPath){
 					<input type="checkbox" onchange="selFile(this)"
 						 value="${f.path}" data-limit="${f.limit}" data-format="${f.format}"
 						 ${f.active?'checked':''} style="margin-right:6px;flex-shrink:0;cursor:pointer">
-					<span class="${hit?'tf-n':''}" style="font-size:10px;color:${f.active?'var(--text)':'var(--muted)'}">${esc(f.name)}</span>
+					<span class="${hit?'tf-n':''}" style="font-size:16px;color:${f.active?'var(--text)':'var(--muted)'}">${esc(f.name.replace('.log', ''))}</span>
 				 </div>
-				 <span class="${hit?'tf-t':''}" style="font-size:16px;flex-shrink:0;margin-left:8px;color:${mtC}">${f.mtime}</span>
+				 <span style="font-size:16px;flex-shrink:0;margin-left:8px;color:${mtC}">${f.mtime}</span>
 				</label>`;
-		 });
+			});
 			html += '</div></div>';
-	 });
+		});
 		document.getElementById('sb').innerHTML = html;
- } catch(e){console.error('fetchTree', e);}
+	} catch(e){console.error('fetchTree', e);}
 }
 const getAgeColor = (age) =>{
- const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
- if (age <= 60){
-	const ratio = clamp(age / 60, 0, 1);
-	const saturation = 100 - (ratio * 100);
-	const lightness = 50 + (ratio * 50);
-	return `hsl(60, ${saturation}%, ${lightness}%)`;
- }
- else{
-	const ratio = clamp((age - 60) / (900 - 60), 0, 1);
-	const lightness = 100 - (ratio * 70);
-	return `hsl(0, 0%, ${lightness}%)`;
- }
+	const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+	if (age <= 60){
+		const ratio = clamp(age / 60, 0, 1);
+		const saturation = 100 - (ratio * 100);
+		const lightness = 50 + (ratio * 50);
+		return `hsl(60, ${saturation}%, ${lightness}%)`;
+	} else {
+		const ratio = clamp((age - 60) / (900 - 60), 0, 1);
+		const lightness = 100 - (ratio * 70);
+		return `hsl(0, 0%, ${lightness}%)`;
+	}
 };
 async function fetchLogs(){
 	if (userScrolled || busy) return;
@@ -466,24 +484,24 @@ async function fetchLogs(){
 			if (r.isNew) tpath = pArr[r.pi];
 			if (r.t > highTs) highTs = r.t;
 			parseLine(r);nw.push(r);hasNew = true;
-	 }
+		}
 		if (hasNew){
 			if (firstFetch || nw.length > 500){
 				allLines = allLines.concat(nw);
 				allLines.sort((a, b) => b.t - a.t);
-		 } else{
+			} else {
 				for (const nl of nw){
 					let lo = 0, hi = allLines.length;
 					while (lo < hi){const m=(lo+hi)>>>1;allLines[m].t >= nl.t ? lo=m+1 : hi=m;}
 					allLines.splice(lo, 0, nl);
-			 }
-		 }
+				}
+			}
 			if (allLines.length > 20000){allLines = allLines.slice(0,20000);hashes = new Set(allLines.map(l=>l.h));}
 			dirty = true;renderVs();
 			fetchTree(tpath);
-	 } else if (firstFetch) fetchTree();
+		} else if (firstFetch) fetchTree();
 		firstFetch = false;
- } catch(e){console.error('fetchLogs', e);}
+	} catch(e){console.error('fetchLogs', e);}
 	finally{busy = false;}
 }
 function setChip(live){
@@ -511,7 +529,7 @@ async function grpAct(name, mode){
 async function selFile(cb){
 	await fetch('?action=update_selection',{method:'POST', body:JSON.stringify({
 		path:cb.value, checked:cb.checked, limit:parseInt(cb.dataset.limit), format:cb.dataset.format
- })});
+	})});
 	if (isMobile()) closeSb();
 	reset();
 }
@@ -540,7 +558,10 @@ function hilite(str, term){
 }
 function openLinePop(line){
 	document.getElementById('lpTs').textContent = line.d || '';
-	document.getElementById('lpBody').textContent = line.c;
+	// Strip timestamp from first line only, continuation lines stay intact
+	const lines = line.c.split('\n');
+	lines[0] = lines[0].replace(/^\d{1,2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)?[\t ]/, '').trimStart();
+	document.getElementById('lpBody').textContent = lines.join('\n');
 	document.getElementById('linePop').classList.add('open');
 }
 function closeLinePop(){

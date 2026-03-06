@@ -17,7 +17,7 @@ use PhpMqtt\Client\ConnectionSettings;
 require_once '/var/www/vendor/autoload.php';
 
 $user = 'ENERGY';
-lg('🟢 Starting ' . $user . ' loop ', -1);
+lg('🟢 Starting ' . $user . ' loop ');
 
 $time = time();
 $lastcheck = $time;
@@ -155,12 +155,14 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     $q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
           VALUES (:date, :gas, :elec, :injectie, :zon, :water)
           ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), injectie=VALUES(injectie), zon=VALUES(zon), water=VALUES(water)";
-
-    try {
-        $dbverbruik->query($q, [
+	$opts=[
             ':date' => $vandaag, ':gas' => $gasStand, ':elec' => $elecStand,
             ':injectie' => $injectie, ':zon' => $zontotaal, ':water' => $waterStand
-        ]);
+        ];
+    lg($q.'
+'.json_encode($opts));
+    try {
+        $dbverbruik->query($q, $opts);
     } catch (Exception $e) {
         lg("❌ Error Guy update: " . $e->getMessage());
     }
@@ -182,12 +184,14 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         $q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
               VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
               ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
-
-        try {
-            $dbverbruik->query($q, [
+		$opts=[
                 ':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
                 ':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
-            ]);
+            ];
+        lg($q.'
+'.json_encode($opts));
+		try {
+            $dbverbruik->query($q, $opts);
         } catch (Exception $e) {
             lg("❌ Error Guydag update: " . $e->getMessage());
         }
@@ -199,7 +203,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     // 7. Statistieken & Gemiddelden
     $since = date("Y-m-d", $time - (86400 * 30));
     $avg = ['gas' => 0, 'elec' => 0];
-    $q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date >= :since AND date < CURRENT_DATE()";
+    $q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date >= :since";
     $stmt = $dbverbruik->query($q, [':since' => $since]);
     if ($row = $stmt->fetch()) $avg = $row;
 
@@ -258,7 +262,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 }
 function lg($msg) {
 	echo $msg."\n";
-	$fp = fopen('/temp/domoticz.log', "a+");
+	$fp = fopen('/var/log/mqtt/energy.log', "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
 	$mSecs = $time - floor($time);

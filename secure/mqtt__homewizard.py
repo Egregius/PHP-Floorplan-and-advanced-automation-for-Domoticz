@@ -26,7 +26,16 @@ mqtt_connected = False
 _pending_retained_publish = True  # flag voor eerste connect en reconnect
 
 def log(*args):
-    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]", *args)
+    now = datetime.now()
+    timestamp = now.strftime('%d-%m %H:%M:%S') + f".{now.microsecond // 1000:03d}"
+    log_message = f"{timestamp} " + " ".join(map(str, args))
+    print(log_message)
+    try:
+        with open("/var/log/mqtt/homewizard.log", "a", encoding="utf-8") as f:
+            f.write(log_message + "\n")
+    except:
+        pass
+
 def publish_all_retained():
     """Publiceer alles naar MQTT met retain=True als broker verbonden"""
     if not mqtt_connected:
@@ -67,20 +76,28 @@ _last_time_published = None
 state = {"n": 0, "a": 0, "z": 0, "b": 0, "c": 0}
 state_publish = {}
 teller_state = {"import": 0, "export": 0, "gas": 0, "water": 0}
-teller_publish_state = {"import": 0,"export": 0,"gas": 0,"water": 0}
+teller_publish_state = {"import": 0, "export": 0, "gas": 0, "water": 0}
 
-# NIEUW: Lees cache bij opstarten
+# --- Cache Laden ---
 if CACHE_FILE.exists():
     try:
-        state.update(json.loads(CACHE_FILE.read_text()))
-        state_publish.update(state)
-    except: pass
+        data = json.loads(CACHE_FILE.read_text())
+        # Zorg dat alle ingeladen waarden floats/ints zijn
+        cleaned_data = {k: float(v) for k, v in data.items()}
+        state.update(cleaned_data)
+        state_publish.update(cleaned_data)
+    except Exception as e:
+        log(f"⚠️ Cache inleesfout (en.txt): {e}")
 
 if TELLER_FILE.exists():
     try:
-        teller_state.update(json.loads(TELLER_FILE.read_text()))
-        teller_publish_state.update(teller_state)
-    except: pass
+        data = json.loads(TELLER_FILE.read_text())
+        # Zorg dat alle ingeladen waarden floats/ints zijn
+        cleaned_data = {k: float(v) for k, v in data.items()}
+        teller_state.update(cleaned_data)
+        teller_publish_state.update(cleaned_data)
+    except Exception as e:
+        log(f"⚠️ Cache inleesfout (teller.txt): {e}")
 
 
 # --- Tokens ---
@@ -106,7 +123,7 @@ def request_token(host, timeout=60):
         time.sleep(1)
     raise TimeoutError(f"❌ Timeout na {timeout}s")
 
-# --- Cache ---
+# --- Cache Opslaan ---
 def flush_state():
     try:
         CACHE_FILE.write_text(json.dumps(state))
@@ -128,31 +145,33 @@ def step_for_value(value):
     elif v<100: return 2
     elif v<200: return 5
     else: return 10
+
 # --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
-        log(f"📤 Publish {key}={value}, rc={result.rc}")  # DEBUG
-        if result.rc != 0:  # MQTT publish result code 0 = OK
+        log(f"📤 Publish {key}={value}, rc={result.rc}")
+        if result.rc != 0:
             print(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
     else:
-        log(f"⚠️ Kan {key} niet publiceren: niet verbonden")  # DEBUG
+        log(f"⚠️ Kan {key} niet publiceren: niet verbonden")
 
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
-        log(f"📤 Publish t/{key}={value}, rc={result.rc}")  # DEBUG
-        if result.rc != 0:  # MQTT publish result code 0 = OK
+        log(f"📤 Publish t/{key}={value}, rc={result.rc}")
+        if result.rc != 0:
             print(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
     else:
-        log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")  # DEBUG
+        log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")
 
 # --- State updates ---
 def publish_step(key, value):
     q = quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
+    # Veiligheidscheck: zorg dat last een getal is voor vergelijking
     if last is None or q != last:
         state_publish[key] = q
         state[key] = q
@@ -160,11 +179,22 @@ def publish_step(key, value):
         mqtt_publish_key(key, q)
 
 def publish_quantized(key, value):
+    if value is None: return
+
     if key=="water" or key=="gas":
         q = value
     else:
         q = quantize_0_01(value)
+
     last = teller_publish_state.get(key)
+
+    # FIX: Forceer last naar float als het niet None is om de TypeError te voorkomen
+    if last is not None:
+        try:
+            last = float(last)
+        except:
+            last = None
+
     if last is None or q > last:
         teller_publish_state[key] = q
         teller_state[key] = q
@@ -220,9 +250,9 @@ async def handle_device(device, token, ssl_context):
                         elif msg_type=="error":
                             log(f"❌ {name}: {data.get('message',data)}")
                     except Exception as e:
-                        log(f"⚠️ {name}: {e}")
+                        log(f"⚠️ {name} (data error): {e}")
         except Exception as e:
-            log(f"❌ {name}: {e}")
+            log(f"❌ {name} (verbinding error): {e}")
         await asyncio.sleep(RECONNECT_DELAY)
 
 # --- Main ---

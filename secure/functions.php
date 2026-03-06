@@ -248,7 +248,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         return;
     }
     $d ??= fetchdata();
-    lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 4);
+    lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 'sl');
     $deviceType = $d[$name]->d ?? null;
     $entityPrefix = in_array($deviceType, ['r', 'luifel']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
@@ -302,7 +302,7 @@ function sw($name,$action='Toggle',$msg=null) {
 				if ($d[$name]->s=='On') $action='Off';
 				else $action='On';
 			}
-			lg('💡 SW ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $action . ($msg ? " ($msg)" : ''), 4);
+			lg('💡 SW ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $action . ($msg ? " ($msg)" : ''), 'sw');
 			if ($action=='On') hass('switch','turn_on','switch.'.$name);
 			elseif ($action=='Off') hass('switch','turn_off','switch.'.$name);
 		} else {
@@ -346,7 +346,7 @@ function store($name='',$status='',$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', 'store');
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -356,7 +356,7 @@ function store($name='',$status='',$msg='') {
 	}
 	if($affected>0/*&&!in_array($name,['dag'])*/){
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),10);
+		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),'store');
 	}
 	return $affected ?? 0;
 }
@@ -395,7 +395,7 @@ function storemode($name,$mode,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', 'store');
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -405,7 +405,7 @@ function storemode($name,$mode,$msg='') {
 	}
 	if($affected>0&&!in_array($name,['dag'])) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STOREM	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STOREM	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),'store');
 	}
 	return $affected ?? 0;
 }
@@ -425,7 +425,7 @@ function storesm($name,$s,$m,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', 'store');
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -435,7 +435,7 @@ function storesm($name,$s,$m,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESM   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESM   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),'store');
 	}
 	return $affected ?? 0;
 }
@@ -456,7 +456,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', 'store');
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -466,7 +466,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
-		lg('💾 STORESMI  '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESMI  '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),'store');
 	}
 	return $affected ?? 0;
 }
@@ -488,7 +488,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', 'store');
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -498,7 +498,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESMIP '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESMIP '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),'store');
 	}
 	return $affected ?? 0;
 }
@@ -518,7 +518,7 @@ function storesp($name,$s,$p,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', 'store');
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -528,7 +528,7 @@ function storesp($name,$s,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESP   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STORESP   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),'store');
 	}
 	return $affected ?? 0;
 }
