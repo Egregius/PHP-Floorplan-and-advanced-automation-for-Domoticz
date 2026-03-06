@@ -3,7 +3,7 @@ $logDir = '/temp/ping/';
 $files = glob($logDir . 'ping_*.csv');
 
 $analytics = [];
-$globalMax = 0; // De variabele om de schaal te bepalen
+$globalMax = 0;
 $routerColors = [
     'AXT1800' => ['line' => '#38bdf8', 'bar' => 'rgba(56, 189, 248, 0.4)'],
     'Velop'   => ['line' => '#fbbf24', 'bar' => 'rgba(251, 191, 36, 0.4)'],
@@ -28,40 +28,112 @@ foreach ($files as $file) {
             $analytics[$devKey][$router]['max'][$seq] = $max;
             $analytics[$devKey][$router]['spikes'][$seq] = $spikes;
 
-            // Bepaal de hoogste waarde voor de grafiekschaal
             if ($avg > $globalMax) $globalMax = $avg;
         }
         fclose($handle);
     }
 }
 
-// Voeg een beetje marge toe aan de globalMax voor de look (10% extra)
 $chartScaleMax = $globalMax * 1.1;
-if ($chartScaleMax < 20) $chartScaleMax = 20; // Minimum schaal van 20ms
+if ($chartScaleMax < 20) $chartScaleMax = 20;
 ?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Router Stress Benchmark - Global Scale</title>
+    <title>Router Stress Benchmark</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #f1f5f9; margin: 0; padding: 20px; }
-        h1 { text-align: center; color: #38bdf8; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 100%; margin: 0 auto; }
-        .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; display: flex; flex-direction: column; }
-        .device-title { font-size: 1.3rem; margin: 0 0 15px 0; color: #f8fafc; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-        .stats-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.85rem; background: #0f172a; border-radius: 8px; overflow: hidden; }
-        .stats-table th { text-align: left; padding: 8px; background: #111827; color: #94a3b8; font-size: 0.7rem; }
-        .stats-table td { padding: 8px; border-bottom: 1px solid #334155; }
-        .router-name-cell { font-weight: bold; border-left: 4px solid; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            margin: 0;
+            padding: 5px;
+            height: 100vh;
+            overflow: hidden; /* Geen scrollbar */
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            text-align: center;
+            color: #38bdf8;
+            font-size: 1rem;
+            margin: 2px 0;
+            position: absolute;
+		    width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(3, 1fr); /* 3 gelijke rijen */
+            gap: 8px;
+            flex-grow: 1; /* Vult resterende hoogte body */
+            height: 100%;
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0; /* Belangrijk voor flexbox in grid */
+        }
+
+        .device-title {
+            font-size: 1rem;
+            margin: 0 auto;
+            color: #f8fafc;
+            line-height: 1.2;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            margin-bottom: 2px;
+        }
+
+        .stats-table th {
+            padding: 2px 4px;
+            color: #94a3b8;
+            font-size: 0.65rem;
+            text-align: center;
+        }
+
+        .stats-table td {
+            padding: 2px 4px;
+            border-bottom: 1px solid #334155;
+            text-align: center;
+        }
+
+        .router-name-cell {
+            font-weight: bold;
+            border-left: 12px solid;
+            border-radius: 4px;
+            text-align: left !important;
+            padding-left: 8px !important;
+        }
+
         .stat-val-max { color: #f87171; }
         .stat-val-stab { font-weight: bold; }
-        canvas { min-height: 200px; width: 100% !important; }
+
+        .chart-container {
+            flex-grow: 1;
+            position: relative;
+            min-height: 0;
+        }
+
+        canvas { width: 100% !important; height: 100% !important; }
     </style>
 </head>
 <body>
-    <h1>🛰️ WiFi Stress Benchmark (Global Scale: <?php echo round($chartScaleMax); ?>ms)</h1>
+    <h1>Max AVG: <?php echo round($chartScaleMax); ?>ms</h1>
 
     <div class="grid">
     <?php foreach ($analytics as $device => $routers): ?>
@@ -86,13 +158,15 @@ if ($chartScaleMax < 20) $chartScaleMax = 20; // Minimum schaal van 20ms
                         <td class="router-name-cell" style="border-left-color: <?php echo $color; ?>; color: <?php echo $color; ?>"><?php echo $rName; ?></td>
                         <td class="stat-val-stab <?php echo ($stab < 95) ? 'stat-val-max' : ''; ?>"><?php echo $stab; ?>%</td>
                         <td><?php echo $sumSpikes; ?></td>
-                        <td><?php echo $avgLat; ?> ms</td>
-                        <td class="stat-val-max"><?php echo $maxLat; ?> ms</td>
+                        <td><?php echo $avgLat; ?>ms</td>
+                        <td class="stat-val-max"><?php echo $maxLat; ?>ms</td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <div style="flex-grow: 1;"><canvas id="chart_<?php echo md5($device); ?>"></canvas></div>
+            <div class="chart-container">
+                <canvas id="chart_<?php echo md5($device); ?>"></canvas>
+            </div>
         </div>
 
         <script>
@@ -106,14 +180,14 @@ if ($chartScaleMax < 20) $chartScaleMax = 20; // Minimum schaal van 20ms
                         label: '<?php echo $rName; ?> Avg',
                         data: <?php echo json_encode(array_values($rData['avg'])); ?>,
                         borderColor: '<?php echo $routerColors[$rName]['line'] ?? "#fff"; ?>',
-                        yAxisID: 'y', tension: 0.3, pointRadius: 0, borderWidth: 2
+                        yAxisID: 'y', tension: 0.3, pointRadius: 0, borderWidth: 1.5
                     },
                     {
                         type: 'bar',
                         label: '<?php echo $rName; ?> Spikes',
                         data: <?php echo json_encode(array_values($rData['spikes'])); ?>,
                         backgroundColor: '<?php echo $routerColors[$rName]['bar'] ?? "rgba(255,255,255,0.1)"; ?>',
-                        yAxisID: 'y1', barThickness: 4
+                        yAxisID: 'y1', barThickness: 2
                     },
                     <?php endforeach; ?>
                 ]
@@ -123,13 +197,13 @@ if ($chartScaleMax < 20) $chartScaleMax = 20; // Minimum schaal van 20ms
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        position: 'left',
                         beginAtZero: true,
-                        max: <?php echo $chartScaleMax; ?>, // HIER WORDT DE SCHAAL GEFORCEERD
-                        title: { display: true, text: 'ms', color: '#64748b' },
+                        max: <?php echo $chartScaleMax; ?>,
+                        ticks: { font: { size: 9 }, color: '#64748b', maxTicksLimit: 10 },
                         grid: { color: '#334155' }
                     },
-                    y1: { position: 'right', display: false, beginAtZero: true, max: 50 }
+                    y1: { position: 'right', display: false, beginAtZero: true, max: 50 },
+                    x: { ticks: { display: false }, grid: { display: false } }
                 },
                 plugins: { legend: { display: false } }
             }
