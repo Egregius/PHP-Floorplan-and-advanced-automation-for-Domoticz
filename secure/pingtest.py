@@ -7,33 +7,38 @@ import os
 from datetime import datetime
 
 # --- CONFIGURATIE ---
+ROUTER = "AXT1800" # Aanpassen bij wissel: "Velop", "Flint2"
 DEVICES = {
+    "192.168.2.254": "pfSense",
     "192.168.2.101": "living",
+    "192.168.2.103": "boven",
     "192.168.2.104": "garage",
-    "192.168.2.1":   "router_gateway"
+    "192.168.2.107": "keuken",
+    "192.168.2.201": "Macbook",
 }
 
-LOG_DIR = "/temp"
+LOG_DIR = "/temp/ping"
 INTERVAL = 30
 PING_COUNT = 50
 
-def get_hour_csv_path(ip, name):
-    # Formaat: ping_naam_ip_datum_uur.csv
+def get_csv_path(ip, name):
     now = datetime.now()
-    filename = f"ping_{name}_{ip}_{now.strftime('%Y%m%d_%H')}.csv"
+    filename = f"ping_{name}_{ip}_{now.strftime('%H')}_{ROUTER}.csv"
     return os.path.join(LOG_DIR, filename)
 
 async def run_ping_test(ip, name):
+    seq = 1
     while True:
-        csv_path = get_hour_csv_path(ip, name)
+        csv_path = get_csv_path(ip, name)
 
-        # Schrijf header als het bestand van dit uur nog niet bestaat
         if not os.path.exists(csv_path):
             with open(csv_path, 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(["timestamp", "min", "avg", "max", "mdev", "spikes_over_20ms"])
+                writer.writerow(["seq", "timestamp", "min", "avg", "max", "mdev", "spikes_40"])
+            seq = 1
 
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        timestamp = datetime.now().strftime('%H:%M:%S')
+        # Stress-test: 50 pings, 0.02 interval
         cmd = ["ping", "-c", str(PING_COUNT), "-s", "1472", "-i", "0.02", "-W", "1", ip]
 
         try:
@@ -42,22 +47,26 @@ async def run_ping_test(ip, name):
             output = stdout.decode()
 
             times = [float(t) for t in re.findall(r"time=(\d+\.?\d*) ms", output)]
-            spikes = len([t for t in times if t > 20])
+            # Nieuwe drempelwaarde: 40ms
+            spikes = len([t for t in times if t > 40])
+
             stats_match = re.search(r"rtt min/avg/max/mdev = (\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+) ms", output)
 
             if stats_match:
                 rmin, ravg, rmax, rmdev = stats_match.groups()
                 with open(csv_path, 'a', newline='') as f:
                     writer = csv.writer(f)
-                    writer.writerow([timestamp, rmin, ravg, rmax, rmdev, spikes])
-                print(f"[{timestamp}] ✅ {name}: avg={ravg}ms")
+                    writer.writerow([seq, timestamp, rmin, ravg, rmax, rmdev, spikes])
+                print(f"[{timestamp}] {name} ({ROUTER}) seq {seq}: avg={ravg}ms, spikes(>40ms)={spikes}")
+                seq += 1
         except Exception as e:
             print(f"Fout bij {name}: {e}")
 
         await asyncio.sleep(INTERVAL)
 
 async def main():
-    print(f"🚀 Monitor gestart (Hourly logs in {LOG_DIR})")
+    if not os.path.exists(LOG_DIR): os.makedirs(LOG_DIR, exist_ok=True)
+    print(f"🚀 Monitor gestart voor ROUTER: {ROUTER} (Drempel: 40ms)")
     await asyncio.gather(*(run_ping_test(ip, name) for ip, name in DEVICES.items()))
 
 if __name__ == "__main__":
