@@ -86,7 +86,8 @@ $chartScaleMax = ($globalMax > 0) ? $globalMax * 1.1 : 20;
         .card { background: #1e293b; border-radius: 6px; border: 1px solid #334155; padding: 4px; display: flex; flex-direction: column; min-height: 0; }
         .device-title { font-size: 0.9rem; margin: 0 auto; color: #f8fafc; }
         .stats-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-        .stats-table th { padding: 2px; color: #94a3b8; font-size: 0.6rem; }
+        .stats-table th { padding: 2px; color: #94a3b8; font-size: 0.6rem;text-align:center; }
+        td{text-align:center;}
         .router-name-cell { font-weight: bold; border-left: 12px solid; padding-left: 5px; text-align: left; }
         .chart-container { flex-grow: 1; position: relative; min-height: 0; }
 
