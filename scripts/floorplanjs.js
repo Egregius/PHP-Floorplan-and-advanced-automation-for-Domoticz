@@ -60,26 +60,41 @@ function processQueue() {
     updateQueue.clear();
     rafScheduled = false;
 }
-function setText(id, text) {
-    if (lastValues[id] === text) return false;
+function setText(id, text, force = false) {
+    if (!force && lastValues[id] === text) return false;
     lastValues[id] = text;
+    if (force) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = text;
+            updateQueue.delete(id);
+            return true;
+        }
+    }
     let entry = getUpdateEntry(id);
     entry.text = text;
     delete entry.html;
     requestTick();
     return true;
 }
-function setHTML(id, html) {
+function setHTML(id, html, force = false) {
     const key = id + ':html';
-    if (lastValues[key] === html) return false;
+    if (!force && lastValues[key] === html) return false;
     lastValues[key] = html;
+    if (force) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = html;
+            updateQueue.delete(id);
+            return true;
+        }
+    }
     let entry = getUpdateEntry(id);
     entry.html = html;
     delete entry.text;
     requestTick();
     return true;
 }
-
 function setStyle(id, prop, value) {
     const key = id + ':style:' + prop;
     if (value === null) {
@@ -92,7 +107,6 @@ function setStyle(id, prop, value) {
     getUpdateEntry(id).styles[prop] = value;
     requestTick();
 }
-
 function setAttr(id, attr, value) {
     const key = id + ':attr:' + attr;
     if (lastValues[key] === value) return;
@@ -326,96 +340,92 @@ function renderBoseHTML(device, v) {
 }
 function bose(device, ip) {
     if (myAjaxMedia) clearInterval(myAjaxMedia);
+    window.isSubmitting = false;
     let html = `<div class="fix" id="bose"><a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">Bose ${ip}</a></div>`;
-    html += `<div class="fix bose"><br><br><br><br><div id="art"></div><br><br><br><br><br><br><h4 id="artist"></h4><span id="track"></span><br><div id="volume"></div><br><br><div id="power"></div></div>`;
-    html += `<button class="close-btn" onclick="clearInterval(myAjaxMedia); myAjaxMedia=null; setView('floorplan');">✕</button>`;
+    html += `<div class="fix bose">
+                <br><br><br><br><div id="art"></div>
+                <br><br><br><br><br><br><h4 id="artist"></h4>
+                <span id="track"></span><br>
+                <div id="volume"></div><br><br>
+                <div id="power"></div>
+             </div>`;
+    html += `<button class="close-btn" onclick="clearInterval(myAjaxMedia); setView('floorplan');">✕</button>`;
+
     setHTML('floorplantemp', html);
     setView('floorplantemp');
-    setTimeout(() => {
-        ajaxbose(ip);
-        myAjaxMedia = setInterval(() => ajaxbose(ip), 5000);
-    }, 50);
-}
-async function ajaxbose(ip) {
-    if (typeof isSubmitting !== 'undefined' && isSubmitting) return;
-    isSubmitting = true;
 
+    ajaxbose(ip,true);
+    myAjaxMedia = setInterval(() => ajaxbose(ip,false), 5000);
+}
+async function ajaxbose(ip, force = false) {
+    if (window.isSubmitting) return;
+    window.isSubmitting = true;
     try {
         const data = await ajaxJSON('/ajax.php?bose=' + ip);
-		console.log(data)
-        let mainHtml = '';
-
+        if (!data) return;
         if (data.source !== "STANDBY") {
-            // Volume Sectie
             if (data.volume !== undefined) {
-                const volume = parseInt(data.volume, 10);
-                const levels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
-                let volHtml = '<div id="volume-control-group">';
-                levels.forEach(level => {
-                    let targetVolume = volume + level;
-                    let label = "";
-                    if (targetVolume < 0) { targetVolume = 0; label = "&nbsp;"; }
-                    else if (targetVolume > 80) { targetVolume = 80; label = "&nbsp;"; }
-                    else { label = (level === 0) ? targetVolume : (level > 0 ? `+${level}` : level); }
+				const volume = parseInt(data.volume, 10);
+				const levels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
+				let volHtml = '<div id="volume-control-group" class="visualizer">';
 
-                    const isCurrent = (level === 0);
-                    const typeClass = level < 0 ? 'minus' : (level > 0 ? 'plus' : 'current');
-                    const cls = isCurrent ? 'btn volume btna' : `btn volume hover ${typeClass}`;
+				levels.forEach(level => {
+					let targetVolume = volume + level;
 
-                    // FIX: Quotes in onclick verbeterd
-                    volHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','volume','${targetVolume}'); ajaxbose('${ip}')">${label}</button>`;
-                });
-                volHtml += '</div>';
-                setHTML('volume', volHtml);
-            }
+					// Zorg dat we binnen 0-80 blijven
+					targetVolume = Math.max(0, Math.min(80, targetVolume));
 
-            // Info tekst
-            if (data.source === "SPOTIFY" || data.source === "TUNEIN") {
-                setText('artist', data.artist);
-                setText('track', data.track);
-            } else if (data.source === "BLUETOOTH") {
-                setText('artist', "Bluetooth");
-                setText('track', data.track);
-            } else {
-                setText('artist', data.source);
-            }
+					const isCurrent = (level === 0);
+					const typeClass = level < 0 ? 'minus' : (level > 0 ? 'plus' : 'current');
 
-            // Art update
+					// Bereken hoogte factor: hoe dichter bij 0, hoe hoger (0=1, 1=0.8, 5=0.4 etc)
+					const heightFactor = (6 - Math.abs(level)) / 6;
+
+					volHtml += `<button class="btn volume ${isCurrent ? 'btna' : 'hover'} ${typeClass}"
+								  style="--h: ${heightFactor}"
+								  title="${level === 0 ? 'Huidig: ' : ''}${targetVolume}"
+								  onclick="ajaxcontrolbose('${ip}','volume','${targetVolume}'); ajaxbose('${ip}')">
+								</button>`;
+				});
+
+				volHtml += '</div>';
+				setHTML('volume', volHtml, force);
+			}
+            const artist = (data.source === "BLUETOOTH") ? "Bluetooth" : (data.artist || data.source);
+            setText('artist', artist, force);
+            setText('track', data.track || '', force);
             let artHtml = '';
             let img = data.art ? data.art.toString().replace("http://", "https://") : 'None';
-            if (data.source === "BLUETOOTH") artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
-            else if (img.startsWith('http')) artHtml = `<img src="${img}" class="spotify" alt="Art">`;
-            setHTML('art', artHtml);
-
-            // Controls & Presets
-            if (data.source === "SPOTIFY") {
-                mainHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev'); ajaxbose('${ip}')">Prev</button>`;
-                mainHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next'); ajaxbose('${ip}')">Next</button>`;
+            if (data.source === "BLUETOOTH") {
+                artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
+            } else if (img.startsWith('http')) {
+                artHtml = `<img src="${img}" class="spotify" alt="Art">`;
             }
-
+            setHTML('art', artHtml, force);
+            let powerHtml = '';
+            if (data.source === "SPOTIFY") {
+                powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev'); ajaxbose('${ip}')">Prev</button>`;
+                powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next'); ajaxbose('${ip}')">Next</button>`;
+            }
             const presets = [['EDM - Part 1','1'], ['EDM - Part 2','2'], ['EDM - Part 3','3'], ['Mix - Part 1','4'], ['Mix - Part 2','5'], ['Mix - Part 3','6']];
             presets.forEach(([playlistName, presetId]) => {
                 const cls = (data.playlist === playlistName) ? 'btn btna b3' : 'btn b3';
-                const shortLabel = playlistName.split(' ')[0] + " - " + (playlistName.split(' ')[3] || presetId);
-                mainHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${shortLabel}</button>`;
+                const parts = playlistName.split(' ');
+                const shortLabel = parts[0] + " - " + (parts[3] || presetId);
+                powerHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${shortLabel}</button>`;
             });
-
+            setHTML('power', powerHtml, force);
         } else {
-            // Standby modus
-            setText('artist', '');
-            setText('track', '');
-            setHTML('art', '');
-            setHTML('volume', '');
-            mainHtml = `<button class="btn b1" onclick="ajaxcontrolbose('${ip}','power','On'); ajaxbose('${ip}')">Power On</button>`;
+            setText('artist', 'Standby', force);
+            setText('track', '', force);
+            setHTML('art', '', force);
+            setHTML('volume', '', force);
+            setHTML('power', `<button class="btn b1" onclick="ajaxcontrolbose('${ip}','power','On'); ajaxbose('${ip}')">Power On</button>`, force);
         }
-
-        setHTML('power', mainHtml);
-        if(data.playlisttoday) setHTML('playlist', data.playlisttoday);
-
     } catch (err) {
-        console.warn('ajaxbose error', err);
+        console.error('ajaxbose error:', err);
     } finally {
-        isSubmitting = false;
+        window.isSubmitting = false;
     }
 }
 // ─────────────────────────────────────────────────────────────────────────────
