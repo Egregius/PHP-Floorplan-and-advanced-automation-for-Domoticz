@@ -330,9 +330,6 @@ function handleResponse(device,v){
 	switch(device) {
 		case 't':
 			return
-		case 'i':
-			setText('info',v)
-			return
 		case 'd':
 			setText('Tstart',v.Ts)
 			setText('Srise',v.Sr)
