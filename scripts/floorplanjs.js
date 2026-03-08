@@ -192,6 +192,7 @@ async function ajaxJSON(url){
     }
 }
 function setView(newView){
+    if(view=='bose') clearInterval(myAjaxMedia)
     view=newView;
     ['floorplan','floorplanothers','floorplanheating','floorplantemp'].forEach(v=>{
         const el=getElem(v);
@@ -319,10 +320,107 @@ function renderBoseHTML(device, v) {
     if (v.m === 0) return '';
     const img = (device === 'bose101' || device === 'bose106') ? 'ST30' : 'ST10';
     const state = v.s === 1 ? 'On' : 'Off';
-    return `<a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">`
+//    return `<a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">`
+//         + `<img src="images/${img}_${state}.png" id="${device}" alt="bose"></a>`;
+    return `<a href="javascript:bose(${device});">`
          + `<img src="images/${img}_${state}.png" id="${device}" alt="bose"></a>`;
 }
+function bose(device) {
+//	html=`<div class="fix" id="clockbose"><a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');" id="time"></a></div>`
+	html=`<div class="fix" id="playlist"><a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');"><?= boseplaylist();?></a></div>`
+	html+=`<div class="fix" id="bose"><a href="avascript:navigator_Go('floorplan.bose.php?ip=${device}');"><?= $boses[$bose] ?></a></div>`
+	html+=`<div class="fix bose" ><input type="hidden" name="ip" value="'.$bose.'"><br><br><br><br><div id="art"></div><br><br><br><br><h4 id="artist"></h4><span id="track"></span><br><div id="volume"></div><br><br><div id="power"></div></div>`
+	html+=`<button class="close-btn" onclick="clearInterval(myAjaxMedia);setView('floorplan');">✕</button>`
+	setHTML('floorplantemp',html);
+	setView('floorplantemp')
+	ajaxbose('101')
+	myAjaxMedia = setInterval(function() {
+		ajaxbose('101')
+	}, 1000);
+}
+async function ajaxbose(ip){
+//	cleanup('bose')
+    if (isSubmitting) return;
+    isSubmitting=true;
+    try {
+        const data=await ajaxJSON('/ajax.php?bose=' + ip)
+        if (data.time){
+            const date=new Date(data.time * 1000);
+            const hours=date.getHours();
+            const minutes=('0' + date.getMinutes()).slice(-2);
+            const seconds=('0' + date.getSeconds()).slice(-2);
+            setText('time',hours + ':' + minutes + ':' + seconds);
+        }
+        let html='';
+        if (data.source!=="STANDBY"){
+            if (data.volume!==undefined){
+                const volume=parseInt(data.volume,10);
+                const levels=[-10,-7,-4,-2,-1,0,1,2,4,7,10];
+                html="<br>";
+                levels.forEach(level=>{
+                    const newlevel=volume + level;
+                    if (newlevel >= 0&&newlevel <= 80){
+                        const cls=(level===0) ? 'btn volume btna' : 'btn volume hover';
+                        html += `<button class="${cls}" id="vol${level}" onclick="ajaxcontrolbose('${ip}','volume','${newlevel}')">${newlevel}</button>`;
+                    }
+                });
+                setHTML('volume',html);
+            }
+            if (data.source==="SPOTIFY"){
+                setText('artist',data.artist)
+                setText('track',data.track)
+            } else if (data.source==="BLUETOOTH"){
+                setText('artist',"Bluetooth")
+                setText('track',data.track)
+            } else if (data.source==="TUNEIN"){
+                setText('artist',data.artist)
+                setText('track',data.track)
+                setText('source',data.source)
+            } else {
+                try { setText('artist',data.source); } catch {}
+            }
+            let img='None';
+            try { img=data.art?.toString().replace("http://","https://"); } catch {}
+            if (data.source==="BLUETOOTH") html='<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
+            else if (img==='None') html='';
+           else if (img.startsWith('http')) html=`<img src="${img}" class="spotify" alt="Art">`;
+            else html='';
+            setHTML('art',html);
+            html='';
+            if (data.source==="SPOTIFY"){
+                html += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev')">Prev</button>`;
+                html += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next')">Next</button>`;
+            }
+                const presets=[
+                    ['EDM - Part 1','1'],
+                    ['EDM - Part 2','2'],
+                    ['EDM - Part 3','3'],
+                    ['Mix - Part 1','4'],
+                    ['Mix - Part 2','5'],
+                    ['Mix - Part 3','6'],
+                ];
+                presets.forEach(([playlistName,presetId])=>{
+                    const cls=(data.playlist===playlistName) ? 'btn btna b3' : 'btn b3';
+                    html += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}')">${playlistName.split(' ')[0]} - ${playlistName.split(' ')[3]}</button>`;
+                });
 
+        } else {
+            setText('artist','');
+            setText('track','');
+            setHTML('art','');
+            setHTML('volume','');
+            setHTML('bass','');
+            html=`<button class="btn b1" onclick="ajaxcontrolbose('${ip}','power','On')">Power On</button>`;
+        }
+        setHTML('power',html);
+        setHTML('playlist',data.playlisttoday ?? '');
+        removeClass('clock','offline')
+    } catch(err){
+        console.warn('ajaxbose error',err);
+    } finally {
+        isSubmitting=false;
+    }
+}
 // ─────────────────────────────────────────────────────────────────────────────
 function handleResponse(device,v){
 	d[device]=v
@@ -688,89 +786,7 @@ function handleResponse(device,v){
 		return
 	}
 }
-async function ajaxbose(ip){
-	cleanup('bose')
-    if (isSubmitting) return;
-    isSubmitting=true;
-    try {
-        const data=await ajaxJSON('/ajax.php?bose=' + ip)
-        if (data.time){
-            const date=new Date(data.time * 1000);
-            const hours=date.getHours();
-            const minutes=('0' + date.getMinutes()).slice(-2);
-            const seconds=('0' + date.getSeconds()).slice(-2);
-            setText('time',hours + ':' + minutes + ':' + seconds);
-        }
-        let html='';
-        if (data.source!=="STANDBY"){
-            if (data.volume!==undefined){
-                const volume=parseInt(data.volume,10);
-                const levels=[-10,-7,-4,-2,-1,0,1,2,4,7,10];
-                html="<br>";
-                levels.forEach(level=>{
-                    const newlevel=volume + level;
-                    if (newlevel >= 0&&newlevel <= 80){
-                        const cls=(level===0) ? 'btn volume btna' : 'btn volume hover';
-                        html += `<button class="${cls}" id="vol${level}" onclick="ajaxcontrolbose('${ip}','volume','${newlevel}')">${newlevel}</button>`;
-                    }
-                });
-                setHTML('volume',html);
-            }
-            if (data.source==="SPOTIFY"){
-                setText('artist',data.artist)
-                setText('track',data.track)
-            } else if (data.source==="BLUETOOTH"){
-                setText('artist',"Bluetooth")
-                setText('track',data.track)
-            } else if (data.source==="TUNEIN"){
-                setText('artist',data.artist)
-                setText('track',data.track)
-                setText('source',data.source)
-            } else {
-                try { setText('artist',data.source); } catch {}
-            }
-            let img='None';
-            try { img=data.art?.toString().replace("http://","https://"); } catch {}
-            if (data.source==="BLUETOOTH") html='<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
-            else if (img==='None') html='';
-            else if (img.startsWith('http')) html=`<img src="${img}" class="spotify" alt="Art">`;
-            else html='';
-            setHTML('art',html);
-            html='';
-            if (data.source==="SPOTIFY"){
-                html += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev')">Prev</button>`;
-                html += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next')">Next</button>`;
-            }
-                const presets=[
-                    ['EDM - Part 1','1'],
-                    ['EDM - Part 2','2'],
-                    ['EDM - Part 3','3'],
-                    ['Mix - Part 1','4'],
-                    ['Mix - Part 2','5'],
-                    ['Mix - Part 3','6'],
-                ];
-                presets.forEach(([playlistName,presetId])=>{
-                    const cls=(data.playlist===playlistName) ? 'btn btna b3' : 'btn b3';
-                    html += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}')">${playlistName.split(' ')[0]} - ${playlistName.split(' ')[3]}</button>`;
-                });
 
-        } else {
-            setText('artist','');
-            setText('track','');
-            setHTML('art','');
-            setHTML('volume','');
-            setHTML('bass','');
-            html=`<button class="btn b1" onclick="ajaxcontrolbose('${ip}','power','On')">Power On</button>`;
-        }
-        setHTML('power',html);
-        setHTML('playlist',data.playlisttoday ?? '');
-        removeClass('clock','offline')
-    } catch(err){
-        console.warn('ajaxbose error',err);
-    } finally {
-        isSubmitting=false;
-    }
-}
 function setpoint(device){
 	const level=d[device+'_set'].s;
 	const heatingset=d.heating.s
@@ -1099,9 +1115,8 @@ function navigator_Go(n){
     }
 	window.location.assign(n)
 }
-function ajaxcontrol(a,o,n){fetch(`https://home.egregius.be/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
-function ajaxcontrolbose(a,o,n){fetch(`https://home.egregius.be/ajax.php?boseip=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
-function floorplanbose(){ajaxbose($ip)(),myAjaxmedia=$.setInterval((function(){ajaxbose($ip)}),1e3)}
+function ajaxcontrol(a,o,n){fetch(`/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
+function ajaxcontrolbose(a,o,n){fetch(`/ajax.php?boseip=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
 function pad(e,n){return len=n-(""+e).length,(len>0?new Array(++len).join("0"):"")+e}
 function fix(){var e=this,n=e.parentNode,i=e.nextSibling;n.removeChild(e),setTimeout((function(){n.insertBefore(e,i)}),0)}
 function sliderToDimmer(r){return r<=50?r/50*25:25+(r-50)/50*75}
