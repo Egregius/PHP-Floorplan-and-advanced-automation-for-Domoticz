@@ -338,24 +338,29 @@ function renderBoseHTML(device, v) {
     return `<a href="javascript:bose('${device}',${ip});">`
          + `<img src="images/${img}_${state}.png" id="${device}" alt="bose"></a>`;
 }
+const boseNames = {
+    '101': 'Living',
+    '102': '102',
+    '103': '103',
+    '104': 'Garage',
+    '105': '105',
+    '106': '106',
+    '107': '107',
+};
 function bose(device, ip) {
     if (myAjaxMedia) clearInterval(myAjaxMedia);
     window.isSubmitting = false;
-    let html = `<div class="fix" id="bose"><a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">Bose ${ip}</a></div>`;
-    html += `<div class="fix bose">
-                <br><br><br><br><div id="art"></div>
-                <br><br><br><br><br><br><h4 id="artist"></h4>
-                <span id="track"></span><br>
-                <div id="volume"></div><br><br>
-                <div id="power"></div>
-             </div>`;
+    const displayName = boseNames[ip] || `Bose ${ip}`;
+    let html = `<div class="fix" id="bose">
+                    <span class="bose-label">${displayName}</span>
+                    <a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">Configureer</a>
+                </div>`;
+    html += `<div class="fix bose"><br><br><br><br><div id="art"></div><br><br><br><br><br><br><h4 id="artist"></h4><span id="track"></span><br><div id="volume"></div><br><br><div id="power"></div></div>`;
     html += `<button class="close-btn" onclick="clearInterval(myAjaxMedia); setView('floorplan');">✕</button>`;
-
     setHTML('floorplantemp', html);
     setView('floorplantemp');
-
-    ajaxbose(ip,true);
-    myAjaxMedia = setInterval(() => ajaxbose(ip,false), 5000);
+    ajaxbose(ip, true);
+    myAjaxMedia = setInterval(() => ajaxbose(ip, false), 2000);
 }
 async function ajaxbose(ip, force = false) {
     if (window.isSubmitting) return;
@@ -365,42 +370,27 @@ async function ajaxbose(ip, force = false) {
         if (!data) return;
         if (data.source !== "STANDBY") {
             if (data.volume !== undefined) {
-				const volume = parseInt(data.volume, 10);
-				const levels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
-				let volHtml = '<div id="volume-control-group" class="visualizer">';
-
+				let volume = parseInt(data.volume, 10);
+				const levels = [-12, -8, -4, -2, -1, 0, 1, 2, 4, 8, 12];
+				let volHtml = '<div id="volume-control-group" class="visualizer-centered">';
 				levels.forEach(level => {
-					let targetVolume = volume + level;
-
-					// Zorg dat we binnen 0-80 blijven
-					targetVolume = Math.max(0, Math.min(80, targetVolume));
-
 					const isCurrent = (level === 0);
-					const typeClass = level < 0 ? 'minus' : (level > 0 ? 'plus' : 'current');
-
-					// Bereken hoogte factor: hoe dichter bij 0, hoe hoger (0=1, 1=0.8, 5=0.4 etc)
-					const heightFactor = (6 - Math.abs(level)) / 6;
-
-					volHtml += `<button class="btn volume ${isCurrent ? 'btna' : 'hover'} ${typeClass}"
-								  style="--h: ${heightFactor}"
-								  title="${level === 0 ? 'Huidig: ' : ''}${targetVolume}"
-								  onclick="ajaxcontrolbose('${ip}','volume','${targetVolume}'); ajaxbose('${ip}')">
-								</button>`;
+					const targetVolume = Math.max(0, Math.min(80, volume + level));
+					const heightFactor = isCurrent ? 1.0 : 0.2 + (Math.abs(level) / 15);
+					const cls = isCurrent ? 'btn volume btna' : `btn volume hover ${level < 0 ? 'minus' : 'plus'}`;
+					const clickAction = isCurrent ? '' : `onclick="ajaxcontrolbose('${ip}','volume','${targetVolume}'); ajaxbose('${ip}')"`;
+					volHtml += `<button class="${cls}" style="--h: ${heightFactor}" ${clickAction}>${isCurrent ? volume : ''}</button>`;
 				});
-
 				volHtml += '</div>';
-				setHTML('volume', volHtml, force);
+				setHTML('volume', volHtml, true);
 			}
             const artist = (data.source === "BLUETOOTH") ? "Bluetooth" : (data.artist || data.source);
             setText('artist', artist, force);
             setText('track', data.track || '', force);
             let artHtml = '';
             let img = data.art ? data.art.toString().replace("http://", "https://") : 'None';
-            if (data.source === "BLUETOOTH") {
-                artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
-            } else if (img.startsWith('http')) {
-                artHtml = `<img src="${img}" class="spotify" alt="Art">`;
-            }
+            if (data.source === "BLUETOOTH") artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
+            else if (img.startsWith('http')) artHtml = `<img src="${img}" class="spotify" alt="Art">`;
             setHTML('art', artHtml, force);
             let powerHtml = '';
             if (data.source === "SPOTIFY") {
@@ -414,12 +404,12 @@ async function ajaxbose(ip, force = false) {
                 const shortLabel = parts[0] + " - " + (parts[3] || presetId);
                 powerHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${shortLabel}</button>`;
             });
-            setHTML('power', powerHtml, force);
+            setHTML('power', powerHtml, true);
         } else {
-            setText('artist', 'Standby', force);
-            setText('track', '', force);
-            setHTML('art', '', force);
-            setHTML('volume', '', force);
+            setText('artist', 'Standby', true);
+            setText('track', '', true);
+            setHTML('art', '', true);
+            setHTML('volume', '', true);
             setHTML('power', `<button class="btn b1" onclick="ajaxcontrolbose('${ip}','power','On'); ajaxbose('${ip}')">Power On</button>`, force);
         }
     } catch (err) {
