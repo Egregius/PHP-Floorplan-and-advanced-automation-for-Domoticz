@@ -94,7 +94,7 @@ function fgarage() {
 	global $d;
 	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['garage']->s!='On'&&$d['garageled']->s!='On') {
 		if ($d['z']<260) {
-			zwave('poort','binary',2,'ON');
+//			zwave('poort','binary',2,'ON');
 			sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 		}
 		if ($d['garageled']->m!=1) {
