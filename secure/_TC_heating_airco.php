@@ -11,12 +11,12 @@ if($trend>0.15) $maxpow=40;
 else {
 	$maxpow = 40;
 	if ($d['weg']->s > 0)            $maxpow = 40;
-	elseif ($totalmin >= 1.5)        $maxpow = 100;
-	elseif ($totalmin >= 1.3)        $maxpow = 90;
-	elseif ($totalmin >= 1.1)        $maxpow = 80;
-	elseif ($totalmin >= 0.9)        $maxpow = 70;
-	elseif ($totalmin >= 0.7)        $maxpow = 60;
-	elseif ($totalmin >= 0.5)        $maxpow = 50;
+	elseif ($totalmin >= 1.5 && $d['buiten_temp']->s<2)        $maxpow = 100;
+	elseif ($totalmin >= 1.3 && $d['buiten_temp']->s<4)        $maxpow = 90;
+	elseif ($totalmin >= 1.1 && $d['buiten_temp']->s<6)        $maxpow = 80;
+	elseif ($totalmin >= 0.9 && $d['buiten_temp']->s<8)        $maxpow = 70;
+	elseif ($totalmin >= 0.7 && $d['buiten_temp']->s<9)        $maxpow = 60;
+	elseif ($totalmin >= 0.5 && $d['buiten_temp']->s<10)        $maxpow = 50;
 
 	if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
 	elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
@@ -54,12 +54,6 @@ foreach (array('living','kamer','alex') as $k) {
         elseif ($dif<-1) $spmode=0;
         if ($k=='living') {
             if ($prevSet==1||($d['weg']->s==0&&$d['living_set']->m==1&&$dif<=-0.4)) {
-            	if($dif>=-0.3) $maxpow=50;
-            	elseif($dif>=-0.6) $maxpow=60;
-            	elseif($dif>=-0.8) $maxpow=70;
-            	elseif($dif>=-1) $maxpow=80;
-            	elseif($dif>=-1.2) $maxpow=90;
-            	else $maxpow=100;
             	$spmode=1;
             	$diffac=$trendfac=$factor=0;
             	$set=28;
