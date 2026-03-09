@@ -1443,220 +1443,121 @@ let client = null;
 let monitorTimer = null;
 let lastMessageReceived = Date.now();
 let lastWakeUp = Date.now();
-let initialConnectDone = false
+let initialConnectDone = false;
 let isReconnecting = false;
 let messageBatch = {};
 let batchTimeout = null;
 const DEAD_TIMEOUT = 2900;
 const MONITOR_INTERVAL = 1000;
-let totalHandleCalls = 0;
 let currentVersion = null;
 let offlineTimeout = null;
 function connect() {
     if (client && client.connected) return;
-    if (!navigator.onLine) {
-        setTimeout(connect, 1000);
-        return;
-    }
     client = mqtt.connect('wss://' + window.location.hostname + ':443/mqtt', {
         clientId: getClientId(),
         clean: true,
-        connectTimeout: 1000,
+        connectTimeout: 500,
         reconnectPeriod: 500,
-        keepalive: 30
+        keepalive: 10,
+        resubscribe: true
     });
     client.on('connect', function () {
-        const duration = Date.now() - lastWakeUp;
-    	if (offlineTimeout) {
-			clearTimeout(offlineTimeout);
-			offlineTimeout = null;
-		}
-		log(`✅ MQTT Verbonden in ${duration}ms`);
+        if (offlineTimeout) { clearTimeout(offlineTimeout); offlineTimeout = null; }
         initialConnectDone = true;
         isReconnecting = false;
-        circleStates={};
         client.subscribe("d/#");
-        removeClass('clock','offline')
-        addClass('clock','online')
+        removeClass('clock','offline');
+        addClass('clock','online');
         startMonitor();
     });
     client.on('message', (topic, payload) => onMessage(String(topic), payload));
-    client.on('reconnect', () => {
-		lastWakeUp = Date.now();
-		log("🔄 MQTT herverbinden...");
-	});
-	client.on('close', () => {
-		log("ℹ️ MQTT Verbinding gesloten (Close)");
-		setTimeout(() => {
-			if (!client || !client.connected) stopMonitor();
-		}, 350);
-	});
-	client.on('offline', () => {
-		log("⚠️ MQTT Client is offline");
-		setTimeout(() => {
-			if (!client || !client.connected) stopMonitor();
-		}, 350);
-	});
-	client.on('error', (err) => {
-		log("❌ MQTT Fout: " + err.message);
-		stopMonitor();
-	});
+    client.on('reconnect', () => { lastWakeUp = Date.now(); });
+    client.on('close', () => { setTimeout(() => { if (!client || !client.connected) stopMonitor(); }, 350); });
+    client.on('error', () => stopMonitor());
 }
 function onMessage(topic, payload) {
     lastMessageReceived = Date.now();
     if (topic === "d/floorplan_version") {
-		const serverVersion = parseInt(payload);
-		const s = serverVersion.toString();
-		const readable = `${s.substring(6,8)}/${s.substring(4,6)} ${s.substring(8,10)}:${s.substring(10,12)}:${s.substring(12,14)}`;
-		if (currentVersion === null) {
-			currentVersion = serverVersion;
-			log(`📌 App Versie: ${readable}`);
-		} else if (serverVersion > currentVersion) {
-			log(`🚀 Update gevonden (${readable}), herladen...`);
-			forceReset();
-		}
-		return;
-	}
+        const serverVersion = parseInt(payload);
+        if (currentVersion !== null && serverVersion > currentVersion) forceReset();
+        currentVersion = serverVersion;
+        return;
+    }
     const device = topic.split("/").pop();
     if (payload && typeof payload === "object") {
-        if (payload.type === "Buffer" && Array.isArray(payload.data)) {
-            payload = String.fromCharCode(...payload.data);
-        } else if (payload instanceof Uint8Array) {
-            payload = new TextDecoder().decode(payload);
-        }
+        if (payload.type === "Buffer") payload = String.fromCharCode(...payload.data);
+        else if (payload instanceof Uint8Array) payload = new TextDecoder().decode(payload);
     }
     if (typeof payload === "string" && (payload.startsWith("{") || payload.startsWith("["))) {
         try {
             const parsed = JSON.parse(payload);
             payload = parsed.val || parsed.value || parsed.svalue || parsed;
-        } catch {
-            log(`⚠️ Invalid JSON: ${topic} ${payload}`);
-            return;
-        }
+        } catch { return; }
     }
     if (typeof payload === "string" || typeof payload === "number") {
         const n = Number(payload);
-        if (!Number.isNaN(n)) {
-            payload = n;
-        }
+        if (!Number.isNaN(n)) payload = n;
     }
     messageBatch[device] = payload;
     if (!batchTimeout) {
-		batchTimeout = setTimeout(() => {
+        batchTimeout = setTimeout(() => {
             for (const [deviceId, data] of Object.entries(messageBatch)) {
-				requestAnimationFrame(() => {
-					handleResponse(deviceId, data);
-				});
-			}
-			messageBatch = {};
-			batchTimeout = null;
-		}, 150);
-	}
-}
-function isIPad() {
-    return (
-        navigator.platform === "MacIntel" &&
-        navigator.maxTouchPoints > 1
-    );
-}
-function cleanup(reason = "") {
-    stopMonitor();
-    if (client) {
-        client.end(true);
-        client = null;
+                requestAnimationFrame(() => handleResponse(deviceId, data));
+            }
+            messageBatch = {};
+            batchTimeout = null;
+        }, 50);
     }
+}
+function isIPad() { return (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+function cleanup() {
+    stopMonitor();
+    if (client) { client.end(true); client = null; }
 }
 function hardReconnect(reason = "") {
-	log('hardReconnect '+reason)
-	if (offlineTimeout) {
-        clearTimeout(offlineTimeout);
-        offlineTimeout = null;
-    }
+    if (offlineTimeout) { clearTimeout(offlineTimeout); offlineTimeout = null; }
     isReconnecting = true;
-    cleanup(reason);
+    cleanup();
     connect();
 }
 function getClientId() {
-    let id = localStorage.getItem("mqttClientId")
-    if (!id) {
-        id = "web_" + Math.random().toString(16).slice(2, 10)
-        localStorage.setItem("mqttClientId", id)
-    }
-    return id
+    let id = localStorage.getItem("mqttClientId") || "web_" + Math.random().toString(16).slice(2, 10);
+    localStorage.setItem("mqttClientId", id);
+    return id;
 }
 function startMonitor() {
     stopMonitor();
     monitorTimer = setInterval(() => {
         if (document.hidden || !client || !client.connected) return;
-        const silence = Date.now() - lastMessageReceived;
-        if (silence > DEAD_TIMEOUT) {
-            console.warn(`⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...`);
-            hardReconnect(`⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...`);
-        }
+        if (Date.now() - lastMessageReceived > DEAD_TIMEOUT) hardReconnect("timeout");
     }, MONITOR_INTERVAL);
 }
 function stopMonitor() {
-    if (monitorTimer) {
-        clearInterval(monitorTimer);
-        monitorTimer = null;
-    }
+    if (monitorTimer) { clearInterval(monitorTimer); monitorTimer = null; }
     if (!offlineTimeout) {
         offlineTimeout = setTimeout(() => {
             if (!isReconnecting && (!client || !client.connected)) {
                 removeClass('clock', 'online');
-                addClass('clock', 'offline');
-                log("🔴 Status: Echt offline (Grace period verlopen)");
+                //addClass('clock', 'offline');
             }
             offlineTimeout = null;
         }, 300);
     }
 }
 document.addEventListener("DOMContentLoaded", () => {
-    lastMessageReceived = Date.now()
-    connect()
-})
+    lastMessageReceived = Date.now();
+    connect();
+});
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === 'hidden') cleanup();
+    else hardReconnect("visible");
+});
 window.addEventListener("pageshow", e => {
-	lastWakeUp = Date.now();
-	if (client && client.connected) {
-        addClass('clock', 'online');
-        return;
-    } else {
-    	removeClass('clock', 'online');
-		removeClass('clock', 'offline');
-	}
-    if (!initialConnectDone && isIPad()) {
-        hardReconnect("pageshow")
-        return
-    }
-    if (e.persisted) {
-        hardReconnect("bfcache")
-    } else {
-        const ua = navigator.userAgent || navigator.vendor || window.opera
-        const isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
-        if (isiOS) {
-            hardReconnect("pageshow")
-        }
-    }
-})
-window.addEventListener("offline", () => {
-    log("🌐 Offline")
-    cleanup("offline")
-	removeClass('clock','online')
-	addClass('clock','offline')
-    fetchajax=true
-})
-
-window.addEventListener("online", () => {
-    log("🌐 Online")
-    hardReconnect("online")
-})
-
-window.addEventListener("pagehide", () => {
-    log("📄 Pagehide")
-    cleanup("pagehide")
-    fetchajax=true
-})
-
+    if (client && client.connected) return;
+    if (e.persisted || /iPad|iPhone|iPod/.test(navigator.userAgent)) hardReconnect("pageshow");
+});
+window.addEventListener("offline", () => { cleanup(); addClass('clock','offline'); });
+window.addEventListener("online", () => hardReconnect("online"));
 function initPlaceholders() {
 	drawCircle('avgtimecircle', 0, 0, 82, 'gray')
 	drawCircle('avgcircle', 0, 0, 90, 'purple')
