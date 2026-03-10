@@ -92,11 +92,12 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
+	lg('fgarage:'.$d['z']);
 	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['garage']->s!='On'&&$d['garageled']->s!='On') {
-		if ($d['z']<260) {
-//			zwave('poort','binary',2,'ON');
+	//	if ($d['z']<260) {
+			zwave('poort','binary',2,'ON');
 			sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
-		}
+//		}
 		if ($d['garageled']->m!=1) {
 			storemode('garageled',1);
 			setBatterijLedBrightness(40);
@@ -1063,14 +1064,11 @@ function curl($url) {
 }
 final class Database {
     private static ?PDO $instance = null;
-
     private function __construct() {}
     private function __clone(): void {}
-
     public static function getInstance(): PDO {
         return self::$instance ??= self::createConnection();
     }
-
     private static function createConnection(): PDO {
         try {
             return new PDO(
@@ -1093,11 +1091,9 @@ final class Database {
             throw new RuntimeException('Database connection failed.', 0, $e);
         }
     }
-
     public static function reset(): void {
         self::$instance = null;
     }
-
     public static function isConnected(): bool {
         return self::$instance !== null;
     }
@@ -1110,7 +1106,6 @@ function fetchdata(): array {
             static $stmt = null;
             $stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
             $stmt->execute();
-
             foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
                 $dev = new Device();
                 $dev->n  = $n;
@@ -1126,7 +1121,6 @@ function fetchdata(): array {
                 $d[$n] = $dev;
             }
             break;
-
         } catch (PDOException $e) {
             $isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
             if ($isRecoverable) {
@@ -1140,57 +1134,13 @@ function fetchdata(): array {
             throw $e;
         }
     }
-
     if ($en = json_decode(getCache('en'))) {
 		foreach (['n','a','b','c','z'] as $key) {
 			$d[$key] = $en->$key ?? 0;
 		}
 	}
-
     return $d;
 }
-function fetchdataold(): array {
-	global $d;
-	for ($attempt = 0; $attempt <= 4; $attempt++) {
-		try {
-			$db = Database::getInstance();
-			static $stmt = null;
-			$stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
-			$stmt->execute();
-			foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
-				$d[$n] = array_filter(
-					compact('s', 't', 'm', 'deviceD', 'i', 'p', 'rt', 'f'),
-					static fn($v) => $v !== null
-				);
-				if (isset($d[$n]['deviceD'])) {
-					$d[$n]['d'] = $d[$n]['deviceD'];
-					unset($d[$n]['deviceD']);
-				}
-			}
-			break;
-		} catch (PDOException $e) {
-			$isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
-			if ($isRecoverable) {
-				lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
-				Database::reset();
-				$stmt = null;
-				$attempt > 0 && sleep($attempt);
-				continue;
-			}
-			lg('FETCHDATA ERROR! ' . $e->getCode());
-			throw $e;
-		}
-	}
-	if ($en = json_decode(getCache('en'))) {
-		$d['n'] = $en->n ?? null;
-		$d['a'] = $en->a ?? null;
-		$d['b'] = $en->b ?? null;
-		$d['c'] = $en->c ?? null;
-		$d['z'] = $en->z ?? null;
-	}
-	return $d;
-}
-
 final class Device {
     public string $n;
     public mixed  $s;
@@ -1202,7 +1152,6 @@ final class Device {
     public ?int  $rt;
     public ?int  $f;
 }
-
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;
 }
