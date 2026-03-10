@@ -103,28 +103,4 @@ if ($d['regenpomp']->s=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off');
 
 if ($d['water']->s=='On'&&past('water')>=$d['water']->m) sw('water', 'Off');
 
-$newStatus = (int)$d['weg']->s;
 
-if ($currentFlintStatus !== $newStatus) {
-    $config = [];
-    switch ($newStatus) {
-        case 0: // Thuis
-            $config = ['main5' => true, 'main24' => false];
-            break;
-        case 1: // Slapen
-            $config = ['main5' => false, 'main24' => true];
-            break;
-        case 2: // Weg
-        case 3: // Vakantie
-            $config = ['main5' => false, 'main24' => false];
-            break;
-    }
-
-    if (!empty($config)) {
-        if (updateOpenWrtSsidStatus('192.168.2.253:8080', $mt6000user, $mt6000pass, $config)) {
-            $currentFlintStatus = $newStatus;
-            // Optioneel: log de wijziging
-            lg("Flint2 aangepast naar status: " . $newStatus ,'cron');
-        }
-    }
-}

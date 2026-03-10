@@ -9,7 +9,14 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-print_r($_SERVER);
+$token = getOpenWrtToken($mt6000host, $mt6000user, $mt6000pass);
+setSsid($mt6000host, $token, 'main5', true);
+sleep(3);
+setSsid($mt6000host, $token, 'main24', false);
+
+
+
+
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(

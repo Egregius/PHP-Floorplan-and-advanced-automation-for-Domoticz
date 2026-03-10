@@ -42,7 +42,6 @@ foreach ($d as $k=>$v) {
 }
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99,'maxpow'=>99,'lastset'=>$time-300];
 $daikin ??= new stdClass();
-static $currentFlintStatus = null;
 foreach (array('living', 'kamer', 'alex') as $k) {
 	$daikin->$k ??= (object)$daikinDefaults;
 }
