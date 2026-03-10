@@ -196,7 +196,7 @@ function huisthuis($msg='') {
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
 	$config = ['main5' => true, 'main24' => false];
-	shell_exec('php /var/www/setSSID.php \'{"main5":1,"main24":0}\' > /dev/null 2>&1 &');
+	shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
