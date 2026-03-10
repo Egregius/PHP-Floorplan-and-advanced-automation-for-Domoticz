@@ -9,12 +9,7 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-$token = getOpenWrtToken($mt6000host, $mt6000user, $mt6000pass);
-setSsid($mt6000host, $token, 'main5', true);
-sleep(3);
-setSsid($mt6000host, $token, 'main24', false);
-
-
+shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":1}\' > /dev/null 2>&1 &');
 
 
 echo '</pre>';

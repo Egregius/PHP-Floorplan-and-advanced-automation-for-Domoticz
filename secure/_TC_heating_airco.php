@@ -93,7 +93,7 @@ foreach (array('living','kamer','alex') as $k) {
                 ($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
         }
 
-		if ($k=='living'&&$target>16) {
+/*		if ($k=='living'&&$target>16) {
 			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.round($factor,3).' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.$change.' maxpow='.$maxpow.' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				lg($msg);
@@ -116,7 +116,7 @@ foreach (array('living','kamer','alex') as $k) {
 				"maxpow"=>$maxpow,
 				"fan"=>$fan
 			]);
-		}
+		}*/
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
             ($power!=0&&$daikin->$k->lastset <= $time-281)) {
@@ -132,7 +132,6 @@ foreach (array('living','kamer','alex') as $k) {
             }
         }
     } elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
-        publishmqtt('d/l',"Daikin On");
         sw('daikin','On');
     }
     unset($power);

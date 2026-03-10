@@ -273,9 +273,9 @@ function renderSwitchHTML(device, v, opts = {}) {
     const icon    = v.i || 'l';
     const state   = isOn ? 'On' : 'Off';
 
-    const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort'];
+    const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort','vanons'];
     const DIRECT   = ['regenpomp','nas'];
-    const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort'];
+    const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort','vanons'];
     const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort'];
 
     let onclick;
