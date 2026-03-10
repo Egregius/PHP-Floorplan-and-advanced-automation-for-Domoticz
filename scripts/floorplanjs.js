@@ -276,7 +276,7 @@ function renderSwitchHTML(device, v, opts = {}) {
     const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort','vanons'];
     const DIRECT   = ['regenpomp','nas'];
     const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort','vanons'];
-    const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort'];
+    const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort','vanons'];
 
     let onclick;
     if (CONFIRM.includes(device)) {
@@ -611,9 +611,9 @@ function handleResponse(device,v){
 			setHTML(device,html)
 			updateDeviceTime(device)
 			return
-		case 'l':
-			log('💬 '+v)
-			return
+//		case 'l':
+//			log('💬 '+v)
+//			return
 		default:
 
 			switch(v?.d) {
