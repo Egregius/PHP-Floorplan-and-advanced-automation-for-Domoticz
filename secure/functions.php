@@ -92,12 +92,11 @@ function fliving() {
 }
 function fgarage() {
 	global $d;
-	lg('fgarage:'.$d['z']);
 	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['garage']->s!='On'&&$d['garageled']->s!='On') {
-	//	if ($d['z']<260) {
+		if ($d['z']<260) {
 			zwave('poort','binary',2,'ON');
 			sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
-//		}
+		}
 		if ($d['garageled']->m!=1) {
 			storemode('garageled',1);
 			setBatterijLedBrightness(40);
@@ -1256,6 +1255,53 @@ function setBatterijLedBrightness(int $brightness) {
 	} else {
 		return json_decode($response, true);
 	}
+}
+/**
+ * Update meerdere SSID's in één keer en herstart de wifi éénmaal.
+ * @param array $settings Voorbeeld: ['main5' => true, 'main24' => false]
+ */
+function updateOpenWrtSsidStatus(string $host, string $user, string $pass, array $settings): bool {
+    $baseUrl = "http://{$host}/cgi-bin/luci/rpc";
+
+    // 1. Login
+    $ch = curl_init("{$baseUrl}/auth");
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode(['method' => 'login', 'params' => [$user, $pass], 'id' => 1])
+    ]);
+    $auth = json_decode(curl_exec($ch), true);
+    $token = $auth['result'] ?? null;
+    if (!$token) return false;
+
+    // 2. Verzamel alle UCI sets
+    $batch = [];
+    $id = 2;
+    foreach ($settings as $configId => $enable) {
+        $disabled = $enable ? '0' : '1';
+        $batch[] = ['method' => 'set', 'params' => ['wireless', $configId, 'disabled', $disabled], 'id' => $id++];
+    }
+
+    // Voeg commit toe aan de batch
+    $batch[] = ['method' => 'commit', 'params' => ['wireless'], 'id' => $id++];
+
+    // Voer UCI batch uit
+    $uciUrl = "{$baseUrl}/uci?auth={$token}";
+    foreach ($batch as $payload) {
+        curl_setopt($ch, CURLOPT_URL, $uciUrl);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_exec($ch);
+    }
+
+    // 3. Eénmalige herstart via ubus
+    curl_setopt($ch, CURLOPT_URL, "{$baseUrl}/ubus?auth={$token}");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+        'jsonrpc' => '2.0', 'method' => 'call', 'params' => ['network', 'reload', []], 'id' => $id
+    ]));
+    curl_exec($ch);
+
+    curl_close($ch);
+    return true;
 }
 function setCache(string $key, $value): bool {
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;

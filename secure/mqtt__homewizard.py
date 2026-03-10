@@ -140,7 +140,6 @@ def flush_teller_state():
 def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
-    return 1
     v=abs(value)
     if v<50:return 1
     elif v<100: return 2
@@ -153,7 +152,7 @@ def mqtt_publish_key(key, value):
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
         log(f"📤 Publish {key}={value}, rc={result.rc}")
         if result.rc != 0:
-            print(f"Publish failed with code {result.rc}, script stopt.")
+            log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")
@@ -163,7 +162,7 @@ def mqtt_publish_teller(key, value):
         result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
         log(f"📤 Publish t/{key}={value}, rc={result.rc}")
         if result.rc != 0:
-            print(f"Publish failed with code {result.rc}, script stopt.")
+            log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
     else:
         log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")
