@@ -21,7 +21,7 @@ while [ $i -lt 6 ]; do
 		if ! pgrep -f "[${s:0:1}]${s:1}" >/dev/null; then
 		echo "$(date '+%F %T') starting $s"
 		case "$s" in
-			*.php) /usr/bin/nice -n 5 /usr/bin/php8.2 /var/www/html/secure/$s >/dev/null 2>&1 & ;;
+			*.php) /usr/bin/nice -n 5 /usr/bin/php /var/www/html/secure/$s >/dev/null 2>&1 & ;;
 			*.py)  /usr/bin/nice -n 5 /usr/bin/python3 /var/www/html/secure/$s >/dev/null 2>&1 & ;;
 		esac
 	fi

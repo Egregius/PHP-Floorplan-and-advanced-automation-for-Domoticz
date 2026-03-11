@@ -1,5 +1,5 @@
 var isSubmitting=!1,euroelec=.2784,eurogas=.0889,eurowater=4.8166;const ucfirst=e=>e[0].toUpperCase()+e.slice(1);
-let avgTimeOffset=0,ftime=0,htime=0,otime=0,lastAvgValue=null,forceTimes=true,fetchajax=true,d={time:0},view=null,circleStates={},deviceElems={},lastValues={},lastLog={},lastState={},newTime=Math.floor(Date.now() / 1000),prevnet=null,prevzon=-1,prevtotal=null,prevavg=-1
+let avgTimeOffset=0,ftime=0,htime=0,otime=0,lastAvgValue=null,forceTimes=true,fetchajax=true,d={time:0},view=null,circleStates={},deviceElems={},lastValues={},lastLog={},lastState={},newTime=Math.floor(Date.now() / 1000),prevnet=null,prevzon=-1,prevtotal=null,prevavg=-1,myAjaxMedia=null
 keys = ['n','c','b','a','z'];
 for (const k of keys) {
     d[k] = 0;
@@ -60,26 +60,41 @@ function processQueue() {
     updateQueue.clear();
     rafScheduled = false;
 }
-function setText(id, text) {
-    if (lastValues[id] === text) return false;
+function setText(id, text, force = false) {
+    if (!force && lastValues[id] === text) return false;
     lastValues[id] = text;
+    if (force) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = text;
+            updateQueue.delete(id);
+            return true;
+        }
+    }
     let entry = getUpdateEntry(id);
     entry.text = text;
     delete entry.html;
     requestTick();
     return true;
 }
-function setHTML(id, html) {
+function setHTML(id, html, force = false) {
     const key = id + ':html';
-    if (lastValues[key] === html) return false;
+    if (!force && lastValues[key] === html) return false;
     lastValues[key] = html;
+    if (force) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = html;
+            updateQueue.delete(id);
+            return true;
+        }
+    }
     let entry = getUpdateEntry(id);
     entry.html = html;
     delete entry.text;
     requestTick();
     return true;
 }
-
 function setStyle(id, prop, value) {
     const key = id + ':style:' + prop;
     if (value === null) {
@@ -92,7 +107,6 @@ function setStyle(id, prop, value) {
     getUpdateEntry(id).styles[prop] = value;
     requestTick();
 }
-
 function setAttr(id, attr, value) {
     const key = id + ':attr:' + attr;
     if (lastValues[key] === value) return;
@@ -192,6 +206,7 @@ async function ajaxJSON(url){
     }
 }
 function setView(newView){
+    if(view=='bose') clearInterval(myAjaxMedia)
     view=newView;
     ['floorplan','floorplanothers','floorplanheating','floorplantemp'].forEach(v=>{
         const el=getElem(v);
@@ -258,10 +273,10 @@ function renderSwitchHTML(device, v, opts = {}) {
     const icon    = v.i || 'l';
     const state   = isOn ? 'On' : 'Off';
 
-    const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort'];
+    const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort','vanons'];
     const DIRECT   = ['regenpomp','nas'];
-    const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort'];
-    const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort'];
+    const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort','vanons'];
+    const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort','vanons'];
 
     let onclick;
     if (CONFIRM.includes(device)) {
@@ -317,21 +332,98 @@ function renderDimmerHTML(device, v) {
 
 function renderBoseHTML(device, v) {
     if (v.m === 0) return '';
+    const ip = device.replace('bose', '');
     const img = (device === 'bose101' || device === 'bose106') ? 'ST30' : 'ST10';
     const state = v.s === 1 ? 'On' : 'Off';
-    return `<a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">`
+    return `<a href="javascript:bose('${device}',${ip});">`
          + `<img src="images/${img}_${state}.png" id="${device}" alt="bose"></a>`;
 }
-
+const boseNames = {
+    '101': 'Living',
+    '102': '102',
+    '103': '103',
+    '104': 'Garage',
+    '105': '105',
+    '106': '106',
+    '107': '107',
+};
+function bose(device, ip) {
+    if (myAjaxMedia) clearInterval(myAjaxMedia);
+    window.isSubmitting = false;
+    const displayName = boseNames[ip] || `Bose ${ip}`;
+    let html = `<div class="fix" id="bose">
+                    <span class="bose-label">${displayName}</span>
+                    <a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">Configureer</a>
+                </div>`;
+    html += `<div class="fix bose"><br><br><br><br><div id="art"></div><br><br><br><br><br><br><h4 id="artist"></h4><span id="track"></span><br><div id="volume"></div><br><br><div id="power"></div></div>`;
+    html += `<button class="close-btn" onclick="clearInterval(myAjaxMedia); setView('floorplan');">✕</button>`;
+    setHTML('floorplantemp', html);
+    setView('floorplantemp');
+    ajaxbose(ip, true);
+    myAjaxMedia = setInterval(() => ajaxbose(ip, false), 2000);
+}
+async function ajaxbose(ip, force = false) {
+    if (window.isSubmitting) return;
+    window.isSubmitting = true;
+    try {
+        const data = await ajaxJSON('/ajax.php?bose=' + ip);
+        if (!data) return;
+        if (data.source !== "STANDBY") {
+            if (data.volume !== undefined) {
+				let volume = parseInt(data.volume, 10);
+				const levels = [-12, -8, -4, -2, -1, 0, 1, 2, 4, 8, 12];
+				let volHtml = '<div id="volume-control-group" class="visualizer-centered">';
+				levels.forEach(level => {
+					const isCurrent = (level === 0);
+					const targetVolume = Math.max(0, Math.min(80, volume + level));
+					const heightFactor = isCurrent ? 1.0 : 0.2 + (Math.abs(level) / 15);
+					const cls = isCurrent ? 'btn volume btna' : `btn volume hover ${level < 0 ? 'minus' : 'plus'}`;
+					const clickAction = isCurrent ? '' : `onclick="ajaxcontrolbose('${ip}','volume','${targetVolume}'); ajaxbose('${ip}')"`;
+					volHtml += `<button class="${cls}" style="--h: ${heightFactor}" ${clickAction}>${isCurrent ? volume : ''}</button>`;
+				});
+				volHtml += '</div>';
+				setHTML('volume', volHtml, true);
+			}
+            const artist = (data.source === "BLUETOOTH") ? "Bluetooth" : (data.artist || data.source);
+            setText('artist', artist, force);
+            setText('track', data.track || '', force);
+            let artHtml = '';
+            let img = data.art ? data.art.toString().replace("http://", "https://") : 'None';
+            if (data.source === "BLUETOOTH") artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
+            else if (img.startsWith('http')) artHtml = `<img src="${img}" class="spotify" alt="Art">`;
+            setHTML('art', artHtml, force);
+            let powerHtml = '';
+            if (data.source === "SPOTIFY") {
+                powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev'); ajaxbose('${ip}')">Prev</button>`;
+                powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next'); ajaxbose('${ip}')">Next</button>`;
+            }
+            const presets = [['EDM - Part 1','1'], ['EDM - Part 2','2'], ['EDM - Part 3','3'], ['Mix - Part 1','4'], ['Mix - Part 2','5'], ['Mix - Part 3','6']];
+            presets.forEach(([playlistName, presetId]) => {
+                const cls = (data.playlist === playlistName) ? 'btn btna b3' : 'btn b3';
+                const parts = playlistName.split(' ');
+                const shortLabel = parts[0] + " - " + (parts[3] || presetId);
+                powerHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${shortLabel}</button>`;
+            });
+            setHTML('power', powerHtml, true);
+        } else {
+            setText('artist', 'Standby', true);
+            setText('track', '', true);
+            setHTML('art', '', true);
+            setHTML('volume', '', true);
+            setHTML('power', `<button class="btn b1" onclick="ajaxcontrolbose('${ip}','power','On'); ajaxbose('${ip}')">Power On</button>`, force);
+        }
+    } catch (err) {
+        console.error('ajaxbose error:', err);
+    } finally {
+        window.isSubmitting = false;
+    }
+}
 // ─────────────────────────────────────────────────────────────────────────────
 function handleResponse(device,v){
 	d[device]=v
 	setTime()
 	switch(device) {
 		case 't':
-			return
-		case 'i':
-			setText('info',v)
 			return
 		case 'd':
 			setText('Tstart',v.Ts)
@@ -519,9 +611,9 @@ function handleResponse(device,v){
 			setHTML(device,html)
 			updateDeviceTime(device)
 			return
-		case 'l':
-			log('💬 '+v)
-			return
+//		case 'l':
+//			log('💬 '+v)
+//			return
 		default:
 
 			switch(v?.d) {
@@ -691,89 +783,7 @@ function handleResponse(device,v){
 		return
 	}
 }
-async function ajaxbose(ip){
-	cleanup('bose')
-    if (isSubmitting) return;
-    isSubmitting=true;
-    try {
-        const data=await ajaxJSON('/ajax.php?bose=' + ip)
-        if (data.time){
-            const date=new Date(data.time * 1000);
-            const hours=date.getHours();
-            const minutes=('0' + date.getMinutes()).slice(-2);
-            const seconds=('0' + date.getSeconds()).slice(-2);
-            setText('time',hours + ':' + minutes + ':' + seconds);
-        }
-        let html='';
-        if (data.source!=="STANDBY"){
-            if (data.volume!==undefined){
-                const volume=parseInt(data.volume,10);
-                const levels=[-10,-7,-4,-2,-1,0,1,2,4,7,10];
-                html="<br>";
-                levels.forEach(level=>{
-                    const newlevel=volume + level;
-                    if (newlevel >= 0&&newlevel <= 80){
-                        const cls=(level===0) ? 'btn volume btna' : 'btn volume hover';
-                        html += `<button class="${cls}" id="vol${level}" onclick="ajaxcontrolbose('${ip}','volume','${newlevel}')">${newlevel}</button>`;
-                    }
-                });
-                setHTML('volume',html);
-            }
-            if (data.source==="SPOTIFY"){
-                setText('artist',data.artist)
-                setText('track',data.track)
-            } else if (data.source==="BLUETOOTH"){
-                setText('artist',"Bluetooth")
-                setText('track',data.track)
-            } else if (data.source==="TUNEIN"){
-                setText('artist',data.artist)
-                setText('track',data.track)
-                setText('source',data.source)
-            } else {
-                try { setText('artist',data.source); } catch {}
-            }
-            let img='None';
-            try { img=data.art?.toString().replace("http://","https://"); } catch {}
-            if (data.source==="BLUETOOTH") html='<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
-            else if (img==='None') html='';
-            else if (img.startsWith('http')) html=`<img src="${img}" class="spotify" alt="Art">`;
-            else html='';
-            setHTML('art',html);
-            html='';
-            if (data.source==="SPOTIFY"){
-                html += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev')">Prev</button>`;
-                html += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next')">Next</button>`;
-            }
-                const presets=[
-                    ['EDM - Part 1','1'],
-                    ['EDM - Part 2','2'],
-                    ['EDM - Part 3','3'],
-                    ['Mix - Part 1','4'],
-                    ['Mix - Part 2','5'],
-                    ['Mix - Part 3','6'],
-                ];
-                presets.forEach(([playlistName,presetId])=>{
-                    const cls=(data.playlist===playlistName) ? 'btn btna b3' : 'btn b3';
-                    html += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}')">${playlistName.split(' ')[0]} - ${playlistName.split(' ')[3]}</button>`;
-                });
 
-        } else {
-            setText('artist','');
-            setText('track','');
-            setHTML('art','');
-            setHTML('volume','');
-            setHTML('bass','');
-            html=`<button class="btn b1" onclick="ajaxcontrolbose('${ip}','power','On')">Power On</button>`;
-        }
-        setHTML('power',html);
-        setHTML('playlist',data.playlisttoday ?? '');
-        removeClass('clock','offline')
-    } catch(err){
-        console.warn('ajaxbose error',err);
-    } finally {
-        isSubmitting=false;
-    }
-}
 function setpoint(device){
 	const level=d[device+'_set'].s;
 	const heatingset=d.heating.s
@@ -1102,9 +1112,8 @@ function navigator_Go(n){
     }
 	window.location.assign(n)
 }
-function ajaxcontrol(a,o,n){fetch(`https://home.egregius.be/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
-function ajaxcontrolbose(a,o,n){fetch(`https://home.egregius.be/ajax.php?boseip=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
-function floorplanbose(){ajaxbose($ip)(),myAjaxmedia=$.setInterval((function(){ajaxbose($ip)}),1e3)}
+function ajaxcontrol(a,o,n){fetch(`/ajax.php?device=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrol error',err));}
+function ajaxcontrolbose(a,o,n){fetch(`/ajax.php?boseip=${a}&command=${o}&action=${n}`,{cache:'no-store'}).catch(err=>console.warn('ajaxcontrolbose error',err));}
 function pad(e,n){return len=n-(""+e).length,(len>0?new Array(++len).join("0"):"")+e}
 function fix(){var e=this,n=e.parentNode,i=e.nextSibling;n.removeChild(e),setTimeout((function(){n.insertBefore(e,i)}),0)}
 function sliderToDimmer(r){return r<=50?r/50*25:25+(r-50)/50*75}
@@ -1434,220 +1443,121 @@ let client = null;
 let monitorTimer = null;
 let lastMessageReceived = Date.now();
 let lastWakeUp = Date.now();
-let initialConnectDone = false
+let initialConnectDone = false;
 let isReconnecting = false;
 let messageBatch = {};
 let batchTimeout = null;
 const DEAD_TIMEOUT = 2900;
 const MONITOR_INTERVAL = 1000;
-let totalHandleCalls = 0;
 let currentVersion = null;
 let offlineTimeout = null;
 function connect() {
     if (client && client.connected) return;
-    if (!navigator.onLine) {
-        setTimeout(connect, 1000);
-        return;
-    }
     client = mqtt.connect('wss://' + window.location.hostname + ':443/mqtt', {
         clientId: getClientId(),
         clean: true,
-        connectTimeout: 1000,
+        connectTimeout: 500,
         reconnectPeriod: 500,
-        keepalive: 30
+        keepalive: 10,
+        resubscribe: true
     });
     client.on('connect', function () {
-        const duration = Date.now() - lastWakeUp;
-    	if (offlineTimeout) {
-			clearTimeout(offlineTimeout);
-			offlineTimeout = null;
-		}
-		log(`✅ MQTT Verbonden in ${duration}ms`);
+        if (offlineTimeout) { clearTimeout(offlineTimeout); offlineTimeout = null; }
         initialConnectDone = true;
         isReconnecting = false;
-        circleStates={};
         client.subscribe("d/#");
-        removeClass('clock','offline')
-        addClass('clock','online')
+        removeClass('clock','offline');
+        addClass('clock','online');
         startMonitor();
     });
     client.on('message', (topic, payload) => onMessage(String(topic), payload));
-    client.on('reconnect', () => {
-		lastWakeUp = Date.now();
-		log("🔄 MQTT herverbinden...");
-	});
-	client.on('close', () => {
-		log("ℹ️ MQTT Verbinding gesloten (Close)");
-		setTimeout(() => {
-			if (!client || !client.connected) stopMonitor();
-		}, 350);
-	});
-	client.on('offline', () => {
-		log("⚠️ MQTT Client is offline");
-		setTimeout(() => {
-			if (!client || !client.connected) stopMonitor();
-		}, 350);
-	});
-	client.on('error', (err) => {
-		log("❌ MQTT Fout: " + err.message);
-		stopMonitor();
-	});
+    client.on('reconnect', () => { lastWakeUp = Date.now(); });
+    client.on('close', () => { setTimeout(() => { if (!client || !client.connected) stopMonitor(); }, 350); });
+    client.on('error', () => stopMonitor());
 }
 function onMessage(topic, payload) {
     lastMessageReceived = Date.now();
     if (topic === "d/floorplan_version") {
-		const serverVersion = parseInt(payload);
-		const s = serverVersion.toString();
-		const readable = `${s.substring(6,8)}/${s.substring(4,6)} ${s.substring(8,10)}:${s.substring(10,12)}:${s.substring(12,14)}`;
-		if (currentVersion === null) {
-			currentVersion = serverVersion;
-			log(`📌 App Versie: ${readable}`);
-		} else if (serverVersion > currentVersion) {
-			log(`🚀 Update gevonden (${readable}), herladen...`);
-			forceReset();
-		}
-		return;
-	}
+        const serverVersion = parseInt(payload);
+        if (currentVersion !== null && serverVersion > currentVersion) forceReset();
+        currentVersion = serverVersion;
+        return;
+    }
     const device = topic.split("/").pop();
     if (payload && typeof payload === "object") {
-        if (payload.type === "Buffer" && Array.isArray(payload.data)) {
-            payload = String.fromCharCode(...payload.data);
-        } else if (payload instanceof Uint8Array) {
-            payload = new TextDecoder().decode(payload);
-        }
+        if (payload.type === "Buffer") payload = String.fromCharCode(...payload.data);
+        else if (payload instanceof Uint8Array) payload = new TextDecoder().decode(payload);
     }
     if (typeof payload === "string" && (payload.startsWith("{") || payload.startsWith("["))) {
         try {
             const parsed = JSON.parse(payload);
             payload = parsed.val || parsed.value || parsed.svalue || parsed;
-        } catch {
-            log(`⚠️ Invalid JSON: ${topic} ${payload}`);
-            return;
-        }
+        } catch { return; }
     }
     if (typeof payload === "string" || typeof payload === "number") {
         const n = Number(payload);
-        if (!Number.isNaN(n)) {
-            payload = n;
-        }
+        if (!Number.isNaN(n)) payload = n;
     }
     messageBatch[device] = payload;
     if (!batchTimeout) {
-		batchTimeout = setTimeout(() => {
+        batchTimeout = setTimeout(() => {
             for (const [deviceId, data] of Object.entries(messageBatch)) {
-				requestAnimationFrame(() => {
-					handleResponse(deviceId, data);
-				});
-			}
-			messageBatch = {};
-			batchTimeout = null;
-		}, 150);
-	}
-}
-function isIPad() {
-    return (
-        navigator.platform === "MacIntel" &&
-        navigator.maxTouchPoints > 1
-    );
-}
-function cleanup(reason = "") {
-    stopMonitor();
-    if (client) {
-        client.end(true);
-        client = null;
+                requestAnimationFrame(() => handleResponse(deviceId, data));
+            }
+            messageBatch = {};
+            batchTimeout = null;
+        }, 50);
     }
+}
+function isIPad() { return (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+function cleanup() {
+    stopMonitor();
+    if (client) { client.end(true); client = null; }
 }
 function hardReconnect(reason = "") {
-	log('hardReconnect '+reason)
-	if (offlineTimeout) {
-        clearTimeout(offlineTimeout);
-        offlineTimeout = null;
-    }
+    if (offlineTimeout) { clearTimeout(offlineTimeout); offlineTimeout = null; }
     isReconnecting = true;
-    cleanup(reason);
+    cleanup();
     connect();
 }
 function getClientId() {
-    let id = localStorage.getItem("mqttClientId")
-    if (!id) {
-        id = "web_" + Math.random().toString(16).slice(2, 10)
-        localStorage.setItem("mqttClientId", id)
-    }
-    return id
+    let id = localStorage.getItem("mqttClientId") || "web_" + Math.random().toString(16).slice(2, 10);
+    localStorage.setItem("mqttClientId", id);
+    return id;
 }
 function startMonitor() {
     stopMonitor();
     monitorTimer = setInterval(() => {
         if (document.hidden || !client || !client.connected) return;
-        const silence = Date.now() - lastMessageReceived;
-        if (silence > DEAD_TIMEOUT) {
-            console.warn(`⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...`);
-            hardReconnect(`⚠️ MQTT Stilte: ${Math.round(silence / 1000)}s - Reconnecting...`);
-        }
+        if (Date.now() - lastMessageReceived > DEAD_TIMEOUT) hardReconnect("timeout");
     }, MONITOR_INTERVAL);
 }
 function stopMonitor() {
-    if (monitorTimer) {
-        clearInterval(monitorTimer);
-        monitorTimer = null;
-    }
+    if (monitorTimer) { clearInterval(monitorTimer); monitorTimer = null; }
     if (!offlineTimeout) {
         offlineTimeout = setTimeout(() => {
             if (!isReconnecting && (!client || !client.connected)) {
                 removeClass('clock', 'online');
-                addClass('clock', 'offline');
-                log("🔴 Status: Echt offline (Grace period verlopen)");
+                //addClass('clock', 'offline');
             }
             offlineTimeout = null;
         }, 300);
     }
 }
 document.addEventListener("DOMContentLoaded", () => {
-    lastMessageReceived = Date.now()
-    connect()
-})
+    lastMessageReceived = Date.now();
+    connect();
+});
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === 'hidden') cleanup();
+    else hardReconnect("visible");
+});
 window.addEventListener("pageshow", e => {
-	lastWakeUp = Date.now();
-	if (client && client.connected) {
-        addClass('clock', 'online');
-        return;
-    } else {
-    	removeClass('clock', 'online');
-		removeClass('clock', 'offline');
-	}
-    if (!initialConnectDone && isIPad()) {
-        hardReconnect("pageshow")
-        return
-    }
-    if (e.persisted) {
-        hardReconnect("bfcache")
-    } else {
-        const ua = navigator.userAgent || navigator.vendor || window.opera
-        const isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
-        if (isiOS) {
-            hardReconnect("pageshow")
-        }
-    }
-})
-window.addEventListener("offline", () => {
-    log("🌐 Offline")
-    cleanup("offline")
-	removeClass('clock','online')
-	addClass('clock','offline')
-    fetchajax=true
-})
-
-window.addEventListener("online", () => {
-    log("🌐 Online")
-    hardReconnect("online")
-})
-
-window.addEventListener("pagehide", () => {
-    log("📄 Pagehide")
-    cleanup("pagehide")
-    fetchajax=true
-})
-
+    if (client && client.connected) return;
+    if (e.persisted || /iPad|iPhone|iPod/.test(navigator.userAgent)) hardReconnect("pageshow");
+});
+window.addEventListener("offline", () => { cleanup(); addClass('clock','offline'); });
+window.addEventListener("online", () => hardReconnect("online"));
 function initPlaceholders() {
 	drawCircle('avgtimecircle', 0, 0, 82, 'gray')
 	drawCircle('avgcircle', 0, 0, 90, 'purple')

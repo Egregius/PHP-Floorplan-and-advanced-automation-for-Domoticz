@@ -152,7 +152,7 @@ def mqtt_publish_key(key, value):
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
         log(f"📤 Publish {key}={value}, rc={result.rc}")
         if result.rc != 0:
-            print(f"Publish failed with code {result.rc}, script stopt.")
+            log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")
@@ -162,7 +162,7 @@ def mqtt_publish_teller(key, value):
         result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
         log(f"📤 Publish t/{key}={value}, rc={result.rc}")
         if result.rc != 0:
-            print(f"Publish failed with code {result.rc}, script stopt.")
+            log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
     else:
         log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")

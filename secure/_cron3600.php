@@ -3,7 +3,7 @@ $user='cron3600';
 //lg($user);
 $uur=date('G');
 if ($uur==0||LOOP_START>$time-60) {
-	lg('🕒 '.$user.' ===================================================================================================================================================');
+	lg('🕒 '.$user.' ===================================================================================================================================================','cron3600');
 //	if ($uur==0) {
 //		setCache('alwayson', 9999);
 //	}
@@ -72,7 +72,7 @@ if ($uur==0||LOOP_START>$time-60) {
 	$stmt = $db->prepare("SELECT 1 FROM temp_hist WHERE datum = :datum");
 	$stmt->execute([':datum' => $yesterday]);
 	if ($stmt->fetchColumn()) {
-		lg( "Data voor $yesterday bestaat al.");
+		lg( "Data voor $yesterday bestaat al.",'cron3600');
 		$since=date("Y-m-d G:i:s", $time-86400);
 		foreach (array('01','02','03','04','06','07','08','09',11,12,13,14,16,17,18,19,21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59) as $x) {
 			$query="DELETE FROM `temp` WHERE `stamp` LIKE '%:$x:00' AND `stamp` < '$since'";
@@ -103,11 +103,15 @@ if ($uur==0||LOOP_START>$time-60) {
 				':avg_buiten' => $data['avg_buiten'],
 				':max_buiten' => $data['max_buiten']
 			]);
-			lg("Dagdata voor $yesterday toegevoegd.");
+			lg("Dagdata voor $yesterday toegevoegd.",'cron3600');
 		} else {
-			lg("Geen temperatuurdata voor $yesterday gevonden.");
+			lg("Geen temperatuurdata voor $yesterday gevonden.",'cron3600');
 		}
 	}
+}
+if ($uur==8) {
+	shell_exec('php /var/www/setSSID.php \'{"main24":0}\' > /dev/null 2>&1 &');
+	lg('main24 uitgeschakeld','cron3600');
 }
 if ($d['weg']->s==0) {
 	foreach (array('living_temp','kamer_temp','alex_temp','badkamer_temp') as $i) {
