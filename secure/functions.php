@@ -82,11 +82,13 @@ function fliving() {
 	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['media']->s=='Off'&&$d['bureellinks']->s==0&&$d['lampkast']->s!='On'&&$d['eettafel']->s==0&&$d['zithoek']->s==0) {
 		if (($d['z']==0&&$d['dag']->s<0)||($d['rkeukenl']->s>80&&$d['rkeukenr']->s>80&&$d['rbureel']->s>80&&$d['rliving']->s>80)) {
 			$am=strtotime('10:00');
-			if ($d['wasbak']->s<10&&$d['time']<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-			if ($d['zithoek']->s<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
-			if ($d['eettafel']->s<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
-			if ($d['bureellinks']->s<14) sl('bureellinks', 14, basename(__FILE__).':'.__LINE__);
-			if ($d['bureelrechts']->s<14) sl('bureelrechts', 14, basename(__FILE__).':'.__LINE__);
+			if($d['time']<$am) {
+				if ($d['wasbak']->s<10) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+//				if ($d['zithoek']->s<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
+//				if ($d['eettafel']->s<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
+				if ($d['bureellinks']->s<40) sl('bureellinks', 40, basename(__FILE__).':'.__LINE__);
+//				if ($d['bureelrechts']->s<14) sl('bureelrechts', 14, basename(__FILE__).':'.__LINE__);
+			}
 		}
 	}
 }
@@ -175,13 +177,16 @@ function huisslapen($weg=false) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
+		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
 	} elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
+		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
 	} else {
 		store('weg', 1, basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
+		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
 	}
 	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
 	sw(['lampkast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','bosekeuken','boseliving','mac','ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
