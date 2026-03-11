@@ -50,6 +50,7 @@ foreach ($devices as $ip => $vol) {
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') store('bose'.$ip, 'On');
+					if ($invalidcounter > 0) $invalidcounter = 0;
 				}
 			} else {
 				if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__);
@@ -118,8 +119,8 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 		if (!isset($lastlibraryupdate)||$lastlibraryupdate<$time-72000) {
 			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
 				$lastlibraryupdate=$time;
-				kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-				kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Scan","params": {"showdialogs": true}}');
+//				kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
+//				kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Scan","params": {"showdialogs": true}}');
 			}
 		}
 		if (
@@ -129,8 +130,8 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 			&& ($d['kodi_last_action']->t < $lastlibraryupdate || $kodi_last_action[0]=='GUI.OnScreensaverActivated')
 		) {
 			$lastlibraryclean=$time;
-			kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-			kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Clean","params": {"showdialogs": true}}');
+//			kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
+//			kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Clean","params": {"showdialogs": true}}');
 		}
 	}
 }

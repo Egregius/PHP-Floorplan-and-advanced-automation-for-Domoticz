@@ -82,13 +82,11 @@ function fliving() {
 	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['media']->s=='Off'&&$d['bureellinks']->s==0&&$d['lampkast']->s!='On'&&$d['eettafel']->s==0&&$d['zithoek']->s==0) {
 		if (($d['z']==0&&$d['dag']->s<0)||($d['rkeukenl']->s>80&&$d['rkeukenr']->s>80&&$d['rbureel']->s>80&&$d['rliving']->s>80)) {
 			$am=strtotime('10:00');
-			if($d['time']<$am) {
-				if ($d['wasbak']->s<10) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
-//				if ($d['zithoek']->s<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
-//				if ($d['eettafel']->s<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
-				if ($d['bureellinks']->s<40) sl('bureellinks', 40, basename(__FILE__).':'.__LINE__);
-//				if ($d['bureelrechts']->s<14) sl('bureelrechts', 14, basename(__FILE__).':'.__LINE__);
-			}
+			if ($d['wasbak']->s<10&&$d['time']<$am) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
+			if ($d['zithoek']->s<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
+			if ($d['eettafel']->s<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
+			if ($d['bureellinks']->s<14) sl('bureellinks', 14, basename(__FILE__).':'.__LINE__);
+			if ($d['bureelrechts']->s<14) sl('bureelrechts', 14, basename(__FILE__).':'.__LINE__);
 		}
 	}
 }
@@ -144,10 +142,7 @@ function fhall() {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['weg']->s==0&&$d['rkamerl']->s>70&&$d['rkamerr']->s>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']->s==0&&past('kamer')>7200) {
-		sl('kamer', 1, basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
-	}
+	if ($d['weg']->s==0&&$d['rkamerl']->s>70&&$d['rkamerr']->s>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']->s==0&&past('kamer')>7200) sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 }
 function fbadkamer($level,$power=false) {
 	global $d,$t;
@@ -176,17 +171,11 @@ function huisslapen($weg=false) {
 	if ($weg===3) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
-		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
 	} elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
-		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
 	} else {
 		store('weg', 1, basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
-		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
 	}
 	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
 	sw(['lampkast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','bosekeuken','boseliving','mac','ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
@@ -200,8 +189,6 @@ function huisthuis($msg='') {
 	store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
-	$config = ['main5' => true, 'main24' => false];
-	shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
@@ -1076,11 +1063,14 @@ function curl($url) {
 }
 final class Database {
     private static ?PDO $instance = null;
+
     private function __construct() {}
     private function __clone(): void {}
+
     public static function getInstance(): PDO {
         return self::$instance ??= self::createConnection();
     }
+
     private static function createConnection(): PDO {
         try {
             return new PDO(
@@ -1103,9 +1093,11 @@ final class Database {
             throw new RuntimeException('Database connection failed.', 0, $e);
         }
     }
+
     public static function reset(): void {
         self::$instance = null;
     }
+
     public static function isConnected(): bool {
         return self::$instance !== null;
     }
@@ -1118,6 +1110,7 @@ function fetchdata(): array {
             static $stmt = null;
             $stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
             $stmt->execute();
+
             foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
                 $dev = new Device();
                 $dev->n  = $n;
@@ -1133,6 +1126,7 @@ function fetchdata(): array {
                 $d[$n] = $dev;
             }
             break;
+
         } catch (PDOException $e) {
             $isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
             if ($isRecoverable) {
@@ -1146,13 +1140,57 @@ function fetchdata(): array {
             throw $e;
         }
     }
+
     if ($en = json_decode(getCache('en'))) {
 		foreach (['n','a','b','c','z'] as $key) {
 			$d[$key] = $en->$key ?? 0;
 		}
 	}
+
     return $d;
 }
+function fetchdataold(): array {
+	global $d;
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$db = Database::getInstance();
+			static $stmt = null;
+			$stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
+			$stmt->execute();
+			foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
+				$d[$n] = array_filter(
+					compact('s', 't', 'm', 'deviceD', 'i', 'p', 'rt', 'f'),
+					static fn($v) => $v !== null
+				);
+				if (isset($d[$n]['deviceD'])) {
+					$d[$n]['d'] = $d[$n]['deviceD'];
+					unset($d[$n]['deviceD']);
+				}
+			}
+			break;
+		} catch (PDOException $e) {
+			$isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
+			if ($isRecoverable) {
+				lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
+				Database::reset();
+				$stmt = null;
+				$attempt > 0 && sleep($attempt);
+				continue;
+			}
+			lg('FETCHDATA ERROR! ' . $e->getCode());
+			throw $e;
+		}
+	}
+	if ($en = json_decode(getCache('en'))) {
+		$d['n'] = $en->n ?? null;
+		$d['a'] = $en->a ?? null;
+		$d['b'] = $en->b ?? null;
+		$d['c'] = $en->c ?? null;
+		$d['z'] = $en->z ?? null;
+	}
+	return $d;
+}
+
 final class Device {
     public string $n;
     public mixed  $s;
@@ -1164,6 +1202,7 @@ final class Device {
     public ?int  $rt;
     public ?int  $f;
 }
+
 function roundUpToAny($n,$x=5) {
 	return round(($n+$x/2)/$x)*$x;
 }
@@ -1253,14 +1292,21 @@ function republishmqtt() {
 function setBatterijLedBrightness(int $brightness) {
 	$payload = json_encode([ 'status_led_brightness_pct' => $brightness ]);
 	$ch = curl_init("https://battery/api/system");
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 	curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Authorization: Bearer 9D03BCA88274A4C1603E4D0F5DD21AB0", "X-Api-Version: 2", "Content-Type: application/json" ]);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-	curl_exec($ch);
+	$response = curl_exec($ch);
+	$error = curl_error($ch);
 	curl_close($ch);
+	if ($error) {
+		lg("❌ Fout bij LED brightness: $error");
+		return false;
+	} else {
+		return json_decode($response, true);
+	}
 }
 function setCache(string $key, $value): bool {
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
