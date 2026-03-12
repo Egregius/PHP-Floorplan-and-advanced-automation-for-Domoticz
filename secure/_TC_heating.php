@@ -234,11 +234,13 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		$$prevSetTime=$time;
 	}
 }
+if ($d['weg']->s<=2&&$d['n']<-600&&$d['b']>0&&$d['c']>80&&$d['living_temp']->s<21) $Setliving+=2;
 if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
 if ($d['living_set']->s!=$Setliving) {
 	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 	$living_set=$Setliving;
 	$d['living_set']->s=$Setliving;
+	telegram('Setliving = '.$Setliving);
 }
 
 require('_Rolluiken_Heating.php');

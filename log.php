@@ -245,7 +245,7 @@ input[type=checkbox]{accent-color:var(--accent)}
 <div id="app">
  <div id="hdr">
 	<button id="sbBtn" onclick="toggleSb()" style="background:none;border:1px solid var(--border);color:var(--dim);font-size:14px;padding:4px 9px;border-radius:4px;cursor:pointer;line-height:1;flex-shrink:0;">☰</button>
-	<a href="log.php"><h1>Logs</h1></a>
+	<a href="index.php"><h1>Logs</h1></a>
 	<div id="chip">LIVE</div>
 	<input type="text" id="fi" placeholder="Filter…" oninput="schedRender()">
 	<span id="lc">0 lijnen</span>
