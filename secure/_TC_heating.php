@@ -234,8 +234,12 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 		$$prevSetTime=$time;
 	}
 }
-if ($d['weg']->s<=2&&$d['n']<-600&&$d['b']>0&&$d['c']>80&&$d['living_temp']->s<21) $Setliving+=2;
 if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
+if($d['heating']->s==1&&$d['weg']->s<=2) {
+	if ($d['n']<-1200&&$d['b']>0&&$d['c']>20&&$d['living_temp']->s<21) $Setliving=21;
+	elseif ($d['n']<-800&&$d['b']>0&&$d['c']>50&&$d['living_temp']->s<21) $Setliving=21;
+	elseif ($d['n']<-500&&$d['b']>0&&$d['c']>80&&$d['living_temp']->s<21) $Setliving=21;
+}
 if ($d['living_set']->s!=$Setliving) {
 	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 	$living_set=$Setliving;
