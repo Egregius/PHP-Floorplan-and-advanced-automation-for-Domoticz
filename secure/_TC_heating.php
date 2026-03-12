@@ -235,16 +235,16 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 	}
 }
 if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
-if($d['heating']->s==1&&$d['weg']->s<=2) {
+/*elseif($d['heating']->s==1&&$d['weg']->s<=2) {
 	if ($d['n']<-1200&&$d['b']>0&&$d['c']>20&&$d['living_temp']->s<21) $Setliving=21;
 	elseif ($d['n']<-800&&$d['b']>0&&$d['c']>50&&$d['living_temp']->s<21) $Setliving=21;
 	elseif ($d['n']<-500&&$d['b']>0&&$d['c']>80&&$d['living_temp']->s<21) $Setliving=21;
-}
+}*/
 if ($d['living_set']->s!=$Setliving) {
 	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 	$living_set=$Setliving;
 	$d['living_set']->s=$Setliving;
-	telegram('Setliving = '.$Setliving);
+//	telegram('Setliving = '.$Setliving);
 }
 
 require('_Rolluiken_Heating.php');
