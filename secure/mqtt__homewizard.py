@@ -143,8 +143,7 @@ def step_for_value(value):
     v=abs(value)
     if v<50:return 1
     elif v<100: return 2
-    elif v<200: return 5
-    else: return 10
+    else: return 5
 
 # --- MQTT ---
 def mqtt_publish_key(key, value):

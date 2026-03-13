@@ -16,7 +16,7 @@ use PhpMqtt\Client\ConnectionSettings;
 require_once '/var/www/vendor/autoload.php';
 require '/var/www/html/secure/functions.php';
 $user='TIME';
-lg('🟢 Starting '.$user.' loop ','loop');
+lg('🟢 Starting '.$user.' loop ','time');
 $time=time();
 $lastcheck=$time;
 $lasttimepub=$time;
@@ -49,7 +49,7 @@ while (true) {
     $mqtt->loopOnce($time);
     if (!$lastMessageReceived) {
         $lastpub = $time;
-//        lg('🏓 ' . ($time - $lasttimepub));
+        lg('🏓 ' . ($time - $lasttimepub),'time');
         $lasttimepub = $time;
         $mqtt->publish('d/t', json_encode(1));
     }
@@ -57,13 +57,13 @@ while (true) {
     $lastMessageReceived = false;
 }
 $mqtt->disconnect();
-lg("🛑 MQTT {$user} loop stopped ".__FILE__,'loop');
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,'time');
 
 function stoploop() {
     global $mqtt,$lock_file;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-        lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...','loop');
+        lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...','time');
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
@@ -71,7 +71,7 @@ function stoploop() {
         exit;
     }
     if (filemtime($script) > LOOP_START) {
-        lg('🛑 '.basename($script) . ' gewijzigd → restarting ...','loop');
+        lg('🛑 '.basename($script) . ' gewijzigd → restarting ...','time');
         $mqtt->disconnect();
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);

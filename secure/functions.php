@@ -345,7 +345,7 @@ function setpoint($name, $value,$msg='') {
 	$msg='(SETPOINT)'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	store($name, $value, $msg);
 }
-function store($name='',$status='',$msg='') {
+function store($name='',$status='',$msg='',$log='store') {
 	global $d,$user;
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
@@ -359,7 +359,7 @@ function store($name='',$status='',$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 'store');
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -369,7 +369,7 @@ function store($name='',$status='',$msg='') {
 	}
 	if($affected>0/*&&!in_array($name,['dag'])*/){
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),'store');
+		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
@@ -393,7 +393,7 @@ function publishmqtt($topic,$msg,$log='') {
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
 }
-function storemode($name,$mode,$msg='') {
+function storemode($name,$mode,$msg='',$log='store') {
 	global $d,$user;
     if((string)$d[$name]->m==(string)$mode) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -408,7 +408,7 @@ function storemode($name,$mode,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 'store');
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -418,11 +418,11 @@ function storemode($name,$mode,$msg='') {
 	}
 	if($affected>0&&!in_array($name,['dag'])) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STOREM	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),'store');
+		lg('💾 STOREM	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
-function storesm($name,$s,$m,$msg='') {
+function storesm($name,$s,$m,$msg='',$log='store') {
 	global $d,$user;
     if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -438,7 +438,7 @@ function storesm($name,$s,$m,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 'store');
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -448,11 +448,11 @@ function storesm($name,$s,$m,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESM   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),'store');
+		lg('💾 STORESM   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
-function storesmi($name,$s,$m,$i,$msg='') {
+function storesmi($name,$s,$m,$i,$msg='',$log='store') {
 	global $d,$user;
     if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m&&(string)$d[$name]->i==(string)$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -469,7 +469,7 @@ function storesmi($name,$s,$m,$i,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 'store');
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -479,11 +479,11 @@ function storesmi($name,$s,$m,$i,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
-		lg('💾 STORESMI  '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),'store');
+		lg('💾 STORESMI  '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
-function storesmip($name,$s,$m,$i,$p,$msg='') {
+function storesmip($name,$s,$m,$i,$p,$msg='',$log='store') {
 	global $d,$user;
     if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m&&(string)$d[$name]->i==(string)$i&&(string)$d[$name]->p==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -501,7 +501,7 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 'store');
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -511,11 +511,11 @@ function storesmip($name,$s,$m,$i,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESMIP '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),'store');
+		lg('💾 STORESMIP '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
-function storesp($name,$s,$p,$msg='') {
+function storesp($name,$s,$p,$msg='',$log='store') {
 	global $d,$user;
     if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->p==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -531,7 +531,7 @@ function storesp($name,$s,$p,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 'store');
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -541,11 +541,11 @@ function storesp($name,$s,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STORESP   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),'store');
+		lg('💾 STORESP   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
-function storep($name,$p,$msg='') {
+function storep($name,$p,$msg='',$log='store') {
 	global $d,$user;
     if((string)$d[$name]->p==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -561,7 +561,7 @@ function storep($name,$p,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -571,11 +571,11 @@ function storep($name,$p,$msg='') {
 	}
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-		lg('💾 STOREP	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STOREP	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
-function storeicon($name,$i,$msg='') {
+function storeicon($name,$i,$msg='','store') {
 	global $d,$user;
     if($d[$name]->i==$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -590,7 +590,7 @@ function storeicon($name,$i,$msg='') {
 			break;
 		} catch (PDOException $e) {
 			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', 5);
+				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
 				if($attempt>0) sleep($attempt);
 				continue;
@@ -602,7 +602,7 @@ function storeicon($name,$i,$msg='') {
 	if($affected>0) {
 		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		if (str_ends_with($name, '_temp')) return;
-		lg('💾 STOREIC	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),10);
+		lg('💾 STOREIC	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
 }
@@ -704,7 +704,7 @@ function lgcsv($type, array $data) {
     fclose($fp);
 }
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
-	lg('bosekey '.$ip.' '.$key.' '.$msg);
+	lg('bosekey '.$ip.' '.$key.' '.$msg,'bose');
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
 	bosepost("key", $xml, $ip, true);
 	$xml="<key state=\"release\" sender=\"Gabbo\">$key</key>";
@@ -722,7 +722,7 @@ function bosevolume($vol,$ip=101, $msg='') {
 		elseif ($vol>=20) bosebass(-8, $ip);
 		else bosebass(-9, $ip);
 	}
-	lg('🔊 bosevolume '.$ip.' -> '.$vol.' '.$msg);
+	lg('🔊 bosevolume '.$ip.' -> '.$vol.' '.$msg,'bose');
 }
 function bosebass($bass,$ip=101) {
 	$bass=1*$bass;
@@ -762,10 +762,10 @@ function bosezone($ip,$vol='') {
 		if ($d['boseliving']->s=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 		if ($time<strtotime('21:00')&&$d['boseliving']->s=='On'&&past('boseliving')>60) {
 			if ($d['bose101']->s=='Off') {
-				lg(basename(__FILE__).':'.__LINE__);
+				lg(basename(__FILE__).':'.__LINE__,'bose');
 				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
-				lg('Bose zone time='.$time.'|'.$t+1800);
+				lg('Bose zone time='.$time.'|'.$t+1800,'bose');
 				if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				elseif ($d['alexslaapt']->s==1) bosevolume(11, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
@@ -781,7 +781,7 @@ function bosezone($ip,$vol='') {
 					107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
 				];
 				if ($d['bose101']->s=='Off'&&$d['bose'.$ip]->s=='Off') {
-					lg(basename(__FILE__).':'.__LINE__);
+					lg(basename(__FILE__).':'.__LINE__,'bose');
 					sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 					if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 					elseif ($d['alexslaapt']->s==1) bosevolume(15, 101, basename(__FILE__).':'.__LINE__);
@@ -826,7 +826,7 @@ function bosepost($method, $xml, $ip=101, $log=false) {
         fclose($fp);
 //        if ($log) lg("💡 Bose $method verstuurd naar $host");
     } else {
-        if ($log) lg("❌ Bose socket fout: $errstr ($errno)");
+        if ($log) lg("❌ Bose socket fout: $errstr ($errno)",'bose');
     }
 }
 function sirene($msg) {
@@ -910,7 +910,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 
     // 3. Logging check (per device)
     if(($prevmsg[$device] ?? null) !== $msg) {
-        lg($msg);
+        lg($msg,'daikin');
         $prevmsg[$device] = $msg;
     }
 

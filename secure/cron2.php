@@ -8,7 +8,7 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
     exit("Another instance is already running; terminating.\n");
 }
 require '/var/www/html/secure/functions.php';
-lg('🟢 Starting cron2 loop...');
+lg('🟢 Starting cron2 loop...','cron2');
 $time=time();
 $d=fetchdata();
 $lastcheck=$time;
@@ -72,14 +72,14 @@ function stoploop() {
     global $lock_file;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-        lg('🛑 functions.php gewijzigd → restarting cron2 loop...');
+        lg('🛑 functions.php gewijzigd → restarting cron2 loop...','cron2');
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime(__DIR__ . '/cron2.php') > LOOP_START) {
-        lg('🛑 cron2.php gewijzigd → restarting cron2 loop...');
+        lg('🛑 cron2.php gewijzigd → restarting cron2 loop...','cron2');
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
