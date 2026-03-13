@@ -1284,7 +1284,6 @@ function berekenKleurRood(t, end, start = 0) {
         g = interp(153, 0, k);
         b = 0;
     }
-
     return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
 }
 function drawCircle(id,value,color,radius,angle) {
