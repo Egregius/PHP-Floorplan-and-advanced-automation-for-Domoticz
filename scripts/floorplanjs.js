@@ -1374,7 +1374,6 @@ function getTrendArrow(t) {
 	    const r = Math.round(6 + 40 * n);
         return `<div class="abs trend-arrow"><img src="/images/trenddown.png" height="${r}px" width="15px" style="filter: drop-shadow(0 0 3px rgba(100,150,255,0.8));"></div>`;
     }
-
     return "";
 }
 function updateDeviceTime(id) {
@@ -1421,18 +1420,13 @@ function log(msg) {
     const id = 'log';
     let entry = getUpdateEntry(id);
     if (!entry.logs) entry.logs = [];
-
     const d = new Date();
     const hh = d.getHours().toString().padStart(2, '0');
     const mm = d.getMinutes().toString().padStart(2, '0');
     const ss = d.getSeconds().toString().padStart(2, '0');
-
-    // Voeg de nieuwe regel toe aan de wachtrij voor dit frame
     entry.logs.push(`${hh}:${mm}:${ss} ${msg}`);
-
     requestTick();
 }
-
 function shouldRedraw(prev,curr,circleMax,degrees=2){
 	if (prev===undefined) return true;
 	if ((prev <= 0&&curr > 0) || (prev >= 0&&curr < 0)) return true;
@@ -1572,6 +1566,7 @@ function initPlaceholders() {
 }
 window.onload = initPlaceholders;
 async function forceReset() {
+	addClass('clock', 'offline');
 	const storageKey = 'app_version_' + window.location.hostname;
 	const localVersion = localStorage.getItem(storageKey);
 	try {
