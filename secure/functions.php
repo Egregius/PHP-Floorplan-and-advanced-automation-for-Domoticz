@@ -575,7 +575,7 @@ function storep($name,$p,$msg='',$log='store') {
 	}
 	return $affected ?? 0;
 }
-function storeicon($name,$i,$msg='','store') {
+function storeicon($name,$i,$msg='',$log='store') {
 	global $d,$user;
     if($d[$name]->i==$i) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {

@@ -149,7 +149,7 @@ def step_for_value(value):
 def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
-        log(f"📤 Publish {key}={value}, rc={result.rc}")
+        log(f"{key} {value}")
         if result.rc != 0:
             log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
@@ -159,7 +159,7 @@ def mqtt_publish_key(key, value):
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
-        log(f"📤 Publish t/{key}={value}, rc={result.rc}")
+        log(f"t/{key} {value}")
         if result.rc != 0:
             log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
@@ -168,14 +168,14 @@ def mqtt_publish_teller(key, value):
 
 # --- State updates ---
 def publish_step(key, value):
-    q = quantize_step(value, step_for_value(value))
+#    q = quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
     # Veiligheidscheck: zorg dat last een getal is voor vergelijking
-    if last is None or q != last:
-        state_publish[key] = q
-        state[key] = q
+    if last is None or value != last:
+        state_publish[key] = value
+        state[key] = value
         flush_state()
-        mqtt_publish_key(key, q)
+        mqtt_publish_key(key, value)
 
 def publish_quantized(key, value):
     if value is None: return
