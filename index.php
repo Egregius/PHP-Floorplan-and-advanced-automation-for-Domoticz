@@ -47,7 +47,6 @@
 			<div class="abs z1 i48" id="garage"></div>
 			<div class="abs z1 i48" id="garageled"></div>
 			<div class="abs z1 i48" id="zolderg"></div>
-			<div class="abs z1 i48" id="poort"></div>
 			<div class="abs z" id="inkom" onclick="dimmer('inkom')"></div>
 			<div class="abs z" id="hall" onclick="dimmer('hall')"></div>
 			<div class="abs yellow" id="rbureel"></div>
@@ -264,6 +263,7 @@
 			<div id="floorplanheating" class="view">
 				<div class="abs floorplan2icon" onclick="setView('floorplan');"><img src="/images/close.png" class="i60" alt="plus"></div>
 				<div class="abs leftbuttons" id="heatingbutton"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
+				<div class="abs z1 i48" id="poort"></div>
 				<div class="abs z1 i48" id="wasdroger"></div>
 				<div class="abs z1 i48" style="width:70px;" id="water"></div>
 				<div class="abs z1 i48" style="width:70px;" id="regenpomp"></div>
