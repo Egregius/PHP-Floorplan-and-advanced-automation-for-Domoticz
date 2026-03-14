@@ -1243,9 +1243,7 @@ function republishmqtt() {
 			}
 			list($domain, $object_id) = explode('.', $entity_id);
 			$state = ucfirst($data['state']);
-			if($i->s==0) $knownstate='Closed';
-			elseif($i->s==1) $knownstate='Open';
-			if ($state!=$knownstate) $to_publish[] = [
+			if ($state!=$i->s) $to_publish[] = [
 				'topic' => "$base_topic/$domain/$object_id/state",
 				'payload' => $state
 			];
