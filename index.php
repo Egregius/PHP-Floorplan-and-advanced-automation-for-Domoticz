@@ -22,6 +22,7 @@
 	</head>
 	<body class="floorplan">
 		<div class="abs z2" id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
+		<div class="abs weg z" id="weg" onclick="weg();"><img src="/images/Thuis.png" id="wegimg"></div>
 		<div class="abs center zon">
 			<div class="sun-times">
 				☀️ <span id="dag"></span><br>
@@ -153,7 +154,6 @@
 			<div id="floorplan" class="view active">
 				<div class="abs leftbuttons" id="heatingbutton" onclick="setView('floorplanheating')"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="fix floorplan2icon" onclick="setView('floorplanothers')"><img src="/images/plus.png" class="i60" alt="plus"></div>
-				<div class="abs weg z" id="weg" onclick="weg();"><img src="/images/Thuis.png" id="wegimg"></div>
 				<div class="abs" id="bose101"></div>
 				<div class="abs" id="bose102"></div>
 				<div class="abs" id="bose103"></div>
@@ -264,7 +264,6 @@
 			<div id="floorplanheating" class="view">
 				<div class="abs floorplan2icon" onclick="setView('floorplan');"><img src="/images/close.png" class="i60" alt="plus"></div>
 				<div class="abs leftbuttons" id="heatingbutton"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
-				<div class="abs z1" style="top:343px;left:415px;"><a href="javascript:navigator_Go('floorplan.doorsensors.php');"><img src="/images/close.png" width="72" height="72" alt="Close"></a></div>
 				<div class="abs z1 i48" id="wasdroger"></div>
 				<div class="abs z1 i48" style="width:70px;" id="water"></div>
 				<div class="abs z1 i48" style="width:70px;" id="regenpomp"></div>

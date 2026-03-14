@@ -1,6 +1,6 @@
 <?php
 
-if ($status=='Open'&&1==2) {
+if ($status=='Open') {
 	if ($d['auto']->s=='On') {
 		fhall();
 		if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('10:00')/*&&$d['dag']->s>0*/) {
