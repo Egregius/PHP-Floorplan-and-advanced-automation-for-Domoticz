@@ -1,4 +1,5 @@
 <?php
+/*
 if ($status=='Open') {
 	if ($d['auto']->s=='On') {
 		fhall();
@@ -28,3 +29,4 @@ if ($d['weg']->s>1) {
 	if ($status=='Open') sirene('Deur Alex open');
 	else sirene('Deur Alex dicht');
 }
+*/

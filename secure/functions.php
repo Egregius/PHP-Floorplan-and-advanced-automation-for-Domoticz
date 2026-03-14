@@ -1228,6 +1228,25 @@ function republishmqtt() {
 					'payload' => $brightness
 				];
 			}
+		} elseif ($i->d === 'c') {
+			$entity_id = "binary_sensor.$device";
+			$url = "$ha_url/api/states/$entity_id";
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: $ha_token"]);
+			$result = curl_exec($ch);
+			curl_close($ch);
+			$data = json_decode($result, true);
+			if (!isset($data['state'])) {
+				lg("❌ Fout: kon status van $entity_id niet ophalen");
+				continue;
+			}
+			list($domain, $object_id) = explode('.', $entity_id);
+			$state = ucfirst($data['state']);
+			if ($state!=$i->s) $to_publish[] = [
+				'topic' => "$base_topic/$domain/$object_id/state",
+				'payload' => $state
+			];
 		} else continue;
 		usleep(50000);
 		foreach ($to_publish as $pub) {
