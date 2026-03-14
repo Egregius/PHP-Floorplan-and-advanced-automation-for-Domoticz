@@ -9,7 +9,8 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-shell_exec('php /var/www/setSSID.php \'{"main5":1,"main24":0}\' > /dev/null 2>&1 &');
+republishmqtt();
+
 
 
 echo '</pre>';

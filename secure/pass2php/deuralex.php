@@ -1,6 +1,6 @@
 <?php
-/*
-if ($status=='Open') {
+
+if ($status=='Open'&&1==2) {
 	if ($d['auto']->s=='On') {
 		fhall();
 		if ($d['time']>strtotime('7:00')&&$d['time']<strtotime('10:00')/*&&$d['dag']->s>0*/) {
@@ -29,4 +29,3 @@ if ($d['weg']->s>1) {
 	if ($status=='Open') sirene('Deur Alex open');
 	else sirene('Deur Alex dicht');
 }
-*/
