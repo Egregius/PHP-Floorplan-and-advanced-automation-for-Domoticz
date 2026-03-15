@@ -2,35 +2,37 @@
 cd /var/www/html/secure
 
 SCRIPTS=(
-  mqtt_cover.php
-  mqtt_light.php
-  mqtt_media_player.php
-  mqtt_sensor_switch.php
-#  mqtt_time.php
-  mqtt_zigbee2mqtt.php
-  cron.php
-  cron2.php
-  mqtt__energy.php
-  mqtt__homewizard.py
-  mqtt__eufy-security-ws.py
+  "mqtt_cover.php"
+  "mqtt_light.php"
+  "mqtt_media_player.php"
+  "mqtt_sensor_switch.php"
+  "mqtt_zigbee2mqtt.php"
+  "cron.php"
+  "cron2.php"
+  "mqtt__energy.php"
+  "mqtt__homewizard.py"
+  "mqtt__eufy-security-ws.py"
 )
 
-i=1
+i=0
 while [ $i -lt 6 ]; do
-	echo $i
-	for s in "${SCRIPTS[@]}"; do
-		if ! pgrep -f "[${s:0:1}]${s:1}" >/dev/null; then
-		echo "$(date '+%F %T') starting $s"
-		case "$s" in
-			*.php) /usr/bin/nice -n 5 /usr/bin/php /var/www/html/secure/$s >/dev/null 2>&1 & ;;
-			*.py)  /usr/bin/nice -n 5 /usr/bin/python3 /var/www/html/secure/$s >/dev/null 2>&1 & ;;
-		esac
-	fi
-	done
-	sleep 10
-	i=`expr $i + 1`
+    for s in "${SCRIPTS[@]}"; do
+        if ! pgrep -f "[${s:0:1}]${s:1}" >/dev/null; then
+            echo "$(date '+%F %T') Herstarten: $s"
+            case "$s" in
+                *.php) 
+                    /usr/bin/nice -n 5 /usr/bin/php /var/www/html/secure/$s >/dev/null 2>&1 & 
+                    ;;
+                *.py)  
+                    /usr/bin/nice -n 5 /usr/bin/python3 /var/www/html/secure/$s >> /var/log/mqtt_scripts.log 2>&1 & 
+                    ;;
+            esac
+        fi
+    done
+    
+    sleep 10
+    i=$((i + 1))
 done
-
 
 
 ps cax | grep nginx
