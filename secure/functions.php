@@ -263,7 +263,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
     $d ??= fetchdata();
     lg('💡 SL ' . str_pad($user, 9) . ' => ' . str_pad($name, 13) . ' => ' . $level . ($msg ? " ($msg)" : ''), 'sl');
     $deviceType = $d[$name]->d ?? null;
-    $entityPrefix = in_array($deviceType, ['r', 'luifel']) ? 'cover' : 'light';
+    $entityPrefix = in_array($deviceType, ['r', 'l']) ? 'cover' : 'light';
     $entity = "$entityPrefix.$name";
     match($deviceType) {
         'hd' => $level > 0
@@ -277,7 +277,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
         'r' => hass('cover', 'set_cover_position', $entity, [
             'position' => $name === 'rbureel' ? 100 - $level : $level
         ]),
-        'luifel' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
+        'l' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
     };
 	$d['time']??=time();
@@ -951,7 +951,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         }
         stream_set_blocking($socket, true);
         stream_set_write_buffer($socket, 0);
-        stream_set_timeout($socket, 10);
+        stream_set_timeout($socket, $keepAliveTime);
     }
     if ($entity !== '') {
         $data['entity_id'] = $entity;
@@ -971,7 +971,6 @@ function hass(string $domain, string $service, string $entity = '', array $data 
     fwrite($socket, $request);
     fflush($socket);
     $lastUse = $d['time'];
-    lg($request);
 }
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);
