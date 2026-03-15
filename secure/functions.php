@@ -942,7 +942,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
             'tcp://192.168.2.26:8123',
             $errno,
             $errstr,
-            0.2,
+            0.4,
             STREAM_CLIENT_CONNECT
         );
         if (!$socket) {
@@ -951,7 +951,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         }
         stream_set_blocking($socket, true);
         stream_set_write_buffer($socket, 0);
-        stream_set_timeout($socket, 30);
+        stream_set_timeout($socket, 10);
     }
     if ($entity !== '') {
         $data['entity_id'] = $entity;
@@ -971,6 +971,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
     fwrite($socket, $request);
     fflush($socket);
     $lastUse = $d['time'];
+    lg($request);
 }
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);

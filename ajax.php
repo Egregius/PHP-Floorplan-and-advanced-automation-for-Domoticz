@@ -87,23 +87,10 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='dimmer') {
 		sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 	} elseif ($_REQUEST['command']=='roller') {
-		if ($_REQUEST['device']=='Beneden') {
-			foreach(array('rliving', 'rbureel', 'rkeukenl', 'rkeukenr') as $i) {
-				if ($d[$i]->s!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			}
-		} elseif ($_REQUEST['device']=='rkeukenl') {
+		if ($_REQUEST['device']=='rkeukenl') {
 			foreach(array('rkeukenl', 'rkeukenr') as $i) {
 				if ($d[$i]->s!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			}
-		} elseif ($_REQUEST['device']=='Boven') {
-			foreach(array('rkamerl', 'rkamerr', 'rwaskamer', 'ralex') as $i) {
-				if ($d[$i]->s!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
-			}
-		} elseif ($_REQUEST['device']=='tv') {
-			if ($d['rliving']->s<30) sl('rliving', 30, basename(__FILE__).':'.__LINE__);
-			if ($d['rbureel']->s<70) sl('rbureel', 69, basename(__FILE__).':'.__LINE__);
-			if ($d['rkeukenl']->s<55) sl('rkeukenl', 55, basename(__FILE__).':'.__LINE__);
-			if ($d['rkeukenr']->s<55) sl('rkeukenr', 55, basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['device']=='rkamerl') {
 			sl('rkamerl', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 			sl('rkamerr', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
