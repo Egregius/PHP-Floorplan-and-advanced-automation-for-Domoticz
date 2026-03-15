@@ -1,74 +1,90 @@
 #!/usr/bin/env python3
 import asyncio
 import json
-import logging
 import datetime
+import requests
+from pathlib import Path
 from websockets import connect
-import paho.mqtt.client as mqtt
 
-# --- Config ---
+# --- Statische Config ---
 WS_URL = "ws://192.168.2.26:3000"
-MQTT_HOST = "192.168.30.22"
-MQTT_TOPIC = "d/e/doorbell/picture_url"
-MQTT_USER = "mqtt"
-MQTT_PASS = "mqtt"
+CONFIG_PATH = Path("/var/www/eufy_config.json")
+RECONNECT_DELAY = 5
 
-# --- Logger ---
 def log(msg):
     now = datetime.datetime.now().strftime('%d-%m %H:%M:%S')
     print(f"{now} {msg}")
 
-# --- MQTT Setup ---
-mqtt_client = mqtt.Client(client_id="eufy_picture_bridge")
-mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
+def load_config():
+    """Laadt de Telegram credentials uit de externe JSON file."""
+    if not CONFIG_PATH.exists():
+        log(f"❌ Configbestand niet gevonden op {CONFIG_PATH}")
+        return None
+    try:
+        return json.loads(CONFIG_PATH.read_text())
+    except Exception as e:
+        log(f"❌ Fout bij laden config: {e}")
+        return None
+
+def send_telegram_photo(image_bytes, config):
+    """Verstuurt de binaire afbeelding naar alle geconfigureerde CHAT_IDS."""
+    token = config.get("TELEGRAM_TOKEN")
+    chat_ids = config.get("CHAT_IDS", [])
+    url = f"https://api.telegram.org/bot{token}/sendPhoto"
+    
+    for chat_id in chat_ids:
+        try:
+            files = {'photo': ('eufy_doorbell.jpg', image_bytes, 'image/jpeg')}
+            data = {'chat_id': chat_id, 'caption': '🔔 Deurbel event (Eufy)'}
+            response = requests.post(url, files=files, data=data, timeout=10)
+            if response.status_code == 200:
+                log(f"✅ Foto verstuurd naar {chat_id}")
+            else:
+                log(f"❌ Telegram fout ({chat_id}): {response.text}")
+        except Exception as e:
+            log(f"⚠️ Fout bij versturen naar {chat_id}: {e}")
 
 async def handle_eufy():
-    log(f"🔌 Verbinden met Eufy WS: {WS_URL}")
+    config = load_config()
+    if not config:
+        return
+
+    log(f"🚀 Script gestart. Luisteren op {WS_URL}...")
     
     while True:
         try:
             async with connect(WS_URL, ping_interval=20) as ws:
-                log("✅ Verbonden met Eufy WS")
+                log("✅ Verbonden met Eufy Security WS")
                 
-                # 1. Zet API schema (nodig voor nieuwere bropat versies)
                 await ws.send(json.dumps({"command": "set_api_schema", "schemaVersion": 13}))
-                
-                # 2. Start met luisteren naar events
                 await ws.send(json.dumps({"command": "start_listening"}))
                 
                 async for message in ws:
                     data = json.loads(message)
-                    msg_type = data.get("type")
-
-                    # Log elk event voor debugging
-                    if msg_type == "event":
+                    
+                    if data.get("type") == "event":
                         event_data = data.get("event", {})
-                        event_name = event_data.get("event")
                         
-                        # Volledige dump van het event voor inspectie
-                        log(f"🔔 Event: {event_name} | Data: {json.dumps(event_data)}")
-
-                        # Check specifiek op picture_url in de event data
-                        # Soms zit het in 'event_data', soms dieper in 'properties'
-                        url = event_data.get("picture_url")
-                        
-                        if url:
-                            log(f"📸 URL gedetecteerd: {url}")
+                        # Zoek naar de property change van de afbeelding
+                        if event_data.get("name") == "picture":
+                            log("📸 Afbeelding ontvangen in buffer")
                             
-                            try:
-                                # Gebruik een korte timeout voor de MQTT publish
-                                mqtt_client.connect(MQTT_HOST, MQTT_PORT, 10)
-                                mqtt_client.publish(MQTT_TOPIC, url, retain=True, qos=1)
-                                mqtt_client.disconnect()
-                                log(f"📡 URL succesvol naar MQTT gepushed")
-                            except Exception as mqtt_err:
-                                log(f"❌ MQTT Publish fout: {mqtt_err}")
+                            raw_data = event_data.get("value", {}).get("data", [])
+                            if raw_data:
+                                image_bytes = bytes(raw_data)
+                                log(f"🖼️ Verwerken ({len(image_bytes)} bytes)...")
+                                send_telegram_photo(image_bytes, config)
+                            else:
+                                log("⚠️ Picture event was leeg.")
+
         except Exception as e:
-            log(f"❌ Fout in verbinding: {e}")
-            await asyncio.sleep(5)
+            log(f"❌ Verbinding verbroken: {e}")
+            await asyncio.sleep(RECONNECT_DELAY)
 
 if __name__ == "__main__":
     try:
         asyncio.run(handle_eufy())
     except KeyboardInterrupt:
-        log("👋 Gestopt door gebruiker")
+        log("👋 Gestopt")
+    except Exception as e:
+        log(f"☢️ Fatale fout: {e}")
