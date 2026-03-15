@@ -12,6 +12,7 @@ SCRIPTS=(
   cron2.php
   mqtt__energy.php
   mqtt__homewizard.py
+  mqtt__eufy-security-ws.py
 )
 
 i=1
