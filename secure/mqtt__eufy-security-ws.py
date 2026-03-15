@@ -40,24 +40,29 @@ async def handle_eufy():
                     data = json.loads(message)
                     msg_type = data.get("type")
 
-                    # We zoeken naar 'event' messages van de camera/deurbel
+                    # Log elk event voor debugging
                     if msg_type == "event":
                         event_data = data.get("event", {})
                         event_name = event_data.get("event")
                         
-                        # Debug: log alle event namen om te zien wat er binnenkomt
-                        log(f"Event ontvangen: {event_name}")
+                        # Volledige dump van het event voor inspectie
+                        log(f"🔔 Event: {event_name} | Data: {json.dumps(event_data)}")
 
-                        # Check specifiek op picture_url updates
-                        if "picture_url" in event_data:
-                            url = event_data.get("picture_url")
-                            log(f"📸 Nieuwe URL gevonden: {url}")
+                        # Check specifiek op picture_url in de event data
+                        # Soms zit het in 'event_data', soms dieper in 'properties'
+                        url = event_data.get("picture_url")
+                        
+                        if url:
+                            log(f"📸 URL gedetecteerd: {url}")
                             
-                            if mqtt_client.connect(MQTT_HOST, 1883, 60) == 0:
+                            try:
+                                # Gebruik een korte timeout voor de MQTT publish
+                                mqtt_client.connect(MQTT_HOST, MQTT_PORT, 10)
                                 mqtt_client.publish(MQTT_TOPIC, url, retain=True, qos=1)
                                 mqtt_client.disconnect()
-                                log(f"📡 URL gepubliceerd naar MQTT")
-
+                                log(f"📡 URL succesvol naar MQTT gepushed")
+                            except Exception as mqtt_err:
+                                log(f"❌ MQTT Publish fout: {mqtt_err}")
         except Exception as e:
             log(f"❌ Fout in verbinding: {e}")
             await asyncio.sleep(5)
