@@ -1136,7 +1136,7 @@ function fetchdata(): array {
         } catch (PDOException $e) {
             $isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
             if ($isRecoverable) {
-                lg(' ♻  DB gone away → reconnect & retry fetchdata', 5);
+                lg(' ♻  DB gone away → reconnect & retry fetchdata');
                 Database::reset();
                 $stmt = null;
                 $attempt > 0 && sleep($attempt);
