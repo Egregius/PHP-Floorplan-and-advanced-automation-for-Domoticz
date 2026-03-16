@@ -134,6 +134,12 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			sw('grohered', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			store('8keuken_8', 'On', basename(__FILE__).':'.__LINE__);
 		} elseif ($_REQUEST['device']=='Egregius5') {
+			$key = "Wifiupdate";
+			if (apcu_exists($key)) {
+				http_response_code(429);
+				exit;
+			}
+			apcu_store($key, true, 10);
 			if($_REQUEST['action']=='On') {
 				shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
 				store('Egregius5', 1, basename(__FILE__).':'.__LINE__);
@@ -142,6 +148,12 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				store('Egregius5', 0, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='Egregius') {
+			$key = "Wifiupdate";
+			if (apcu_exists($key)) {
+				http_response_code(429);
+				exit;
+			}
+			apcu_store($key, true, 10);
 			if($_REQUEST['action']=='On') {
 				shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
 				store('Egregius', 1, basename(__FILE__).':'.__LINE__);
@@ -150,6 +162,12 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				store('Egregius', 0, basename(__FILE__).':'.__LINE__);
 			}
 		} elseif ($_REQUEST['device']=='VanOns') {
+			$key = "Wifiupdate";
+			if (apcu_exists($key)) {
+				http_response_code(429);
+				exit;
+			}
+			apcu_store($key, true, 10);
 			if($_REQUEST['action']=='On') {
 				shell_exec('php /var/www/setSSID.php \'{"guests":1}\' > /dev/null 2>&1 &');
 				store('VanOns', 1, basename(__FILE__).':'.__LINE__);
