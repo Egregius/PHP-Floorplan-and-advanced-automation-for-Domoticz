@@ -133,29 +133,29 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		} elseif ($_REQUEST['device']=='grohered') {
 			sw('grohered', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 			store('8keuken_8', 'On', basename(__FILE__).':'.__LINE__);
-		} elseif ($_REQUEST['device']=='5Ghz') {
+		} elseif ($_REQUEST['device']=='Egregius5') {
 			if($_REQUEST['action']=='On') {
 				shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
-				store('5Ghz', 1, basename(__FILE__).':'.__LINE__);
+				store('Egregius5', 1, basename(__FILE__).':'.__LINE__);
 			} else {
 				shell_exec('php /var/www/setSSID.php \'{"main5":0}\' > /dev/null 2>&1 &');
-				store('5Ghz', 0, basename(__FILE__).':'.__LINE__);
+				store('Egregius5', 0, basename(__FILE__).':'.__LINE__);
 			}
-		} elseif ($_REQUEST['device']=='2.4Ghz') {
+		} elseif ($_REQUEST['device']=='Egregius') {
 			if($_REQUEST['action']=='On') {
 				shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
-				store('2.4Ghz', 1, basename(__FILE__).':'.__LINE__);
+				store('Egregius', 1, basename(__FILE__).':'.__LINE__);
 			} else {
 				shell_exec('php /var/www/setSSID.php \'{"main24":0}\' > /dev/null 2>&1 &');
-				store('2.4Ghz', 0, basename(__FILE__).':'.__LINE__);
+				store('Egregius', 0, basename(__FILE__).':'.__LINE__);
 			}
-		} elseif ($_REQUEST['device']=='vanons') {
+		} elseif ($_REQUEST['device']=='VanOns') {
 			if($_REQUEST['action']=='On') {
 				shell_exec('php /var/www/setSSID.php \'{"guests":1}\' > /dev/null 2>&1 &');
-				store('vanons', 1, basename(__FILE__).':'.__LINE__);
+				store('VanOns', 1, basename(__FILE__).':'.__LINE__);
 			} else {
 				shell_exec('php /var/www/setSSID.php \'{"guests":0}\' > /dev/null 2>&1 &');
-				store('vanons', 0, basename(__FILE__).':'.__LINE__);
+				store('VanOns', 0, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
 			if (str_ends_with($_REQUEST['device'], '_set')) {

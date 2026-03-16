@@ -237,8 +237,8 @@
 				<div class="abs z1 i48" id="zetel"></div>
 				<div class="abs z1 i48" id="boseliving"></div>
 				<div class="abs z1 i48" id="bosekeuken"></div>
-				<div class="abs z1 i48" id="5Ghz"></div>
-				<div class="abs z1 i48" id="2.4Ghz"></div>
+				<div class="abs z1 i48" id="Egregius5"></div>
+				<div class="abs z1 i48" id="Egregius"></div>
 				<div class="abs z1 i48" id="vanons"></div>
 				<div class="abs i48" style="width:70px;z-index:4;" id="auto"></div>
 				<div class="abs z1 i48" style="width:70px;" id="mac"></div>
