@@ -273,10 +273,10 @@ function renderSwitchHTML(device, v, opts = {}) {
     const icon    = v.i || 'l';
     const state   = isOn ? 'On' : 'Off';
 
-    const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort','vanons'];
+    const CONFIRM  = ['ipaddcok','mac','daikin','grohered','kookplaat','media','boseliving','bosekeuken','poort','5Ghz','2.4Ghz','vanons'];
     const DIRECT   = ['regenpomp','nas'];
-    const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort','vanons'];
-    const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort','vanons'];
+    const SPECIAL  = ['water','regenpomp','steenterras','tuintafel','terras','tuin','auto','media','nas','zetel','grohered','kookplaat','boseliving','bosekeuken','ipaddock','mac','poort','5Ghz','2.4Ghz','vanons'];
+    const TIMESTMP = ['water','regenpomp','auto','media','nas','mac','ipaddock','boseliving','bosekeuken','grohered','kookplaat','zetel','poort','5Ghz','2.4Ghz','vanons'];
 
     let onclick;
     if (CONFIRM.includes(device)) {
