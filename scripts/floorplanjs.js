@@ -498,8 +498,8 @@ function showToast(message, needsConfirm = false) {
             const btnWrap = document.createElement('div');
             btnWrap.style.marginTop = '10px';
             btnWrap.innerHTML = `
-                <button id="toast-yes" class="btn-s" style="color:#1DB954; font-weight:bold;">JA</button>
-                <button id="toast-no" class="btn-s" style="color:#ff4444; margin-left:15px;">NEE</button>
+                <button id="toast-yes" class="btn btn-s" style="color:#1DB954; font-weight:bold;">JA</button>
+                <button id="toast-no" class="btn btn-s" style="color:#ff4444; margin-left:15px;">NEE</button>
             `;
             toast.appendChild(btnWrap);
 
