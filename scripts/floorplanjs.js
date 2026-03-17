@@ -444,13 +444,11 @@ async function ajaxbose(ip, force = false) {
 }
 async function spotifyAction(trackId, action, ip, isCurrentlyInTop = false) {
     if (window.isSubmitting) return;
-
-    // Specifieke tekst bepalen op basis van actie en huidige status
     let vraag = "Ben je zeker?";
     if (action === 'thumbs_down') {
         vraag = "Track verwijderen uit alle playlists?";
     } else if (action === 'thumbs_up') {
-        vraag = isCurrentlyInTop ? "Verwijderen uit TOP playlist?" : "Toevoegen aan TOP playlist?";
+        vraag = isCurrentlyInTop ? "Verwijderen uit TOP?" : "Toevoegen aan TOP?";
     }
 
     const bevestigd = await showToast(vraag, true);
