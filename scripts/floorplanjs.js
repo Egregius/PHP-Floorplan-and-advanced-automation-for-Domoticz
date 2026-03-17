@@ -444,14 +444,21 @@ async function ajaxbose(ip, force = false) {
 }
 async function spotifyAction(trackId, action, ip) {
     if (window.isSubmitting) return;
-    window.isSubmitting = true;
 
+    // Stel de vraag
+    const vraag = (action === 'thumbs_down') 
+        ? "Track overal verwijderen?" 
+        : "Toevoegen/Verwijderen uit TOP?";
+    
+    const bevestigd = await showToast(vraag, true);
+    
+    if (!bevestigd) return; // Gebruiker klikte op NEE, stop hier.
+
+    window.isSubmitting = true;
     try {
         if (action === 'thumbs_down') {
-            showToast("Verwijderd uit alle lijsten 🗑️");
+            showToast("Verwijderen... 🗑️");
             ajaxcontrolbose(ip, 'skip', 'next');
-        } else {
-            showToast("TOP bijwerken... ⏳");
         }
 
         const response = await fetch('//secure.egregius.be/spotify/actions.php', {
@@ -461,39 +468,58 @@ async function spotifyAction(trackId, action, ip) {
         });
 
         const result = await response.json();
-
         if (result.status === 'success') {
-            if (action === 'thumbs_up') {
-                showToast(result.mode === 'added' ? "Toegevoegd aan TOP ❤️" : "Verwijderd uit TOP 💔");
-            }
+            const msg = (action === 'thumbs_up') 
+                ? (result.mode === 'added' ? "Toegevoegd ❤️" : "Verwijderd 💔")
+                : "Succesvol verwijderd";
+            showToast(msg);
         }
         
         ajaxbose(ip, true);
     } catch (err) {
-        showToast("Fout bij uitvoeren actie ❌");
-        console.error('Spotify actie mislukt:', err);
+        showToast("Fout opgetreden ❌");
     } finally {
         window.isSubmitting = false;
     }
 }
-function showToast(message) {
-    let toast = document.getElementById('spotify-toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'spotify-toast';
-        document.body.appendChild(toast);
-    }
-    toast.innerText = message;
-    toast.style.display = 'block';
-    toast.style.opacity = '1';
-    
-    // Reset de timer als er snel achter elkaar geklikt wordt
-    if (window.toastTimeout) clearTimeout(window.toastTimeout);
-    
-    window.toastTimeout = setTimeout(() => { 
-        toast.style.opacity = '0';
-        setTimeout(() => { toast.style.display = 'none'; }, 300);
-    }, 2500);
+function showToast(message, needsConfirm = false) {
+    return new Promise((resolve) => {
+        let toast = document.getElementById('spotify-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'spotify-toast';
+            document.body.appendChild(toast);
+        }
+        if (window.toastTimeout) clearTimeout(window.toastTimeout);
+        toast.innerHTML = `<span>${message}</span>`;
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+        if (needsConfirm) {
+            const btnWrap = document.createElement('div');
+            btnWrap.style.marginTop = '10px';
+            btnWrap.innerHTML = `
+                <button id="toast-yes" class="btn-s" style="color:#1DB954; font-weight:bold;">JA</button>
+                <button id="toast-no" class="btn-s" style="color:#ff4444; margin-left:15px;">NEE</button>
+            `;
+            toast.appendChild(btnWrap);
+
+            document.getElementById('toast-yes').onclick = () => {
+                hideToast();
+                resolve(true);
+            };
+            document.getElementById('toast-no').onclick = () => {
+                hideToast();
+                resolve(false);
+            };
+        } else {
+            window.toastTimeout = setTimeout(hideToast, 5000);
+            resolve(true);
+        }
+        function hideToast() {
+            toast.style.opacity = '0';
+            setTimeout(() => { toast.style.display = 'none'; }, 300);
+        }
+    });
 }
 // ─────────────────────────────────────────────────────────────────────────────
 function handleResponse(device,v){
