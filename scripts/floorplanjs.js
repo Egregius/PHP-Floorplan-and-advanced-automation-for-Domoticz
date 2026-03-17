@@ -419,11 +419,10 @@ async function ajaxbose(ip, force = false) {
 				const downHtml = `<button class="btn-action thumbs-down" onclick="spotifyAction('${data.trackid}', 'thumbs_down', '${ip}')">👎</button>`;
 				setHTML('thumbs-down-wrap', downHtml, force);
 			
-				// Thumbs Up (Naar TOP playlist)
-				// Als data.top bestaat (omdat hij al in de lijst staat), geven we een gevuld hartje of andere class
-				const upCls = data.top ? 'btn-action thumbs-up active' : 'btn-action thumbs-up';
-				const upIcon = data.top ? '❤️' : '👍';
-				const upHtml = `<button class="${upCls}" onclick="spotifyAction('${data.trackid}', 'thumbs_up', '${ip}')">${upIcon}</button>`;
+				const isTop = (data.top === true || data.top === 1 || data.top === "true");
+				const upIcon = isTop ? '❤️' : '👍';
+				const upCls = isTop ? 'btn-action thumbs-up active' : 'btn-action thumbs-up';
+				const upHtml = `<button class="${upCls}" onclick="spotifyAction('${data.trackid}', 'thumbs_up', '${ip}', ${isTop})">${upIcon}</button>`;
 				setHTML('thumbs-up-wrap', upHtml, force);
 			} else {
 				setHTML('thumbs-down-wrap', '', force);
