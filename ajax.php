@@ -15,7 +15,15 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$d['track']=$nowplaying['track'];
 		$d['art']=$nowplaying['art'];
 		$d['playlist']=$nowplaying['ContentItem']['itemName'];
-		$d['trackid']=str_replace('spotify:track:','',$nowplaying['trackID']);
+		$trackid=str_replace('spotify:track:','',$nowplaying['trackID']);
+		$d['trackid']=$trackid;
+		
+		$db = Database::getInstance();
+		$stmt = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? AND playlist_id = '4O0G5e4lsBRG5CV485iolD' LIMIT 1");
+		$stmt->execute([$trackid]);
+		if ($stmt->fetch()) {
+			$response['top'] = true;
+		}
 	} else {
 		$d['artist']='';
 		$d['track']='';
