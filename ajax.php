@@ -22,7 +22,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$stmt = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? AND playlist_id = '4O0G5e4lsBRG5CV485iolD' LIMIT 1");
 		$stmt->execute([$trackid]);
 		if ($stmt->fetch()) {
-			$response['top'] = true;
+			$d['top'] = true;
 		}
 	} else {
 		$d['artist']='';
