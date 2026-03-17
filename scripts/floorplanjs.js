@@ -445,21 +445,55 @@ async function ajaxbose(ip, force = false) {
 async function spotifyAction(trackId, action, ip) {
     if (window.isSubmitting) return;
     window.isSubmitting = true;
+
     try {
         if (action === 'thumbs_down') {
+            showToast("Verwijderd uit alle lijsten 🗑️");
             ajaxcontrolbose(ip, 'skip', 'next');
+        } else {
+            showToast("TOP bijwerken... ⏳");
         }
-        await fetch('//secure.egregius.be/spotify/actions.php', {
+
+        const response = await fetch('//secure.egregius.be/spotify/actions.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `track_id=${trackId}&action=${action}`
         });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            if (action === 'thumbs_up') {
+                showToast(result.mode === 'added' ? "Toegevoegd aan TOP ❤️" : "Verwijderd uit TOP 💔");
+            }
+        }
+        
         ajaxbose(ip, true);
     } catch (err) {
+        showToast("Fout bij uitvoeren actie ❌");
         console.error('Spotify actie mislukt:', err);
     } finally {
         window.isSubmitting = false;
     }
+}
+function showToast(message) {
+    let toast = document.getElementById('spotify-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'spotify-toast';
+        document.body.appendChild(toast);
+    }
+    toast.innerText = message;
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    
+    // Reset de timer als er snel achter elkaar geklikt wordt
+    if (window.toastTimeout) clearTimeout(window.toastTimeout);
+    
+    window.toastTimeout = setTimeout(() => { 
+        toast.style.opacity = '0';
+        setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }, 2500);
 }
 // ─────────────────────────────────────────────────────────────────────────────
 function handleResponse(device,v){
