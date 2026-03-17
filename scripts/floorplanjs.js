@@ -445,17 +445,15 @@ async function ajaxbose(ip, force = false) {
 async function spotifyAction(trackId, action, ip) {
     if (window.isSubmitting) return;
     window.isSubmitting = true;
-    
     try {
-        // We sturen dit naar een apart php script (bijv. spotify_action.php)
-        // of je bestaande ajax.php als je die daarop aanpast.
+        if (action === 'thumbs_down') {
+            ajaxcontrolbose(ip, 'skip', 'next');
+        }
         await fetch('//secure.egregius.be/spotify/actions.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `track_id=${trackId}&action=${action}`
         });
-        
-        // Direct verversen om de nieuwe status (bijv. het hartje) te zien
         ajaxbose(ip, true);
     } catch (err) {
         console.error('Spotify actie mislukt:', err);
