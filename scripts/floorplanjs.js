@@ -351,12 +351,21 @@ function bose(device, ip) {
     if (myAjaxMedia) clearInterval(myAjaxMedia);
     window.isSubmitting = false;
     const displayName = boseNames[ip] || `Bose ${ip}`;
+    
     let html = `<div class="fix" id="bose">
                     <span class="bose-label">${displayName}</span>
                     <a href="javascript:navigator_Go('floorplan.bose.php?ip=${device}');">Configureer</a>
                 </div>`;
+    
+    // De knoppen-container bovenaan
+    html += `<div class="bose-actions-header">
+                <div id="thumbs-down-wrap"></div>
+                <button class="close-btn" onclick="clearInterval(myAjaxMedia); setView('floorplan');">✕</button>
+                <div id="thumbs-up-wrap"></div>
+            </div>`;
+
     html += `<div class="fix bose"><br><br><br><br><div id="art"></div><br><br><br><br><br><br><h4 id="artist"></h4><span id="track"></span><br><div id="volume"></div><br><br><div id="power"></div></div>`;
-    html += `<button class="close-btn" onclick="clearInterval(myAjaxMedia); setView('floorplan');">✕</button>`;
+    
     setHTML('floorplantemp', html);
     setView('floorplantemp');
     ajaxbose(ip, true);
@@ -405,6 +414,21 @@ async function ajaxbose(ip, force = false) {
                 powerHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${shortLabel}</button>`;
             });
             setHTML('power', powerHtml, true);
+            if (data.source === "SPOTIFY" && data.trackid) {
+				// Thumbs Down (Verwijderen uit playlists)
+				const downHtml = `<button class="btn-action thumbs-down" onclick="spotifyAction('${data.trackid}', 'thumbs_down', '${ip}')">👎</button>`;
+				setHTML('thumbs-down-wrap', downHtml, force);
+			
+				// Thumbs Up (Naar TOP playlist)
+				// Als data.top bestaat (omdat hij al in de lijst staat), geven we een gevuld hartje of andere class
+				const upCls = data.top ? 'btn-action thumbs-up active' : 'btn-action thumbs-up';
+				const upIcon = data.top ? '❤️' : '👍';
+				const upHtml = `<button class="${upCls}" onclick="spotifyAction('${data.trackid}', 'thumbs_up', '${ip}')">${upIcon}</button>`;
+				setHTML('thumbs-up-wrap', upHtml, force);
+			} else {
+				setHTML('thumbs-down-wrap', '', force);
+				setHTML('thumbs-up-wrap', '', force);
+			}
         } else {
             setText('artist', 'Standby', true);
             setText('track', '', true);
@@ -414,6 +438,27 @@ async function ajaxbose(ip, force = false) {
         }
     } catch (err) {
         console.error('ajaxbose error:', err);
+    } finally {
+        window.isSubmitting = false;
+    }
+}
+async function spotifyAction(trackId, action, ip) {
+    if (window.isSubmitting) return;
+    window.isSubmitting = true;
+    
+    try {
+        // We sturen dit naar een apart php script (bijv. spotify_action.php)
+        // of je bestaande ajax.php als je die daarop aanpast.
+        await fetch('//secure.egregius.be/spotify/actions.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `track_id=${trackId}&action=${action}`
+        });
+        
+        // Direct verversen om de nieuwe status (bijv. het hartje) te zien
+        ajaxbose(ip, true);
+    } catch (err) {
+        console.error('Spotify actie mislukt:', err);
     } finally {
         window.isSubmitting = false;
     }
