@@ -177,16 +177,22 @@ function huisslapen($weg=false) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
-		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius']->s!=0) store('Egregius',0,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius5']->s!=0) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
+		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);
 	} elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
-		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius']->s!=0) store('Egregius',0,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius5']->s!=0) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
+		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);
 	} else {
 		store('weg', 1, basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
-		if($d['vanons']->s!=0) store('vanons',0,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius5']->s!=0) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
+		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);
 	}
 	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
 	sw(['lampkast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','bosekeuken','boseliving','mac','ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
@@ -202,6 +208,7 @@ function huisthuis($msg='') {
 	else lg('Huis thuis');
 	$config = ['main5' => true, 'main24' => false];
 	shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
+	if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
