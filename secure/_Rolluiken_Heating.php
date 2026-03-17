@@ -4,6 +4,7 @@ $zonelevatie=-5.5;
 if ($d['auto']->s=='On') {
 	if (($time>=$t||($d['weg']->s==0&&$d['dag']->s>$zonelevatie))&&$time>strtotime('5:00')&&$time<strtotime('9:00')) {
 		if ($time>=$t) {
+			lg($d['ralex']->s);
 			if ($d['rkamerl']->s>0) sl('rkamerl', 0);
 			if ($d['rkamerr']->s>0) sl('rkamerr', 0);
 			if ($d['rwaskamer']->s>0&&$d['alexslaapt']->s==0) sl('rwaskamer', 0);

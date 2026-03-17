@@ -77,7 +77,7 @@ while (true) {
     usleep(500000);
 }
 $mqtt->disconnect();
-lg("🛑 MQTT {$user} loop stopped ".__FILE__,,'cover');
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,'cover');
 
 function isProcessed(string $topic,string $status,array &$alreadyProcessed): bool {
 	if (isset($alreadyProcessed[$topic]) && $alreadyProcessed[$topic] === $status) return true;
