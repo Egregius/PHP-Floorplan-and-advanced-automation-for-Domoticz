@@ -521,7 +521,7 @@ function showToast(message, needsConfirm = false) {
                 resolve(false);
             };
         } else {
-            window.toastTimeout = setTimeout(hideToast, 5000);
+            window.toastTimeout = setTimeout(hideToast, 3000);
             resolve(true);
         }
         function hideToast() {
