@@ -442,23 +442,27 @@ async function ajaxbose(ip, force = false) {
         window.isSubmitting = false;
     }
 }
-async function spotifyAction(trackId, action, ip) {
+async function spotifyAction(trackId, action, ip, isCurrentlyInTop = false) {
     if (window.isSubmitting) return;
 
-    // Stel de vraag
-    const vraag = (action === 'thumbs_down') 
-        ? "Track overal verwijderen?" 
-        : "Toevoegen/Verwijderen uit TOP?";
-    
+    // Specifieke tekst bepalen op basis van actie en huidige status
+    let vraag = "Ben je zeker?";
+    if (action === 'thumbs_down') {
+        vraag = "Track verwijderen uit alle playlists?";
+    } else if (action === 'thumbs_up') {
+        vraag = isCurrentlyInTop ? "Verwijderen uit TOP playlist?" : "Toevoegen aan TOP playlist?";
+    }
+
     const bevestigd = await showToast(vraag, true);
-    
-    if (!bevestigd) return; // Gebruiker klikte op NEE, stop hier.
+    if (!bevestigd) return;
 
     window.isSubmitting = true;
     try {
         if (action === 'thumbs_down') {
-            showToast("Verwijderen... 🗑️");
+            showToast("Bezig met verwijderen... 🗑️");
             ajaxcontrolbose(ip, 'skip', 'next');
+        } else {
+            showToast("Playlist bijwerken... ⏳");
         }
 
         const response = await fetch('//secure.egregius.be/spotify/actions.php', {
@@ -468,16 +472,23 @@ async function spotifyAction(trackId, action, ip) {
         });
 
         const result = await response.json();
+        
         if (result.status === 'success') {
-            const msg = (action === 'thumbs_up') 
-                ? (result.mode === 'added' ? "Toegevoegd ❤️" : "Verwijderd 💔")
-                : "Succesvol verwijderd";
+            let msg = "Klaar!";
+            if (action === 'thumbs_up') {
+                msg = (result.mode === 'added') ? "Toegevoegd aan TOP ❤️" : "Verwijderd uit TOP 💔";
+            } else {
+                msg = "Succesvol overal verwijderd ✅";
+            }
             showToast(msg);
+        } else {
+            showToast("Spotify gaf een foutmelding ⚠️");
         }
         
         ajaxbose(ip, true);
     } catch (err) {
-        showToast("Fout opgetreden ❌");
+        showToast("Netwerkfout opgetreden ❌");
+        console.error(err);
     } finally {
         window.isSubmitting = false;
     }
