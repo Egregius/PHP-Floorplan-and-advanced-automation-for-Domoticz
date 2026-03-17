@@ -502,6 +502,7 @@ function showToast(message, needsConfirm = false) {
         toast.innerHTML = `<span>${message}</span>`;
         toast.style.display = 'block';
         toast.style.opacity = '1';
+        toast.style.display = 'flex';
         if (needsConfirm) {
             const btnWrap = document.createElement('div');
             btnWrap.style.marginTop = '10px';
