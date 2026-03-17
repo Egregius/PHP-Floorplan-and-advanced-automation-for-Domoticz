@@ -15,11 +15,13 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$d['track']=$nowplaying['track'];
 		$d['art']=$nowplaying['art'];
 		$d['playlist']=$nowplaying['ContentItem']['itemName'];
+		$d['trackid']=str_replace('spotify:track:','',$nowplaying['trackID']);
 	} else {
 		$d['artist']='';
 		$d['track']='';
 		$d['art']='';
 		$d['playlist']='';
+		$d['trackid']='';
 	}
 	$d['volume']=$volume['actualvolume'];
 	echo json_encode($d);
