@@ -72,3 +72,10 @@ if ($d['zolderg']->s=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zo
 
 
 republishmqtt();
+
+
+if ($time>=$t&&$d['Egregius']->s!=0) {
+	shell_exec('php /var/www/setSSID.php \'{"main24":0}\' > /dev/null 2>&1 &');
+	store('Egregius',0,basename(__FILE__).':'.__LINE__);
+	lg('main24 uitgeschakeld','cron3600');
+}

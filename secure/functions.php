@@ -148,7 +148,7 @@ function fhall() {
 		sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
 		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
-		}
+	}
 }
 function fbadkamer($level,$power=false) {
 	global $d,$t;
