@@ -13,7 +13,7 @@ WS_URL = "ws://192.168.2.26:3000"
 CONFIG_PATH = Path("/var/www/eufy_config.json")
 SUPPRESS_FILE = Path("/dev/shm/cache/timestampweg.txt")
 RECONNECT_DELAY = 5
-MAX_TELEGRAM_RETRIES = 3
+MAX_TELEGRAM_RETRIES = 6
 SUPPRESS_WINDOW = 300  # 5 minuten in seconden
 
 def log(msg):

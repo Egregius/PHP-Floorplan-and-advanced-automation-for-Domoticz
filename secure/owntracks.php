@@ -12,6 +12,7 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.20.21'||$_SERVER['REMOTE_ADDR']=='192.168.
 						hassnotify('🏠 Huis thuis', 'door '.$user, 'mobile_app_iphone_guy', false);
 						setCache('remoteauto', time());
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
+						setCache('timestampweg',$time);
 						huisthuis('Huis thuis door '.$user);
 						if ($d['dag']->s>=-2) {
 							sleep(5);
