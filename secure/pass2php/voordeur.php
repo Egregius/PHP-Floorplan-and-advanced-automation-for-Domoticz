@@ -1,2 +1,2 @@
 <?php
-if ($status=='Open') setCache('timestampweg',$time);
+setCache('timestampweg',$time);

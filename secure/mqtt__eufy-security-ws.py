@@ -65,7 +65,7 @@ def send_telegram_photo(image_bytes, config):
             attempt += 1
             try:
                 files = {'photo': ('eufy_doorbell.jpg', image_bytes, 'image/jpeg')}
-                data = {'chat_id': chat_id, 'caption': f'🔔 {datetime.datetime.now().strftime("%H:%M:%S")}'}
+                data = {'chat_id': chat_id}
                 response = requests.post(url, files=files, data=data, timeout=15)
                 
                 if response.status_code == 200:
