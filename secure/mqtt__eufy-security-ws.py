@@ -4,18 +4,42 @@ import json
 import datetime
 import requests
 import time
+import os
 from pathlib import Path
 from websockets import connect
 
 # --- Config ---
 WS_URL = "ws://192.168.2.26:3000"
 CONFIG_PATH = Path("/var/www/eufy_config.json")
+SUPPRESS_FILE = Path("/dev/shm/cache/timestampweg.txt")
 RECONNECT_DELAY = 5
 MAX_TELEGRAM_RETRIES = 3
+SUPPRESS_WINDOW = 300  # 5 minuten in seconden
 
 def log(msg):
     now = datetime.datetime.now().strftime('%d-%m %H:%M:%S')
     print(f"{now} {msg}")
+
+def is_suppressed():
+    """Checkt of we het sturen van foto's moeten onderdrukken."""
+    if not SUPPRESS_FILE.exists():
+        return False
+    
+    try:
+        content = SUPPRESS_FILE.read_text().strip()
+        if not content:
+            return False
+        
+        file_ts = float(content)
+        current_ts = time.time()
+        
+        # Als timestamp minder dan 300 sec geleden is -> onderdrukken
+        if (current_ts - file_ts) < SUPPRESS_WINDOW:
+            return True
+    except Exception as e:
+        log(f"⚠️ Fout bij lezen suppress file: {e}")
+    
+    return False
 
 def load_config():
     if not CONFIG_PATH.exists():
@@ -41,7 +65,7 @@ def send_telegram_photo(image_bytes, config):
             attempt += 1
             try:
                 files = {'photo': ('eufy_doorbell.jpg', image_bytes, 'image/jpeg')}
-                data = {'chat_id': chat_id, 'caption': f'🔔 Deurbel event ({datetime.datetime.now().strftime("%H:%M:%S")})'}
+                data = {'chat_id': chat_id, 'caption': f'🔔 {datetime.datetime.now().strftime("%H:%M:%S")}'}
                 response = requests.post(url, files=files, data=data, timeout=15)
                 
                 if response.status_code == 200:
@@ -50,7 +74,7 @@ def send_telegram_photo(image_bytes, config):
                 else:
                     log(f"⚠️ Telegram fout {response.status_code} op {chat_id}: {response.text}")
                     if attempt < MAX_TELEGRAM_RETRIES:
-                        time.sleep(2) # Korte pauze voor de volgende poging
+                        time.sleep(2)
             except Exception as e:
                 log(f"❌ Netwerkfout Telegram ({chat_id}), poging {attempt}: {e}")
                 if attempt < MAX_TELEGRAM_RETRIES:
@@ -77,14 +101,18 @@ async def handle_eufy():
                     if data.get("type") == "event":
                         event_data = data.get("event", {})
                         
-                        # Directe notificatie bij aanbellen (zonder foto) voor snelheid
                         if event_data.get("name") == "ringing" and event_data.get("value") is True:
-                            log("🔔 Er wordt aangebeld! (Wachten op foto...)")
+                            if is_suppressed():
+                                log("🔕 Aanbellen gedetecteerd, maar onderdrukt via timestamp file.")
+                            else:
+                                log("🔔 Er wordt aangebeld! (Wachten op foto...)")
 
-                        # Verwerken van de foto
                         if event_data.get("name") == "picture":
+                            if is_suppressed():
+                                log("📸 Foto ontvangen, maar verzenden overgeslagen (onderdrukt).")
+                                continue
+
                             log("📸 Foto ontvangen, verwerken...")
-                            
                             val = event_data.get("value", {})
                             inner = val.get("data", {}) if isinstance(val, dict) else {}
                             buffer_list = inner.get("data") if isinstance(inner, dict) else None
@@ -92,7 +120,6 @@ async def handle_eufy():
                             if buffer_list:
                                 try:
                                     image_bytes = bytes([int(x) for x in buffer_list])
-                                    # Gebruik de executor om de async loop niet te blokkeren tijdens de retries
                                     loop = asyncio.get_event_loop()
                                     await loop.run_in_executor(None, send_telegram_photo, image_bytes, config)
                                 except Exception as e:
