@@ -21,6 +21,7 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.20.21'||$_SERVER['REMOTE_ADDR']=='192.168.
 					} elseif($d['weg']->s==0) {
 						sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 						huisthuis('🏠 Huis thuis door '.$user);
+						setCache('timestampweg',$time);
 						if ($d['dag']->s>=-2) {
 							sleep(5);
 							sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
