@@ -204,6 +204,7 @@ function huisslapen($weg=false) {
 }
 
 function huisthuis($msg='') {
+	global $d,$time;
 	store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
