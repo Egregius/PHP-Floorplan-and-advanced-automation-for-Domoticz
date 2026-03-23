@@ -34,8 +34,8 @@ if ($d['auto']->s=='On') {
 		}
 	}
 	if (1==2) { // Lichten aan laten bij feestjes
-		$i=29;
-		if ($d['pirkeuken']->s=='Off'&&$d['wasbak']->s>0&&$d['wasbak']->s<=25&&past('wasbak')>$i) {
+		$i=5;
+		if ($d['wasbak']->s>8&&$d['pirkeuken']->s=='Off'&&$d['wasbak']->s>0&&$d['wasbak']->s<=25&&past('wasbak')>$i*$d['wasbak']->s) {
 			foreach (array(8,7,6,5,4,3,2,1) as $i) {
 				if ($d['wasbak']->s>$i) {
 					sl('wasbak', $i);
@@ -43,8 +43,8 @@ if ($d['auto']->s=='On') {
 				}
 			}
 		}
-		$i=29;
-		if ($d['pirkeuken']->s=='Off'&&$d['snijplank']->s>0&&$d['snijplank']->s<=25&&past('snijplank')>$i) {
+		$i=5;
+		if ($d['snijplank']->s>8&&$d['pirkeuken']->s=='Off'&&$d['snijplank']->s>0&&$d['snijplank']->s<=25&&past('snijplank')>$i*$d['snijplank']->s) {
 			foreach (array(8,7,6,5,4,3,2,1) as $i) {
 				if ($d['snijplank']->s>$i) {
 					sl('snijplank', $i);
