@@ -7,9 +7,9 @@ if (isset($_REQUEST['zon'])) {
 	if (isset($_REQUEST['fetch'])) {
 		$d=fetchdata();
 		echo $d[$_REQUEST['fetch']]->s;
-	} elseif (isset($_REQUEST->s)) {
+	} elseif (isset($_REQUEST['s'])) {
 		$d=fetchdata();
-		echo $d[$_REQUEST->s]->s;
+		echo $d[$_REQUEST['s']]->s;
 	} if (isset($_REQUEST->m)) {
 		$d=fetchdata();
 		if ($_REQUEST->m=='auto'&&$d['auto']->m==0) echo 0;
