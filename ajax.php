@@ -203,8 +203,8 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='skip') {
 		$db = Database::getInstance();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
-		while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-			$bose=$row->s;
+		while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
+			$bose=$row[0];
 		}
 		if ($bose=='On') $_REQUEST['boseip']=101;
 		if ($_REQUEST['action']=='prev') {
