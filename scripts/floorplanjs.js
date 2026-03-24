@@ -374,10 +374,13 @@ function bose(device, ip) {
 async function ajaxbose(ip, force = false) {
     if (window.isSubmitting) return;
     window.isSubmitting = true;
+
     try {
         const data = await ajaxJSON('/ajax.php?bose=' + ip);
         if (!data) return;
+
         if (data.source !== "STANDBY") {
+            // 1. Volume Control
             if (data.volume !== undefined) {
                 let volume = parseInt(data.volume, 10);
                 const levels = [-12, -8, -4, -2, -1, 0, 1, 2, 4, 8, 12];
@@ -393,20 +396,29 @@ async function ajaxbose(ip, force = false) {
                 volHtml += '</div>';
                 setHTML('volume', volHtml, true);
             }
+
+            // 2. Metadata (Artist & Track)
             const artist = (data.source === "BLUETOOTH") ? "Bluetooth" : (data.artist || data.source);
             setText('artist', artist, force);
             setText('track', data.track || '', force);
+
+            // 3. Album Art
             let artHtml = '';
             let img = data.art ? data.art.toString().replace("http://", "https://") : 'None';
-            if (data.source === "BLUETOOTH") artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
-            else if (img.startsWith('http')) artHtml = `<img src="${img}" class="spotify" alt="Art">`;
+            if (data.source === "BLUETOOTH") {
+                artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
+            } else if (img.startsWith('http')) {
+                artHtml = `<img src="${img}" class="spotify" alt="Art">`;
+            }
             setHTML('art', artHtml, force);
 
+            // 4. Playback & Presets
             let powerHtml = '';
             if (data.source === "SPOTIFY") {
                 powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev'); ajaxbose('${ip}')">Prev</button>`;
                 powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next'); ajaxbose('${ip}')">Next</button>`;
             }
+
             const presets = [['EDM - Part 1','1'], ['EDM - Part 2','2'], ['EDM - Part 3','3'], ['Mix - Part 1','4'], ['Mix - Part 2','5'], ['Mix - Part 3','6']];
             presets.forEach(([playlistName, presetId]) => {
                 const cls = (data.playlist === playlistName) ? 'btn btna b3' : 'btn b3';
@@ -416,21 +428,20 @@ async function ajaxbose(ip, force = false) {
             });
             setHTML('power', powerHtml, true);
 
-            // SPOTIFY ACTIES (Thumbs Up / Down / Add)
+            // 5. Spotify Action Buttons (Thumbs Up / Down / Add)
             if (data.source === "SPOTIFY" && data.trackid) {
                 if (data.in_library === true) {
-                    // Track is in library: Toon Thumbs Down (Verwijderen)
+                    // Track IS bekend: toon 👎 en 👍/❤️
                     const downHtml = `<button class="btn-action thumbs-down" onclick="spotifyAction('${data.trackid}', 'thumbs_down', '${ip}')">👎</button>`;
                     setHTML('thumbs-down-wrap', downHtml, force);
             
-                    // Toon TOP (Thumbs Up) knop
                     const isTop = (data.top === true || data.top === 1 || data.top === "true");
                     const upIcon = isTop ? '❤️' : '👍';
                     const upCls = isTop ? 'btn-action thumbs-up active' : 'btn-action thumbs-up';
                     const upHtml = `<button class="${upCls}" onclick="spotifyAction('${data.trackid}', 'thumbs_up', '${ip}', ${isTop})">${upIcon}</button>`;
                     setHTML('thumbs-up-wrap', upHtml, force);
                 } else {
-                    // Track is NIET in library: Thumbs Down verbergen en ADD knop tonen
+                    // Track NIET in library: verberg 👎 en toon ➕ (links van sluitknop)
                     setHTML('thumbs-down-wrap', '', force);
                     const addHtml = `<button class="btn-action add-track" onclick="spotifyAction('${data.trackid}', 'add_to_library', '${ip}')">➕</button>`;
                     setHTML('thumbs-up-wrap', addHtml, force);
@@ -440,6 +451,7 @@ async function ajaxbose(ip, force = false) {
                 setHTML('thumbs-up-wrap', '', force);
             }
         } else {
+            // Standby Mode
             setText('artist', 'Standby', true);
             setText('track', '', true);
             setHTML('art', '', true);
@@ -449,6 +461,7 @@ async function ajaxbose(ip, force = false) {
     } catch (err) {
         console.error('ajaxbose error:', err);
     } finally {
+        // Cruciaal: Vlag altijd vrijgeven zodat interval doorloopt
         window.isSubmitting = false;
     }
 }
