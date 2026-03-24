@@ -454,40 +454,42 @@ async function ajaxbose(ip, force = false) {
 }
 async function spotifyAction(trackId, action, ip, isCurrentlyInTop = false) {
     if (window.isSubmitting) return;
-    let payload = `track_id=${trackId}&action=${action}`;
-
+    
+    let type = null;
     if (action === 'add_to_library') {
-        const choice = await showToast("Toevoegen aan welke lijst?", true, ["EDM", "Pop"]);
-        if (!choice) return;
-        payload += `&type=${choice}`;
-    } else if (action === 'thumbs_down') {
-        const bevestigd = await showToast("Track verwijderen uit alle playlists?", true);
-        if (!bevestigd) return;
-        ajaxcontrolbose(ip, 'skip', 'next');
-    } else if (action === 'thumbs_up') {
-        const vraag = isCurrentlyInTop ? "Verwijderen uit TOP?" : "Toevoegen aan TOP?";
+        type = await showToast("Toevoegen aan welke lijst?", true, ["EDM", "Pop"]);
+        if (!type) {
+            window.isSubmitting = false; // Reset als er gecancelled wordt
+            return;
+        }
+    } else {
+        let vraag = (action === 'thumbs_down') ? "Track verwijderen?" : (isCurrentlyInTop ? "Uit TOP?" : "In TOP?");
         const bevestigd = await showToast(vraag, true);
-        if (!bevestigd) return;
+        if (!bevestigd) {
+            window.isSubmitting = false;
+            return;
+        }
     }
 
     window.isSubmitting = true;
     showToast("Spotify bijwerken... ⏳");
 
     try {
+        let body = `track_id=${trackId}&action=${action}`;
+        if (type) body += `&type=${type}`;
+
         const response = await fetch('//secure.egregius.be/spotify/actions.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: payload
+            body: body
         });
         const result = await response.json();
-        if (result.status === 'success') {
-            showToast(result.message || "Klaar!");
-        } else {
-            showToast("Fout: " + result.message);
-        }
-        ajaxbose(ip, true);
+        showToast(result.message || "Klaar!");
+        
+        // Forceer een refresh na de actie
+        setTimeout(() => { ajaxbose(ip, true); }, 1000);
     } catch (err) {
-        showToast("Netwerkfout ❌");
+        showToast("Fout opgetreden ❌");
     } finally {
         window.isSubmitting = false;
     }
