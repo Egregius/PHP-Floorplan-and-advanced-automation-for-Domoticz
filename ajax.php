@@ -19,11 +19,15 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$d['trackid']=$trackid;
 		
 		$db = Database::getInstance();
+		// Check of de track in TOP staat
 		$stmt = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? AND playlist_id = '4O0G5e4lsBRG5CV485iolD' LIMIT 1");
 		$stmt->execute([$trackid]);
-		if ($stmt->fetch()) {
-			$d['top'] = true;
-		}
+		$d['top'] = (bool)$stmt->fetch();
+
+		// NIEUW: Check of de track überhaupt in een van je bron-lijsten staat (EDM, Pop, Top)
+		$stmtLib = $db->prepare("SELECT 1 FROM track_mapping tm JOIN playlists p ON tm.playlist_id = p.id WHERE tm.track_id = ? AND (p.name LIKE 'EDM - %' OR p.name = 'Ballads + Pop' OR p.name = 'Top') LIMIT 1");
+		$stmtLib->execute([$trackid]);
+		$d['in_library'] = (bool)$stmtLib->fetch();
 	} else {
 		$d['artist']='';
 		$d['track']='';
