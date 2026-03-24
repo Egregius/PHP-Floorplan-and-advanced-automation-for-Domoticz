@@ -379,20 +379,20 @@ async function ajaxbose(ip, force = false) {
         if (!data) return;
         if (data.source !== "STANDBY") {
             if (data.volume !== undefined) {
-				let volume = parseInt(data.volume, 10);
-				const levels = [-12, -8, -4, -2, -1, 0, 1, 2, 4, 8, 12];
-				let volHtml = '<div id="volume-control-group" class="visualizer-centered">';
-				levels.forEach(level => {
-					const isCurrent = (level === 0);
-					const targetVolume = Math.max(0, Math.min(80, volume + level));
-					const heightFactor = isCurrent ? 1.0 : 0.2 + (Math.abs(level) / 15);
-					const cls = isCurrent ? 'btn volume btna' : `btn volume hover ${level < 0 ? 'minus' : 'plus'}`;
-					const clickAction = isCurrent ? '' : `onclick="ajaxcontrolbose('${ip}','volume','${targetVolume}'); ajaxbose('${ip}')"`;
-					volHtml += `<button class="${cls}" style="--h: ${heightFactor}" ${clickAction}>${isCurrent ? volume : ''}</button>`;
-				});
-				volHtml += '</div>';
-				setHTML('volume', volHtml, true);
-			}
+                let volume = parseInt(data.volume, 10);
+                const levels = [-12, -8, -4, -2, -1, 0, 1, 2, 4, 8, 12];
+                let volHtml = '<div id="volume-control-group" class="visualizer-centered">';
+                levels.forEach(level => {
+                    const isCurrent = (level === 0);
+                    const targetVolume = Math.max(0, Math.min(80, volume + level));
+                    const heightFactor = isCurrent ? 1.0 : 0.2 + (Math.abs(level) / 15);
+                    const cls = isCurrent ? 'btn volume btna' : `btn volume hover ${level < 0 ? 'minus' : 'plus'}`;
+                    const clickAction = isCurrent ? '' : `onclick="ajaxcontrolbose('${ip}','volume','${targetVolume}'); ajaxbose('${ip}')"`;
+                    volHtml += `<button class="${cls}" style="--h: ${heightFactor}" ${clickAction}>${isCurrent ? volume : ''}</button>`;
+                });
+                volHtml += '</div>';
+                setHTML('volume', volHtml, true);
+            }
             const artist = (data.source === "BLUETOOTH") ? "Bluetooth" : (data.artist || data.source);
             setText('artist', artist, force);
             setText('track', data.track || '', force);
@@ -401,6 +401,7 @@ async function ajaxbose(ip, force = false) {
             if (data.source === "BLUETOOTH") artHtml = '<img src="/images/bluetooth.png" height="160px" width="auto" alt="bluetooth">';
             else if (img.startsWith('http')) artHtml = `<img src="${img}" class="spotify" alt="Art">`;
             setHTML('art', artHtml, force);
+
             let powerHtml = '';
             if (data.source === "SPOTIFY") {
                 powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','prev'); ajaxbose('${ip}')">Prev</button>`;
@@ -414,20 +415,30 @@ async function ajaxbose(ip, force = false) {
                 powerHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${shortLabel}</button>`;
             });
             setHTML('power', powerHtml, true);
+
+            // SPOTIFY ACTIES (Thumbs Up / Down / Add)
             if (data.source === "SPOTIFY" && data.trackid) {
-				// Thumbs Down (Verwijderen uit playlists)
-				const downHtml = `<button class="btn-action thumbs-down" onclick="spotifyAction('${data.trackid}', 'thumbs_down', '${ip}')">👎</button>`;
-				setHTML('thumbs-down-wrap', downHtml, force);
-			
-				const isTop = (data.top === true || data.top === 1 || data.top === "true");
-				const upIcon = isTop ? '❤️' : '👍';
-				const upCls = isTop ? 'btn-action thumbs-up active' : 'btn-action thumbs-up';
-				const upHtml = `<button class="${upCls}" onclick="spotifyAction('${data.trackid}', 'thumbs_up', '${ip}', ${isTop})">${upIcon}</button>`;
-				setHTML('thumbs-up-wrap', upHtml, force);
-			} else {
-				setHTML('thumbs-down-wrap', '', force);
-				setHTML('thumbs-up-wrap', '', force);
-			}
+                if (data.in_library === true) {
+                    // Track is in library: Toon Thumbs Down (Verwijderen)
+                    const downHtml = `<button class="btn-action thumbs-down" onclick="spotifyAction('${data.trackid}', 'thumbs_down', '${ip}')">👎</button>`;
+                    setHTML('thumbs-down-wrap', downHtml, force);
+            
+                    // Toon TOP (Thumbs Up) knop
+                    const isTop = (data.top === true || data.top === 1 || data.top === "true");
+                    const upIcon = isTop ? '❤️' : '👍';
+                    const upCls = isTop ? 'btn-action thumbs-up active' : 'btn-action thumbs-up';
+                    const upHtml = `<button class="${upCls}" onclick="spotifyAction('${data.trackid}', 'thumbs_up', '${ip}', ${isTop})">${upIcon}</button>`;
+                    setHTML('thumbs-up-wrap', upHtml, force);
+                } else {
+                    // Track is NIET in library: Thumbs Down verbergen en ADD knop tonen
+                    setHTML('thumbs-down-wrap', '', force);
+                    const addHtml = `<button class="btn-action add-track" onclick="spotifyAction('${data.trackid}', 'add_to_library', '${ip}')">➕</button>`;
+                    setHTML('thumbs-up-wrap', addHtml, force);
+                }
+            } else {
+                setHTML('thumbs-down-wrap', '', force);
+                setHTML('thumbs-up-wrap', '', force);
+            }
         } else {
             setText('artist', 'Standby', true);
             setText('track', '', true);
@@ -443,54 +454,45 @@ async function ajaxbose(ip, force = false) {
 }
 async function spotifyAction(trackId, action, ip, isCurrentlyInTop = false) {
     if (window.isSubmitting) return;
-    let vraag = "Ben je zeker?";
-    if (action === 'thumbs_down') {
-        vraag = "Track verwijderen uit alle playlists?";
+    let payload = `track_id=${trackId}&action=${action}`;
+
+    if (action === 'add_to_library') {
+        const choice = await showToast("Toevoegen aan welke lijst?", true, ["EDM", "Pop"]);
+        if (!choice) return;
+        payload += `&type=${choice}`;
+    } else if (action === 'thumbs_down') {
+        const bevestigd = await showToast("Track verwijderen uit alle playlists?", true);
+        if (!bevestigd) return;
+        ajaxcontrolbose(ip, 'skip', 'next');
     } else if (action === 'thumbs_up') {
-        vraag = isCurrentlyInTop ? "Verwijderen uit TOP?" : "Toevoegen aan TOP?";
+        const vraag = isCurrentlyInTop ? "Verwijderen uit TOP?" : "Toevoegen aan TOP?";
+        const bevestigd = await showToast(vraag, true);
+        if (!bevestigd) return;
     }
 
-    const bevestigd = await showToast(vraag, true);
-    if (!bevestigd) return;
-
     window.isSubmitting = true;
-    try {
-        if (action === 'thumbs_down') {
-            showToast("Bezig met verwijderen... 🗑️");
-            ajaxcontrolbose(ip, 'skip', 'next');
-        } else {
-            showToast("Playlist bijwerken... ⏳");
-        }
+    showToast("Spotify bijwerken... ⏳");
 
+    try {
         const response = await fetch('//secure.egregius.be/spotify/actions.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `track_id=${trackId}&action=${action}`
+            body: payload
         });
-
         const result = await response.json();
-        
         if (result.status === 'success') {
-            let msg = "Klaar!";
-            if (action === 'thumbs_up') {
-                msg = (result.mode === 'added') ? "Toegevoegd aan TOP ❤️" : "Verwijderd uit TOP 💔";
-            } else {
-                msg = "Succesvol overal verwijderd ✅";
-            }
-            showToast(msg);
+            showToast(result.message || "Klaar!");
         } else {
-            showToast("Spotify gaf een foutmelding ⚠️");
+            showToast("Fout: " + result.message);
         }
-        
         ajaxbose(ip, true);
     } catch (err) {
-        showToast("Netwerkfout opgetreden ❌");
-        console.error(err);
+        showToast("Netwerkfout ❌");
     } finally {
         window.isSubmitting = false;
     }
 }
-function showToast(message, needsConfirm = false) {
+function showToast(message, needsConfirm = false, choices = null) {
     return new Promise((resolve) => {
         let toast = document.getElementById('spotify-toast');
         if (!toast) {
@@ -500,26 +502,38 @@ function showToast(message, needsConfirm = false) {
         }
         if (window.toastTimeout) clearTimeout(window.toastTimeout);
         toast.innerHTML = `<span>${message}</span>`;
-        toast.style.display = 'block';
-        toast.style.opacity = '1';
         toast.style.display = 'flex';
+        toast.style.opacity = '1';
+
         if (needsConfirm) {
             const btnWrap = document.createElement('div');
             btnWrap.style.marginTop = '10px';
-            btnWrap.innerHTML = `
-                <button id="toast-yes" class="btn btn-s" style="color:#1DB954; font-weight:bold;">JA</button>
-                <button id="toast-no" class="btn btn-s" style="color:#ff4444; margin-left:15px;">NEE</button>
-            `;
+            if (choices) {
+                // Keuzemenu voor EDM / Pop
+                choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-s';
+                    btn.style.margin = '0 5px';
+                    btn.innerText = choice;
+                    btn.onclick = () => { hideToast(); resolve(choice); };
+                    btnWrap.appendChild(btn);
+                });
+                const cancel = document.createElement('button');
+                cancel.innerText = '✕';
+                cancel.className = 'btn btn-s';
+                cancel.onclick = () => { hideToast(); resolve(null); };
+                btnWrap.appendChild(cancel);
+            } else {
+                // Standaard Ja/Nee
+                btnWrap.innerHTML = `
+                    <button id="toast-yes" class="btn btn-s" style="color:#1DB954; font-weight:bold;">JA</button>
+                    <button id="toast-no" class="btn btn-s" style="color:#ff4444; margin-left:15px;">NEE</button>
+                `;
+                toast.appendChild(btnWrap);
+                document.getElementById('toast-yes').onclick = () => { hideToast(); resolve(true); };
+                document.getElementById('toast-no').onclick = () => { hideToast(); resolve(false); };
+            }
             toast.appendChild(btnWrap);
-
-            document.getElementById('toast-yes').onclick = () => {
-                hideToast();
-                resolve(true);
-            };
-            document.getElementById('toast-no').onclick = () => {
-                hideToast();
-                resolve(false);
-            };
         } else {
             window.toastTimeout = setTimeout(hideToast, 3000);
             resolve(true);
