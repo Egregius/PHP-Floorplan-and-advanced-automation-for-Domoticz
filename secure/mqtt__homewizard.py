@@ -168,14 +168,14 @@ def mqtt_publish_teller(key, value):
 
 # --- State updates ---
 def publish_step(key, value):
-#    q = quantize_step(value, step_for_value(value))
+    q = quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
     # Veiligheidscheck: zorg dat last een getal is voor vergelijking
-    if last is None or value != last:
-        state_publish[key] = value
-        state[key] = value
+    if last is None or q != last:
+        state_publish[key] = q
+        state[key] = q
         flush_state()
-        mqtt_publish_key(key, value)
+        mqtt_publish_key(key, q)
 
 def publish_quantized(key, value):
     if value is None: return
