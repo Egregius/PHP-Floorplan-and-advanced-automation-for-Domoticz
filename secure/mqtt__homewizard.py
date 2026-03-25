@@ -141,9 +141,11 @@ def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
     v=abs(value)
-    if v<50:return 1
-    elif v<100: return 2
-    else: return 5
+    if v<20:return 1
+    elif v<50: return 2
+    elif v<100: return 5
+    elif v<500: return 10
+    else: return 20
 
 # --- MQTT ---
 def mqtt_publish_key(key, value):
@@ -168,9 +170,9 @@ def mqtt_publish_teller(key, value):
 
 # --- State updates ---
 def publish_step(key, value):
-    q = quantize_step(value, step_for_value(value))
+    if key == "c": q = value
+    else: q = quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
-    # Veiligheidscheck: zorg dat last een getal is voor vergelijking
     if last is None or q != last:
         state_publish[key] = q
         state[key] = q
@@ -186,8 +188,6 @@ def publish_quantized(key, value):
         q = quantize_0_01(value)
 
     last = teller_publish_state.get(key)
-
-    # FIX: Forceer last naar float als het niet None is om de TypeError te voorkomen
     if last is not None:
         try:
             last = float(last)
