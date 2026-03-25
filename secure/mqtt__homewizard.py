@@ -12,19 +12,15 @@ import paho.mqtt.client as mqtt
 from math import floor
 from math import ceil
 import threading
-
 MQTT_HOST = "192.168.30.22"
 MQTT_PORT = 1883
 MQTT_USER = "mqtt"
 MQTT_PASS = "mqtt"
 MQTT_BASE = "d"
-
 mqtt_client = mqtt.Client(client_id="homewizard_bridge")
 mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
-
 mqtt_connected = False
-_pending_retained_publish = True  # flag voor eerste connect en reconnect
-
+_pending_retained_publish = True
 def log(*args):
     now = datetime.now()
     timestamp = now.strftime('%d-%m %H:%M:%S') + f".{now.microsecond // 1000:03d}"
@@ -35,7 +31,6 @@ def log(*args):
             f.write(log_message + "\n")
     except:
         pass
-
 def publish_all_retained():
     """Publiceer alles naar MQTT met retain=True als broker verbonden"""
     if not mqtt_connected:
@@ -45,7 +40,6 @@ def publish_all_retained():
     for k, v in teller_state.items():
         mqtt_client.publish(f"t/{k}", v, retain=True, qos=1)
     log("📡 Alle retained topics gepubliceerd")
-
 def on_connect(client, userdata, flags, rc):
     global mqtt_connected, _pending_retained_publish
     if rc == 0:
@@ -55,58 +49,43 @@ def on_connect(client, userdata, flags, rc):
             publish_all_retained()
     else:
         log(f"❌ MQTT connect fout: rc={rc}")
-
 mqtt_client.on_connect = on_connect
 mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
 mqtt_client.loop_start()
-
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
 CACHE_FILE = Path("/dev/shm/cache/en.txt")
 TELLER_FILE = Path("/dev/shm/cache/teller.txt")
-
 DEVICES = [
     {"name": "p", "host": "p1dongle"},
     {"name": "z", "host": "energymeter"},
     {"name": "b", "host": "battery"},
 ]
-
 RECONNECT_DELAY = 5
 _last_time_published = None
-
 state = {"n": 0, "a": 0, "z": 0, "b": 0, "c": 0}
 state_publish = {}
 teller_state = {"import": 0, "export": 0, "gas": 0, "water": 0}
 teller_publish_state = {"import": 0, "export": 0, "gas": 0, "water": 0}
-
-# --- Cache Laden ---
 if CACHE_FILE.exists():
     try:
         data = json.loads(CACHE_FILE.read_text())
-        # Zorg dat alle ingeladen waarden floats/ints zijn
         cleaned_data = {k: float(v) for k, v in data.items()}
         state.update(cleaned_data)
         state_publish.update(cleaned_data)
     except Exception as e:
         log(f"⚠️ Cache inleesfout (en.txt): {e}")
-
 if TELLER_FILE.exists():
     try:
         data = json.loads(TELLER_FILE.read_text())
-        # Zorg dat alle ingeladen waarden floats/ints zijn
         cleaned_data = {k: float(v) for k, v in data.items()}
         teller_state.update(cleaned_data)
         teller_publish_state.update(cleaned_data)
     except Exception as e:
         log(f"⚠️ Cache inleesfout (teller.txt): {e}")
-
-
-# --- Tokens ---
 def load_tokens():
     return json.loads(TOKEN_FILE.read_text()) if TOKEN_FILE.exists() else {}
-
 def save_tokens(tokens):
     TOKEN_FILE.write_text(json.dumps(tokens, indent=2))
-
 def request_token(host, timeout=60):
     url = f"https://{host}/api/user"
     payload = {"name": "local/homewizard_mqtt", "type": "script"}
@@ -122,8 +101,6 @@ def request_token(host, timeout=60):
             pass
         time.sleep(1)
     raise TimeoutError(f"❌ Timeout na {timeout}s")
-
-# --- Cache Opslaan ---
 def flush_state():
     try:
         CACHE_FILE.write_text(json.dumps(state))
@@ -135,8 +112,6 @@ def flush_teller_state():
         TELLER_FILE.write_text(json.dumps(teller_state))
     except Exception as e:
         log("Fout bij schrijven teller cache:", e)
-
-# --- Quantization ---
 def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
@@ -146,8 +121,6 @@ def step_for_value(value):
     elif v<100: return 5
     elif v<500: return 10
     else: return 20
-
-# --- MQTT ---
 def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
@@ -157,7 +130,6 @@ def mqtt_publish_key(key, value):
             sys.exit(1)
     else:
         log(f"⚠️ Kan {key} niet publiceren: niet verbonden")
-
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
@@ -167,8 +139,6 @@ def mqtt_publish_teller(key, value):
             sys.exit(1)
     else:
         log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")
-
-# --- State updates ---
 def publish_step(key, value):
     if key == "c": q = value
     else: q = quantize_step(value, step_for_value(value))
@@ -178,38 +148,31 @@ def publish_step(key, value):
         state[key] = q
         flush_state()
         mqtt_publish_key(key, q)
-
 def publish_quantized(key, value):
     if value is None: return
-
     if key=="water" or key=="gas":
         q = value
     else:
         q = quantize_0_01(value)
-
     last = teller_publish_state.get(key)
     if last is not None:
         try:
             last = float(last)
         except:
             last = None
-
     if last is None or q > last:
         teller_publish_state[key] = q
         teller_state[key] = q
         flush_teller_state()
         mqtt_publish_teller(key, q)
-
 def update_state(key, value):
     if value is not None:
         publish_step(key, value)
-
 def update_teller(import_kwh, export_kwh, gas, water):
     if import_kwh is not None: publish_quantized("import", import_kwh)
     if export_kwh is not None: publish_quantized("export", export_kwh)
     if gas is not None: publish_quantized("gas", gas)
     if water is not None: publish_quantized("water", water)
-
 def process_measurement(name, data):
     if name=="p":
         update_state("n", int(round(data.get("power_w",0))))
@@ -226,8 +189,6 @@ def process_measurement(name, data):
         update_state("c", int(round(data.get("state_of_charge_pct",0))))
     else:
         update_state("z", -int(round(data.get("power_w",0))))
-
-# --- WebSocket handler ---
 async def handle_device(device, token, ssl_context):
     name, host = device["name"], device["host"]
     url = f"wss://{host}/api/ws"
@@ -253,19 +214,15 @@ async def handle_device(device, token, ssl_context):
         except Exception as e:
             log(f"❌ {name} (verbinding error): {e}")
         await asyncio.sleep(RECONNECT_DELAY)
-
-# --- Main ---
 async def main():
     log("🚀 HomeWizard Energy TMPFS Bridge")
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname=False
     ssl_context.verify_mode=ssl.CERT_NONE
-
     try:
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     except: pass
-
     tokens = load_tokens()
     for dev in DEVICES:
         if dev["name"] not in tokens:
@@ -274,15 +231,12 @@ async def main():
                 save_tokens(tokens)
             except Exception as e:
                 log(f"❌ {dev['name']}: {e}")
-
     tasks = [asyncio.create_task(handle_device(dev, tokens[dev["name"]], ssl_context))
              for dev in DEVICES if dev["name"] in tokens]
-
     if tasks:
         await asyncio.gather(*tasks)
     else:
         log("❌ Geen devices beschikbaar")
-
 if __name__=="__main__":
     try:
         asyncio.run(main())
