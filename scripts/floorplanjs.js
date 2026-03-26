@@ -823,6 +823,7 @@ function handleResponse(device,v){
 				case 'p': {
 					d[device] = v;
 					const pirZone = device.replace('pir', '');
+					forceTimes=true;
 					updateDeviceTime(device);
 					if (pirZone === 'hall' || pirZone === 'living') {
 						if (v.s === 1) { addClass('z'+pirZone+'a','motion'); addClass('z'+pirZone+'b','motion'); }
@@ -836,6 +837,7 @@ function handleResponse(device,v){
 				case 'c':
 					if (device !== 'raamhall') {
 						d[device] = v;
+						forceTimes=true;
 						updateDeviceTime(device);
 						if (v.s === 1) addClass(device, 'red');
 						else           removeClass(device, 'red');
