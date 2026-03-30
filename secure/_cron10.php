@@ -102,5 +102,3 @@ elseif ($d['grohered']->s=='On'&&past('8keuken_8')>1800&&$d['n']>100&&$d['b']<0&
 if ($d['regenpomp']->s=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off');
 
 if ($d['water']->s=='On'&&past('water')>=$d['water']->m) sw('water', 'Off');
-
-
