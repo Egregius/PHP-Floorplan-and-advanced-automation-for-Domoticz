@@ -240,8 +240,12 @@ if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
 	elseif ($d['n']<-800&&$d['b']>0&&$d['c']>50&&$d['living_temp']->s<21) $Setliving=21;
 	elseif ($d['n']<-500&&$d['b']>0&&$d['c']>80&&$d['living_temp']->s<21) $Setliving=21;
 }*/
-if($d['living_set']->m==0&&$d['grohered']->s=='On'&&$d['n']<-400&&$d['b']>=0) {
-	$Setliving=23;
+if($d['living_set']->m==0&&$d['grohered']->s=='On') {
+	if($d['n']<-600&&$d['b']>=0&&$d['c']>=0) $Setliving=23;
+	elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=40) $Setliving=23;
+	elseif($d['n']<-200&&$d['b']>=0&&$d['c']>=70) $Setliving=23;
+	elseif($d['n']<0&&$d['b']>=0&&$d['c']>=90) $Setliving=23;
+	lg('Setliving=23','daikin');
 }
 
 if ($d['living_set']->s!=$Setliving) {
