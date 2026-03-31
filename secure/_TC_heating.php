@@ -245,10 +245,10 @@ if($d['living_set']->m==0) {
 	elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=40) $Setliving=24;
 	elseif($d['n']<-200&&$d['b']>=0&&$d['c']>=70) $Setliving=25;
 	elseif($d['n']<0&&$d['b']>=0&&$d['c']>=90) $Setliving=26;
-	if($d['living_set']->s!=$Setliving) lg('Setliving=23, net='.$d['n'].', bat='.$d['b'].', charge='.$d['c'],'daikin');
+	if($d['living_set']->s!=$Setliving&&past('living_set')>50) lg('Setliving=23, net='.$d['n'].', bat='.$d['b'].', charge='.$d['c'],'daikin');
 }
 
-if ($d['living_set']->s!=$Setliving) {
+if ($d['living_set']->s!=$Setliving&&past('living_set')>50) {
 	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
 	$living_set=$Setliving;
 	$d['living_set']->s=$Setliving;
