@@ -99,7 +99,7 @@ while (true) {
     usleep(500000);
 }
 $mqtt->disconnect();
-lg("🛑 MQTT {$user} loop stopped ".__FILE__,,'mediaplayer');
+lg("🛑 MQTT {$user} loop stopped ".__FILE__,'mediaplayer');
 
 function stoploop() {
     global $mqtt,$lock_file;
