@@ -242,10 +242,10 @@ if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
 }*/
 if($d['living_set']->m==0) {
 	if($d['n']<-600&&$d['b']>=0&&$d['c']>=0) $Setliving=23;
-	elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=40) $Setliving=23;
-	elseif($d['n']<-200&&$d['b']>=0&&$d['c']>=70) $Setliving=23;
-	elseif($d['n']<0&&$d['b']>=0&&$d['c']>=90) $Setliving=23;
-	if($d['living_set']->s!=23) lg('Setliving=23, net='.$d['n'].', bat='.$d['b'].', charge='.$d['c'],'daikin');
+	elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=40) $Setliving=24;
+	elseif($d['n']<-200&&$d['b']>=0&&$d['c']>=70) $Setliving=25;
+	elseif($d['n']<0&&$d['b']>=0&&$d['c']>=90) $Setliving=26;
+	if($d['living_set']->s!=$Setliving) lg('Setliving=23, net='.$d['n'].', bat='.$d['b'].', charge='.$d['c'],'daikin');
 }
 
 if ($d['living_set']->s!=$Setliving) {
