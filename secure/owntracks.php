@@ -1,6 +1,6 @@
 <?php
 require '/var/www/html/secure/functions.php';
-if ($_SERVER['REMOTE_ADDR']=='192.168.20.21'||$_SERVER['REMOTE_ADDR']=='192.168.2.203') {
+//if ($_SERVER['REMOTE_ADDR']=='192.168.20.21'||$_SERVER['REMOTE_ADDR']=='192.168.2.201') {
 	if (isset($_GET['user'])) {
 		if ($_GET['user']=='Guy'||$_GET['user']=='Kirby') {
 			if (isset($_GET['event'])) {
@@ -31,5 +31,5 @@ if ($_SERVER['REMOTE_ADDR']=='192.168.20.21'||$_SERVER['REMOTE_ADDR']=='192.168.
 			} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET, true).PHP_EOL.'Event niet gevonden');
 		} else telegram('domoticz/owntracks.php:'.__LINE__.PHP_EOL.'Onbekende gebruiker: '.$_GET['user']);
 	} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET,true).PHP_EOL.'User niet gevonden');
-} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET,true).PHP_EOL.$_SERVER['REMOTE_ADDR']);
+//} else telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET,true).PHP_EOL.$_SERVER['REMOTE_ADDR']);
 //telegram('domoticz/owntracks.php:'.__LINE__.print_r($_GET,true).PHP_EOL.$_SERVER['REMOTE_ADDR']);
