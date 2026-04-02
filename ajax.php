@@ -32,9 +32,9 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$d['top'] = (bool)$stmt->fetch();
 
 		// NIEUW: Check of de track überhaupt in een van je bron-lijsten staat (EDM, Pop, Top)
-		$stmtLib = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? LIMIT 1");
-		$stmtLib->execute([$trackid]);
-		$d['in_library'] = (bool)$stmtLib->fetch();
+//		$stmtLib = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? LIMIT 1");
+//		$stmtLib->execute([$trackid]);
+//		$d['in_library'] = (bool)$stmtLib->fetch();
 		$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 		$d['volume']=$volume['actualvolume'];
 	} else {

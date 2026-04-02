@@ -430,7 +430,7 @@ async function ajaxbose(ip, force = false) {
 
             // 5. Spotify Action Buttons (Thumbs Up / Down / Add)
             if (data.source === "SPOTIFY" && data.trackid) {
-                if (data.in_library === true) {
+//                if (data.in_library === true) {
                     // Track IS bekend: toon 👎 en 👍/❤️
                     const downHtml = `<button class="btn-action thumbs-down" onclick="spotifyAction('${data.trackid}', 'thumbs_down', '${ip}')">👎</button>`;
                     setHTML('thumbs-down-wrap', downHtml, force);
@@ -440,12 +440,13 @@ async function ajaxbose(ip, force = false) {
                     const upCls = isTop ? 'btn-action thumbs-up active' : 'btn-action thumbs-up';
                     const upHtml = `<button class="${upCls}" onclick="spotifyAction('${data.trackid}', 'thumbs_up', '${ip}', ${isTop})">${upIcon}</button>`;
                     setHTML('thumbs-up-wrap', upHtml, force);
-                } else {
+ //               }
+ 				/* else {
                     // Track NIET in library: verberg 👎 en toon ➕ (links van sluitknop)
                     setHTML('thumbs-down-wrap', '', force);
                     const addHtml = `<button class="btn-action add-track" onclick="spotifyAction('${data.trackid}', 'add_to_library', '${ip}')">➕</button>`;
                     setHTML('thumbs-up-wrap', addHtml, force);
-                }
+                }*/
             } else {
                 setHTML('thumbs-down-wrap', '', force);
                 setHTML('thumbs-up-wrap', '', force);
