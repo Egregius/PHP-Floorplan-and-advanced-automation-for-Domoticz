@@ -21,9 +21,9 @@
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs" id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
+		<div class="abs z2" id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
 		<div class="abs weg" id="weg" onclick="weg();"><img src="/images/Thuis.png" id="wegimg"></div>
-		<div class="abs center zon">
+		<div class="abs center zon z1">
 			<div class="sun-times">
 				☀️ <span id="dag"></span><br>
 				<span id="Tstart"></span><br>
