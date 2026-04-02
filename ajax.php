@@ -1,13 +1,14 @@
 <?php
 require 'secure/functions.php';
 require '/var/www/authentication.php';
-session_write_close();
+//session_write_close();
 if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') {
 	if($_REQUEST['action']=='garmingpx') exec('curl -4 http://192.168.30.2:9000/hooks/garmingpx -H "Content-Type: application/json" &');
 	elseif($_REQUEST['action']=='googlemaps') exec('curl -4 http://192.168.20.21:9000/hooks/googlemaps -H "Content-Type: application/json" &');
 	elseif($_REQUEST['action']=='garminbadges') exec('curl -4 http://192.168.20.21:9000/hooks/garminbadges -H "Content-Type: application/json" &');
 	elseif($_REQUEST['action']=='trakt') exec('curl -4 http://192.168.20.21:9000/hooks/trakt -H "Content-Type: application/json" &');
-	else exec('curl -s http://192.168.20.21/secure/runsync.php?sync='.$_REQUEST['action'].' &');
+	elseif($_REQUEST['action']=='weegschaal') exec('curl -4 http://192.168.20.21:9000/hooks/weegschaal -H "Content-Type: application/json" &');
+	exit;
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
 elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107) {
@@ -44,13 +45,6 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$d['trackid']='';
 	}
 	echo json_encode($d);
-	exit;
-}
-elseif (isset($_REQUEST['media'])) {
-	$ctx=stream_context_create(array('http'=>array('timeout'=>2)));
-	$data=array();
-	$data['pfsense']=json_decode(@file_get_contents('https://pfsense.egregius.be:44300/egregius.php', false, $ctx), true);
-	echo json_encode($data);
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST['action'])) {
