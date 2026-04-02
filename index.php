@@ -21,7 +21,7 @@
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs z2" id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
+		<div class="abs z3" id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
 		<div class="abs weg" id="weg" onclick="weg();"><img src="/images/Thuis.png" id="wegimg"></div>
 		<div class="abs center zon z1">
 			<div class="sun-times">
@@ -42,13 +42,13 @@
 				<span id="mint"></span>
 			</div>
 			<div class="abs z2" id="sirene"></div>
-			<div class="abs i48" id="voordeur"></div>
-			<div class="abs i48" id="wc"></div>
-			<div class="abs i48" id="garage"></div>
-			<div class="abs i48" id="garageled"></div>
-			<div class="abs i48" id="zolderg"></div>
-			<div class="abs" id="inkom" onclick="dimmer('inkom')"></div>
-			<div class="abs" id="hall" onclick="dimmer('hall')"></div>
+			<div class="abs z1 i48" id="voordeur"></div>
+			<div class="abs z1 i48" id="wc"></div>
+			<div class="abs z1 i48" id="garage"></div>
+			<div class="abs z1 i48" id="garageled"></div>
+			<div class="abs z1 i48" id="zolderg"></div>
+			<div class="abs z1" id="inkom" onclick="dimmer('inkom')"></div>
+			<div class="abs z1" id="hall" onclick="dimmer('hall')"></div>
 			<div class="abs yellow" id="rbureel"></div>
 			<div class="abs yellow" id="rkeukenl"></div>
 			<div class="abs yellow" id="rkeukenr"></div>
@@ -161,16 +161,16 @@
 				<div class="abs" id="bose106"></div>
 				<div class="abs" id="bose107"></div>
 				<div class="abs z1 i48" id="lampkast"></div>
-				<div class="abs z" id="alex" onclick="dimmer('alex')"></div>
-				<div class="abs z" id="eettafel" onclick="dimmer('eettafel')"></div>
-				<div class="abs z" id="bureellinks" onclick="dimmer('bureellinks')"></div>
-				<div class="abs z" id="bureelrechts" onclick="dimmer('bureelrechts')"></div>
-				<div class="abs z" id="kamer" onclick="dimmer('kamer')"></div>
-				<div class="abs z" id="lichtbadkamer" onclick="dimmer('lichtbadkamer')"></div>
-				<div class="abs z" id="zithoek" onclick="dimmer('zithoek')"></div>
-				<div class="abs z" id="wasbak" onclick="dimmer('wasbak')"></div>
-				<div class="abs z" id="snijplank" onclick="dimmer('snijplank')"></div>
-				<div class="abs z" id="terras" onclick="dimmer('terras')"></div>
+				<div class="abs z1" id="alex" onclick="dimmer('alex')"></div>
+				<div class="abs z1" id="eettafel" onclick="dimmer('eettafel')"></div>
+				<div class="abs z1" id="bureellinks" onclick="dimmer('bureellinks')"></div>
+				<div class="abs z1" id="bureelrechts" onclick="dimmer('bureelrechts')"></div>
+				<div class="abs z1" id="kamer" onclick="dimmer('kamer')"></div>
+				<div class="abs z1" id="lichtbadkamer" onclick="dimmer('lichtbadkamer')"></div>
+				<div class="abs z1" id="zithoek" onclick="dimmer('zithoek')"></div>
+				<div class="abs z1" id="wasbak" onclick="dimmer('wasbak')"></div>
+				<div class="abs z1" id="snijplank" onclick="dimmer('snijplank')"></div>
+				<div class="abs z1" id="terras" onclick="dimmer('terras')"></div>
 				<div class="abs z1 i48" id="tuin"></div>
 				<div class="abs z1 i48" id="tuintafel"></div>
 				<div class="abs z1 i48" id="steenterras"></div>
