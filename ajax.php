@@ -3,7 +3,7 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 session_write_close();
 if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') {
-	if($_REQUEST['action']=='garmingpx') exec('curl -s http://192.168.30.2:9000/hooks/garmingpx &');
+	if($_REQUEST['action']=='garmingpx') exec('curl -4 http://192.168.30.2:9000/hooks/garmingpx -H "Content-Type: application/json" &');
 	else exec('curl -s http://192.168.20.21/secure/runsync.php?sync='.$_REQUEST['action'].' &');
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
