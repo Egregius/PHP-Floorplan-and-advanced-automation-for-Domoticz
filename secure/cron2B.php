@@ -38,18 +38,18 @@ foreach ($devices as $ip => $vol) {
 					} elseif(past('boseliving')<60) {
 						if ($status['shuffleSetting']=='SHUFFLE_OFF') {
 							bosekey("SHUFFLE_ON", 0, 101);
-						} else {
-							lg(print_r($status,true),'cron2');
-							$db = Database::getInstance();
-							$stmt ??= $db->prepare("SELECT track_id FROM `track_mapping` WHERE `pos` = 0");
-							$stmt->execute();
-							$skiptracks=[];
-							foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$track_id]) {
-								$skiptracks[]=$track_id;
-							}
-							$current_id=str_replace('spotify:track:','',$status['trackID']);
-							if (in_array($current_id, $skiptracks)) bosekey("NEXT_TRACK", 0, 101);;
+						} 
+						//lg(print_r($status,true),'cron2');
+						$db = Database::getInstance();
+						$stmt ??= $db->prepare("SELECT track_id FROM `track_mapping` WHERE `pos` = 0");
+						$stmt->execute();
+						$skiptracks=[];
+						foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$track_id]) {
+							$skiptracks[]=$track_id;
 						}
+						$current_id=str_replace('spotify:track:','',$status['trackID']);
+						if (in_array($current_id, $skiptracks)) bosekey("NEXT_TRACK", 0, 101);;
+						
 					}
 				}
 				
