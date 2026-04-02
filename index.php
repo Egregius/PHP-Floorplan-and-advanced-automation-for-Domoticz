@@ -21,8 +21,8 @@
 		<script>document.addEventListener('DOMContentLoaded',function(){setView('floorplan')});</script>
 	</head>
 	<body class="floorplan">
-		<div class="abs " id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
-		<div class="abs weg z" id="weg" onclick="weg();"><img src="/images/Thuis.png" id="wegimg"></div>
+		<div class="abs" id="clock"><a href="#" id="time" onclick="forceReset();"><?= date("G:i:s");?></a></div>
+		<div class="abs weg" id="weg" onclick="weg();"><img src="/images/Thuis.png" id="wegimg"></div>
 		<div class="abs center zon">
 			<div class="sun-times">
 				☀️ <span id="dag"></span><br>
@@ -42,13 +42,13 @@
 				<span id="mint"></span>
 			</div>
 			<div class="abs z2" id="sirene"></div>
-			<div class="abs z1 i48" id="voordeur"></div>
-			<div class="abs z1 i48" id="wc"></div>
-			<div class="abs z1 i48" id="garage"></div>
-			<div class="abs z1 i48" id="garageled"></div>
-			<div class="abs z1 i48" id="zolderg"></div>
-			<div class="abs z" id="inkom" onclick="dimmer('inkom')"></div>
-			<div class="abs z" id="hall" onclick="dimmer('hall')"></div>
+			<div class="abs i48" id="voordeur"></div>
+			<div class="abs i48" id="wc"></div>
+			<div class="abs i48" id="garage"></div>
+			<div class="abs i48" id="garageled"></div>
+			<div class="abs i48" id="zolderg"></div>
+			<div class="abs" id="inkom" onclick="dimmer('inkom')"></div>
+			<div class="abs" id="hall" onclick="dimmer('hall')"></div>
 			<div class="abs yellow" id="rbureel"></div>
 			<div class="abs yellow" id="rkeukenl"></div>
 			<div class="abs yellow" id="rkeukenr"></div>
@@ -254,7 +254,6 @@
 						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b3">Weegschaal</button>
 						<button onclick="ajaxcontrol('runsync','runsync','trakt');setView('floorplan');" class="btn b3">trakt.tv</button>
 					</div>
-					<div class="abs z2" id="log"></div>
 				</div>
 				<div class="fix" id="mediasidebar">
 					<br><br><br><br><br><br><br><br>
