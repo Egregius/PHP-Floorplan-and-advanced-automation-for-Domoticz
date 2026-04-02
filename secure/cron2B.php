@@ -35,11 +35,11 @@ foreach ($devices as $ip => $vol) {
 							if($vol['actualvolume']>0) bosevolume(0,101, 'TV aan');
 						}
 						}
-					} elseif(past('boseliving')<60) {
+					} elseif(past('boseliving')<600) {
 						if ($status['shuffleSetting']=='SHUFFLE_OFF') {
 							bosekey("SHUFFLE_ON", 0, 101);
 						} 
-						//lg(print_r($status,true),'cron2');
+						lg(print_r($status,true),'cron2');
 						$db = Database::getInstance();
 						$stmt ??= $db->prepare("SELECT track_id FROM `track_mapping` WHERE `pos` = 0");
 						$stmt->execute();
