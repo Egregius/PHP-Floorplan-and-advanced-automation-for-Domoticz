@@ -275,13 +275,13 @@
 					<div id="zolder_temp_display" class="temp-display"></div>
 					<div id="zolder_temp_trend" class="trend-arrow-container"></div>
 				</div>
-				<div class="abs z" id="Rrliving" onclick="roller('rliving');"></div>
-				<div class="abs z" id="Rrbureel" onclick="roller('rbureel');"></div>
-				<div class="abs z" id="Rrkeukenl" onclick="roller('rkeukenl');"></div>
-				<div class="abs z" id="Rrkamerl" onclick="roller('rkamerl');"></div>
-				<div class="abs z" id="Rrkamerr" onclick="roller('rkamerr');"></div>
-				<div class="abs z" id="Rrwaskamer" onclick="roller('rwaskamer');"></div>
-				<div class="abs z" id="Rralex" onclick="roller('ralex');"></div>
+				<div class="abs z1" id="Rrliving" onclick="roller('rliving');"></div>
+				<div class="abs z1" id="Rrbureel" onclick="roller('rbureel');"></div>
+				<div class="abs z1" id="Rrkeukenl" onclick="roller('rkeukenl');"></div>
+				<div class="abs z1" id="Rrkamerl" onclick="roller('rkamerl');"></div>
+				<div class="abs z1" id="Rrkamerr" onclick="roller('rkamerr');"></div>
+				<div class="abs z1" id="Rrwaskamer" onclick="roller('rwaskamer');"></div>
+				<div class="abs z1" id="Rralex" onclick="roller('ralex');"></div>
 				<div class="abs z2 living_set" id="living_set" onclick="setpoint('living');"></div>
 				<div class="abs z2 badkamer_set" id="badkamer_set" onclick="setpoint('badkamer');"></div>
 				<div class="abs z2 kamer_set" id="kamer_set" onclick="setpoint('kamer');"></div>
