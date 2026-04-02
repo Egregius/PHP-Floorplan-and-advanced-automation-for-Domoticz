@@ -5,6 +5,7 @@ foreach ($devices as $ip => $vol) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
 			if ($ip==101) {
+				lg(print_r($status,true),'cron2');
 				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
 					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
 						lg(basename(__FILE__).':'.__LINE__,'cron2');
