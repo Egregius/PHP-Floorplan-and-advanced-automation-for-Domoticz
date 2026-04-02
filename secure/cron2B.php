@@ -5,13 +5,7 @@ foreach ($devices as $ip => $vol) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
 			if ($ip==101) {
-//				lg(print_r($status,true),'cron2');
-				$db = Database::getInstance();
-				$stmt ??= $db->prepare("SELECT track_id FROM `track_mapping` WHERE `pos` = 0");
-				$stmt->execute();
-				foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$track_id]) {
-					lg($track_id,'cron2');
-				}
+				
 				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
 					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
 						lg(basename(__FILE__).':'.__LINE__,'cron2');
@@ -32,15 +26,30 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else lg('Bose living $invalidcounter = '.$invalidcounter);
 				}
-				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE'&&$d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||$d['nvidia']->s!='Unavailable'))) {
-					 $vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
-					 if (isset($vol)) {
+				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
+					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||$d['nvidia']->s!='Unavailable'))) {
+						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
+						if (isset($vol)) {
 						$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
 						if (is_array($vol)) {
 							if($vol['actualvolume']>0) bosevolume(0,101, 'TV aan');
 						}
+						}
+					} elseif(past('boseliving')<60) {
+						lg(print_r($status,true),'cron2');
+						$db = Database::getInstance();
+						$stmt ??= $db->prepare("SELECT track_id FROM `track_mapping` WHERE `pos` = 0");
+						$stmt->execute();
+						$skiptracks=[];
+						foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$track_id]) {
+							$skiptracks[]=$track_id;
+						}
+						$current_id=str_replace('spotify:track:','',$status['trackID']);
+						if (in_array($current_id, $skiptracks)) bosekey("NEXT");
 					}
 				}
+				
+				
 			}
 			if (isset($status['@attributes']['source'])) {
 				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
