@@ -138,7 +138,7 @@ if (isset($current['result']['item']['file'])) {
 			$totaltime=$total['hours'].':';
 			$total['minutes']<10?$totaltime.='0'.$total['minutes'].':':$totaltime.=$total['minutes'].':';
 			$total['seconds']<10?$totaltime.='0'.$total['seconds']:$totaltime.=$total['seconds'];
-			if ($udevice=='iPad') {
+			if (substr($device,0,4)=='iPad') {
 				echo '
 					<table align="center">
 						<tr>

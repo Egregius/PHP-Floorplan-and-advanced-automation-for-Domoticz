@@ -94,3 +94,110 @@ function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
 }
+function store($name='',$status='',$msg='',$log='store') {
+	global $d,$user;
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			$d['time']??=time();
+			$d[$name]->s=$status;
+			$d[$name]->t=$d['time'];
+			$db=Database::getInstance();
+			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
+			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
+			$affected=$stmt->rowCount();
+			break;
+		} catch (PDOException $e) {
+			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
+				lg('♻ DB gone away → reconnect & retry', $log);
+				Database::reset();
+				if($attempt>0) sleep($attempt);
+				continue;
+			}
+			throw $e;
+		}
+	}
+	if($affected>0/*&&!in_array($name,['dag'])*/){
+		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),$log);
+	}
+	return $affected ?? 0;
+}
+final class Database {
+    private static ?PDO $instance = null;
+    private function __construct() {}
+    private function __clone(): void {}
+    public static function getInstance(): PDO {
+        return self::$instance ??= self::createConnection();
+    }
+    private static function createConnection(): PDO {
+        try {
+            return new PDO(
+                dsn: "mysql:host=192.168.30.23;dbname=domotica;charset=latin1",
+                username: 'dbuser',
+                password: 'dbuser',
+                options: [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_PERSISTENT => true,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_STRINGIFY_FETCHES => false,
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES latin1",
+                    PDO::ATTR_TIMEOUT => 5,
+                    PDO::MYSQL_ATTR_FOUND_ROWS => true
+                ]
+            );
+        } catch (PDOException $e) {
+            error_log('Database connection failed: ' . $e->getMessage());
+            throw new RuntimeException('Database connection failed.', 0, $e);
+        }
+    }
+    public static function reset(): void {
+        self::$instance = null;
+    }
+    public static function isConnected(): bool {
+        return self::$instance !== null;
+    }
+}
+function fetchdata(): array {
+    global $d;
+    for ($attempt = 0; $attempt <= 4; $attempt++) {
+        try {
+            $db = Database::getInstance();
+            static $stmt = null;
+            $stmt ??= $db->prepare("SELECT n,s,t,m,d,i,p,rt,f FROM devices");
+            $stmt->execute();
+            foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$n, $s, $t, $m, $deviceD, $i, $p, $rt, $f]) {
+                $dev = new Device();
+                $dev->n  = $n;
+                $dev->s  = $s;
+                $dev->t  = $t;
+                $dev->m  = $m;
+                $dev->d  = $deviceD;
+                $dev->i  = $i;
+                $dev->p  = $p;
+                $dev->rt = $rt;
+                $dev->f  = $f;
+
+                $d[$n] = $dev;
+            }
+            break;
+        } catch (PDOException $e) {
+            $isRecoverable = in_array($e->getCode(), [2006, 'HY000'], true) && $attempt < 4;
+            if ($isRecoverable) {
+                lg(' ♻  DB gone away → reconnect & retry fetchdata');
+                Database::reset();
+                $stmt = null;
+                $attempt > 0 && sleep($attempt);
+                continue;
+            }
+            lg('FETCHDATA ERROR! ' . $e->getCode());
+            throw $e;
+        }
+    }
+    if ($en = json_decode(getCache('en'))) {
+		foreach (['n','a','b','c','z'] as $key) {
+			$d[$key] = $en->$key ?? 0;
+		}
+	}
+    return $d;
+}
