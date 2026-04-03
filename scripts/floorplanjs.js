@@ -175,7 +175,6 @@ function setTime(){
 		if (correctedSeconds % 5 == 0 || forceTimes) {
 			drawCircle('avgtimecircle', correctedSeconds, 900, 82, 'gray');
 		}
-
 		if (d.timestamps === undefined || newTime >= d.timestamps + 20 || forceTimes === true) {
 			const items = [
 				...['living_set','badkamer_set','kamer_set','alex_set','brander','luifel'],
@@ -216,7 +215,6 @@ function setView(newView){
     if(newEl) newEl.classList.add('active')
 }
 function formatDate(t){return date=new Date(1e3*t),date.getDate()+"/"+(date.getMonth()+1)}
-// ── Heating render helpers ────────────────────────────────────────────────────
 const HEATING_ICONS = {
     '-2': { img: 'Cooling',      alt: 'Cooling',  label: 'Airco<br>cooling'   },
     '-1': { img: 'Cooling_grey', alt: 'Cooling',  label: 'Passive<br>cooling' },
