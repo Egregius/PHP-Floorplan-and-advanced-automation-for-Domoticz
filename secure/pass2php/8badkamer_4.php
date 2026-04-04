@@ -1,2 +1,2 @@
 <?php
-if ($status=='On') fbadkamer(100,true);
+if ($status=='On') fbadkamer(75,true);
