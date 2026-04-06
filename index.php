@@ -247,9 +247,10 @@
 					<div class="abs z1 center" style="top:880px;left:110px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40" alt="Log"><br>Log</a></div>
 					<div class="abs z1 center" style="top:880px;left:230px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40" alt="Cache"><br>Cache</a></div>
 					<div class="abs z1 center" style="top:0px;left:0px;width:100%;">
-						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b3">Google myMaps</button>
-						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b3">Garmin GPX</button>
-						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b3">Garmin Badges</button>
+						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b4">myMaps</button>
+						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b4">GPX</button>
+						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b4">Badges</button>
+						<button onclick="ajaxcontrol('runsync','runsync','dedup');setView('floorplan');" class="btn b4">Dedup</button>
 						<button class="btn b3" id="verlof" onclick="verlof();">Verlof</button>
 						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b3">Weegschaal</button>
 						<button onclick="ajaxcontrol('runsync','runsync','trakt');setView('floorplan');" class="btn b3">trakt.tv</button>
