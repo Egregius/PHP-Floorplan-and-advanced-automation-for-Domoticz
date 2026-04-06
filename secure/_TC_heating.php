@@ -240,12 +240,16 @@ if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
 	elseif ($d['n']<-800&&$d['b']>0&&$d['c']>50&&$d['living_temp']->s<21) $Setliving=21;
 	elseif ($d['n']<-500&&$d['b']>0&&$d['c']>80&&$d['living_temp']->s<21) $Setliving=21;
 }*/
+$lastautosetliving ??= 0;
 if($d['living_set']->m==0&&$d['heating']->s==1) {
 	if($d['n']<0&&$d['b']>=0&&$d['c']>=70) $Setliving=26;
 	elseif($d['n']<-200&&$d['b']>=0&&$d['c']>=50) $Setliving=25;
 	elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=30) $Setliving=24;
 	elseif($d['n']<-600&&$d['b']>=0&&$d['c']>=10) $Setliving=23;
-	if($d['living_set']->s!=$Setliving&&past('living_set')>50) lg('Setliving='.$Setliving.', net='.$d['n'].', bat='.$d['b'].', charge='.$d['c'],'daikin');
+	if($d['living_set']->s!=$Setliving&&past('living_set')>50) {
+		lg('Setliving='.$Setliving.', net='.$d['n'].', bat='.$d['b'].', charge='.$d['c'],'daikin');
+		$lastautosetliving=$time;
+	}
 }
 
 if ($d['living_set']->s!=$Setliving&&past('living_set')>50) {
