@@ -117,6 +117,7 @@ foreach (array('living','kamer','alex') as $k) {
 				"fan"=>$fan
 			]);
 		}*/
+		if ($lastautosetliving>$time-3600) $power=1;
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
             ($power!=0&&$daikin->$k->lastset <= $time-281)) {
