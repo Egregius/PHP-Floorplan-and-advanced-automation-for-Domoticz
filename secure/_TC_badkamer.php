@@ -3,7 +3,7 @@ $user='TC_badkamer';
 $m='';$m2='';
 $preheatbath=false;
 if ($d['badkamer_set']->m==0) {$setBath=10;$m2.=__LINE__.' ';}
-//else {$setBath=$d['badkamer_set']->s;$m2.=__LINE__.' ';}
+else {$setBath=$d['badkamer_set']->s;$m2.=__LINE__.' ';}
 $pastdeurbadkamer=past('deurbadkamer');
 if ($d['weg']->s>2) $setBath=10;
 elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkamer>57&&($d['raamkamer']->s=='Open'||$d['raamwaskamer']->s=='Open'||$d['raamalex']->s=='Open')) {
