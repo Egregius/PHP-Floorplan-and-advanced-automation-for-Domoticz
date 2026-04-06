@@ -135,7 +135,7 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 				unset($kodi);
 			}
 		}
-	} elseif ($d['nas']->s=='On'&&$d['nvidia']->m=='Kodi'&&past('nas')>90) {
+	}/* elseif ($d['nas']->s=='On'&&$d['nvidia']->m=='Kodi'&&past('nas')>90) {
 		$kodi_last_action=explode('-',$d['kodi_last_action']->s);
 		if (!isset($lastlibraryupdate)||$lastlibraryupdate<$time-72000) {
 			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
@@ -154,5 +154,5 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 			kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
 			kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Clean","params": {"showdialogs": true}}');
 		}
-	}
+	}*/
 }
