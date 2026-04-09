@@ -177,20 +177,20 @@ function huisslapen($weg=false) {
 	if ($weg===3) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
+		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guest":0}\' > /dev/null 2>&1 &');
 		if($d['Egregius']->s!=0) store('Egregius',0,basename(__FILE__).':'.__LINE__);
 		if($d['Egregius5']->s!=0) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
 		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);
 	} elseif ($weg===true) {
 		store('weg', 2, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
+		shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guest":0}\' > /dev/null 2>&1 &');
 		if($d['Egregius']->s!=0) store('Egregius',0,basename(__FILE__).':'.__LINE__);
 		if($d['Egregius5']->s!=0) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
 		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);
 	} else {
 		store('weg', 1, basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":0,"guests":0}\' > /dev/null 2>&1 &');
+		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":0,"guest":0}\' > /dev/null 2>&1 &');
 		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
 		if($d['Egregius5']->s!=0) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
 		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);

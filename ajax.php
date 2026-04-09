@@ -185,10 +185,10 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			}
 			apcu_store($key, true, 10);
 			if($_REQUEST['action']=='On') {
-				shell_exec('php /var/www/setSSID.php \'{"guests":1}\' > /dev/null 2>&1 &');
+				shell_exec('php /var/www/setSSID.php \'{"guest":1}\' > /dev/null 2>&1 &');
 				store('VanOns', 1, basename(__FILE__).':'.__LINE__);
 			} else {
-				shell_exec('php /var/www/setSSID.php \'{"guests":0}\' > /dev/null 2>&1 &');
+				shell_exec('php /var/www/setSSID.php \'{"guest":0}\' > /dev/null 2>&1 &');
 				store('VanOns', 0, basename(__FILE__).':'.__LINE__);
 			}
 		} else {
