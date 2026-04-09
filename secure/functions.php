@@ -1298,7 +1298,7 @@ function setBatterijLedBrightness(int $brightness) {
 	curl_close($ch);
 }
 function setCache(string $key, $value): bool {
-//	lg("setCache $key $value","setcache");
+	lg("setCache $key $value","setcache");
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
 }
 function getCache(string $key, $default = false) {
