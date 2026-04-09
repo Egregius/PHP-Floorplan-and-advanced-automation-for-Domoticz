@@ -868,7 +868,7 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	return FALSE;
 }
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
-    global $d, $time, $lastfetch, $daikin, $spm;
+    global $d, $time, $lastfetch, $daikin, $spm, $iotvlan;
     static $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
 
     $lastfetch = $time;
@@ -878,7 +878,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
         'alex'   => 163,
     ];
 
-    $base = "http://192.168.2.{$ips[$device]}";
+    $base = "http://$iotvlan.{$ips[$device]}";
     $url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 
     if(!http_get($url)) return false;
@@ -909,7 +909,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
         foreach($ips as $name => $ip) {
             $en_demand = ($maxpow === 100) ? 0 : 1;
             $m_pow = $maxpow;
-            $url = "http://192.168.2.$ip/aircon/set_demand_control?type=1&en_demand=$en_demand&mode=0&max_pow=$m_pow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+            $url = "http://$iotvlan.$ip/aircon/set_demand_control?type=1&en_demand=$en_demand&mode=0&max_pow=$m_pow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
 
             if(!http_get($url)) return false;
             usleep(50000); // Korte pauze tussen units om netwerk/Daikin-stack niet te overbelasten
