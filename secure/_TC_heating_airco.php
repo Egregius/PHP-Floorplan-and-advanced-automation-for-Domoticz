@@ -84,7 +84,8 @@ foreach (array('living','kamer','alex') as $k) {
 				$fan=$fanspeeds[clamp(round($dif*10)+2,0,2)];
 				$maxpow=40;
 			} else $fan=$fanspeeds[clamp(round($dif*10),-3,1)];
-
+			lg($setrounded,'daikin');
+			lg(print_r($daikin->$k,true),'daikin');
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;
             $setrounded = clamp(ceil($set*2)/2,10,28);
@@ -120,9 +121,11 @@ foreach (array('living','kamer','alex') as $k) {
 		if ($lastautosetliving>$time-3600) $power=1;
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
-            ($power!=0&&$daikin->$k->lastset <= $time-281)) {
+            ($power!=0&&$daikin->$k->lastset <= $time-281))
+            {
             if($power==99&&$setrounded>=18) $power=1;
             if (daikinset($k,$power,4,$setrounded,basename(__FILE__).':'.__LINE__,$fan,$spmode,$maxpow)) {
+            	lg(__LINE__,'daikin');
 				$daikin->$k->power = $power;
 				$daikin->$k->mode  = 4;
 				$daikin->$k->fan   = $fan;
