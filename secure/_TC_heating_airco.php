@@ -84,7 +84,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$fan=$fanspeeds[clamp(round($dif*10)+2,0,2)];
 				$maxpow=40;
 			} else $fan=$fanspeeds[clamp(round($dif*10),-3,1)];
-			lg($daikin->$k->set.' '.$setrounded,'daikin');
+//			lg($daikin->$k->set.' '.$setrounded,'daikin');
 //			lg(print_r($daikin->$k,true),'daikin');
         } elseif ($k=='kamer' || $k=='alex') {
             $set -= 1.5;

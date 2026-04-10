@@ -868,7 +868,7 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	return FALSE;
 }
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
-    global $d, $time, $lastfetch, $daikin, $spm;
+    global $d, $time, $lastfetch, $daikin, $spm, $iotvlan;
     static $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
 
     $lastfetch = $time;
@@ -881,10 +881,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     $base = "http://192.168.40.{$ips[$device]}";
     $url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
 
-    if(!http_get($url)) {
-    	lg('daikinset failed '.$url,'daikin');
-    	return false;
-    }
+    if(!http_get($url)) return false;
 
     // Bepaal icoon op basis van heating status
     $msg = ($d['heating']->s >= 0) ? "🔥 " : "❄️ ";
@@ -924,7 +921,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     if(($prevmsg[$device] ?? null) !== $msg) {
         lg($msg,'daikin');
         $prevmsg[$device] = $msg;
-    } else lg('daikinset same msg','daikin');
+    }
 
     return true;
 }
