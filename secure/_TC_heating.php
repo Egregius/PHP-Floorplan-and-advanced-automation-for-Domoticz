@@ -241,7 +241,7 @@ if ($d['living_set']->m==1) $Setliving=$d['living_set']->s;
 	elseif ($d['n']<-500&&$d['b']>0&&$d['c']>80&&$d['living_temp']->s<21) $Setliving=21;
 }*/
 $lastautosetliving ??= 0;
-if($d['living_set']->m==0&&$d['heating']->s==1&&$d['living_temp']->s<=22) {
+if($d['living_set']->m==0&&$d['weg']->s<3&&$d['heating']->s==1&&$d['living_temp']->s<=22) {
 	if($d['n']<0&&$d['b']>=0&&$d['c']>=70) $Setliving=28;
 	elseif($d['n']<-200&&$d['b']>=0&&$d['c']>=50) $Setliving=26;
 	elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=30) $Setliving=24;
