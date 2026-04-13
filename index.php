@@ -249,15 +249,6 @@
 					<div class="abs z1 center" style="top:0px;left:0px;width:100%;">
 						<button class="btn b2" id="verlof" onclick="verlof();">Verlof</button>
 						<button class="btn b2" id="syncs" onclick="syncs();">Syncs</button>
-
-<!--
-						<button onclick="ajaxcontrol('runsync','runsync','googlemaps');setView('floorplan');" class="btn b4">myMaps</button>
-						<button onclick="ajaxcontrol('runsync','runsync','garmingpx');setView('floorplan');" class="btn b4">GPX</button>
-						<button onclick="ajaxcontrol('runsync','runsync','garminbadges');setView('floorplan');" class="btn b4">Badges</button>
-						<button onclick="ajaxcontrol('runsync','runsync','dedup');setView('floorplan');" class="btn b4">Dedup</button>
-						<button onclick="ajaxcontrol('runsync','runsync','weegschaal');setView('floorplan');" class="btn b3">Weegschaal</button>
-						<button onclick="ajaxcontrol('runsync','runsync','trakt');setView('floorplan');" class="btn b3">trakt.tv</button>
--->
 					</div>
 				</div>
 				<div class="fix" id="mediasidebar">

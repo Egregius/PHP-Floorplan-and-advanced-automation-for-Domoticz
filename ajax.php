@@ -9,6 +9,7 @@ if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['comma
 	elseif($_REQUEST['action']=='trakt') exec('curl -4 http://192.168.20.21:9000/hooks/trakt -H "Content-Type: application/json" &');
 	elseif($_REQUEST['action']=='weegschaal') exec('curl -4 http://192.168.20.21:9000/hooks/weegschaal -H "Content-Type: application/json" &');
 	elseif($_REQUEST['action']=='dedup') exec('curl -4 http://192.168.20.21:9000/hooks/dedup -H "Content-Type: application/json" &');
+	elseif($_REQUEST['action']=='resetreizen') exec('curl -4 http://192.168.20.21:9000/hooks/resetreizen -H "Content-Type: application/json" &');
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();

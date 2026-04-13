@@ -1218,12 +1218,13 @@ function weg(){
 function syncs(){
 	let html=''
 	html += '<div id="message" class="dimmer">'
-	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'googlemaps\');setView(\'floorplan\');" class="btn huge6">Google lists > myMaps Places</button>'
-	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garmingpx\');setView(\'floorplan\');" class="btn huge6">Garmin GPX > Wandelingen</button>'
-	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garminbadges\');setView(\'floorplan\');" class="btn huge6">Garmin Badges</button>'
-	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'dedup\');setView(\'floorplan\');" class="btn huge6">Spotify Dedup</button>'
-	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'weegschaal\');setView(\'floorplan\');" class="btn huge6">Weegschaal</button>'
-	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'trakt\');setView(\'floorplan\');" class="btn huge6">trakt.tv</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'googlemaps\');setView(\'floorplan\');" class="btn huge9">Google lists > myMaps Places</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garmingpx\');setView(\'floorplan\');" class="btn huge9">Garmin GPX > Wandelingen</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garminbadges\');setView(\'floorplan\');" class="btn huge9">Garmin Badges</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'dedup\');setView(\'floorplan\');" class="btn huge9">Spotify Dedup</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'weegschaal\');setView(\'floorplan\');" class="btn huge9">Weegschaal</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'trakt\');setView(\'floorplan\');" class="btn huge9">trakt.tv</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'resetreizen\');setView(\'floorplan\');" class="btn huge9">Reset To-do "Op reis"</button>'
 	html += '</div></div>'
 	html += '<button class="close-btn" onclick="setView(\'floorplan\');">✕</button>';
 	setHTML('floorplantemp',html);
