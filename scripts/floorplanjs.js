@@ -1215,6 +1215,14 @@ function weg(){
 	setHTML('floorplantemp',html);
 	setView('floorplantemp')
 }
+function syncs(){
+	let html=''
+	html += '<div id="message" class="dimmer">'
+	html += '</div></div>'
+	html += '<button class="close-btn" onclick="setView(\'floorplan\');">✕</button>';
+	setHTML('floorplantemp',html);
+	setView('floorplantemp')
+}	
 function heating(){
 	let html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer">'
 	if(d.heating.s==3) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');setView(\'floorplanheating\');">Gas heating</button>'
