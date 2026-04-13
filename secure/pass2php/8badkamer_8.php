@@ -10,9 +10,9 @@ if ($status=='On') {
 		sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 		if($d['bose103']->s=='On') storesm('bose103','Off',0, basename(__FILE__).':'.__LINE__);
 	}
-/*	if (!isset($weegschaal)||$weegschaal<$time-300) {
+	if (!isset($weegschaal)||$weegschaal<$time-300) {
 		lg('Fetch weegschaal');
-		exec('curl -s http://192.168.20.21/secure/runsync.php?sync=weegschaal &');
+		exec('curl -4 http://192.168.20.21:9000/hooks/weegschaal -H "Content-Type: application/json" &');
 		$weegschaal=$time;
-	}*/
+	}
 }
