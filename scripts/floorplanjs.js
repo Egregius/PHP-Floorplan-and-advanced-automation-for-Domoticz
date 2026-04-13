@@ -1181,10 +1181,10 @@ function weg(){
 	let html=''
 	html += '<div id="message" class="dimmer">'
 	const warnings=[]
-	if(d.achterdeur.s==='Open') warnings.push('Achterdeur OPEN')
-	if(d.raamliving.s==='Open') warnings.push('Raam Living OPEN')
-	if(d.raamhall.s==='Open') warnings.push('Raam Hall OPEN')
-	if(d.raamkeuken.s==='Open') warnings.push('Raam Keuken OPEN')
+	if(d.achterdeur.s===1) warnings.push('Achterdeur OPEN')
+	if(d.raamliving.s===1) warnings.push('Raam Living OPEN')
+	if(d.raamhall.s===1) warnings.push('Raam Hall OPEN')
+	if(d.raamkeuken.s===1) warnings.push('Raam Keuken OPEN')
 	if(d.bose103.s===1) warnings.push('Bose kamer aan')
 	if(d.bose104.s===1) warnings.push('Bose garage aan')
 	if(d.bose105.s===1) warnings.push('Bose keuken aan')
@@ -1206,6 +1206,9 @@ function weg(){
 	} else if(d.weg.s == 2){
 		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/Thuis.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','0');setView(\'floorplan\');">Thuis</button>`
 		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/Vacation.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','3');setView(\'floorplan\');">Vakantie</button>`
+	} else if(d.weg.s == 3){
+		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/Thuis.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','0');setView(\'floorplan\');">Thuis</button>`
+		html += `<button class="btn huge2" style="height:${buttonHeight};display:inline-block;background-image:url(images/weg.png);background-repeat:no-repeat;background-position:center left 58px;background-size:25%;" onclick="ajaxcontrol('weg','weg','2');setView(\'floorplan\');">Weg</button>`
 	}
 	html += '</div></div>'
 	html += '<button class="close-btn" onclick="setView(\'floorplan\');">✕</button>';
