@@ -246,14 +246,22 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         'zon' => $dataArray['zon'],
         'alwayson' => $dataArray['alwayson'],
     ];
-
+    $dailyen=json_encode([
+		'gasavg' => $dataArray['gasavg'],
+		'elecavg' => $dataArray['elecavg'],
+		'zonavg' => $dataArray['zonavg'],
+		'zonref' => $dataArray['zonref'],
+	],JSON_NUMERIC_CHECK);
+	if ($force || !isset($mqttcache['dailyen']) || $mqttcache['dailyen']!=$dailyen) {
+		publishmqtt('d/e/dailyen', $dailyen);
+		$mqttcache[$k] = $dailyen;
+	}
     foreach ($den as $k => $v) {
         if ($force || !isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
             publishmqtt('d/e/' . $k, $v);
             $mqttcache[$k] = $v;
         }
     }
-
     $force = false;
     setCache('energy_prevavg', $newavg);
 }
