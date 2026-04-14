@@ -982,7 +982,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
     $lastUse = $d['time'];
 }
 function hassinput($domain,$service,$entity,$input) {
-	lg('HASSinput '.$domain.' '.$service.' '.$entity,4);
+	lg('HASSinput '.$domain.' '.$service.' '.$entity,'media');
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/services/'.$domain.'/'.$service);
 	curl_setopt($ch,CURLOPT_POST,1);
