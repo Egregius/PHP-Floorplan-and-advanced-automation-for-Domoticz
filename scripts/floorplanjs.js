@@ -1163,14 +1163,13 @@ function roller(device,floorplan='floorplanheating'){
 	setView('floorplantemp')
 }
 function verlof(){
-	let html='<div class="dimmer" ><div style="min-height:220px">'
-	html+='<div id="message" class="dimmer">'
-	if (d.verlof.s==2)html+='<button class="btn btna huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'2\');setView(\'floorplanothers\');">Verlof</button>'
-	else html+='<button class="btn huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'2\');setView(\'floorplanothers\');">Verlof</button>'
-	if (d.verlof.s==1)html+='<button class="btn btna huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'1\');setView(\'floorplanothers\');">Geen school</button>'
-	else html+='<button class="btn huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'1\');setView(\'floorplanothers\');">Geen school</button>'
-	if (d.verlof.s==0)html+='<button class="btn btna huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'0\');setView(\'floorplanothers\');">Normaal</button>'
-	else html+='<button class="btn huge3" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'0\');setView(\'floorplanothers\');">Normaal</button>'
+	let html='<div id="message" class="dimmer" ><div class="overlay-content">'
+	if (d.verlof.s==2)html+='<button class="btn btna huge" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'2\');setView(\'floorplanothers\');">Verlof</button>'
+	else html+='<button class="btn huge" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'2\');setView(\'floorplanothers\');">Verlof</button>'
+	if (d.verlof.s==1)html+='<button class="btn btna huge" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'1\');setView(\'floorplanothers\');">Geen school</button>'
+	else html+='<button class="btn huge" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'1\');setView(\'floorplanothers\');">Geen school</button>'
+	if (d.verlof.s==0)html+='<button class="btn btna huge" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'0\');setView(\'floorplanothers\');">Normaal</button>'
+	else html+='<button class="btn huge" style="display:inline-block;" onclick="ajaxcontrol(\'verlof\',\'verlof\',\'0\');setView(\'floorplanothers\');">Normaal</button>'
 	html+='</div>'
 	html+='</div>'
 	html += '<button class="close-btn" onclick="setView(\'floorplanothers\');">✕</button>';
@@ -1216,8 +1215,7 @@ function weg(){
 	setView('floorplantemp')
 }
 function syncs(){
-	let html=''
-	html += '<div id="message" class="dimmer"><div class="overlay-content">'
+	let html='<div id="message" class="dimmer"><div class="overlay-content">'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'googlemaps\');setView(\'floorplan\');" class="btn huge">Google lists > Guru maps</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garmingpx\');setView(\'floorplan\');" class="btn huge">Garmin GPX > Guru maps</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garminbadges\');setView(\'floorplan\');" class="btn huge">Garmin Badges</button>'
@@ -1252,12 +1250,13 @@ function heating(){
 }
 function confirmSwitch(device){
 	let html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer"><br><h1>'+device+'</h1><br>'
+	let html='<div id="message" class="dimmer"><div class="overlay-content">'
 	if (d[device].s==1){
-		html+='<button class="btn btna huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');setView(\''+view+'\');">On</button>'
-		html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');setView(\''+view+'\');">Off</button>'
+		html+='<button class="btn btna huge" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');setView(\''+view+'\');">On</button>'
+		html+='<button class="btn huge" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');setView(\''+view+'\');">Off</button>'
 	} else {
-		html+='<button class="btn huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');setView(\''+view+'\');">On</button>'
-		html+='<button class="btn btna huge3" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');setView(\''+view+'\');">Off</button>'
+		html+='<button class="btn huge" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');setView(\''+view+'\');">On</button>'
+		html+='<button class="btn btna huge" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');setView(\''+view+'\');">Off</button>'
 	}
 	html+='</div>'
 	html+='</div>'
