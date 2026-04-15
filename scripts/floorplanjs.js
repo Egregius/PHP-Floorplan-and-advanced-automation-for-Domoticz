@@ -1229,7 +1229,7 @@ function syncs(){
 	setView('floorplantemp')
 }	
 function heating(){
-	let html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer">'
+	let html='<div id="message" class="dimmer"><div class="overlay-content">'
 	if(d.heating.s==3) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');setView(\'floorplanheating\');">Gas heating</button>'
 	else html+='<button class="btn huge7" style="display:inline-block;background-image:url(images/Gas.png);background-repeat:no-repeat;background-position:center left 80px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'3\');setView(\'floorplanheating\');">Gas heating</button>'
 	if(d.heating.s==2) html+='<button class="btn btna huge7" style="display:inline-block;background-image:url(images/GasAirco.png);background-repeat:no-repeat;background-position:center left 35px;" onclick="ajaxcontrol(\'heating\',\'heating\',\'2\');setView(\'floorplanheating\');">Gas-Airco heating</button>'
@@ -1249,8 +1249,7 @@ function heating(){
 	setView('floorplantemp')
 }
 function confirmSwitch(device){
-	let html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer"><br><h1>'+device+'</h1><br>'
-	let html='<div id="message" class="dimmer"><div class="overlay-content">'
+	let html='<div class="dimmer" ><div style="min-height:220px"><div id="message" class="dimmer"><br><h1>'+device+'</h1><br><div class="overlay-content">'
 	if (d[device].s==1){
 		html+='<button class="btn btna huge" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'On\');setView(\''+view+'\');">On</button>'
 		html+='<button class="btn huge" onclick="ajaxcontrol(\''+device+'\',\'sw\',\'Off\');setView(\''+view+'\');">Off</button>'
