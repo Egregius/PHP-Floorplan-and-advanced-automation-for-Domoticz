@@ -62,7 +62,7 @@ foreach (array('living','kamer','alex') as $k) {
             	$adjLiving=1;
             	$fan=$fanspeeds[clamp(round($dif*10)-2,-3,2)];
             } else {
-            	if(past('living_set')>300) {
+            	if(past('living_set')>600) {
 					if($dif>0.3) $factor = ($daikinrunning) ? $daikinpower/2:abs($dif)/2;
 					elseif($dif>0.15) $factor = ($daikinrunning) ? $daikinpower/20:abs($dif)/2;
 					elseif($dif<-0.1) $factor = ($daikinrunning) ? abs($dif)/2:10;
