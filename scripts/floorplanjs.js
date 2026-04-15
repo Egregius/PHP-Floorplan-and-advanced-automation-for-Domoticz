@@ -1217,7 +1217,7 @@ function weg(){
 }
 function syncs(){
 	let html=''
-	html += '<div id="message" class="dimmer">'
+	html += '<div id="message" class="dimmer"><div class="overlay-content">'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'googlemaps\');setView(\'floorplan\');" class="btn huge9">Google lists > Guru maps</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garmingpx\');setView(\'floorplan\');" class="btn huge9">Garmin GPX > Guru maps</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garminbadges\');setView(\'floorplan\');" class="btn huge9">Garmin Badges</button>'
