@@ -11,12 +11,12 @@ if($trend>0.15) $maxpow=40;
 else {
 	$maxpow = 40;
 	if ($d['weg']->s > 0)            $maxpow = 40;
-	elseif ($totalmin >= 1.5 && $d['buiten_temp']->s<2)        $maxpow = 100;
-	elseif ($totalmin >= 1.3 && $d['buiten_temp']->s<4)        $maxpow = 90;
-	elseif ($totalmin >= 1.1 && $d['buiten_temp']->s<6)        $maxpow = 80;
-	elseif ($totalmin >= 0.9 && $d['buiten_temp']->s<8)        $maxpow = 70;
-	elseif ($totalmin >= 0.7 && $d['buiten_temp']->s<9)        $maxpow = 60;
-	elseif ($totalmin >= 0.5 && $d['buiten_temp']->s<10)        $maxpow = 50;
+	elseif ($totalmin >= 1.5 && $d['buiten_temp']->s<0)        $maxpow = 100;
+	elseif ($totalmin >= 1.3 && $d['buiten_temp']->s<1)        $maxpow = 90;
+	elseif ($totalmin >= 1.1 && $d['buiten_temp']->s<2)        $maxpow = 80;
+	elseif ($totalmin >= 0.9 && $d['buiten_temp']->s<3)        $maxpow = 70;
+	elseif ($totalmin >= 0.7 && $d['buiten_temp']->s<4)        $maxpow = 60;
+	elseif ($totalmin >= 0.5 && $d['buiten_temp']->s<5)        $maxpow = 50;
 
 	if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
 	elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
@@ -83,7 +83,7 @@ foreach (array('living','kamer','alex') as $k) {
 			if ($time>strtotime('18:30') && $d['media']->s=='On') {
 				$fan=$fanspeeds[clamp(round($dif*10)+2,0,2)];
 				$maxpow=40;
-			} else $fan=$fanspeeds[clamp(round($dif*10),-3,1)];
+			} else $fan=$fanspeeds[clamp(round($dif*10),-3,0)];
 //			lg($daikin->$k->set.' '.$setrounded,'daikin');
 //			lg(print_r($daikin->$k,true),'daikin');
         } elseif ($k=='kamer' || $k=='alex') {
