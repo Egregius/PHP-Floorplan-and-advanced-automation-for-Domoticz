@@ -144,7 +144,7 @@ function fhall() {
 			sl('hall', 30, basename(__FILE__).':'.__LINE__);
 		}
 	} else finkom();
-	if ($d['weg']->s==0&&$d['rkamerl']->s>70&&$d['rkamerr']->s>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']->s==0&&past('kamer')>7200) {
+	if ($d['weg']->s==0&&$d['alexslaapt']->s==1&&$d['rkamerl']->s>70&&$d['rkamerr']->s>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']->s==0&&past('kamer')>7200) {
 		sl('kamer', 1, basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
 		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
