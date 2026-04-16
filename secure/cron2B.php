@@ -27,7 +27,7 @@ foreach ($devices as $ip => $vol) {
 					} else lg('Bose living $invalidcounter = '.$invalidcounter);
 				}
 				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
-					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||$d['nvidia']->s!='Unavailable'))) {
+					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
 						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 						if (isset($vol)) {
 						$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
