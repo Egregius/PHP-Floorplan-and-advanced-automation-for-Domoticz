@@ -12,7 +12,7 @@ if ($uur%4==0||LOOP_START>$time-60) {
 	$data = json_decode($response, true);
 	if (isset($data['results'])) {
 		$today = date('Y-m-d');
-		$dy = (int)date('z', strtotime($today));
+		$dy = (int)date('z', strtotime($today)) + 1;
 		$range = 10;
 		$start = $dy - $range;
 		$end   = $dy + $range;

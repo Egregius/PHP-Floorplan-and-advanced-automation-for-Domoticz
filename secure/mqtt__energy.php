@@ -240,10 +240,22 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     }
 	if ($lastDate !== $vandaag) {
 		// 7. Statistieken & Gemiddelden
-		$since = date("Y-m-d", $time - (86400 * 30));
-		
-		$q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date >= :since";
-		$stmt = $dbverbruik->query($q, [':since' => $since]);
+		$today = date('Y-m-d');
+		$dy = (int)date('z', strtotime($today)) + 1;
+		$range = 10;
+		$start = $dy - $range;
+		$end = $dy + $range;
+		if ($start <= 0 || $end > 366) {
+			$q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE (DAYOFYEAR(date) >= :start OR DAYOFYEAR(date) <= :end)";
+			$params = [
+				':start' => $start <= 0 ? 366 + $start : $start,
+				':end' => $end > 366 ? $end - 366 : $end
+			];
+		} else {
+			$q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE DAYOFYEAR(date) BETWEEN :start AND :end";
+			$params = [':start' => $start, ':end' => $end];
+		}
+		$stmt = $dbverbruik->query($q, $params);
 		if ($row = $stmt->fetch()) $avg = $row;
 	
 		$maand = date('m', $time);
