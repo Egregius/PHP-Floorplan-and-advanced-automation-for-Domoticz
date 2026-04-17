@@ -77,6 +77,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
 	static $b=0;
 	static $a=0;
 	static $prevavg=0;
+	static $vandaag = date("Y-m-d");
 	${$topic}=$status;
 	$p=$n+$z-$b;
 	echo "n=$n	z=$z	b=$b	p=$p".PHP_EOL;
@@ -92,6 +93,14 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
             $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
         }
     }
+    if ($p >= 30 && ($p < $alwayson || empty($alwayson))) {
+		setCache('alwayson', $p);
+		$alwayson = $p;
+		$force = true;
+		lg('💡 New alwayson ' . $p . ' W');
+		$q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
+		$dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
+	}
     if($topic==='z') {
 		if ($z > $peakpower || empty($peakpower)) {
 			$peakpower=$z;
