@@ -141,6 +141,7 @@ def mqtt_publish_teller(key, value):
         log(f"⚠️ Kan t/{key} niet publiceren: niet verbonden")
 def publish_step(key, value):
     if key == "c": q = value
+    elif key == "z": q = value
     else: q = quantize_step(value, step_for_value(value))
     last = state_publish.get(key)
     if last is None or q != last:
