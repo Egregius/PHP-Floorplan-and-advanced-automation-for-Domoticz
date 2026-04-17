@@ -159,20 +159,6 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         $kwartierpiek = $row['wH'] ?? 2500;
     }
 
-    // 2. Cache 'en' ophalen (retry loop)
-    $en = null;
-    for ($x = 1; $x <= 5; $x++) {
-        $en = json_decode(getCache('en'));
-        if ($en) break;
-        usleep(100000);
-    }
-
-    // DEBUG LOGGING voor data-integriteit
-    if (count($newData) != 4 || !$en) {
-        lg("⚠️ Onderbroken: newData count=" . count($newData) . " (G:" . ($newData['gas'] ?? 'N/A') . ") en=" . ($en ? 'OK' : 'FAIL'));
-        return;
-    }
-
     $gasStand    = $newData['gas'];
     $elecStand   = $newData['import'];
     $injectie    = $newData['export'];
