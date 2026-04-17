@@ -142,7 +142,13 @@ $mqtt->disconnect();
 // --- FUNCTIES ---
 
 function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $time, &$alwayson) {
-    $vandaag = date("Y-m-d", $time);
+    static $mqttcache = [];
+    static $lastDate = null;
+    static $gisteren = null;
+	static $zonref = 0;
+	static $zonavg = 0;
+	static $avg = ['gas' => 0, 'elec' => 0];
+	$vandaag = date("Y-m-d", $time);
     $gisterenDatum = date("Y-m-d", strtotime("-1 day", $time));
 
     // 1. Kwartierpiek ophalen
@@ -198,10 +204,11 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         lg("❌ Error Guy update: " . $e->getMessage());
     }
     // 6. Bereken Dagverbruik (Guydag)
-    $q = "SELECT gas, elec, injectie, water FROM `Guy` ORDER BY date DESC LIMIT 1,1";
-    $stmt = $dbverbruik->query($q);
-    $gisteren = $stmt->fetch();
-
+    if ($lastDate !== $vandaag) {
+		$q = "SELECT gas, elec, injectie, water FROM `Guy` ORDER BY date DESC LIMIT 1,1";
+		$stmt = $dbverbruik->query($q);
+		$gisteren = $stmt->fetch();
+	}
     $dagGas = 0; $dagElec = 0; $dagWater = 0; $dagVerbruik = 0;
 
     if ($gisteren) {
@@ -231,25 +238,25 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         // Belangrijk: als gisteren niet gevonden wordt, log dit!
         lg("⚠️ Geen gisteren data gevonden voor $gisterenDatum in tabel Guy.");
     }
-
-    // 7. Statistieken & Gemiddelden
-    $since = date("Y-m-d", $time - (86400 * 30));
-    $avg = ['gas' => 0, 'elec' => 0];
-    $q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date >= :since";
-    $stmt = $dbverbruik->query($q, [':since' => $since]);
-    if ($row = $stmt->fetch()) $avg = $row;
-
-    $maand = date('m', $time);
-    $zonref = 0; $zonavg = 0;
-    $q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
-    $stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
-    if ($row = $stmt->fetch()) $zonref = round($row['Dag_Refer'], 1);
-
-    $q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE Datum_Dag LIKE :maand
-          AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
-    $stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
-    if ($row = $stmt->fetch()) $zonavg = round($row['AVG'], 0);
-
+	if ($lastDate !== $vandaag) {
+		// 7. Statistieken & Gemiddelden
+		$since = date("Y-m-d", $time - (86400 * 30));
+		
+		$q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE date >= :since";
+		$stmt = $dbverbruik->query($q, [':since' => $since]);
+		if ($row = $stmt->fetch()) $avg = $row;
+	
+		$maand = date('m', $time);
+		
+		$q = "SELECT Dag_Refer FROM `tgeg_refer` WHERE Datum_Refer = :datum";
+		$stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
+		if ($row = $stmt->fetch()) $zonref = round($row['Dag_Refer'], 1);
+	
+		$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE Datum_Dag LIKE :maand
+			  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
+		$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
+		if ($row = $stmt->fetch()) $zonavg = round($row['AVG'], 0);
+	}
     // 8. MQTT & Cache
     $dataArray = [
         'gas' => round($dagGas, 2),
@@ -265,9 +272,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 
     setCache('energy_vandaag', json_encode($dataArray));
 
-    static $mqttcache = [];
-    static $lastDate = null;
-
+    
     if ($lastDate !== $vandaag) {
         $mqttcache = [];
         $lastDate = $vandaag;
