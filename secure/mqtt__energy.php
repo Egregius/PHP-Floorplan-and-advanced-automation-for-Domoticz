@@ -92,8 +92,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
             $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
             $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
         }
-    }
-    if ($p >= 30 && ($p < $alwayson || empty($alwayson))) {
+    } elseif ($p >= 30 && ($p < $alwayson || empty($alwayson))) {
 		setCache('alwayson', $p);
 		$alwayson = $p;
 		$force = true;
@@ -138,7 +137,10 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
 		}
 		setCache('energy_prevavg', $newavg);
     }
-    
+    $nu=date("Y-m-d");
+    if($vandaag!=$nu) {
+    	$vandaag=$nu;
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
@@ -280,6 +282,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         $mqttcache = [];
         $lastDate = $vandaag;
         $force = true;
+        $alwayson=9999;
         lg("📅 Dagwissel gedetecteerd ($vandaag), cache gereset.");
     }
 
