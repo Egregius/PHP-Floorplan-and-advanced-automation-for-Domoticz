@@ -68,6 +68,17 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
+$mqtt->subscribe('d/e/z', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
+	lg($topic.'	'.$status);
+/*	static $peakpower   = (int)getCache('peakpower');
+	if (($en->z > 0 && $en->z > $peakpower) || empty($peakpower)) {
+    	$peakpower=$en->z;
+    	setCache('peakpower', $peakpower);
+    	$msg='Solar Peakpower = '.$peakpower.'W';
+    	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
+    }*/
+}, MqttClient::QOS_AT_LEAST_ONCE);
+
 while (true) {
     $mqtt->loop(true, false, null, 50000);
 }
@@ -107,7 +118,6 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     $injectie    = $newData['export'];
     $waterStand  = $newData['water'];
     static $alwayson    = (int)getCache('alwayson');
-    static $peakpower   = (int)getCache('peakpower');
     $newavg      = $en->a;
     $prevavg     = (float)getCache('energy_prevavg');
 
@@ -123,12 +133,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
             $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
         }
     }
-    if (($en->z > 0 && $en->z > $peakpower) || empty($peakpower)) {
-    	$peakpower=$en->z;
-    	setCache('peakpower', $peakpower);
-    	$msg='Solar Peakpower = '.$peakpower.'W';
-    	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
-    }
+    
 	if ($prevavg > 2500) {
 		if ($newavg > $kwartierpiek - 200) {
 			alert('Kwartierpiek', 'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh',$time);
