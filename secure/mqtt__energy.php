@@ -106,8 +106,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     $elecStand   = $newData['import'];
     $injectie    = $newData['export'];
     $waterStand  = $newData['water'];
-    $alwayson    = (int)getCache('alwayson');
-    $peakpower   = (int)getCache('peakpower');
+    static $alwayson    = (int)getCache('alwayson');
+    static $peakpower   = (int)getCache('peakpower');
     $newavg      = $en->a;
     $prevavg     = (float)getCache('energy_prevavg');
 
@@ -124,8 +124,9 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         }
     }
     if (($en->z > 0 && $en->z > $peakpower) || empty($peakpower)) {
-    	setCache('peakpower', $en-z);
-    	$msg='Solar Peakpower = '.$en->z.'W';
+    	$peakpower=$en->z;
+    	setCache('peakpower', $peakpower);
+    	$msg='Solar Peakpower = '.$peakpower.'W';
     	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
     }
 	if ($prevavg > 2500) {
@@ -260,7 +261,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 	],JSON_NUMERIC_CHECK);
 	if ($force || !isset($mqttcache['dailyen']) || $mqttcache['dailyen']!=$dailyen) {
 		publishmqtt('d/e/dailyen', $dailyen);
-		$mqttcache[$k] = $dailyen;
+		$mqttcache['dailyen'] = $dailyen;
 	}
     foreach ($den as $k => $v) {
         if ($force || !isset($mqttcache[$k]) || $mqttcache[$k] !== $v) {
