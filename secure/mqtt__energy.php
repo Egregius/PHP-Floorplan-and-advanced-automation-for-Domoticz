@@ -245,18 +245,26 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 		$range = 10;
 		$start = $dy - $range;
 		$end = $dy + $range;
+		
 		if ($start <= 0 || $end > 366) {
-			$q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE (DAYOFYEAR(date) >= :start OR DAYOFYEAR(date) <= :end)";
-			$params = [
-				':start' => $start <= 0 ? 366 + $start : $start,
-				':end' => $end > 366 ? $end - 366 : $end
-			];
+			$startVal = $start <= 0 ? 366 + $start : $start;
+			$endVal = $end > 366 ? $end - 366 : $end;
+			$whereGas = "(DAYOFYEAR(date) >= :start OR DAYOFYEAR(date) <= :end)";
+			$whereZon = "(DAYOFYEAR(Datum_Dag) >= :start OR DAYOFYEAR(Datum_Dag) <= :end)";
+			$params = [':start' => $startVal, ':end' => $endVal];
 		} else {
-			$q = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE DAYOFYEAR(date) BETWEEN :start AND :end";
+			$whereGas = "DAYOFYEAR(date) BETWEEN :start AND :end";
+			$whereZon = "DAYOFYEAR(Datum_Dag) BETWEEN :start AND :end";
 			$params = [':start' => $start, ':end' => $end];
 		}
-		$stmt = $dbverbruik->query($q, $params);
-		if ($row = $stmt->fetch()) $avg = $row;
+		
+		$qGas = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE $whereGas";
+		$stmtGas = $dbverbruik->query($qGas, $params);
+		if ($rowGas = $stmtGas->fetch()) $avg = $rowGas;
+		
+		$qZon = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE $whereZon AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE $whereZon)";
+		$stmtZon = $dbzonphp->query($qZon, $params);
+		if ($rowZon = $stmtZon->fetch()) $zonavg = round($rowZon['AVG'], 0);
 	
 		$maand = date('m', $time);
 		
@@ -264,10 +272,6 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 		$stmt = $dbzonphp->query($q, [':datum' => '2009-' . $maand . '-01 00:00:00']);
 		if ($row = $stmt->fetch()) $zonref = round($row['Dag_Refer'], 1);
 	
-		$q = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE Datum_Dag LIKE :maand
-			  AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE Datum_Dag LIKE :maand2)";
-		$stmt = $dbzonphp->query($q, [':maand' => '%-' . $maand . '-%', ':maand2' => '%-' . $maand . '-%']);
-		if ($row = $stmt->fetch()) $zonavg = round($row['AVG'], 0);
 	}
     // 8. MQTT & Cache
     $dataArray = [
