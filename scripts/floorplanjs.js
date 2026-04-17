@@ -1216,13 +1216,15 @@ function weg(){
 }
 function syncs(){
 	let html='<div id="message" class="dimmer"><div class="overlay-content">'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'resetreizen\');setView(\'floorplan\');" class="btn huge">Reset To-do "Op reis"</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'syncfotos\');setView(\'floorplan\');" class="btn huge">OneDrive - Foto\'s</button>'
+	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'synccamera\');setView(\'floorplan\');" class="btn huge">OneDrive - Camera-album</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'googlemaps\');setView(\'floorplan\');" class="btn huge">Google lists > Guru maps</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garmingpx\');setView(\'floorplan\');" class="btn huge">Garmin GPX > Guru maps</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'garminbadges\');setView(\'floorplan\');" class="btn huge">Garmin Badges</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'dedup\');setView(\'floorplan\');" class="btn huge">Spotify Dedup</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'weegschaal\');setView(\'floorplan\');" class="btn huge">Weegschaal</button>'
 	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'trakt\');setView(\'floorplan\');" class="btn huge">trakt.tv</button>'
-	html += '<button onclick="ajaxcontrol(\'runsync\',\'runsync\',\'resetreizen\');setView(\'floorplan\');" class="btn huge">Reset To-do "Op reis"</button>'
 	html += '</div></div>'
 	html += '<button class="close-btn" onclick="setView(\'floorplan\');">✕</button>';
 	setHTML('floorplantemp',html);
