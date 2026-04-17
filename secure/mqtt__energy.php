@@ -85,6 +85,17 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
     	$msg='Solar Peakpower = '.$peakpower.'W';
     	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
     }
+    if ($z == 0 || empty($alwayson)) {
+        $power = ($b < 0) ? ($n - $b) : $n;
+        if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
+            setCache('alwayson', $power);
+            $alwayson = $power;
+            $force = true;
+            lg('💡 New alwayson ' . $power . ' W');
+            $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
+            $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
+        }
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
@@ -130,7 +141,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     $prevavg     = (float)getCache('energy_prevavg');
 
     // 3. Alwayson logica
-    if ($en->z == 0 || empty($alwayson)) {
+/*    if ($en->z == 0 || empty($alwayson)) {
         $power = ($en->b < 0) ? ($en->n - $en->b) : $en->n;
         if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
             setCache('alwayson', $power);
@@ -140,7 +151,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
             $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
             $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
         }
-    }
+    }*/
     
 	if ($prevavg > 2500) {
 		if ($newavg > $kwartierpiek - 200) {
