@@ -38,10 +38,10 @@ $force = true;
 // CRUCIAAL: Initialiseer de array met default waarden uit cache om count mismatch te voorkomen
 $storedTeller = json_decode(getCache('teller'), true);
 $newData = [
-    'import' => $storedTeller['import'] ?? 0,
-    'export' => $storedTeller['export'] ?? 0,
-    'gas'    => $storedTeller['gas'] ?? 0,
-    'water'  => $storedTeller['water'] ?? 0
+    'import' => $storedTeller['import'],
+    'export' => $storedTeller['export'],
+    'gas'    => $storedTeller['gas'],
+    'water'  => $storedTeller['water']
 ];
 $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
 	try {
