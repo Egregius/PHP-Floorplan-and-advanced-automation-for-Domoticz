@@ -77,7 +77,8 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
 	static $b=0;
 	static $a=0;
 	static $prevavg=0;
-	static $vandaag = date("Y-m-d");
+	static $lastDate = null;
+	$vandaag=date("Y-m-d");
 	${$topic}=$status;
 	$p=$n+$z-$b;
 	echo "n=$n	z=$z	b=$b	p=$p".PHP_EOL;
@@ -85,8 +86,8 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
     if ($z == 0 || empty($alwayson)) {
         $power = ($b < 0) ? ($n - $b) : $n;
         if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
-            setCache('alwayson', $power);
             $alwayson = $power;
+            setCache('alwayson', $alwayson);
             $force = true;
             lg('💡 New alwayson ' . $power . ' W');
             $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
@@ -137,9 +138,11 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
 		}
 		setCache('energy_prevavg', $newavg);
     }
-    $nu=date("Y-m-d");
-    if($vandaag!=$nu) {
-    	$vandaag=$nu;
+    
+    if($vandaag!=$lastDate) {
+    	$lastDate=$vandaag;
+    	$alwayson=9999;
+        setCache('alwayson', $alwayson);
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
@@ -282,7 +285,6 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         $mqttcache = [];
         $lastDate = $vandaag;
         $force = true;
-        $alwayson=9999;
         lg("📅 Dagwissel gedetecteerd ($vandaag), cache gereset.");
     }
 
