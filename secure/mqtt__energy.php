@@ -93,14 +93,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
             $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
             $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
         }
-    } elseif ($p >= 30 && ($p < $alwayson || empty($alwayson))) {
-		setCache('alwayson', $p);
-		$alwayson = $p;
-		$force = true;
-		lg('💡 New alwayson ' . $p . ' W');
-		$q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
-		$dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
-	}
+    }
     if($topic==='z') {
 		if ($z > $peakpower || empty($peakpower)) {
 			$peakpower=$z;
