@@ -94,9 +94,9 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
     }
     if($topic==='z') {
 		if ($z > $peakpower || empty($peakpower)) {
-			$peakpower=$en->z;
+			$peakpower=$z;
 			setCache('peakpower', $peakpower);
-			$msg='Solar Peakpower = '.$peakpower.'W';
+			$msg='Solar peak power = '.$peakpower.'W';
 			shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
 		}
     } elseif($topic==='a') {
