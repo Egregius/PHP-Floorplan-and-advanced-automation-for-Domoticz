@@ -76,15 +76,15 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
 	static $z=0;
 	static $b=0;
 	${$topic}=$status;
-	lg("n=$n	z=$z	b=$b");
+	$p=$n+$z-$b;
+	lg("n=$n	z=$z	b=$b	p=$p");
 	
-/*	static $peakpower   = (int)getCache('peakpower');
-	if (($en->z > 0 && $en->z > $peakpower) || empty($peakpower)) {
+	if ($z > $peakpower || empty($peakpower)) {
     	$peakpower=$en->z;
     	setCache('peakpower', $peakpower);
     	$msg='Solar Peakpower = '.$peakpower.'W';
     	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
-    }*/
+    }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
