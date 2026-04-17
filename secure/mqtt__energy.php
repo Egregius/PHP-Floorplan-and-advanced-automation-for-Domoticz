@@ -43,7 +43,9 @@ $newData = [
     'gas'    => $storedTeller['gas'],
     'water'  => $storedTeller['water']
 ];
-$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
+$alwayson    = (int)getCache('alwayson');
+$peakpower   = (int)getCache('peakpower');
+$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson, &$peakpower) {
 	try {
 		lg($topic.'	'.$status);
 		$time = time();
@@ -57,7 +59,7 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$
 		if ($changed) {
 			// Sla de laatste standen direct op in cache
 			setCache('teller', json_encode($newData));
-			processEnergyData($dbverbruik, $dbzonphp, $force, $newData, $mqtt, $time);
+			processEnergyData($dbverbruik, $dbzonphp, $force, $newData, $mqtt, $time, $alwayson);
 		}
 	} catch (Throwable $e) {
 		lg("‼️ Fout in MQTT_energy: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
@@ -68,8 +70,10 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/e/z', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt) {
+$mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson, &$peakpower) {
+	$topic=substr($topic,-1);
 	lg($topic.'	'.$status);
+	
 /*	static $peakpower   = (int)getCache('peakpower');
 	if (($en->z > 0 && $en->z > $peakpower) || empty($peakpower)) {
     	$peakpower=$en->z;
@@ -87,7 +91,7 @@ $mqtt->disconnect();
 
 // --- FUNCTIES ---
 
-function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $time) {
+function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $time, &$alwayson) {
     $vandaag = date("Y-m-d", $time);
     $gisterenDatum = date("Y-m-d", strtotime("-1 day", $time));
 
@@ -117,7 +121,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     $elecStand   = $newData['import'];
     $injectie    = $newData['export'];
     $waterStand  = $newData['water'];
-    static $alwayson    = (int)getCache('alwayson');
+    
     $newavg      = $en->a;
     $prevavg     = (float)getCache('energy_prevavg');
 
