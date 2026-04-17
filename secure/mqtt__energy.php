@@ -247,23 +247,27 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 		$end = $dy + $range;
 		
 		if ($start <= 0 || $end > 366) {
-			$startVal = $start <= 0 ? 366 + $start : $start;
-			$endVal = $end > 366 ? $end - 366 : $end;
+			$sVal = $start <= 0 ? 366 + $start : $start;
+			$eVal = $end > 366 ? $end - 366 : $end;
 			$whereGas = "(DAYOFYEAR(date) >= :start OR DAYOFYEAR(date) <= :end)";
 			$whereZon = "(DAYOFYEAR(Datum_Dag) >= :start OR DAYOFYEAR(Datum_Dag) <= :end)";
-			$params = [':start' => $startVal, ':end' => $endVal];
+			$whereSub = "(DAYOFYEAR(Datum_Dag) >= :s2 OR DAYOFYEAR(Datum_Dag) <= :e2)";
+			$params = [':start' => $sVal, ':end' => $eVal];
+			$paramsZon = [':start' => $sVal, ':end' => $eVal, ':s2' => $sVal, ':e2' => $eVal];
 		} else {
 			$whereGas = "DAYOFYEAR(date) BETWEEN :start AND :end";
 			$whereZon = "DAYOFYEAR(Datum_Dag) BETWEEN :start AND :end";
+			$whereSub = "DAYOFYEAR(Datum_Dag) BETWEEN :s2 AND :e2";
 			$params = [':start' => $start, ':end' => $end];
+			$paramsZon = [':start' => $start, ':end' => $end, ':s2' => $start, ':e2' => $end];
 		}
 		
 		$qGas = "SELECT AVG(gas) AS gas, AVG(elec) AS elec FROM `Guydag` WHERE $whereGas";
 		$stmtGas = $dbverbruik->query($qGas, $params);
 		if ($rowGas = $stmtGas->fetch()) $avg = $rowGas;
 		
-		$qZon = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE $whereZon AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE $whereZon)";
-		$stmtZon = $dbzonphp->query($qZon, $params);
+		$qZon = "SELECT AVG(Geg_Dag) AS AVG FROM `tgeg_dag` WHERE $whereZon AND Geg_Dag > (SELECT MAX(Geg_Dag)/2 FROM tgeg_dag WHERE $whereSub)";
+		$stmtZon = $dbzonphp->query($qZon, $paramsZon);
 		if ($rowZon = $stmtZon->fetch()) $zonavg = round($rowZon['AVG'], 0);
 	
 		$maand = date('m', $time);
