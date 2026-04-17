@@ -181,24 +181,26 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     if ($gisteren) {
         $dagGas      = round((float)$gasStand - (float)$gisteren['gas'], 3);
         $dagElec     = round((float)$elecStand - (float)$gisteren['elec'], 3);
-        $dagWater    = round((float)$waterStand - (float)$gisteren['water'], 3);
-        $dagInjectie = round((float)$injectie - (float)$gisteren['injectie'], 3);
-        $dagVerbruik = round((float)$zonvandaag - $dagInjectie + $dagElec, 3);
-
-        $q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
-              VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
-              ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
-		$opts=[
-                ':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
-                ':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
-            ];
-        lg($q.'
-'.json_encode($opts));
-		try {
-            $dbverbruik->query($q, $opts);
-        } catch (Exception $e) {
-            lg("❌ Error Guydag update: " . $e->getMessage());
-        }
+        if($dagGas>=0&&$dagElec>=0) {
+			$dagWater    = round((float)$waterStand - (float)$gisteren['water'], 3);
+			$dagInjectie = round((float)$injectie - (float)$gisteren['injectie'], 3);
+			$dagVerbruik = round((float)$zonvandaag - $dagInjectie + $dagElec, 3);
+	
+			$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
+				  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
+				  ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
+			$opts=[
+					':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
+					':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
+				];
+			lg($q.'
+	'.json_encode($opts));
+			try {
+				$dbverbruik->query($q, $opts);
+			} catch (Exception $e) {
+				lg("❌ Error Guydag update: " . $e->getMessage());
+			}
+		}
     } else {
         // Belangrijk: als gisteren niet gevonden wordt, log dit!
         lg("⚠️ Geen gisteren data gevonden voor $gisterenDatum in tabel Guy.");
