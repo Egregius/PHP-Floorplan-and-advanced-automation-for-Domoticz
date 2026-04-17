@@ -107,6 +107,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     $injectie    = $newData['export'];
     $waterStand  = $newData['water'];
     $alwayson    = (int)getCache('alwayson');
+    $peakpower   = (int)getCache('peakpower');
     $newavg      = $en->a;
     $prevavg     = (float)getCache('energy_prevavg');
 
@@ -121,6 +122,11 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
             $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
             $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
         }
+    }
+    if (($en->z > 0 && $en->z > $peakpower) || empty($peakpower)) {
+    	setCache('peakpower', $en-z);
+    	$msg='Solar Peakpower = '.$en->z.'W';
+    	shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
     }
 	if ($prevavg > 2500) {
 		if ($newavg > $kwartierpiek - 200) {
