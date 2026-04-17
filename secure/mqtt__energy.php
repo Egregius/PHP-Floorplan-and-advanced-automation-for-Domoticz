@@ -72,7 +72,11 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$
 
 $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson, &$peakpower) {
 	$topic=substr($topic,-1);
-	lg($topic.'	'.$status);
+	static $n=0;
+	static $z=0;
+	static $b=0;
+	${$topic}=$status;
+	lg("n=$n	z=$z	b=$b");
 	
 /*	static $peakpower   = (int)getCache('peakpower');
 	if (($en->z > 0 && $en->z > $peakpower) || empty($peakpower)) {
