@@ -1320,27 +1320,21 @@ function initDimmerSlider(e){
 		ajaxcontrol(e,"dimmer",val);
 		sessionStorage.setItem(e,val);
 	}
-
 	function a(ev){
 		if (ev.cancelable) ev.preventDefault();
-
 		const rect = t.getBoundingClientRect();
 		const x = getClientX(ev);
 		if (x === null) return;
-
 		const pos = x - rect.left;
 		const pct = Math.max(0, Math.min(100, pos / rect.width * 100));
-
 		let m;
 		const u = (m = pct) <= 50
 			? m / 50 * 25
 			: 25 + (m - 50) / 50 * 75;
 
 		const v = r(Math.round(u));
-
 		o.style.width = pct + "%";
 		n.style.left  = pct + "%";
-
 		if (i){
 			if (c) clearTimeout(c);
 			c = setTimeout(()=>l(v),250);
@@ -1375,8 +1369,6 @@ function initDimmerSlider(e){
 	document.addEventListener("touchmove", ev=>{ if (i) a(ev); }, { passive:false });
 	document.addEventListener("touchend", end, { passive:false });
 	document.addEventListener("touchcancel", end, { passive:false });
-
-	// click on track
 	t.addEventListener("click", ev=>{
 		if (!i) l(a(ev));
 	});

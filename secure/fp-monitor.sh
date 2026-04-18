@@ -17,7 +17,7 @@ execute_backup() {
 inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
     if [[ "$FILE" == "/var/www/html/index.php" ]] || [[ "$FILE" == *.png ]] || [[ "$FILE" == *.webp ]] || [[ "$FILE" == *.gz ]]; then
-        sleep 1
+        while read -t 2 -r; do :; done
         execute_backup
     fi
 done
