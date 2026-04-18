@@ -43,10 +43,7 @@ cleanup() {
                 echo "Verwijderen (ouder dan 1 jaar): $d"
                 /bin/rm -rf "$d"; continue
             fi
-            if [ "$age" -gt 60 ]; then
-                prev="${dirs[$((i-1))]}"
-                [[ "${d:0:5}" != "${prev:0:5}" ]] && keep=1
-            elif [ "$age" -gt 30 ]; then
+            if [ "$age" -gt 30 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:6}" != "${prev:0:6}" ]] && keep=1
             elif [ "$age" -gt 14 ]; then
@@ -73,7 +70,7 @@ cleanup() {
 
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
-    if [[ "$FILE" == "/var/www/html/index.php" ]] || [[ "$FILE" == *.png ]] || [[ "$FILE" == *.webp ]] || [[ "$FILE" == *.gz ]]; then
+    if [[ "$FILE" == *.php ]] || [[ "$FILE" == *.png ]] || [[ "$FILE" == *.webp ]] || [[ "$FILE" == *.gz ]]; then
         /bin/sleep 2
         while read -t 2 -r; do :; done
         execute_backup
