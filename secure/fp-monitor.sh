@@ -4,6 +4,7 @@ BACKUP_DIR="/Backup"
 MQTT_HOST="192.168.30.22"
 MQTT_TOPIC="d/floorplan_version"
 LOCK_FILE="/tmp/backup_cleanup_last_run"
+EXCLUDE_FILE="/var/www/html/secure/backup_exclude.list"
 
 execute_backup() {
     VERSION=$(/bin/date +%Y%m%d%H%M%S)
@@ -12,8 +13,7 @@ execute_backup() {
     LATEST=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
     /bin/mkdir -p "$TARGET"
     
-    # We gebruiken */ om mappen overal in de boomstructuur te vangen
-    OPTS="-a --delete --exclude='.git*' --exclude='*/.git*' --exclude='*/.github' --exclude='*/picam' --exclude='*/fonts' --exclude='*/images' --exclude='*/sounds'"
+    OPTS="-a --delete --exclude-from=$EXCLUDE_FILE"
     [ -n "$LATEST" ] && OPTS="$OPTS --link-dest=$LATEST"
     
     echo "Start backup: $(date)" >> /tmp/fp-monitor.log

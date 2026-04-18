@@ -752,6 +752,7 @@ function handleResponse(device,v){
 			updateDeviceTime(device)
 			return
 		default:
+		
 			switch(v?.d) {
 				case 's':
 				case 'sc': {
