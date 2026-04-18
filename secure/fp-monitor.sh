@@ -7,14 +7,24 @@ LOCK_FILE="/tmp/backup_cleanup_last_run"
 
 execute_backup() {
     VERSION=$(/bin/date +%Y%m%d%H%M%S)
+    /usr/bin/mosquitto_pub -h "$MQTT_HOST" -t "$MQTT_TOPIC" -m "$VERSION" -r
     TARGET="$BACKUP_DIR/$VERSION"
     LATEST=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
     /bin/mkdir -p "$TARGET"
+    
     OPTS="-a --delete"
     [ -n "$LATEST" ] && OPTS="$OPTS --link-dest=$LATEST"
-    /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$TARGET/"
-    /usr/bin/mosquitto_pub -h "$MQTT_HOST" -t "$MQTT_TOPIC" -m "$VERSION" -r
-    echo "Backup: $TARGET"
+    
+    # Debug: Logging naar een specifiek bestand om fouten te vangen
+    echo "Start backup: $(date)" >> /tmp/fp-monitor.log
+    /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$TARGET/" >> /tmp/fp-monitor.log 2>&1
+    
+    # Check of rsync succesvol was
+    if [ $? -eq 0 ]; then
+        echo "Backup succesvol: $TARGET" >> /tmp/fp-monitor.log
+    else
+        echo "ERROR: Rsync gefaald! Controleer /tmp/fp-monitor.log"
+    fi
 }
 
 cleanup() {

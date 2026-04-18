@@ -1060,9 +1060,7 @@ function dimmer(device,floorplan='floorplan'){
 	let orderedLevels=[];
 	for (let r=0; r < rows; r++){
 		for (let c=0; c < cols; c++){
-			if(grid[r][c]!==undefined){
-				orderedLevels.push(grid[r][c]);
-			}
+			if(grid[r][c]!==undefined)orderedLevels.push(grid[r][c]);
 		}
 	}
 	html += '<div class="quick-levels quick-levelsd">';
@@ -1331,7 +1329,6 @@ function initDimmerSlider(e){
 		const u = (m = pct) <= 50
 			? m / 50 * 25
 			: 25 + (m - 50) / 50 * 75;
-
 		const v = r(Math.round(u));
 		o.style.width = pct + "%";
 		n.style.left  = pct + "%";
@@ -1341,7 +1338,6 @@ function initDimmerSlider(e){
 		}
 		return v;
 	}
-
 	function start(ev){
 		if (ev.cancelable) ev.preventDefault();
 		i = true;
