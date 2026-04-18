@@ -6,33 +6,33 @@ MQTT_TOPIC="d/floorplan_version"
 LOCK_FILE="/tmp/backup_cleanup_last_run"
 
 execute_backup() {
-    VERSION=$(date +%Y%m%d%H%M%S)
-    mosquitto_pub -h "$MQTT_HOST" -t "$MQTT_TOPIC" -m "$VERSION" -r
+    VERSION=$(/bin/date +%Y%m%d%H%M%S)
     TARGET="$BACKUP_DIR/$VERSION"
-    LATEST=$(ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | sort -r | head -n 1)
-    mkdir -p "$TARGET"
+    LATEST=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
+    /bin/mkdir -p "$TARGET"
     OPTS="-a --delete"
     [ -n "$LATEST" ] && OPTS="$OPTS --link-dest=$LATEST"
-    rsync $OPTS "$MONITOR_DIR/" "$TARGET/"
+    /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$TARGET/"
+    /usr/bin/mosquitto_pub -h "$MQTT_HOST" -t "$MQTT_TOPIC" -m "$VERSION" -r
     echo "Backup: $TARGET"
 }
 
 cleanup() {
-    if [[ -f "$LOCK_FILE" && "$(cat "$LOCK_FILE")" == "$(date +%Y-%m-%d)" ]]; then return; fi
+    if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y-%m-%d)" ]]; then return; fi
     cd "$BACKUP_DIR" || return
-    local now=$(date +%s)
-    local dirs=($(ls -1d * 2>/dev/null | sort -r))
+    local now=$(/bin/date +%s)
+    local dirs=($(/bin/ls -1d * 2>/dev/null | /usr/bin/sort -r))
     local count=${#dirs[@]}
-    if [ "$count" -gt 50 ]; then
-        for (( i=50; i<count; i++ )); do
+    if [ "$count" -gt 20 ]; then
+        for (( i=20; i<count; i++ )); do
             local d="${dirs[$i]}"
-            local ts=$(date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s 2>/dev/null)
+            local ts=$(/bin/date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s 2>/dev/null)
             if [ $? -ne 0 ]; then continue; fi
             local age=$(( (now - ts) / 86400 ))
             local keep=0
             if [ "$age" -gt 365 ]; then
                 echo "Verwijderen (ouder dan 1 jaar): $d"
-                rm -rf "$d"; continue
+                /bin/rm -rf "$d"; continue
             fi
             if [ "$age" -gt 30 ]; then
                 prev="${dirs[$((i-1))]}"
@@ -44,15 +44,16 @@ cleanup() {
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:10}" != "${prev:0:10}" ]] && keep=1
             fi
-            [[ $keep -eq 0 ]] && { echo "Verwijderen (retentie): $d"; rm -rf "$d"; }
+            [[ $keep -eq 0 ]] && { echo "Verwijderen (retentie): $d"; /bin/rm -rf "$d"; }
         done
     fi
-    date +%Y-%m-%d > "$LOCK_FILE"
+    /bin/date +%Y-%m-%d > "$LOCK_FILE"
 }
 
-inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
+/usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
     if [[ "$FILE" == "/var/www/html/index.php" ]] || [[ "$FILE" == *.png ]] || [[ "$FILE" == *.webp ]] || [[ "$FILE" == *.gz ]]; then
+        /bin/sleep 2
         while read -t 2 -r; do :; done
         execute_backup
         cleanup

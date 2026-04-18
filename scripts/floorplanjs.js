@@ -1347,9 +1347,8 @@ function initDimmerSlider(e){
 		i = true;
 		window.dimmerLocked[e] = true;
 		n.style.cursor = "grabbing";
-		a(ev); // CRUCIAAL voor iOS
+		a(ev);
 	}
-
 	function end(){
 		if (!i) return;
 		i = false;
@@ -1358,7 +1357,6 @@ function initDimmerSlider(e){
 		l(d);
 		setTimeout(()=>{ window.dimmerLocked[e] = false; },1000);
 	}
-
 	n.addEventListener("mousedown", start);
 	document.addEventListener("mousemove", ev=>{ if (i) a(ev); });
 	document.addEventListener("mouseup", end);
