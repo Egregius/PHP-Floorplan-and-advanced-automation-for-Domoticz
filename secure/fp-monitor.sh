@@ -12,7 +12,7 @@ execute_backup() {
     LATEST=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
     /bin/mkdir -p "$TARGET"
     
-    OPTS="-a --delete"
+    OPTS="-a --delete --exclude='.git' --exclude='picam'"
     [ -n "$LATEST" ] && OPTS="$OPTS --link-dest=$LATEST"
     
     # Debug: Logging naar een specifiek bestand om fouten te vangen

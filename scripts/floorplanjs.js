@@ -753,7 +753,6 @@ function handleResponse(device,v){
 			return
 //		case 'l':
 //			log('💬 '+v)
-//			return
 		default:
 
 			switch(v?.d) {
@@ -1000,7 +999,6 @@ function setpoint(device){
 		let btnClass='level-btn';
 		let levelNum=parseFloat(level);
 		let tempNum=(t==='D') ? t : parseFloat(t);
-
 		if(level == t || (t==='D'&&level==='D')){
 			btnClass += ' active';
 		} else if(t!=='D'&&level!=='D'&&levelNum > tempNum){
