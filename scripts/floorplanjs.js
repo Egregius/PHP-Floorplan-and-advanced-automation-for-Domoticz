@@ -1359,12 +1359,9 @@ function initDimmerSlider(e){
 		setTimeout(()=>{ window.dimmerLocked[e] = false; },1000);
 	}
 
-	// mouse
 	n.addEventListener("mousedown", start);
 	document.addEventListener("mousemove", ev=>{ if (i) a(ev); });
 	document.addEventListener("mouseup", end);
-
-	// touch (iOS!)
 	n.addEventListener("touchstart", start, { passive:false });
 	document.addEventListener("touchmove", ev=>{ if (i) a(ev); }, { passive:false });
 	document.addEventListener("touchend", end, { passive:false });
@@ -1536,9 +1533,7 @@ function updateDeviceTime(id) {
 			kleur = "#666"
 		}
 		if (status !== undefined){
-			if (status > 0){
-				kleur = "#FFF"
-			}
+			if (status > 0) kleur = "#FFF"
 		}
 		if (lastState[id] === tijd+kleur) return
 		if (delta >= 82800) {
@@ -1668,10 +1663,7 @@ function stopMonitor() {
     if (monitorTimer) { clearInterval(monitorTimer); monitorTimer = null; }
     if (!offlineTimeout) {
         offlineTimeout = setTimeout(() => {
-            if (!isReconnecting && (!client || !client.connected)) {
-                removeClass('clock', 'online');
-                //addClass('clock', 'offline');
-            }
+            if (!isReconnecting && (!client || !client.connected)) removeClass('clock', 'online');
             offlineTimeout = null;
         }, 300);
     }

@@ -23,13 +23,17 @@ cleanup() {
     local now=$(date +%s)
     local dirs=($(ls -1d * 2>/dev/null | sort -r))
     local count=${#dirs[@]}
-    if [ "$count" -gt 5 ]; then
-        for (( i=5; i<count; i++ )); do
+    if [ "$count" -gt 50 ]; then
+        for (( i=50; i<count; i++ )); do
             local d="${dirs[$i]}"
-            local ts=$(date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s)
+            local ts=$(date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s 2>/dev/null)
+            if [ $? -ne 0 ]; then continue; fi
             local age=$(( (now - ts) / 86400 ))
             local keep=0
-            if [ "$age" -gt 365 ]; then rm -rf "$d"; continue; fi
+            if [ "$age" -gt 365 ]; then
+                echo "Verwijderen (ouder dan 1 jaar): $d"
+                rm -rf "$d"; continue
+            fi
             if [ "$age" -gt 30 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:6}" != "${prev:0:6}" ]] && keep=1
@@ -40,7 +44,7 @@ cleanup() {
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:10}" != "${prev:0:10}" ]] && keep=1
             fi
-            [[ $keep -eq 0 ]] && rm -rf "$d"
+            [[ $keep -eq 0 ]] && { echo "Verwijderen (retentie): $d"; rm -rf "$d"; }
         done
     fi
     date +%Y-%m-%d > "$LOCK_FILE"
