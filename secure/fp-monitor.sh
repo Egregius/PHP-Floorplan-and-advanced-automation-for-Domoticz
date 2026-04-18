@@ -12,14 +12,13 @@ execute_backup() {
     LATEST=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
     /bin/mkdir -p "$TARGET"
     
-    OPTS="-a --delete --exclude='.git' --exclude='picam'"
+    # We gebruiken */ om mappen overal in de boomstructuur te vangen
+    OPTS="-a --delete --exclude='.git*' --exclude='*/.git*' --exclude='*/.github' --exclude='*/picam' --exclude='*/fonts' --exclude='*/images' --exclude='*/sounds'"
     [ -n "$LATEST" ] && OPTS="$OPTS --link-dest=$LATEST"
     
-    # Debug: Logging naar een specifiek bestand om fouten te vangen
     echo "Start backup: $(date)" >> /tmp/fp-monitor.log
     /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$TARGET/" >> /tmp/fp-monitor.log 2>&1
     
-    # Check of rsync succesvol was
     if [ $? -eq 0 ]; then
         echo "Backup succesvol: $TARGET" >> /tmp/fp-monitor.log
     else

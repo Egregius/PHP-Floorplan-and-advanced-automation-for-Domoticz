@@ -751,10 +751,7 @@ function handleResponse(device,v){
 			setHTML(device,html)
 			updateDeviceTime(device)
 			return
-//		case 'l':
-//			log('💬 '+v)
 		default:
-
 			switch(v?.d) {
 				case 's':
 				case 'sc': {
