@@ -1282,11 +1282,7 @@ function setThermostatTemp(t,o){ajaxcontrol(t,"setpoint",o),setView('floorplanhe
 function setRollerLevel(e,l){ajaxcontrol(e,"roller",l),setView('floorplanheating')}
 function setDimmerLevel(e,i){ajaxcontrol(e,"dimmer",i),setView('floorplan')}
 function initDimmerSlider(e){
-/*	const t = getElem("sliderTrack"),
-	      n = getElem("sliderThumb"),
-	      o = getElem("sliderFill"),
-	      s = getElem("dimmerValue");
-*/	const t = document.getElementById("sliderTrack");
+	const t = document.getElementById("sliderTrack");
 	const n = document.getElementById("sliderThumb");
 	const o = document.getElementById("sliderFill");
 	const s = document.getElementById("dimmerValue");
@@ -1319,7 +1315,6 @@ function initDimmerSlider(e){
 		d = t;
 		return t;
 	}
-
 	function l(val){
 		window.dimmerLocked[e] = true;
 		ajaxcontrol(e,"dimmer",val);
