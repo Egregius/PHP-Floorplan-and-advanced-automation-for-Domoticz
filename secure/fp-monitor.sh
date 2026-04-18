@@ -43,15 +43,27 @@ cleanup() {
                 echo "Verwijderen (ouder dan 1 jaar): $d"
                 /bin/rm -rf "$d"; continue
             fi
-            if [ "$age" -gt 30 ]; then
+            if [ "$age" -gt 60 ]; then
+                prev="${dirs[$((i-1))]}"
+                [[ "${d:0:5}" != "${prev:0:5}" ]] && keep=1
+            elif [ "$age" -gt 30 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:6}" != "${prev:0:6}" ]] && keep=1
+            elif [ "$age" -gt 14 ]; then
+                prev="${dirs[$((i-1))]}"
+                [[ "${d:0:7}" != "${prev:0:7}" ]] && keep=1
             elif [ "$age" -gt 7 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:8}" != "${prev:0:8}" ]] && keep=1
-            else
+            elif [ "$age" -gt 2 ]; then
+                prev="${dirs[$((i-1))]}"
+                [[ "${d:0:9}" != "${prev:0:9}" ]] && keep=1
+            elif [ "$age" -gt 1 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:10}" != "${prev:0:10}" ]] && keep=1
+            else
+                prev="${dirs[$((i-1))]}"
+                [[ "${d:0:11}" != "${prev:0:11}" ]] && keep=1
             fi
             [[ $keep -eq 0 ]] && { echo "Verwijderen (retentie): $d"; /bin/rm -rf "$d"; }
         done
