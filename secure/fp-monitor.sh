@@ -23,8 +23,8 @@ cleanup() {
     local now=$(date +%s)
     local dirs=($(ls -1d * 2>/dev/null | sort -r))
     local count=${#dirs[@]}
-    if [ "$count" -gt 20 ]; then
-        for (( i=20; i<count; i++ )); do
+    if [ "$count" -gt 5 ]; then
+        for (( i=5; i<count; i++ )); do
             local d="${dirs[$i]}"
             local ts=$(date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s)
             local age=$(( (now - ts) / 86400 ))

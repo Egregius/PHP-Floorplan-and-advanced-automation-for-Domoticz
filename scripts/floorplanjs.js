@@ -1417,9 +1417,7 @@ function berekenKleurRood(t, end, start = 0) {
         r = 255;
         g = interp(255, 153, k);
         b = interp(102, 0, k);
-
     } else {
-        // oranje -> rood
         k = (f - 0.66) / 0.34;
         r = 255;
         g = interp(153, 0, k);
