@@ -1404,21 +1404,15 @@ function berekenKleurGroen(t, end, start = 0) {
 }
 function berekenKleurRood(t, end, start = 0) {
     const f = norm(t, start, end);
-
     if (f <= 0) return '#CCCCCC';
     if (f >= 1) return '#FF0000';
-
     let r, g, b, k;
-
     if (f < 0.33) {
-        // grijs -> geel
         k = f / 0.33;
         r = interp(204, 255, k);
         g = interp(204, 255, k);
         b = interp(204, 102, k);
-
     } else if (f < 0.66) {
-        // geel -> oranje
         k = (f - 0.33) / 0.33;
         r = 255;
         g = interp(255, 153, k);
