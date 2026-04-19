@@ -417,12 +417,11 @@ async function ajaxbose(ip, force = false) {
                 powerHtml += `<button class="btn b2" onclick="ajaxcontrolbose('${ip}','skip','next'); ajaxbose('${ip}')">Next</button>`;
             }
 
-            const presets = [['EDM - 1','1'], ['EDM - 2','2'], ['EDM - 3','3'], ['Mix - 1','4'], ['Mix - 2','5'], ['Mix - 3','6']];
+            const presets = [['EDM - 1','1'], ['EDM - 2','2'], ['EDM - 3','3'], ['MIX - 1','4'], ['MIX - 2','5'], ['MIX - 3','6']];
             presets.forEach(([playlistName, presetId]) => {
                 const cls = (data.playlist === playlistName) ? 'btn btna b3' : 'btn b3';
                 const parts = playlistName.split(' ');
-                const shortLabel = parts[0] + " - " + (parts[3] || presetId);
-                powerHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${shortLabel}</button>`;
+                powerHtml += `<button class="${cls}" onclick="ajaxcontrolbose('${ip}','preset','${presetId}'); ajaxbose('${ip}')">${playlistName}</button>`;
             });
             setHTML('power', powerHtml, true);
 

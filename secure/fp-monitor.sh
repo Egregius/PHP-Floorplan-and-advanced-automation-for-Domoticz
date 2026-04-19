@@ -70,6 +70,7 @@ cleanup() {
 
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
+	echo $FILE  >> /tmp/fp-monitor.log 2>&1
     if [[ "$FILE" == *.php ]] || [[ "$FILE" == *.png ]] || [[ "$FILE" == *.webp ]] || [[ "$FILE" == *.gz ]]; then
         /bin/sleep 2
         while read -t 2 -r; do :; done
