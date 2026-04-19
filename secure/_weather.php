@@ -186,12 +186,12 @@ if ((int)$d['z']>100&&$d['dag']->s>12) {
 	}
 }
 
-if (count($temps)>=2) $temp=round(array_sum($temps)/count($temps), 2);
-if (count($hums)>=2) $hum=round(array_sum($hums)/count($hums), 0);
+if (count($temps)>2) $temp=round(array_sum($temps)/count($temps), 2);
+if (count($hums)>2) $hum=round(array_sum($hums)/count($hums), 0);
 if (count($uvs)>=2) $uv=round(array_sum($uvs)/count($uvs), 1);
 $weather['uv']=$uv??0;
-foreach ($temps as $i) {
-	if ($i>-30&&$i<50) {
+foreach ($temps as $k => $i) {
+	if ($k!='prev'&&$i>-30&&$i<50) {
 		if ($i>$maxtemp) $maxtemp=$i;
 		elseif ($i<$mintemp) $mintemp=$i;
 	}
