@@ -4,7 +4,7 @@ BACKUP_DIR="/Backup"
 LOCK_FILE="/tmp/backup_cleanup_last_run"
 EXCLUDE_FILE="/var/www/html/secure/backup_exclude.list"
 LOG_BASE="/var/log/fp-monitor"
-
+LAST_BACKUP=0
 get_log() {
     echo "${LOG_BASE}-$(date +%Y-%m).log"
 }
@@ -69,13 +69,19 @@ cleanup() {
     fi
     /bin/date +%Y-%m-%d > "$LOCK_FILE"
 }
+
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $FILE" >> "$(get_log)"
 	FILENAME=$(basename "$FILE")
     case "$FILENAME" in
 		*.php|*.png|*.webp|*.gz|*.sh|*.py)
-			/bin/sleep 2
+			NOW=$(date +%s)
+            if (( NOW - LAST_BACKUP < 5 )); then
+                continue
+            fi
+            LAST_BACKUP=$(date +%s)
+            cho "$(date '+%Y-%m-%d %H:%M:%S') - Event voor: $FILE (start backup)" >> "$(get_log)"
 			execute_backup
 			cleanup
 			;;
