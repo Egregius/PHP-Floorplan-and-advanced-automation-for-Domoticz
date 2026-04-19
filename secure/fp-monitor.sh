@@ -2,13 +2,12 @@
 MONITOR_DIR="/var/www/"
 BACKUP_DIR="/Backup"
 LOCK_FILE="/tmp/backup_cleanup_last_run"
-EXCLUDE_FILE="/var/www/backup_exclude.list"
+EXCLUDE_FILE="/var/www/html/secure/backup_exclude.list"
 LOG_BASE="/var/log/fp-monitor"
 
 get_log() {
     echo "${LOG_BASE}-$(date +%Y-%m).log"
 }
-
 execute_backup() {
     VERSION=$(/bin/date +%Y%m%d%H%M%S)
     TARGET="$BACKUP_DIR/$VERSION"
@@ -29,7 +28,6 @@ execute_backup() {
         echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR: Rsync gefaald!" >> "$(get_log)"
     fi
 }
-
 cleanup() {
     if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y-%m-%d)" ]]; then return; fi
     cd "$BACKUP_DIR" || return
@@ -71,10 +69,9 @@ cleanup() {
     fi
     /bin/date +%Y-%m-%d > "$LOCK_FILE"
 }
-
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $FILE" >> "$LOG_FILE";
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $FILE" >> "$(get_log)"
 	FILENAME=$(basename "$FILE")
     case "$FILENAME" in
 		*.php|*.png|*.webp|*.gz|*.sh|*.py)
