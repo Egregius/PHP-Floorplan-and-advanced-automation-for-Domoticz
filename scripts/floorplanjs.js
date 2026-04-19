@@ -394,8 +394,6 @@ async function ajaxbose(ip, force = false) {
                 volHtml += '</div>';
                 setHTML('volume', volHtml, true);
             }
-
-            // 2. Metadata (Artist & Track)
             const artist = (data.source === "BLUETOOTH") ? "Bluetooth" : (data.artist || data.source);
             setText('artist', artist, force);
             setText('track', data.track || '', force);

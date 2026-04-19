@@ -16,13 +16,13 @@ execute_backup() {
     OPTS="-a --delete --exclude-from=$EXCLUDE_FILE"
     [ -n "$LATEST" ] && OPTS="$OPTS --link-dest=$LATEST"
     
-    echo "Start backup: $(date)" >> /tmp/fp-monitor.log
-    /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$TARGET/" >> /tmp/fp-monitor.log 2>&1
+    echo "Start backup: $(date)" >> /var/log/fp-monitor.log
+    /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$TARGET/" >> /var/log/fp-monitor.log 2>&1
     
     if [ $? -eq 0 ]; then
-        echo "Backup succesvol: $TARGET" >> /tmp/fp-monitor.log
+        echo "Backup succesvol: $TARGET" >> /var/log/fp-monitor.log
     else
-        echo "ERROR: Rsync gefaald! Controleer /tmp/fp-monitor.log"
+        echo "ERROR: Rsync gefaald! Controleer /var/log/fp-monitor.log"
     fi
 }
 
@@ -70,7 +70,7 @@ cleanup() {
 
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
-	echo $FILE  >> /tmp/fp-monitor.log 2>&1
+	echo $FILE  >> /var/log/fp-monitor.log 2>&1
     if [[ "$FILE" == *.php ]] || [[ "$FILE" == *.png ]] || [[ "$FILE" == *.webp ]] || [[ "$FILE" == *.gz ]]; then
         /bin/sleep 2
         while read -t 2 -r; do :; done
