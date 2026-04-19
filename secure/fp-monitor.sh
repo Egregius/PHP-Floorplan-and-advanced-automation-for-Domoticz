@@ -8,26 +8,32 @@ LAST_BACKUP=0
 get_log() {
     echo "${LOG_BASE}-$(date +%Y-%m).log"
 }
+
 execute_backup() {
-    VERSION=$(/bin/date +%Y%m%d%H%M%S)
-    TARGET="$BACKUP_DIR/$VERSION"
-    LATEST=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
-    /bin/mkdir -p "$TARGET"
+    local files=("/var/www/html/index.php" "/var/www/html/scripts/floorplan.js.gz" "/var/www/html/styles/floorplan.css.gz")
+    local max_ts=$(stat -c %Y "${files[@]}" | sort -rn | head -n 1)
+    local mqtt_version=$(date -d "@$max_ts" +%Y%m%d%H%M%S)
+    /usr/bin/mosquitto_pub -h "192.168.30.22" -t "d/floorplan_version" -m "$mqtt_version" -r
+    
+    local backup_version=$(/bin/date +%Y%m%d%H%M%S)
+    local target="$BACKUP_DIR/$backup_version"
+    local latest=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
+    /bin/mkdir -p "$target"
     
     OPTS="-a --delete --size-only --prune-empty-dirs --exclude-from=$EXCLUDE_FILE"
-    [ -n "$LATEST" ] && OPTS="$OPTS --link-dest=$LATEST"
+    [ -n "$latest" ] && OPTS="$OPTS --link-dest=$latest"
     
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - Start backup: $VERSION" >> "$(get_log)"
-    /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$TARGET/" >> "$(get_log)" 2>&1
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - Start backup: $backup_version" >> "$(get_log)"
+    /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$target/" >> "$(get_log)" 2>&1
     
     if [ $? -eq 0 ]; then
-        /usr/bin/find "$TARGET" -type d -empty -delete
-        /usr/bin/mosquitto_pub -h "192.168.30.22" -t "d/floorplan_version" -m "$VERSION" -r
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - Backup succesvol: $TARGET" >> "$(get_log)"
+        /usr/bin/find "$target" -type d -empty -delete
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - Backup succesvol: $target (MQTT: $mqtt_version)" >> "$(get_log)"
     else
         echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR: Rsync gefaald!" >> "$(get_log)"
     fi
 }
+
 cleanup() {
     if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y-%m-%d)" ]]; then return; fi
     cd "$BACKUP_DIR" || return
@@ -42,7 +48,7 @@ cleanup() {
             local age=$(( (now - ts) / 86400 ))
             local keep=0
             if [ "$age" -gt 365 ]; then
-                echo "$(date '+%Y-%m-%d %H:%M:%S') - Verwijderen (ouder dan 1 jaar): $d" >> "$(get_log)"
+                echo "$(date '+%Y-%m-%d %H:%M:%S') - Verwijderen: $d" >> "$(get_log)"
                 /bin/rm -rf "$d"; continue
             fi
             if [ "$age" -gt 30 ]; then
@@ -64,7 +70,7 @@ cleanup() {
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:11}" != "${prev:0:11}" ]] && keep=1
             fi
-            [[ $keep -eq 0 ]] && { echo "$(date '+%Y-%m-%d %H:%M:%S') - Verwijderen (retentie): $d" >> "$(get_log)"; /bin/rm -rf "$d"; }
+            [[ $keep -eq 0 ]] && { echo "$(date '+%Y-%m-%d %H:%M:%S') - Retentie: $d" >> "$(get_log)"; /bin/rm -rf "$d"; }
         done
     fi
     /bin/date +%Y-%m-%d > "$LOCK_FILE"
@@ -72,18 +78,14 @@ cleanup() {
 
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $FILE" >> "$(get_log)"
-	FILENAME=$(basename "$FILE")
-    case "$FILENAME" in
-		*.php|*.png|*.webp|*.gz|*.sh|*.py)
-			NOW=$(date +%s)
-            if (( NOW - LAST_BACKUP < 5 )); then
-                continue
-            fi
+    case "$(basename "$FILE")" in
+        *.php|*.png|*.webp|*.gz|*.sh|*.py)
+            NOW=$(date +%s)
+            if (( NOW - LAST_BACKUP < 5 )); then continue; fi4
+            echo "$(date '+%Y-%m-%d %H:%M:%S') - Event voor: $FILE (start backup)" >> "$(get_log)"
             LAST_BACKUP=$(date +%s)
-            cho "$(date '+%Y-%m-%d %H:%M:%S') - Event voor: $FILE (start backup)" >> "$(get_log)"
-			execute_backup
-			cleanup
-			;;
-	esac
+            execute_backup
+            cleanup
+            ;;
+    esac
 done
