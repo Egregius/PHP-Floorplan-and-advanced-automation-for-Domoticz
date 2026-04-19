@@ -5,27 +5,25 @@ LOCK_FILE="/tmp/backup_cleanup_last_run"
 EXCLUDE_FILE="/var/www/html/secure/backup_exclude.list"
 LOG_BASE="/var/log/fp-monitor"
 LAST_BACKUP=0
+
 get_log() {
     echo "${LOG_BASE}-$(date +%Y-%m).log"
 }
+echo "$(date '+%Y-%m-%d %H:%M:%S') - fp-monitor started" >> "$(get_log)"
 
 execute_backup() {
     local files=("/var/www/html/index.php" "/var/www/html/scripts/floorplan.js.gz" "/var/www/html/styles/floorplan.css.gz")
     local max_ts=$(stat -c %Y "${files[@]}" | sort -rn | head -n 1)
     local mqtt_version=$(date -d "@$max_ts" +%Y%m%d%H%M%S)
     /usr/bin/mosquitto_pub -h "192.168.30.22" -t "d/floorplan_version" -m "$mqtt_version" -r
-    
     local backup_version=$(/bin/date +%Y%m%d%H%M%S)
     local target="$BACKUP_DIR/$backup_version"
     local latest=$(/bin/ls -1d "$BACKUP_DIR"/*/ 2>/dev/null | /usr/bin/sort -r | /usr/bin/head -n 1)
     /bin/mkdir -p "$target"
-    
     OPTS="-a --delete --size-only --prune-empty-dirs --exclude-from=$EXCLUDE_FILE"
     [ -n "$latest" ] && OPTS="$OPTS --link-dest=$latest"
-    
     echo "$(date '+%Y-%m-%d %H:%M:%S') - Start backup: $backup_version" >> "$(get_log)"
     /usr/bin/rsync $OPTS "$MONITOR_DIR/" "$target/" >> "$(get_log)" 2>&1
-    
     if [ $? -eq 0 ]; then
         /usr/bin/find "$target" -type d -empty -delete
         echo "$(date '+%Y-%m-%d %H:%M:%S') - Backup succesvol: $target (MQTT: $mqtt_version)" >> "$(get_log)"
@@ -33,7 +31,6 @@ execute_backup() {
         echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR: Rsync gefaald!" >> "$(get_log)"
     fi
 }
-
 cleanup() {
     if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y-%m-%d)" ]]; then return; fi
     cd "$BACKUP_DIR" || return
@@ -78,10 +75,16 @@ cleanup() {
 
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
+    if [[ "$FILE" == "/var/www/html/secure/fp-monitor.sh" ]]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - Monitor script gewijzigd, service herstarten..." >> "$(get_log)"
+        execute_backup
+        /usr/bin/systemctl restart fp-monitor.service
+        exit 0
+    fi
     case "$(basename "$FILE")" in
         *.php|*.png|*.webp|*.gz|*.sh|*.py)
             NOW=$(date +%s)
-            if (( NOW - LAST_BACKUP < 5 )); then continue; fi4
+            if (( NOW - LAST_BACKUP < 5 )); then continue; fi
             echo "$(date '+%Y-%m-%d %H:%M:%S') - Event voor: $FILE (start backup)" >> "$(get_log)"
             LAST_BACKUP=$(date +%s)
             execute_backup
