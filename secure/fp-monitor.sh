@@ -72,12 +72,10 @@ cleanup() {
     fi
     /bin/date +%Y-%m-%d > "$LOCK_FILE"
 }
-
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
     if [[ "$FILE" == "/var/www/html/secure/fp-monitor.sh" ]]; then
         echo "$(date '+%Y-%m-%d %H:%M:%S') - Monitor script gewijzigd, service herstarten..." >> "$(get_log)"
-        execute_backup
         /usr/bin/systemctl restart fp-monitor.service
         exit 0
     fi
