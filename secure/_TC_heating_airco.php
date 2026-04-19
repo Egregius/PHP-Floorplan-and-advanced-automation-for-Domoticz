@@ -50,7 +50,7 @@ foreach (array('living','kamer','alex') as $k) {
     if ($d['daikin']->s=='On') {
         $fan=7; // A=auto	B=silence	3=lvl_1	4=lvl_2	5=lvl_3	6=lvl_4	7=lvl_5
         $spmode=-1;
-        if ($dif<-2) $spmode=1;
+        if ($dif<-3) $spmode=1;
         elseif ($dif<-1) $spmode=0;
         if ($k=='living') {
             if ($prevSet==1||($d['weg']->s==0&&$d['living_set']->m==1&&$dif<=-0.4)) {

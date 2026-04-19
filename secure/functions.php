@@ -12,7 +12,7 @@ define('VERSIE', 5);
 $dow=date("w");
 if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 date_default_timezone_set('Europe/Brussels');
-$spm=[-1=>'Eco',0=>'',1=>'Power'];
+$spm=[-1=>'Eco',0=>'Normal',1=>'Power'];
 function updateWekker(&$t, &$weekend, &$dow, &$d) {
 	$d['time'] = $d['time'] ?? time();
     $dow = ($d['dag']->m >= 250) ? date("w", $d['time'] + 43200) : date("w");

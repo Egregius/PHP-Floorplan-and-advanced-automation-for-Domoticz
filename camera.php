@@ -99,8 +99,8 @@ function store($name='',$status='',$msg='',$log='store') {
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();
-			$d[$name]->s=$status;
-			$d[$name]->t=$d['time'];
+			$d[$name]['s']=$status;
+			$d[$name]['t']=$d['time'];
 			$db=Database::getInstance();
 			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
 			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
