@@ -7,7 +7,7 @@ SCRIPTS=(
   "mqtt_media_player.php"
   "mqtt_sensor_switch.php"
   "mqtt_zigbee2mqtt.php"
-  "cron.php"
+#  "cron.php"
   "cron2.php"
   "mqtt__energy.php"
   "mqtt__homewizard.py"
