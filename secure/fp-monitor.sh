@@ -39,7 +39,7 @@ execute_backup() {
 }
 
 cleanup() {
-#    if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y-%m-%d)" ]]; then return; fi
+    if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y%m%d%H)" ]]; then return; fi
     cd "$BACKUP_DIR" || return
     local now=$(/bin/date +%s)
     local dirs=($(/bin/ls -1d * 2>/dev/null | /usr/bin/sort -r))
@@ -74,10 +74,10 @@ cleanup() {
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:11}" != "${prev:0:11}" ]] && keep=1
             fi
-            [[ $keep -eq 0 ]] && { echo "$(date '+%Y-%m-%d %H:%M:%S') - Retentie: $d" >> "$(get_log)"; /bin/rm -rf "$d"; }
+            [[ $keep -eq 0 ]] && { echo "$(date '+%Y-%m-%d %H:%M:%S') - Verwijderd: $d" >> "$(get_log)"; /bin/rm -rf "$d"; }
         done
     fi
-    /bin/date +%Y-%m-%d > "$LOCK_FILE"
+    /bin/date +%Y%m%d%H > "$LOCK_FILE"
 }
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
