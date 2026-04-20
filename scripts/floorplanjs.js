@@ -632,7 +632,8 @@ function handleResponse(device,v){
 			return
 		}
 		case 'alwayson':
-			setText('alwayson', v + "W");
+			if(v===9999) setText('alwayson', "");
+			else setText('alwayson', v + "W");
 			return
 		case 'zon': {
 			const val = parseFloat(v);
