@@ -28,11 +28,8 @@ execute_backup() {
         /usr/bin/find "$target" -type d -empty -delete
         mkdir -p "$target/__changes"
         /usr/bin/find "$target" -path "$target/__changes" -prune -o -type f -links 1 -print | while read -r file; do
-            # Bepaal het relatieve pad
             rel_path="${file#$target/}"
-            # Maak de mappenstructuur aan in 'changes'
             mkdir -p "$(dirname "$target/__changes/$rel_path")"
-            # Maak de hard link
             ln "$file" "$target/__changes/$rel_path"
         done
         echo "$(date '+%Y-%m-%d %H:%M:%S') - Backup succesvol: $target (MQTT: $mqtt_version)" >> "$(get_log)"
@@ -40,8 +37,9 @@ execute_backup() {
         echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR: Rsync gefaald!" >> "$(get_log)"
     fi
 }
+
 cleanup() {
-    if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y-%m-%d)" ]]; then return; fi
+#    if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y-%m-%d)" ]]; then return; fi
     cd "$BACKUP_DIR" || return
     local now=$(/bin/date +%s)
     local dirs=($(/bin/ls -1d * 2>/dev/null | /usr/bin/sort -r))
@@ -92,6 +90,7 @@ do
         *.php|*.png|*.webp|*.gz|*.sh|*.py)
             NOW=$(date +%s)
             if (( NOW - LAST_BACKUP < 5 )); then continue; fi
+            sleep 2
             echo "$(date '+%Y-%m-%d %H:%M:%S') - Event voor: $FILE (start backup)" >> "$(get_log)"
             LAST_BACKUP=$(date +%s)
             execute_backup
