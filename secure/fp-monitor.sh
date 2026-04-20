@@ -12,7 +12,7 @@ get_log() {
 echo "$(date '+%Y-%m-%d %H:%M:%S') - fp-monitor started" >> "$(get_log)"
 
 execute_backup() {
-    local files=("/var/www/html/index.php" "/var/www/html/scripts/floorplan.js.gz" "/var/www/html/styles/floorplan.css.gz")
+    local files=("/var/www/html/index.php" "/var/www/html/scripts/floorplanjs.js.gz" "/var/www/html/styles/floorplan.css.gz")
     local max_ts=$(stat -c %Y "${files[@]}" | sort -rn | head -n 1)
     local mqtt_version=$(date -d "@$max_ts" +%Y%m%d%H%M%S)
     /usr/bin/mosquitto_pub -h "192.168.30.22" -t "d/floorplan_version" -m "$mqtt_version" -r
