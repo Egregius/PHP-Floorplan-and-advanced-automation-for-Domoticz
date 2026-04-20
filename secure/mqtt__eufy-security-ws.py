@@ -5,6 +5,7 @@ import datetime
 import requests
 import time
 import os
+import hashlib
 from pathlib import Path
 from websockets import connect
 
@@ -12,6 +13,7 @@ from websockets import connect
 WS_URL = "ws://192.168.2.26:3000"
 CONFIG_PATH = Path("/var/www/eufy_config.json")
 SUPPRESS_FILE = Path("/dev/shm/cache/timestampweg.txt")
+HASH_FILE = Path("/dev/shm/last_eufy_hash.txt") # Bestand om laatste hash te onthouden
 RECONNECT_DELAY = 5
 MAX_TELEGRAM_RETRIES = 6
 SUPPRESS_WINDOW = 300  # 5 minuten in seconden
@@ -21,24 +23,27 @@ def log(msg):
     print(f"{now} {msg}")
 
 def is_suppressed():
-    """Checkt of we het sturen van foto's moeten onderdrukken."""
     if not SUPPRESS_FILE.exists():
         return False
-    
     try:
         content = SUPPRESS_FILE.read_text().strip()
-        if not content:
-            return False
-        
+        if not content: return False
         file_ts = float(content)
-        current_ts = time.time()
-        
-        # Als timestamp minder dan 300 sec geleden is -> onderdrukken
-        if (current_ts - file_ts) < SUPPRESS_WINDOW:
-            return True
+        return (time.time() - file_ts) < SUPPRESS_WINDOW
     except Exception as e:
         log(f"⚠️ Fout bij lezen suppress file: {e}")
+        return False
+
+def is_duplicate(image_bytes):
+    """Checkt of de foto hetzelfde is als de vorige."""
+    current_hash = hashlib.md5(image_bytes).hexdigest()
+    if HASH_FILE.exists():
+        last_hash = HASH_FILE.read_text().strip()
+        if last_hash == current_hash:
+            return True # Is een duplicaat
     
+    # Sla nieuwe hash op
+    HASH_FILE.write_text(current_hash)
     return False
 
 def load_config():
@@ -52,7 +57,6 @@ def load_config():
         return None
 
 def send_telegram_photo(image_bytes, config):
-    """Verstuurt foto naar Telegram met retry-logica."""
     token = config.get("TELEGRAM_TOKEN")
     chat_ids = config.get("CHAT_IDS", [])
     url = f"https://api.telegram.org/bot{token}/sendPhoto"
@@ -60,26 +64,21 @@ def send_telegram_photo(image_bytes, config):
     for chat_id in chat_ids:
         success = False
         attempt = 0
-        
         while not success and attempt < MAX_TELEGRAM_RETRIES:
             attempt += 1
             try:
                 files = {'photo': ('eufy_doorbell.jpg', image_bytes, 'image/jpeg')}
                 data = {'chat_id': chat_id}
                 response = requests.post(url, files=files, data=data, timeout=15)
-                
                 if response.status_code == 200:
                     log(f"✅ Foto verzonden naar {chat_id} (poging {attempt})")
                     success = True
                 else:
                     log(f"⚠️ Telegram fout {response.status_code} op {chat_id}: {response.text}")
-                    if attempt < MAX_TELEGRAM_RETRIES:
-                        time.sleep(2)
+                    if attempt < MAX_TELEGRAM_RETRIES: time.sleep(2)
             except Exception as e:
                 log(f"❌ Netwerkfout Telegram ({chat_id}), poging {attempt}: {e}")
-                if attempt < MAX_TELEGRAM_RETRIES:
-                    time.sleep(2)
-        
+                if attempt < MAX_TELEGRAM_RETRIES: time.sleep(2)
         if not success:
             log(f"🛑 Foto definitief mislukt voor {chat_id} na {MAX_TELEGRAM_RETRIES} pogingen.")
 
@@ -102,17 +101,14 @@ async def handle_eufy():
                         event_data = data.get("event", {})
                         
                         if event_data.get("name") == "ringing" and event_data.get("value") is True:
-                            if is_suppressed():
-                                log("🔕 Aanbellen gedetecteerd, maar onderdrukt via timestamp file.")
-                            else:
-                                log("🔔 Er wordt aangebeld! (Wachten op foto...)")
+                            if is_suppressed(): log("🔕 Aanbellen gedetecteerd, maar onderdrukt.")
+                            else: log("🔔 Er wordt aangebeld! (Wachten op foto...)")
 
                         if event_data.get("name") == "picture":
                             if is_suppressed():
-                                log("📸 Foto ontvangen, maar verzenden overgeslagen (onderdrukt).")
+                                log("📸 Foto ontvangen, maar onderdrukt.")
                                 continue
 
-                            log("📸 Foto ontvangen, verwerken...")
                             val = event_data.get("value", {})
                             inner = val.get("data", {}) if isinstance(val, dict) else {}
                             buffer_list = inner.get("data") if isinstance(inner, dict) else None
@@ -120,6 +116,13 @@ async def handle_eufy():
                             if buffer_list:
                                 try:
                                     image_bytes = bytes([int(x) for x in buffer_list])
+                                    
+                                    # De-duplicatie check
+                                    if is_duplicate(image_bytes):
+                                        log("📸 Foto ontvangen, maar identiek aan vorige (duplicaat genegeerd).")
+                                        continue
+                                    
+                                    log("📸 Nieuwe foto verwerken...")
                                     loop = asyncio.get_event_loop()
                                     await loop.run_in_executor(None, send_telegram_photo, image_bytes, config)
                                 except Exception as e:
