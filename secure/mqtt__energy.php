@@ -85,7 +85,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
     if ($z == 0 || empty($alwayson)) {
         $power = ($b < 0) ? ($n - $b) : $n;
         if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
-            $alwayson = $power;
+            $alwayson = clamp($power,$alwayson*0.95,$alwayson*1.05);
             setCache('alwayson', $alwayson);
             $vandaag=date("Y-m-d");
             lg('💡 New alwayson ' . $power . ' W');
@@ -346,6 +346,8 @@ function alert($name,$msg,$time) {
 		$db->query("INSERT INTO alerts (n,t) VALUES ('$name','$time') ON DUPLICATE KEY UPDATE t='$time';");
 	}
 }
+function clamp($v,$min,$max){return max($min,min($max,$v));}
+
 class Database {
     private $host;
     private $user;
