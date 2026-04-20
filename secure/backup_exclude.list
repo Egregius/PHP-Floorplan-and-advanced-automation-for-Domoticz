@@ -1,6 +1,10 @@
-.git
-.github
-picam
-fonts
-images
-sounds
+# Mappen uitsluiten
+**/.git/
+**/.github/
+**/vendor/
+**/composer/
+**/picam/
+**/fonts/
+**/images/
+**/sounds/
+**/csv/
