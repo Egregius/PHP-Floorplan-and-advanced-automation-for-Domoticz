@@ -238,7 +238,7 @@ if (count($rains) >= 2) {
     }
 
 }
-if($weather['uvm']>$weather['uvm'])$weather['uvm']=$weather['uv'];
+if($weather['uv']>$weather['uvm'])$weather['uvm']=$weather['uv'];
 $weather['uv']=round($weather['uv'],1);
 $weather['uvm']=round($weather['uvm'],1);
 //lg(print_r($uvs,true));

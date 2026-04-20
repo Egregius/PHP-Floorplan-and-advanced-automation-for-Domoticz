@@ -1388,8 +1388,8 @@ function berekenKleurGroen(t, end, start = 0) {
 }
 function berekenKleurRood(t, end, start = 0) {
     const f = norm(t, start, end);
-    if (f <= 0) return '#CCCCCC';
-    if (f >= 1) return '#FF0000';
+    if (f < start) return '#CCCCCC';
+    if (f > end) return '#FF0000';
     let r, g, b, k;
     if (f < 0.33) {
         k = f / 0.33;
