@@ -140,7 +140,6 @@ while (true) {
 $mqtt->disconnect();
 
 // --- FUNCTIES ---
-
 function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $time, &$alwayson) {
     static $mqttcache = [];
     static $lastDate = null;
