@@ -3,15 +3,21 @@ require 'secure/functions.php';
 require '/var/www/authentication.php';
 //session_write_close();
 if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') {
-	if($_REQUEST['action']=='garmingpx') exec('curl -4 http://192.168.30.2:9000/hooks/garmingpx -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='syncfotos') exec('curl -4 http://192.168.30.2:9000/hooks/syncfotos -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='synccamera') exec('curl -4 http://192.168.30.2:9000/hooks/synccamera -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='googlemaps') exec('curl -4 http://192.168.20.21:9000/hooks/googlemaps -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='garminbadges') exec('curl -4 http://192.168.20.21:9000/hooks/garminbadges -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='trakt') exec('curl -4 http://192.168.20.21:9000/hooks/trakt -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='weegschaal') exec('curl -4 http://192.168.20.21:9000/hooks/weegschaal -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='dedup') exec('curl -4 http://192.168.20.21:9000/hooks/dedup -H "Content-Type: application/json" &');
-	elseif($_REQUEST['action']=='resetreizen') exec('curl -4 http://192.168.20.21:9000/hooks/resetreizen -H "Content-Type: application/json" &');
+	$action = $_REQUEST['action'] ?? '';
+	$urls = [
+		'garmingpx' => 'http://192.168.30.2:9000/hooks/garmingpx',
+		'syncfotos' => 'http://192.168.30.2:9000/hooks/syncfotos',
+		'synccamera' => 'http://192.168.30.2:9000/hooks/synccamera',
+		'googlemaps' => 'http://192.168.20.21:9000/hooks/googlemaps',
+		'garminbadges' => 'http://192.168.20.21:9000/hooks/garminbadges',
+		'trakt' => 'http://192.168.20.21:9000/hooks/trakt',
+		'weegschaal' => 'http://192.168.20.21:9000/hooks/weegschaal',
+		'dedup' => 'http://192.168.20.21:9000/hooks/dedup',
+		'resetreizen' => 'http://192.168.20.21:9000/hooks/resetreizen',
+	];
+	if (isset($urls[$action])) {
+		exec('curl -4 ' . $urls[$action] . ' -H "Content-Type: application/json" &');
+	}
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
