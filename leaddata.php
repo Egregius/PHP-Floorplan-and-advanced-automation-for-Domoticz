@@ -8,13 +8,14 @@ function readJsonFile($path) {
     return '{}';
 }
 $modes=[
+	0=>"Neutral",
 	1=>"Airco",
 	2=>"Airco + Gas",
 	3=>"Gas"
 ];
 $jsonBath = readJsonFile($pathBath);
 $jsonLiving = readJsonFile($pathLiving);
-if (isset($_GET['mode']) && in_array($_GET['mode'], ['1','2','3'], true)) {
+if (isset($_GET['mode']) && in_array($_GET['mode'], ['0','1','2','3'], true)) {
     $mode = $_GET['mode'];
     foreach (['jsonLiving', 'jsonBath'] as $var) {
         $data = json_decode($$var, true);
