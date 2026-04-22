@@ -167,7 +167,13 @@ const commonOptions = {
     },
     plugins: {
         legend: { display: false },
-        tooltip: { enabled: true } // <-- Dit schakelt de tekstwolkjes volledig uit
+        tooltip: {
+                mode: 'index',
+                intersect: false,
+                backgroundColor: 'rgba(0,0,0,0.8)',
+                titleFont: { size: 14 },
+                bodyFont: { size: 14 }
+            }
     }
 };
 
