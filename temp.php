@@ -153,7 +153,7 @@ $maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
 <div class="chart-container"><canvas id="chartMaand"></canvas></div>
 
 <script>
-Chart.defaults.animation = false;
+Chart.defaults.animation = true;
 const commonOptions = {
     layout:{padding:{left:0,right:5,top:0,bottom:0}},
     responsive: true,
@@ -167,7 +167,7 @@ const commonOptions = {
     },
     plugins: {
         legend: { display: false },
-        tooltip: { enabled: false } // <-- Dit schakelt de tekstwolkjes volledig uit
+        tooltip: { enabled: true } // <-- Dit schakelt de tekstwolkjes volledig uit
     }
 };
 

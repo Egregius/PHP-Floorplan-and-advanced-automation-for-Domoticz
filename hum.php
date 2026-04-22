@@ -166,7 +166,7 @@ const commonOptions = {
     },
     plugins: {
         legend: { display: false },
-        tooltip: { enabled: false } // <-- Dit schakelt de tekstwolkjes volledig uit
+        tooltip: { enabled: true } // <-- Dit schakelt de tekstwolkjes volledig uit
     }
 };
 
