@@ -85,6 +85,7 @@ foreach (array('living','kamer','alex') as $k) {
 				$maxpow=40;
 			} else $fan=$fanspeeds[clamp(round($dif*10),-3,-2)];
 			$fan=7;
+			$spmode=-1;
 //			lg($daikin->$k->set.' '.$setrounded,'daikin');
 //			lg(print_r($daikin->$k,true),'daikin');
         } elseif ($k=='kamer' || $k=='alex') {
@@ -98,7 +99,7 @@ foreach (array('living','kamer','alex') as $k) {
 			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.round($factor,3).' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.$change.' maxpow='.$maxpow.' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
 			if($msg!=$prevmsg) {
 				lg($msg);
-				publishmqtt('d/i',date("G:i:s").'|'.number_format($setrounded,1,',','').'|'.number_format($set,2,',','').'|'.number_format(($diffac + $trendfac),3,',','').'|'.round($factor,3).'|'.$maxpow.' '. $fan);
+//				publishmqtt('d/i',date("G:i:s").'|'.number_format($setrounded,1,',','').'|'.number_format($set,2,',','').'|'.number_format(($diffac + $trendfac),3,',','').'|'.round($factor,3).'|'.$maxpow.' '. $fan);
 				$prevmsg=$msg;
 				unset($line);
 			}
