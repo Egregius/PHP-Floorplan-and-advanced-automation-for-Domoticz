@@ -85,7 +85,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, 
     if ($z == 0 || empty($alwayson)) {
         $power = ($b < 0) ? ($n - $b) : $n;
         if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
-            $alwayson = clamp($power,$alwayson*0.95,$alwayson*1.05);
+            $alwayson = round(clamp($power,$alwayson*0.95,$alwayson*1.05),0);
             setCache('alwayson', $alwayson);
             $vandaag=date("Y-m-d");
             lg('💡 New alwayson ' . $power . ' W');
