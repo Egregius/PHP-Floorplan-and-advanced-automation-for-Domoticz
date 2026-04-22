@@ -129,9 +129,11 @@ foreach($leadDataLiving as $mode=>$temp) {
             // Loop door de gesorteerde temperaturen
             for (let i = 0; i < sortedTemps.length; i++) {
                 const temp = sortedTemps[i];
+				console.log(temp)
                 const tempKey = String(temp);
+				console.log(tempKey)
                 const values = tempData[tempKey];
-
+				console.log(values)
                 // A. Alle losse punten (Scatter)
                 values.forEach(val => {
                     individualPoints.push({ x: temp, y: val });
@@ -288,7 +290,7 @@ foreach($leadDataLiving as $mode=>$temp) {
     // --- Uitvoeren ---
     const bathData = processData(rawDataBath);
     const livingData = processData(rawDataLiving);
-
+	console.log(bathData)
     initChart('chartBath', bathData);
     initChart('chartLiving', livingData);
 
