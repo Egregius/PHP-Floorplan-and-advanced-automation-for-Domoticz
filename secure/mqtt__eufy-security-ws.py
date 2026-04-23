@@ -107,6 +107,7 @@ async def handle_eufy():
                         if event_data.get("name") == "picture":
                             if is_suppressed():
                                 log("📸 Foto ontvangen, maar onderdrukt.")
+                                is_duplicate(image_bytes)
                                 continue
 
                             val = event_data.get("value", {})
