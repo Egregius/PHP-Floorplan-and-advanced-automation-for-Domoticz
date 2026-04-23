@@ -94,35 +94,23 @@ async def handle_eufy():
                 log("✅ Verbonden met Eufy WS")
                 await ws.send(json.dumps({"command": "set_api_schema", "schemaVersion": 13}))
                 await ws.send(json.dumps({"command": "start_listening"}))
-                
                 async for message in ws:
                     data = json.loads(message)
                     if data.get("type") == "event":
                         event_data = data.get("event", {})
-                        
-                        if event_data.get("name") == "ringing" and event_data.get("value") is True:
-                            if is_suppressed(): log("🔕 Aanbellen gedetecteerd, maar onderdrukt.")
-                            else: log("🔔 Er wordt aangebeld! (Wachten op foto...)")
-
                         if event_data.get("name") == "picture":
-                            if is_suppressed():
-                                log("📸 Foto ontvangen, maar onderdrukt.")
-                                is_duplicate(image_bytes)
-                                continue
-
                             val = event_data.get("value", {})
                             inner = val.get("data", {}) if isinstance(val, dict) else {}
                             buffer_list = inner.get("data") if isinstance(inner, dict) else None
-                            
                             if buffer_list:
                                 try:
                                     image_bytes = bytes([int(x) for x in buffer_list])
-                                    
-                                    # De-duplicatie check
                                     if is_duplicate(image_bytes):
                                         log("📸 Foto ontvangen, maar identiek aan vorige (duplicaat genegeerd).")
                                         continue
-                                    
+                                    if is_suppressed():
+                                        log("📸 Foto ontvangen, maar onderdrukt.")
+                                        continue
                                     log("📸 Nieuwe foto verwerken...")
                                     loop = asyncio.get_event_loop()
                                     await loop.run_in_executor(None, send_telegram_photo, image_bytes, config)
