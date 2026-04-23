@@ -282,7 +282,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         $mqttcache = [];
         $lastDate = $vandaag;
         $force = true;
-        $alwayson=9999;
+        $alwayson=100;
         lg("📅 Dagwissel gedetecteerd ($vandaag), cache gereset.");
     }
 
