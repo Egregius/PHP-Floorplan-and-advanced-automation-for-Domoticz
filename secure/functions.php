@@ -855,6 +855,7 @@ function sirene($msg) {
     } else {
         $lastTime = $currentTime;
         $lastMsg = $msg;
+        telegram('ALARM: '.$msg, false, 3);
         lg(' >>> Eerste trigger opgeslagen. Wachten op afwijkende tweede trigger...');
     }
 }
