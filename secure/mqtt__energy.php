@@ -96,7 +96,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
     $now = time();
     $allFresh = ($now - $timestamps['n']) < MAX_AGE_SEC
              && ($now - $timestamps['z']) < MAX_AGE_SEC
-             && ($now - $timestamps['b']) < MAX_AGE_SEC;
+             && (($now - $timestamps['b']) < MAX_AGE_SEC||$b==0||$b==800);
 
     if (!$allFresh) return;
 
@@ -332,7 +332,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         $mqttcache = [];
         $lastDate = $vandaag;
         $force = true;
-        $alwayson=100;
+        $alwayson=500;
         lg("📅 Dagwissel gedetecteerd ($vandaag), cache gereset.");
     }
 
