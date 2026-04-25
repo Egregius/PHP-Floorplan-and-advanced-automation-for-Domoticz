@@ -35,11 +35,11 @@ $dbzonphp = new Database('192.168.30.23', 'dbuser', 'dbuser', 'zon');
 
 $force = true;
 
-define('BUFFER_SIZE',     20);   // laatste 15 gesynchroniseerde metingen
+define('BUFFER_SIZE',     30);   // laatste 30 gesynchroniseerde metingen
 define('MAX_AGE_SEC',     30);   // max leeftijd per meter-waarde
 define('MIN_ALWAYSON',    50);   // negeer ruis onder 50W
-define('MAX_STD_DEV',     10);   // max toegelaten standaarddeviatie (W)
-define('MIN_BUFFER_FILL', 10);   // wacht tot buffer minstens half gevuld is
+define('MAX_STD_DEV',      8);   // max toegelaten standaarddeviatie (W)
+define('MIN_BUFFER_FILL', 15);   // wacht tot buffer minstens half gevuld is
 
 
 // CRUCIAAL: Initialiseer de array met default waarden uit cache om count mismatch te voorkomen
@@ -345,7 +345,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
         'gas' => $dataArray['gas'],
         'elec' => $dataArray['elec'],
         'zon' => $dataArray['zon'],
-        'alwayson' => $dataArray['alwayson'],
+//        'alwayson' => $dataArray['alwayson'],
     ];
     $dailyen=json_encode([
 		'gasavg' => $dataArray['gasavg'],
