@@ -35,6 +35,13 @@ $dbzonphp = new Database('192.168.30.23', 'dbuser', 'dbuser', 'zon');
 
 $force = true;
 
+define('BUFFER_SIZE',     15);   // laatste 15 gesynchroniseerde metingen
+define('MAX_AGE_SEC',     30);  // max leeftijd per meter-waarde
+define('MIN_ALWAYSON',    30);   // negeer ruis onder 30W
+define('MAX_STD_DEV',     80);   // max toegelaten standaarddeviatie (W)
+define('MIN_BUFFER_FILL',  8);   // wacht tot buffer minstens half gevuld is
+
+
 // CRUCIAAL: Initialiseer de array met default waarden uit cache om count mismatch te voorkomen
 $storedTeller = json_decode(getCache('teller'), true);
 $newData = [
@@ -81,12 +88,6 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
     static $a = 0;
     static $timestamps  = ['n' => 0, 'z' => 0, 'b' => 0];
     static $powerBuffer = [];
-
-    const BUFFER_SIZE    = 15;   // laatste 15 gesynchroniseerde metingen
-    const MAX_AGE_SEC    = 30;   // max leeftijd per meter-waarde
-    const MIN_ALWAYSON   = 30;   // negeer ruis onder 30W
-    const MAX_STD_DEV    = 80;   // max toegelaten standaarddeviatie (W)
-    const MIN_BUFFER_FILL = 8;   // wacht tot buffer minstens half gevuld is
 
     ${$topic} = $status;
     $timestamps[$topic] = time();
