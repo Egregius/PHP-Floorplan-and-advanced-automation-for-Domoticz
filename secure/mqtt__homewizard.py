@@ -115,13 +115,12 @@ def flush_teller_state():
 def quantize_0_01(value): return floor(value*100)/100
 def quantize_step(value, step): return (value//step)*step
 def step_for_value(value):
-    return 1
     v=abs(value)
     if v<20:return 1
-    elif v<50: return 2
-    elif v<100: return 5
-    elif v<500: return 10
-    else: return 20
+    elif v<50: return 1
+    elif v<100: return 1
+    elif v<500: return 1
+    else: return 1
 def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
