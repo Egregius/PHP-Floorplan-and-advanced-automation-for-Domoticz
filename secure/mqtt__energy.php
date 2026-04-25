@@ -70,69 +70,118 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$
     }
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/e/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson, &$peakpower) {
-	$topic=substr($topic,-1);
-	static $n=0;
-	static $z=0;
-	static $b=0;
-	static $a=0;
-	static $prevavg=0;
-	
-	
-	${$topic}=$status;
-	$p=$n+$z-$b;
-	echo "n=$n	z=$z	b=$b	p=$p".PHP_EOL;
-    if ($z == 0 || empty($alwayson)) {
-        $power = ($b < 0) ? ($n - $b) : $n;
-        if ($power >= 30 && ($power < $alwayson || empty($alwayson))) {
-            $alwayson = round(clamp($power,$alwayson*0.95,$alwayson*1.05),0);
+$mqtt->subscribe('d/e/+', function (string $topic, string $status)
+    use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp,
+        &$force, &$mqtt, &$alwayson, &$peakpower)
+{
+    $topic = substr($topic, -1);
+    static $n = 0;
+    static $z = 0;
+    static $b = 0;
+    static $a = 0;
+    static $timestamps  = ['n' => 0, 'z' => 0, 'b' => 0];
+    static $powerBuffer = [];
+
+    const BUFFER_SIZE    = 15;   // laatste 15 gesynchroniseerde metingen
+    const MAX_AGE_SEC    = 30;   // max leeftijd per meter-waarde
+    const MIN_ALWAYSON   = 30;   // negeer ruis onder 30W
+    const MAX_STD_DEV    = 80;   // max toegelaten standaarddeviatie (W)
+    const MIN_BUFFER_FILL = 8;   // wacht tot buffer minstens half gevuld is
+
+    ${$topic} = $status;
+    $timestamps[$topic] = time();
+
+    // Wacht tot alle drie de meters recent zijn
+    $now = time();
+    $allFresh = ($now - $timestamps['n']) < MAX_AGE_SEC
+             && ($now - $timestamps['z']) < MAX_AGE_SEC
+             && ($now - $timestamps['b']) < MAX_AGE_SEC;
+
+    if (!$allFresh) return;
+
+    // Werkelijk momentverbruik (altijd correct, ongeacht bron)
+    $p = $n + $z - $b;
+    echo "n=$n\tz=$z\tb=$b\tp=$p" . PHP_EOL;
+
+    $powerBuffer[] = $p;
+    if (count($powerBuffer) > BUFFER_SIZE) {
+        array_shift($powerBuffer);
+    }
+
+    // Wacht tot buffer voldoende gevuld is
+    if (count($powerBuffer) < MIN_BUFFER_FILL) return;
+
+    // Bereken stabiliteit via standaarddeviatie
+    $avg    = array_sum($powerBuffer) / count($powerBuffer);
+    $stddev = sqrt(array_sum(array_map(
+        fn($v) => ($v - $avg) ** 2, $powerBuffer
+    )) / count($powerBuffer));
+
+    $isStable = $stddev < MAX_STD_DEV;
+
+    // Minimum van de buffer = beste schatting sluimerverbruik
+    $bufferedMin = min($powerBuffer);
+
+    echo "stddev=$stddev\tbufferedMin=$bufferedMin\tstable=" . ($isStable ? 'ja' : 'nee') . PHP_EOL;
+
+    if ($isStable && $bufferedMin >= MIN_ALWAYSON) {
+        if ($bufferedMin < $alwayson || empty($alwayson)) {
+            $alwayson = $bufferedMin;
             setCache('alwayson', $alwayson);
-            $vandaag=date("Y-m-d");
-            lg('💡 New alwayson ' . $power . ' W');
-            $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w) ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
-            $dbverbruik->query($q, [':date' => $vandaag, ':w' => $alwayson]);
+            lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
+            $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w)
+                  ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
+            $dbverbruik->query($q, [':date' => date('Y-m-d'), ':w' => $alwayson]);
         }
     }
-    if($topic==='z') {
-		if ($z > $peakpower || empty($peakpower)) {
-			$peakpower=$z;
-			setCache('peakpower', $peakpower);
-			$msg='Solar peak power = '.$peakpower.'W';
-			shell_exec('/var/www/html/secure/telegram.sh "'.$msg.'" "false" "1" > /dev/null 2>/dev/null &');
-		}
-    } elseif($topic==='a') {
-    	$newavg      = $a;
-		$prevavg     = (float)getCache('energy_prevavg');
-		if ($a>2500) {
-    		$kwartierpiek = 2500;
-			$q = "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
-			$stmt = $dbverbruik->query($q, [':date' => date('Y-m', $time) . '-%']);
-			if ($row = $stmt->fetch()) {
-				$kwartierpiek = $row['wH'] ?? 2500;
-			}
-			if ($prevavg > 2500) {
-			if ($newavg > $kwartierpiek - 200) {
-					alert('Kwartierpiek', 'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL . 'Piek deze maand = ' . $kwartierpiek . ' Wh',$time);
-				}
-				if ($newavg < $prevavg) {
-					try {
-						$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
-						$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
-						if ($prevavg > $kwartierpiek - 200) {
-							alert('KwartierpiekB', 'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL . 'Vorige piek deze maand = ' . $kwartierpiek . ' Wh',$time);
-							$kwartierpiek = $prevavg;
-						}
-					} catch (Exception $e) {
-						lg("Error updating kwartierpiek: " . $e->getMessage());
-					}
-				}
-			}
-		}
-		setCache('energy_prevavg', $newavg);
+
+    // --- Peakpower zonnepanelen ---
+    if ($topic === 'z') {
+        if ($z > $peakpower || empty($peakpower)) {
+            $peakpower = $z;
+            setCache('peakpower', $peakpower);
+            $msg = 'Solar peak power = ' . $peakpower . 'W';
+            shell_exec('/var/www/html/secure/telegram.sh "' . $msg . '" "false" "1" > /dev/null 2>/dev/null &');
+        }
     }
 
-}, MqttClient::QOS_AT_LEAST_ONCE);
+    // --- Kwartierpiek ---
+    elseif ($topic === 'a') {
+        $newavg  = $a;
+        $prevavg = (float)getCache('energy_prevavg');
 
+        if ($a > 2500) {
+            $kwartierpiek = 2500;
+            $q    = "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
+            $stmt = $dbverbruik->query($q, [':date' => date('Y-m', $time) . '-%']);
+            if ($row = $stmt->fetch()) {
+                $kwartierpiek = $row['wH'] ?? 2500;
+            }
+            if ($prevavg > 2500) {
+                if ($newavg > $kwartierpiek - 200) {
+                    alert('Kwartierpiek',
+                        'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL .
+                        'Piek deze maand = ' . $kwartierpiek . ' Wh', $time);
+                }
+                if ($newavg < $prevavg) {
+                    try {
+                        $q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
+                        $dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
+                        if ($prevavg > $kwartierpiek - 200) {
+                            alert('KwartierpiekB',
+                                'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL .
+                                'Vorige piek deze maand = ' . $kwartierpiek . ' Wh', $time);
+                            $kwartierpiek = $prevavg;
+                        }
+                    } catch (Exception $e) {
+                        lg("Error updating kwartierpiek: " . $e->getMessage());
+                    }
+                }
+            }
+        }
+        setCache('energy_prevavg', $newavg);
+    }
+}, MqttClient::QOS_AT_LEAST_ONCE);
 while (true) {
     $mqtt->loop(true, false, null, 50000);
 }
