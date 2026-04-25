@@ -35,11 +35,11 @@ $dbzonphp = new Database('192.168.30.23', 'dbuser', 'dbuser', 'zon');
 
 $force = true;
 
-define('BUFFER_SIZE',     15);   // laatste 15 gesynchroniseerde metingen
-define('MAX_AGE_SEC',     30);  // max leeftijd per meter-waarde
-define('MIN_ALWAYSON',    30);   // negeer ruis onder 30W
-define('MAX_STD_DEV',     25);   // max toegelaten standaarddeviatie (W)
-define('MIN_BUFFER_FILL',  8);   // wacht tot buffer minstens half gevuld is
+define('BUFFER_SIZE',     20);   // laatste 15 gesynchroniseerde metingen
+define('MAX_AGE_SEC',     30);   // max leeftijd per meter-waarde
+define('MIN_ALWAYSON',    50);   // negeer ruis onder 50W
+define('MAX_STD_DEV',     10);   // max toegelaten standaarddeviatie (W)
+define('MIN_BUFFER_FILL', 10);   // wacht tot buffer minstens half gevuld is
 
 
 // CRUCIAAL: Initialiseer de array met default waarden uit cache om count mismatch te voorkomen
@@ -81,6 +81,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
     use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp,
         &$force, &$mqtt, &$alwayson, &$peakpower)
 {
+    if($topic==='alwayson') return;
     $topic = substr($topic, -1);
     static $n = 0;
     static $z = 0;
@@ -177,6 +178,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
             $alwayson = $measurement;
             setCache('alwayson', $alwayson);
             lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
+            publishmqtt('d/e/alwayson', $alwayson);
             $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w)
                   ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
             $dbverbruik->query($q, [':date' => date('Y-m-d'), ':w' => $alwayson]);
