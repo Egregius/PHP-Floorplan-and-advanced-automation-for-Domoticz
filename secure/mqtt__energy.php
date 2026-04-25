@@ -38,7 +38,7 @@ $force = true;
 define('BUFFER_SIZE',     15);   // laatste 15 gesynchroniseerde metingen
 define('MAX_AGE_SEC',     30);  // max leeftijd per meter-waarde
 define('MIN_ALWAYSON',    30);   // negeer ruis onder 30W
-define('MAX_STD_DEV',     80);   // max toegelaten standaarddeviatie (W)
+define('MAX_STD_DEV',     25);   // max toegelaten standaarddeviatie (W)
 define('MIN_BUFFER_FILL',  8);   // wacht tot buffer minstens half gevuld is
 
 
@@ -92,51 +92,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
     ${$topic} = $status;
     $timestamps[$topic] = time();
 
-    // Wacht tot alle drie de meters recent zijn
-    $now = time();
-    $allFresh = ($now - $timestamps['n']) < MAX_AGE_SEC
-             && ($now - $timestamps['z']) < MAX_AGE_SEC
-             && (($now - $timestamps['b']) < MAX_AGE_SEC||$b==0||$b==800);
-
-    if (!$allFresh) return;
-
-    // Werkelijk momentverbruik (altijd correct, ongeacht bron)
-    $p = $n + $z - $b;
-    echo "n=$n\tz=$z\tb=$b\tp=$p" . PHP_EOL;
-
-    $powerBuffer[] = $p;
-    if (count($powerBuffer) > BUFFER_SIZE) {
-        array_shift($powerBuffer);
-    }
-
-    // Wacht tot buffer voldoende gevuld is
-    if (count($powerBuffer) < MIN_BUFFER_FILL) return;
-
-    // Bereken stabiliteit via standaarddeviatie
-    $avg    = array_sum($powerBuffer) / count($powerBuffer);
-    $stddev = sqrt(array_sum(array_map(
-        fn($v) => ($v - $avg) ** 2, $powerBuffer
-    )) / count($powerBuffer));
-
-    $isStable = $stddev < MAX_STD_DEV;
-
-    // Minimum van de buffer = beste schatting sluimerverbruik
-    $bufferedMin = min($powerBuffer);
-
-    echo "stddev=$stddev\tbufferedMin=$bufferedMin\tstable=" . ($isStable ? 'ja' : 'nee') . PHP_EOL;
-
-    if ($isStable && $bufferedMin >= MIN_ALWAYSON) {
-        if ($bufferedMin < $alwayson || empty($alwayson)) {
-            $alwayson = $bufferedMin;
-            setCache('alwayson', $alwayson);
-            lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
-            $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w)
-                  ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
-            $dbverbruik->query($q, [':date' => date('Y-m-d'), ':w' => $alwayson]);
-        }
-    }
-
-    // --- Peakpower zonnepanelen ---
+    // --- Peakpower zonnepanelen (altijd uitvoeren, onafhankelijk van buffer) ---
     if ($topic === 'z') {
         if ($z > $peakpower || empty($peakpower)) {
             $peakpower = $z;
@@ -146,8 +102,8 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
         }
     }
 
-    // --- Kwartierpiek ---
-    elseif ($topic === 'a') {
+    // --- Kwartierpiek (altijd uitvoeren, onafhankelijk van buffer) ---
+    if ($topic === 'a') {
         $newavg  = $a;
         $prevavg = (float)getCache('energy_prevavg');
 
@@ -182,7 +138,54 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
         }
         setCache('energy_prevavg', $newavg);
     }
+
+    // --- Alwayson: wacht tot alle meters recent zijn ---
+    $now = time();
+    $allFresh = ($now - $timestamps['n']) < MAX_AGE_SEC
+             && ($now - $timestamps['z']) < MAX_AGE_SEC
+             && (($now - $timestamps['b']) < MAX_AGE_SEC || $b == 0 || $b == 800);
+
+    if (!$allFresh) return;
+
+    $p = $n + $z - $b;
+    echo "n=$n\tz=$z\tb=$b\tp=$p" . PHP_EOL;
+
+    $powerBuffer[] = $p;
+    if (count($powerBuffer) > BUFFER_SIZE) {
+        array_shift($powerBuffer);
+    }
+
+    if (count($powerBuffer) < MIN_BUFFER_FILL) return;
+
+    $avg    = array_sum($powerBuffer) / count($powerBuffer);
+    $stddev = sqrt(array_sum(array_map(
+        fn($v) => ($v - $avg) ** 2, $powerBuffer
+    )) / count($powerBuffer));
+
+    $sorted = $powerBuffer;
+    sort($sorted);
+    $count  = count($sorted);
+    $median = $count % 2 === 0
+        ? ($sorted[$count/2 - 1] + $sorted[$count/2]) / 2
+        : $sorted[intval($count/2)];
+    $measurement = round($median);
+
+    echo "stddev=" . round($stddev) . "\tmeasurement=$measurement\tstable=" . ($stddev < MAX_STD_DEV ? 'ja' : 'nee') . PHP_EOL;
+
+    if ($stddev < MAX_STD_DEV && $measurement >= MIN_ALWAYSON) {
+        if ($measurement < $alwayson || empty($alwayson)) {
+            $alwayson = $measurement;
+            setCache('alwayson', $alwayson);
+            lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
+            $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w)
+                  ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
+            $dbverbruik->query($q, [':date' => date('Y-m-d'), ':w' => $alwayson]);
+        }
+    }
+
 }, MqttClient::QOS_AT_LEAST_ONCE);
+
+
 while (true) {
     $mqtt->loop(true, false, null, 50000);
 }
