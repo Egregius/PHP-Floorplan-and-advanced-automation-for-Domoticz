@@ -28,9 +28,9 @@ if ($d['auto']->s=='On') {
 	elseif ($time>=strtotime('16:00')&&$time<strtotime('18:00')) {
 		if ($d['dag']->s<$zonelevatie&&$d['buiten_temp']->s<10) {
 			foreach (array('rwaskamer','ralex','rkamerl','rkamerr') as $i) if ($d[$i]->s<50) sl($i, 100);
-			if ($d['dag']->s<0&&$d['buiten_temp']->s<8) {
+			if ($d['dag']->s<0&&$d['buiten_temp']->s<5) {
 				foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
-			} elseif ($d['dag']->s<-6&&$d['buiten_temp']->s<10) {
+			} elseif ($d['dag']->s<-6&&$d['buiten_temp']->s<8) {
 				foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
 			}
 		}
@@ -55,7 +55,7 @@ if ($d['auto']->s=='On') {
 			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<13&&$d['r'.$i]->s<50) sl('r'.$i, 100);
 		}
 	}
-	elseif ($time>=strtotime('22:00')||$time<strtotime('3:00')) {
+	elseif ($time>=strtotime('22:00')) {
 		if ($d['weg']->s>0&&$d['dag']->s<0) {
 			foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
 			foreach (array('rwaskamer','ralex','rkamerl','rkamerr') as $i) if ($d[$i]->s<50) sl($i, 100);
