@@ -49,25 +49,26 @@ cleanup() {
             local d="${dirs[$i]}"
             local ts=$(/bin/date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s 2>/dev/null)
             if [ $? -ne 0 ]; then continue; fi
-            local age=$(( (now - ts) / 86400 ))
+            local age=$(( (now - ts) ))
             local keep=0
-            if [ "$age" -gt 365 ]; then
+            if [ "$age" -gt 7776000 ]; then
                 echo "$(date '+%Y-%m-%d %H:%M:%S') - Verwijderen: $d" >> "$(get_log)"
                 /bin/rm -rf "$d"; continue
             fi
-            if [ "$age" -gt 30 ]; then
+            echo "$d	$age"
+            if [ "$age" -ge 1209600 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:6}" != "${prev:0:6}" ]] && keep=1
-            elif [ "$age" -gt 14 ]; then
+            elif [ "$age" -ge 604800 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:7}" != "${prev:0:7}" ]] && keep=1
-            elif [ "$age" -gt 7 ]; then
+            elif [ "$age" -ge 259200 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:8}" != "${prev:0:8}" ]] && keep=1
-            elif [ "$age" -gt 2 ]; then
+            elif [ "$age" -ge 86400 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:9}" != "${prev:0:9}" ]] && keep=1
-            elif [ "$age" -gt 1 ]; then
+            elif [ "$age" -ge 43200 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:10}" != "${prev:0:10}" ]] && keep=1
             else
