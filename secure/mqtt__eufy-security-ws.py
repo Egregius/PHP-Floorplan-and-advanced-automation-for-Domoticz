@@ -6,6 +6,7 @@ import requests
 import time
 import os
 import hashlib
+import re
 from pathlib import Path
 from websockets import connect
 
@@ -17,10 +18,24 @@ HASH_FILE = Path("/dev/shm/last_eufy_hash.txt") # Bestand om laatste hash te ont
 RECONNECT_DELAY = 5
 MAX_TELEGRAM_RETRIES = 6
 SUPPRESS_WINDOW = 300  # 5 minuten in seconden
+last_image_age = None
 
 def log(msg):
     now = datetime.datetime.now().strftime('%d-%m %H:%M:%S')
     print(f"{now} {msg}")
+
+def get_event_age_seconds(data):
+    """Haal leeftijd op uit de bestandsnaam in customData, of None als niet beschikbaar."""
+    try:
+        custom = data.get("event", {}).get("customData", {})
+        path = custom.get("command", {}).get("value", "")
+        match = re.search(r'(\d{14})_c\d+\.jpg', path)
+        if match:
+            ts = datetime.strptime(match.group(1), "%Y%m%d%H%M%S")
+            return (datetime.now() - ts).total_seconds()
+    except Exception as e:
+        log(f"⚠️ Fout bij parsen bestandsnaam: {e}")
+    return None
 
 def is_suppressed():
     if not SUPPRESS_FILE.exists():
@@ -99,7 +114,17 @@ async def handle_eufy():
                     log(f"data = {data}")
                     if data.get("type") == "event":
                         event_data = data.get("event", {})
+                        if event_data.get("event") == "command result":
+                            age = get_event_age_seconds(data)
+                            if age is not None:
+                                last_image_age = age
+                                log(f"⏱️ Volgende foto is {int(age)}s oud")
                         if event_data.get("name") == "picture":
+                            if last_image_age is not None and last_image_age > 60:
+                                log(f"⏱️ Foto genegeerd, {int(last_image_age)}s oud.")
+                                last_image_age = None
+                                continue
+                            last_image_age = None
                             val = event_data.get("value", {})
                             inner = val.get("data", {}) if isinstance(val, dict) else {}
                             buffer_list = inner.get("data") if isinstance(inner, dict) else None
