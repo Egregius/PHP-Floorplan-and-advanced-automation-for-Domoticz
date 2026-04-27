@@ -1,4 +1,4 @@
 <?php
 if ($status=='On') {
-	bosekey('NEXT_TRACK', 0, 103);
+	if ($d['kamer1']->s<100) sl('kamer1', 100);
 }
