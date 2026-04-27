@@ -121,7 +121,7 @@ async def handle_eufy():
                                 last_image_age = age
                                 log(f"⏱️ Volgende foto is {int(age)}s oud")
                         if event_data.get("name") == "picture":
-                            if last_image_age is not None and last_image_age > 60:
+                            if last_image_age is not None and last_image_age > 600:
                                 log(f"⏱️ Foto genegeerd, {int(last_image_age)}s oud.")
                                 last_image_age = None
                                 continue
