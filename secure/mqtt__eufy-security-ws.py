@@ -114,7 +114,8 @@ async def handle_eufy():
                     log(f"data = {data}")
                     if data.get("type") == "event":
                         event_data = data.get("event", {})
-                        if event_data.get("event") == "command result":
+                        if (event_data.get("event") == "command result" and
+                            event_data.get("customData", {}).get("command", {}).get("name") == "stationDownloadImage"):
                             age = get_event_age_seconds(data)
                             if age is not None:
                                 last_image_age = age
