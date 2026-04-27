@@ -11,6 +11,7 @@ get_log() {
 }
 echo "$(date '+%Y-%m-%d %H:%M:%S') - fp-monitor started" >> "$(get_log)"
 
+
 execute_backup() {
     local files=("/var/www/html/index.php" "/var/www/html/scripts/floorplanjs.js.gz" "/var/www/html/styles/floorplan.css.gz")
     local max_ts=$(stat -c %Y "${files[@]}" | sort -rn | head -n 1)
@@ -39,14 +40,17 @@ execute_backup() {
 }
 
 cleanup() {
-    if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y%m%d%H)" ]]; then return; fi
+	echo "Cleanup"
+    if [[ -f "$LOCK_FILE" && "$(/bin/cat "$LOCK_FILE")" == "$(/bin/date +%Y%m%d%H%M)" ]]; then echo "Locked"; return; fi
     cd "$BACKUP_DIR" || return
     local now=$(/bin/date +%s)
     local dirs=($(/bin/ls -1d * 2>/dev/null | /usr/bin/sort -r))
     local count=${#dirs[@]}
+    echo $count
     if [ "$count" -gt 20 ]; then
         for (( i=20; i<count; i++ )); do
             local d="${dirs[$i]}"
+            echo $d
             local ts=$(/bin/date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s 2>/dev/null)
             if [ $? -ne 0 ]; then continue; fi
             local age=$(( (now - ts) ))
@@ -55,31 +59,39 @@ cleanup() {
                 echo "$(date '+%Y-%m-%d %H:%M:%S') - Verwijderen: $d" >> "$(get_log)"
                 /bin/rm -rf "$d"; continue
             fi
-            echo "$d	$age"
+            
             if [ "$age" -ge 1209600 ]; then
+            	echo "$d	$age 14 dagen"
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:6}" != "${prev:0:6}" ]] && keep=1
             elif [ "$age" -ge 604800 ]; then
+            	echo "$d	$age 7 dagen"
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:7}" != "${prev:0:7}" ]] && keep=1
             elif [ "$age" -ge 259200 ]; then
+            	echo "$d	$age 3 dagen"
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:8}" != "${prev:0:8}" ]] && keep=1
             elif [ "$age" -ge 86400 ]; then
+            	echo "$d	$age 1 dag"
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:9}" != "${prev:0:9}" ]] && keep=1
             elif [ "$age" -ge 43200 ]; then
+            	echo "$d	$age 12 uren"
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:10}" != "${prev:0:10}" ]] && keep=1
             else
+            	echo "$d	$age else"
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:11}" != "${prev:0:11}" ]] && keep=1
             fi
             [[ $keep -eq 0 ]] && { echo "$(date '+%Y-%m-%d %H:%M:%S') - Verwijderd: $d" >> "$(get_log)"; /bin/rm -rf "$d"; }
         done
     fi
-    /bin/date +%Y%m%d%H > "$LOCK_FILE"
+    /bin/date +%Y%m%d%H%M%S > "$LOCK_FILE"
 }
+cleanup
+exit
 /usr/bin/inotifywait -m -r -e close_write -e moved_to --format '%w%f' "$MONITOR_DIR" | while read FILE
 do
     if [[ "$FILE" == "/var/www/html/secure/fp-monitor.sh" ]]; then
