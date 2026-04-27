@@ -166,6 +166,7 @@
 				<div class="abs z1" id="bureellinks" onclick="dimmer('bureellinks')"></div>
 				<div class="abs z1" id="bureelrechts" onclick="dimmer('bureelrechts')"></div>
 				<div class="abs z1" id="kamer" onclick="dimmer('kamer')"></div>
+				<div class="abs z1 i48" id="kamer1" onclick="dimmer('kamer1')"></div>
 				<div class="abs z1" id="lichtbadkamer" onclick="dimmer('lichtbadkamer')"></div>
 				<div class="abs z1" id="zithoek" onclick="dimmer('zithoek')"></div>
 				<div class="abs z1" id="wasbak" onclick="dimmer('wasbak')"></div>
