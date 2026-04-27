@@ -62,8 +62,8 @@ if [ $((MIN % 5)) -eq 0 ]; then
 	echo $LAST>"/temp/timestampappcache.txt"
 	if [ "$LAST" != "$PREV" ]
 	then
-		cd /var/www/html/scripts/
-		gzip -k -d floorplanjs.js.gz -f
+#		cd /var/www/html/scripts/
+#		gzip -k -d floorplanjs.js.gz -f
 		cd /var/www/html/
 		/usr/bin/nice -n 10 git add .
 		/usr/bin/nice -n 10 git commit -am "Update"
