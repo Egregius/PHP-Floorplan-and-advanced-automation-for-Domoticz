@@ -96,6 +96,7 @@ async def handle_eufy():
                 await ws.send(json.dumps({"command": "start_listening"}))
                 async for message in ws:
                     data = json.loads(message)
+                    log(f"data = {data}")
                     if data.get("type") == "event":
                         event_data = data.get("event", {})
                         if event_data.get("name") == "picture":
