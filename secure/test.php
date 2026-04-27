@@ -9,9 +9,7 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-republishmqtt();
-
-
+echo hass('light', 'turn_on', 'light.kamer1', ['brightness_pct' => $_REQUEST['action'],'color_temp' => 2200])
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);

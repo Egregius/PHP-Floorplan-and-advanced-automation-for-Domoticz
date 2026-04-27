@@ -110,7 +110,10 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			huisslapen(3);
 		}
 	} elseif ($_REQUEST['command']=='dimmer') {
-		if($_REQUEST['device']=='kamer1') hass('light', 'turn_on', 'light.kamer1', ['brightness_pct' => $_REQUEST['action'],'color_temp' => 2200]);
+		if($_REQUEST['device']=='kamer1') {
+			echo 'kamer1';
+//			hass('light', 'turn_on', 'light.kamer1', ['brightness_pct' => $_REQUEST['action'],'color_temp' => 2200]);
+		}
 		else sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='rkeukenl') {
