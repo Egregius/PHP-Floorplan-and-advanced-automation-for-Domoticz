@@ -43,8 +43,8 @@ cleanup() {
     local now=$(/bin/date +%s)
     local dirs=($(/bin/ls -1d * 2>/dev/null | /usr/bin/sort -r))
     local count=${#dirs[@]}
-    if [ "$count" -gt 20 ]; then
-        for (( i=20; i<count; i++ )); do
+    if [ "$count" -gt 10 ]; then
+        for (( i=10; i<count; i++ )); do
             local d="${dirs[$i]}"
             local ts=$(/bin/date -d "${d:0:4}-${d:4:2}-${d:6:2} ${d:8:2}:${d:10:2}:${d:12:2}" +%s 2>/dev/null)
             if [ $? -ne 0 ]; then continue; fi
