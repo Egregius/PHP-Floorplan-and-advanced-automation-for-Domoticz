@@ -13,6 +13,12 @@ $modes=[
 	2=>"Airco + Gas",
 	3=>"Gas"
 ];
+$colors=[
+	0=>"#444444",
+	1=>"#28a745",
+	2=>"#fd7e14",
+	3=>"#dc3545",
+];
 $jsonBath = readJsonFile($pathBath);
 $jsonLiving = readJsonFile($pathLiving);
 if (isset($_GET['mode']) && in_array($_GET['mode'], ['0','1','2','3'], true)) {
@@ -41,9 +47,10 @@ if (isset($_GET['mode']) && in_array($_GET['mode'], ['0','1','2','3'], true)) {
 <div class="container-fluid">
 	<div class="mx-auto" style="width: 360;">
 		<a href="leaddata.php" class="btn btn-warning px-5">All</a>&nbsp;
-		<a href="leaddata.php?mode=1" class="btn btn-warning px-4">Airco</a>&nbsp;
-		<a href="leaddata.php?mode=2" class="btn btn-warning px-4">Airco + gas</a>&nbsp;
-		<!-- <a href="leaddata.php?mode=3">Gas</a> -->
+<?php
+foreach ($modes as $k=>$v) echo '
+		<a href="leaddata.php?mode='.$k.'" class="btn btn-warning px-4" style="background-color:'.$colors[$k].'">'.$v.'</a>&nbsp;';
+?>
 	</div>
     <div class="row g-5">
     	<div class="col-12 col-xl-6">
@@ -62,7 +69,7 @@ if (isset($_GET['mode']) && in_array($_GET['mode'], ['0','1','2','3'], true)) {
 $leadDataBath=json_decode($jsonBath,true);
 foreach($leadDataBath as $mode=>$temp) {
 	$points=array_map("count", $temp);
-	echo $modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br>';
+	echo '<div style="color:'.$colors[$mode].'">'.$modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br></div>';
 }
 ?>
                     </div>
@@ -84,9 +91,10 @@ foreach($leadDataBath as $mode=>$temp) {
                      <div>
 <?php
 $leadDataLiving=json_decode($jsonLiving,true);
+
 foreach($leadDataLiving as $mode=>$temp) {
 	$points=array_map("count", $temp);
-	echo $modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br>';
+	echo '<div style="color:'.$colors[$mode].'">'.$modes[$mode].' '.array_sum($points).' metingen over '.count($points).' temperaturen.<br></div>';
 }
 ?>
                     </div>
