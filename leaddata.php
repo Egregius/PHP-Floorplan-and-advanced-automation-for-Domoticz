@@ -14,7 +14,7 @@ $modes=[
 	3=>"Gas"
 ];
 $colors=[
-	0=>"#444444",
+	0=>"#0d6efd",
 	1=>"#28a745",
 	2=>"#fd7e14",
 	3=>"#dc3545",
@@ -110,10 +110,10 @@ foreach($leadDataLiving as $mode=>$temp) {
 
     // Mapping voor de verwarmingsmethodes
     const methods = {
-        "0": { label: "Neutral", color: "#444444" },       // Groen
-        "1": { label: "Airco", color: "#28a745" },       // Groen
-        "2": { label: "Airco + gas", color: "#fd7e14" }, // Oranje
-        "3": { label: "Gas", color: "#dc3545" }          // Rood
+        "0": { label: "Neutral", color: "#0d6efd" }, 
+        "1": { label: "Airco", color: "#28a745" }, 
+        "2": { label: "Airco + gas", color: "#fd7e14" },
+        "3": { label: "Gas", color: "#dc3545" }
     };
 
     /**
