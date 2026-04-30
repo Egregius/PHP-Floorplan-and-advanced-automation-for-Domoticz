@@ -102,6 +102,7 @@ foreach($leadDataLiving as $mode=>$temp) {
 
     // Mapping voor de verwarmingsmethodes
     const methods = {
+        "0": { label: "Neutral", color: "#444444" },       // Groen
         "1": { label: "Airco", color: "#28a745" },       // Groen
         "2": { label: "Airco + gas", color: "#fd7e14" }, // Oranje
         "3": { label: "Gas", color: "#dc3545" }          // Rood
