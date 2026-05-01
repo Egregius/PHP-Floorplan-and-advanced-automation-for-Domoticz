@@ -1,7 +1,6 @@
 <?php
 $user='cron300';
-$d=fetchdata(0,basename(__FILE__).':'.__LINE__);
-lg('🕒 '.$user.' | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' ---------------------------------------------------------');
+lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' ---------------------------------------------------------','cron300');
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['steenterras']->s=='On') {
@@ -77,5 +76,5 @@ republishmqtt();
 if ($d['weg']->s==0&&$d['Egregius']->s!=0&&$time>=$t&&$time<strtotime('9:00')) {
 	shell_exec('php /var/www/setSSID.php \'{"main24":0}\' > /dev/null 2>&1 &');
 	store('Egregius',0,basename(__FILE__).':'.__LINE__);
-	lg('main24 uitgeschakeld','cron3600');
+	lg('main24 uitgeschakeld','cron300');
 }
