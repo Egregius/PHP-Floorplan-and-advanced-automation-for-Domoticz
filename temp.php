@@ -43,7 +43,7 @@ function getChartData($db, $query, $sensors, $active_sensors, $isSingle) {
 
     if ($isSingle && count($active_sensors) == 1) {
         $data['datasets'][] = ['label' => 'Min', 'borderColor' => '#6666FF', 'data' => [], 'fill' => false, 'borderWidth' => 1, 'pointRadius' => 0, 'tension' => 0.1];
-        $data['datasets'][] = ['label' => 'Gem', 'borderColor' => '#00FF00', 'data' => [], 'fill' => false, 'borderWidth' => 3, 'pointRadius' => 0, 'tension' => 0.1];
+        $data['datasets'][] = ['label' => 'Gem', 'borderColor' => '#00FF00', 'data' => [], 'fill' => false, 'borderWidth' => 4, 'pointRadius' => 0, 'tension' => 0.1];
         $data['datasets'][] = ['label' => 'Max', 'borderColor' => '#FF3333', 'data' => [], 'fill' => false, 'borderWidth' => 1, 'pointRadius' => 0, 'tension' => 0.1];
     } else {
         foreach ($active_sensors as $k => $v) {
