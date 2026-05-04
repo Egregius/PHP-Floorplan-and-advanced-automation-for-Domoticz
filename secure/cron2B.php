@@ -1,9 +1,8 @@
 <?php
 foreach ($devices as $ip => $vol) {
-    $start = hrtime(true);
+    $startrun = hrtime(true);
     $status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
-    $elapsedget = round((hrtime(true) - $start) / 1e+3, 0);
-    lg($ip. ' = '.$elapsedget,'bose');
+   
     if (isset($status)) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
@@ -123,6 +122,10 @@ foreach ($devices as $ip => $vol) {
 		unset($status);
 	} else {
 		if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+	}
+	$elapsedrun = round((hrtime(true) - $startrun) / 1e+3, 0);
+	if($elapsedrun<500000) {
+		usleep(500000-$elapsedrun);
 	}
 }
 if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
