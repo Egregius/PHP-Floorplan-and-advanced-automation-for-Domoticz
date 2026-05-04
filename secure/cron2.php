@@ -7,6 +7,21 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
 } else if (!$got_lock && $wouldblock) {
     exit("Another instance is already running; terminating.\n");
 }
+pcntl_async_signals(true);
+
+// Definieer wat er moet gebeuren bij een stop-signaal
+$saveAndExit = function ($signo) use (&$history) {
+    lg("🛑 Signaal $signo ontvangen. Geschiedenis opslaan en afsluiten...", 'cron2');
+    if (!empty($history)) {
+        file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
+    }
+    exit;
+};
+
+// Luister naar SIGTERM (reboot/systemctl stop) en SIGINT (CTRL+C)
+pcntl_signal(SIGTERM, $saveAndExit);
+pcntl_signal(SIGINT, $saveAndExit);
+
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting cron2 loop...','cron2');
 $time=time();
