@@ -1,6 +1,9 @@
 <?php
 foreach ($devices as $ip => $vol) {
+    $start = hrtime(true);
     $status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+    $elapsedget = round((hrtime(true) - $start) / 1e+3, 0);
+    lg($ip. ' = '.$elapsedget,'bose');
     if (isset($status)) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
@@ -58,7 +61,7 @@ foreach ($devices as $ip => $vol) {
 									unset($history[$oldestKey]);
 								}
 							}
-							if (!empty($history) && count($history) % 1 === 0) {
+							if (!empty($history) && count($history) % 20 === 0) {
 								$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
 								file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 								gc_collect_cycles();
