@@ -50,12 +50,27 @@ foreach ($devices as $ip => $vol) {
 //						lg($status['track'],'cron2');
 //						lg(print_r($skiptracks,true),'cron2');
 						
-						if (in_array($status['track'], $skiptracks)) bosekey("NEXT_TRACK", 0, 101);;
+						if (in_array($status['track'], $skiptracks)) bosekey("NEXT_TRACK", 0, 101);
 					} else {
 						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
 						$cleantitle=cleanTitle($status['artist'],$status['track']);
-						lg($trackid.' '.$cleantitle,'bose');
-						lg(print_r($status,true),'bose');
+						if ($trackid && $trackid!=$prevtrackid) {
+							$prevtrackid=$trackid;
+							if (isset($history[$trackid])) {
+								lg($trackid.' '.$cleantitle.' skipped op id','bose');
+								bosekey("NEXT_TRACK", 0, 101);
+							} elseif (in_array($cleantitle,$history)) {
+								lg($trackid.' '.$cleantitle.' skipped op title','bose');
+								bosekey("NEXT_TRACK", 0, 101);
+							} else {
+								$history[$trackid] = $cleantitle;
+								if (count($history) > $maxItems) {
+									reset($history);
+									$oldestKey = key($history);
+									unset($history[$oldestKey]);
+								}
+							}
+						}
 					}
 				}
 				

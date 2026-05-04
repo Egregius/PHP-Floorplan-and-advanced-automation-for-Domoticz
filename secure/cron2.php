@@ -15,7 +15,7 @@ $lastcheck=$time;
 $lastping=$time;
 define('LOOP_START', $time);
 $invalidcounter=0;
-$prevtrack=null;
+$prevtrackid=null;
 $history = file_exists('/var/www/spotifyhistory.json') ? json_decode(file_get_contents('/var/www/spotifyhistory.json'), true) : [];
 $ctx=stream_context_create(array('http'=>array('timeout' =>1.5)));
 $devices = [
