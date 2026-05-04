@@ -52,6 +52,9 @@ foreach ($devices as $ip => $vol) {
 						
 						if (in_array($status['track'], $skiptracks)) bosekey("NEXT_TRACK", 0, 101);;
 					} else {
+						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
+						$cleantitle=cleanTitle($status['artist'],$status['track']);
+						lg($trackid.' '.$cleantitle,'bose');
 						lg(print_r($status,true),'bose');
 					}
 				}
