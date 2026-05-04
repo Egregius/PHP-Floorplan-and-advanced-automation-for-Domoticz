@@ -51,7 +51,8 @@ foreach ($devices as $ip => $vol) {
 //						lg(print_r($skiptracks,true),'cron2');
 						
 						if (in_array($status['track'], $skiptracks)) bosekey("NEXT_TRACK", 0, 101);;
-						
+					} else {
+						lg(print_r($status,true),'bose');
 					}
 				}
 				

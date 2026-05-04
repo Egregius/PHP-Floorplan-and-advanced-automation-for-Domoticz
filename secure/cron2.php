@@ -15,6 +15,7 @@ $lastcheck=$time;
 $lastping=$time;
 define('LOOP_START', $time);
 $invalidcounter=0;
+$prevtrack=null;
 $ctx=stream_context_create(array('http'=>array('timeout' =>1.5)));
 $devices = [
     101 => 14,
@@ -85,4 +86,37 @@ function stoploop() {
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
+}
+function cleanTitle(string $artists, string $title): string
+{
+	static $replace = null;
+
+	if ($replace === null) {
+		$replace = [
+			'albummix','clubedit','clubmix','edit','extended',
+			'feat','ft','featuring',
+			'festivalmix','mixedit','originalmix','original',
+			'radio','radioedit','radiomix','radioversion',
+			'remastered','remaster',
+			'remix','rework','mix',
+			'singleversion','version',
+			'videoedit','7"',
+		];
+	}
+
+	$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $artists));
+	$title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title));
+
+	$title = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
+
+	$arr = array_map('trim', explode(',', $artists));
+	sort($arr);
+
+	$str = implode('', $arr) . $title;
+
+	$str = preg_replace('/\b(' . implode('|', array_map('preg_quote', $replace)) . ')\b/', '', $str);
+
+	$str = preg_replace('/[^a-z0-9]/', '', $str);
+
+	return $str;
 }
