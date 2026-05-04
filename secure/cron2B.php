@@ -64,13 +64,14 @@ foreach ($devices as $ip => $vol) {
 								bosekey("NEXT_TRACK", 0, 101);
 							} else {
 								$history[$trackid] = $cleantitle;
-								if (count($history) > $maxItems) {
+								if (count($history) > 1000) {
 									reset($history);
 									$oldestKey = key($history);
 									unset($history[$oldestKey]);
 								}
 							}
 						}
+						lg(print_r($history,true),'bose');
 					}
 				}
 				
