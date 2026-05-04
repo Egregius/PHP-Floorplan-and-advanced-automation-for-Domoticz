@@ -75,6 +75,7 @@ function stoploop() {
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting cron2 loop...','cron2');
+        if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
@@ -82,6 +83,7 @@ function stoploop() {
     }
     if (filemtime(__DIR__ . '/cron2.php') > LOOP_START) {
         lg('🛑 cron2.php gewijzigd → restarting cron2 loop...','cron2');
+        if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
         ftruncate($lock_file, 0);
 		flock($lock_file, LOCK_UN);
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
