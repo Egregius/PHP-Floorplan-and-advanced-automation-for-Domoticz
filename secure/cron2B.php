@@ -56,6 +56,7 @@ foreach ($devices as $ip => $vol) {
 						
 						if (in_array($status['track'], $skiptracks)) bosekey("NEXT_TRACK", 0, 101);
 					} else {
+						$start = hrtime(true);
 						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
 						$cleantitle=cleanTitle($status['artist'],$status['track']);
 						if ($trackid && $trackid!=$prevtrackid) {
@@ -106,7 +107,7 @@ foreach ($devices as $ip => $vol) {
 									} else $memory_cache[$name] = $size;
 								}
 								unset($vars, $name, $value, $size, $oldSize, $percent);
-								lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items','bose');
+								lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.round((hrtime(true) - $start) / 1e+6, 3). ' milliseconds','bose');
 							}
 						}
 
