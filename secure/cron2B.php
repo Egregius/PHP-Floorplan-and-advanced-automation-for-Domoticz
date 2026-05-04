@@ -106,7 +106,7 @@ foreach ($devices as $ip => $vol) {
 									} else $memory_cache[$name] = $size;
 								}
 								unset($vars, $name, $value, $size, $oldSize, $percent);
-								lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)),'bose');
+								lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items','bose');
 							}
 						}
 
