@@ -124,8 +124,8 @@ foreach ($devices as $ip => $vol) {
 		if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
 	}
 	$elapsedrun = round((hrtime(true) - $startrun) / 1e+3, 0);
-	if($elapsedrun<500000) {
-		usleep(500000-$elapsedrun);
+	if($elapsedrun<700000) {
+		usleep(700000-$elapsedrun);
 	}
 }
 if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
