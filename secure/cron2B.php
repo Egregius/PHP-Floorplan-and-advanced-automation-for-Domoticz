@@ -1,15 +1,10 @@
 <?php
-
-
-
-
 foreach ($devices as $ip => $vol) {
     $status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
     if (isset($status)) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
 			if ($ip==101) {
-				
 				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
 					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
 						lg(basename(__FILE__).':'.__LINE__,'cron2');
@@ -39,23 +34,11 @@ foreach ($devices as $ip => $vol) {
 							if($vol['actualvolume']>0) bosevolume(0,101, 'TV aan');
 						}
 						}
-					} elseif(past('boseliving')<180) {
+					} else {
 						if ($status['shuffleSetting']=='SHUFFLE_OFF') {
 							bosekey("SHUFFLE_ON", 0, 101);
 						} 
-//						lg(print_r($status,true),'cron2');
-						$db = Database::getInstance();
-						$stmt=$db->prepare("SELECT title FROM `track_mapping` WHERE `pos` = 0");
-						$stmt->execute();
-						$skiptracks=[];
-						foreach ($stmt->fetchAll(PDO::FETCH_NUM) as [$title]) {
-							$skiptracks[]=$title;
-						}
-//						lg($status['track'],'cron2');
-//						lg(print_r($skiptracks,true),'cron2');
 						
-						if (in_array($status['track'], $skiptracks)) bosekey("NEXT_TRACK", 0, 101);
-					} else {
 						$start = hrtime(true);
 						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
 						$cleantitle=cleanTitle($status['artist'],$status['track']);
@@ -75,7 +58,6 @@ foreach ($devices as $ip => $vol) {
 									unset($history[$oldestKey]);
 								}
 							}
-							
 							if (!empty($history) && count($history) % 1 === 0) {
 								$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
 								file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
@@ -109,12 +91,9 @@ foreach ($devices as $ip => $vol) {
 								unset($vars, $name, $value, $size, $oldSize, $percent);
 								lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','bose');
 							}
-						}
-
+						} 
 					}
 				}
-				
-				
 			}
 			if (isset($status['@attributes']['source'])) {
 				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
