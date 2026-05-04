@@ -55,6 +55,7 @@ foreach ($devices as $ip => $vol) {
 						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
 						$cleantitle=cleanTitle($status['artist'],$status['track']);
 						if ($trackid && $trackid!=$prevtrackid) {
+//							lg($trackid.' '.$cleantitle,'bose');
 							$prevtrackid=$trackid;
 							if (isset($history[$trackid])) {
 								lg($trackid.' '.$cleantitle.' skipped op id','bose');
@@ -64,14 +65,19 @@ foreach ($devices as $ip => $vol) {
 								bosekey("NEXT_TRACK", 0, 101);
 							} else {
 								$history[$trackid] = $cleantitle;
-								if (count($history) > 1000) {
+								if (count($history) > 10000) {
 									reset($history);
 									$oldestKey = key($history);
 									unset($history[$oldestKey]);
 								}
 							}
+							lg(print_r($history,true),'bose');
+							if (!empty($history) && count($history) % 1 === 0) {
+								file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
+							}
+							lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)),'bose');
 						}
-						lg(print_r($history,true),'bose');
+
 					}
 				}
 				
