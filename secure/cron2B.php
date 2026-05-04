@@ -77,7 +77,7 @@ foreach ($devices as $ip => $vol) {
 							}
 							
 							if (!empty($history) && count($history) % 1 === 0) {
-								lg(print_r($history,true),'bose');
+								$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
 								file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 								gc_collect_cycles();
 								$vars = get_defined_vars();
@@ -107,7 +107,7 @@ foreach ($devices as $ip => $vol) {
 									} else $memory_cache[$name] = $size;
 								}
 								unset($vars, $name, $value, $size, $oldSize, $percent);
-								lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.round((hrtime(true) - $start) / 1e+6, 3). ' milliseconds','bose');
+								lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','bose');
 							}
 						}
 
