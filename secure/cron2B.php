@@ -55,7 +55,6 @@ foreach ($devices as $ip => $vol) {
 						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
 						$cleantitle=cleanTitle($status['artist'],$status['track']);
 						if ($trackid && $trackid!=$prevtrackid) {
-//							lg($trackid.' '.$cleantitle,'bose');
 							$prevtrackid=$trackid;
 							if (isset($history[$trackid])) {
 								lg($trackid.' '.$cleantitle.' skipped op id','bose');
@@ -71,8 +70,9 @@ foreach ($devices as $ip => $vol) {
 									unset($history[$oldestKey]);
 								}
 							}
-							lg(print_r($history,true),'bose');
-							if (!empty($history) && count($history) % 1 === 0) {
+							
+							if (!empty($history) && count($history) % 2 === 0) {
+								lg(print_r($history,true),'bose');
 								file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 							}
 							lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)),'bose');
