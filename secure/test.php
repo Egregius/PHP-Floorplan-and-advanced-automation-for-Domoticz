@@ -10,9 +10,21 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 echo 'OK';
-hassplaylist('EDM - 1');
+//hassplaylist('EDM - 1');
     
+    print_r(json_decode(hassgetgroep(),true));
     
+function hassgetgroep() {
+	$ch=curl_init();
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/states/media_player.groep');
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer '.hasstoken()));
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+	curl_setopt($ch,CURLOPT_TIMEOUT,5);
+	$response=curl_exec($ch);
+	curl_close($ch);
+	return $response;
+}
 function hassplaylist($playlist) {
     $ch = curl_init();
     $payload = json_encode([
