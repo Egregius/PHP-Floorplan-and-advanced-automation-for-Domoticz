@@ -13,7 +13,7 @@ foreach ($devices as $ip => $vol) {
 						bosepreset(boseplaylist(), 101);
 					}
 				}
-				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
+/*				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
 					$invalidcounter++;
 					if ($invalidcounter > 10) {
 						lg('Bose living $invalidcounter = '.$invalidcounter.' Toggling Bose','cron2');
@@ -27,7 +27,7 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else lg('Bose living $invalidcounter = '.$invalidcounter);
 				}
-				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
+*/				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
 						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 						if (isset($vol)) {
@@ -37,9 +37,9 @@ foreach ($devices as $ip => $vol) {
 						}
 						}
 					} else {
-						if ($status['shuffleSetting']=='SHUFFLE_OFF') {
-							bosekey("SHUFFLE_ON", 0, 101);
-						} 
+//						if ($status['shuffleSetting']=='SHUFFLE_OFF') {
+//							bosekey("SHUFFLE_ON", 0, 101);
+//						} 
 						
 						$start = hrtime(true);
 						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
