@@ -11,9 +11,9 @@ $d=fetchdata();
 //$db = Database::getInstance();
 echo 'OK';
 hass(
-        'mass', 
+        'music_assistant', 
         'play_media', 
-        'media_player.syncgroup_xpctkjzj', // De MA-entiteit van je SoundTouch groep
+        'media_player.groep', // De MA-entiteit van je SoundTouch groep
         [
             'media_id' => 'EDM - 2',
             'media_type' => 'playlist',
