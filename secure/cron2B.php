@@ -1,5 +1,6 @@
 <?php
 foreach ($devices as $ip => $vol) {
+	continue;
     $startrun = hrtime(true);
     $status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
