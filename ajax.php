@@ -25,7 +25,6 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 	$bose=$_REQUEST['bose'];
 	$d=[];
 	$nowplaying=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
-	
 	$d['source']=$nowplaying['@attributes']['source'];
 	if (isset($nowplaying['ContentItem']['itemName'])) {
 		$d['artist']=$nowplaying['artist'];
@@ -45,8 +44,6 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 //		$stmtLib = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? LIMIT 1");
 //		$stmtLib->execute([$trackid]);
 //		$d['in_library'] = (bool)$stmtLib->fetch();
-		$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
-		$d['volume']=$volume['actualvolume'];
 	} else {
 		$d['artist']='';
 		$d['track']='';
@@ -54,6 +51,8 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 		$d['playlist']='';
 		$d['trackid']='';
 	}
+	$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
+	$d['volume']=$volume['actualvolume'];
 	echo json_encode($d);
 	exit;
 }
