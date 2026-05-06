@@ -940,7 +940,7 @@ function hasstoken() {
 	}
 }
 
-function hass(string $domain, string $service, string $entity = '', array $data = []): void {
+function hass(string $domain, string $service, string $entity = '', array $data = [], $timeout=0.4): void {
     global $d;
     static $socket = null;
     static $lastUse = 0;
@@ -952,7 +952,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
             'tcp://192.168.2.26:8123',
             $errno,
             $errstr,
-            1.4,
+            $timeout,
             STREAM_CLIENT_CONNECT
         );
         if (!$socket) {

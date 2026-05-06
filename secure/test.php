@@ -15,10 +15,11 @@ hass(
         'play_media', 
         'media_player.groep', // De MA-entiteit van je SoundTouch groep
         [
-            'media_id' => 'EDM - 2',
+            'media_id' => 'EDM - 3',
             'media_type' => 'playlist',
-            'enqueue_mode' => 'replace'
-        ]
+            'enqueue' => 'replace'
+        ],
+        5
     );
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
