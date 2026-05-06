@@ -952,7 +952,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
             'tcp://192.168.2.26:8123',
             $errno,
             $errstr,
-            0.4,
+            1.4,
             STREAM_CLIENT_CONNECT
         );
         if (!$socket) {

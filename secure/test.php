@@ -10,8 +10,16 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 echo 'OK';
-hass('light', 'turn_on', 'light.kamer1', ['brightness_pct' => 50,'color_temp_kelvin' => 6500]);
-
+hass(
+        'mass', 
+        'play_media', 
+        'media_player.syncgroup_xpctkjzj', // De MA-entiteit van je SoundTouch groep
+        [
+            'media_id' => 'EDM - 2',
+            'media_type' => 'playlist',
+            'enqueue_mode' => 'replace'
+        ]
+    );
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
