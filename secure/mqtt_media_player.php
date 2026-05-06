@@ -43,9 +43,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 	try {
 		$path=explode('/',$topic);
 		$device=$path[2];
-		if ($device==='groep') {
-			telegram('Groep status = '.$status);
-		} elseif (isset($validDevices[$device])) {
+		if (isset($validDevices[$device])) {
 			$time=time();
 			if (($time - LOOP_START) <= 2) return;
 			$d['time']=$time;

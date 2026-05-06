@@ -7,13 +7,13 @@ foreach ($devices as $ip => $vol) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
 			if ($ip==101) {
-/*				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
+				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
 					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
 						lg(basename(__FILE__).':'.__LINE__,'cron2');
 						bosepreset(boseplaylist(), 101);
 					}
 				}
-/*				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
+				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
 					$invalidcounter++;
 					if ($invalidcounter > 10) {
 						lg('Bose living $invalidcounter = '.$invalidcounter.' Toggling Bose','cron2');
@@ -27,7 +27,7 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else lg('Bose living $invalidcounter = '.$invalidcounter);
 				}
-*/				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE' && $status['@attributes']['source']=='SPOTIFY') {
+				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
 						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 						if (isset($vol)) {
@@ -37,9 +37,9 @@ foreach ($devices as $ip => $vol) {
 						}
 						}
 					} else {
-//						if ($status['shuffleSetting']=='SHUFFLE_OFF') {
-//							bosekey("SHUFFLE_ON", 0, 101);
-//						} 
+						if ($status['shuffleSetting']=='SHUFFLE_OFF') {
+							bosekey("SHUFFLE_ON", 0, 101);
+						} 
 						
 						$start = hrtime(true);
 						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
@@ -105,11 +105,11 @@ foreach ($devices as $ip => $vol) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
 				}
-/*				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
+				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
 					if ($ip==101) bosepreset(boseplaylist());
 					elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) bosezone($ip,$vol);
 					elseif ($ip!=105&&$d['time']<strtotime('20:00')) bosezone($ip,$vol);
-				}*/
+				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') store('bose'.$ip, 'On');
 				}
