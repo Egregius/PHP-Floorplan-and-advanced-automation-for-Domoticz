@@ -10,7 +10,7 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 echo 'OK';
-hassplaylist();
+hassplaylist('EDM - 1');
     
     
 function hassplaylist($playlist) {
