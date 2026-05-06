@@ -12,8 +12,28 @@ $d=fetchdata();
 echo 'OK';
 //hassplaylist('EDM - 1');
     
-    print_r(json_decode(hassgetgroep(),true));
+    print_r(json_decode(getMaQueueStatus(),true));
+
+
+function getMaQueueStatus() {
+    $ch = curl_init();
+    // We bevragen de MA server direct op poort 8095
+    curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8095/api/players/queue/syncgroup_xpctkjzj');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // MA API heeft vaak geen Bearer token nodig als je lokaal zit, 
+    // maar check je MA instellingen als je een 401 krijgt.
     
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    // In de MA Queue objecten zit vaak de 'metadata' van de huidige stream
+    // of de naam van de actieve lijst.
+    return $data;
+}
+
+
 function hassgetgroep() {
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/states/media_player.groep');
