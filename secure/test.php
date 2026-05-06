@@ -10,17 +10,36 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 echo 'OK';
-hass(
-        'music_assistant', 
-        'play_media', 
-        'media_player.groep', // De MA-entiteit van je SoundTouch groep
-        [
-            'media_id' => 'EDM - 3',
-            'media_type' => 'playlist',
-            'enqueue' => 'replace'
-        ],
-        5
-    );
+hassplaylist();
+    
+    
+function hassplaylist($playlist) {
+    $ch = curl_init();
+    $payload = json_encode([
+        "entity_id" => "media_player.groep",
+        "media_id" => $playlist,
+        "media_type" => "playlist",
+        "enqueue" => "replace_next"
+    ]);
+    curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/music_assistant/play_media');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . hasstoken()
+    ));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $data = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($httpCode !== 200) {
+        echo "Foutcode: " . $httpCode . " - Respons: " . $data;
+    } else {
+        echo "Succes!";
+    }
+}
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
