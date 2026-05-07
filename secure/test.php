@@ -10,7 +10,11 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-if(isPlayerOnline('58:7a:62:60:c5:b2')) echo 'ja'; else echo 'nee';
+$res = lmsRequest("slim.request", ["", ["serverstatus", 0, 100]]);
+
+echo '<pre>'; print_r($res); echo '</pre>';
+
+//if(isPlayerOnline('58:7a:62:60:c5:b2')) echo 'ja'; else echo 'nee';
 
 function isPlayerOnline($speaker_mac) {
     $res = lmsRequest("slim.request", ["", ["serverstatus", 0, 100]]);
