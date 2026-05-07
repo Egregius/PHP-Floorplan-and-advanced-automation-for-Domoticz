@@ -9,40 +9,56 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-echo 'OK';
-//hassplaylist('EDM - 1');
+
+
+
     
 function maCommand($method, $params = []) {
-//    global $matoken; // Gebruik hier je MA token of je HA token (beiden werken vaak via dit pad)
-    
-    // Gebruik de HA poort en het MA-specifieke JSON-RPC endpoint
-    $url = "http://192.168.2.26:8123/api/mass/jsonrpc";
+    global $matoken;
+    $host = '192.168.2.26';
+    $port = 8095;
 
-    $payload = json_encode([
+    // 1. Open verbinding
+    $sp = fsockopen($host, $port, $errno, $errstr, 5);
+    if (!$sp) return "Error: $errstr ($errno)";
+
+    // 2. WebSocket Handshake
+    $key = base64_encode(random_bytes(16));
+    $header = "GET /api/websocket HTTP/1.1\r\n" .
+              "Host: $host:$port\r\n" .
+              "Upgrade: websocket\r\n" .
+              "Connection: Upgrade\r\n" .
+              "Sec-WebSocket-Key: $key\r\n" .
+              "Sec-WebSocket-Version: 13\r\n" .
+              "Authorization: Bearer $matoken\r\n\r\n";
+    fwrite($sp, $header);
+    fread($sp, 2048); // Lees handshake respons (negeren we voor nu)
+
+    // 3. JSON-RPC Payload
+    $id = time();
+    $data = json_encode([
         "jsonrpc" => "2.0",
-        "id"      => time(),
+        "id"      => $id,
         "method"  => $method,
         "params"  => $params
     ]);
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . hasstoken(), // Gebruik hier je HA token
-    ]);
+    // 4. WebSocket Frame opbouwen (simpele versie voor korte berichten)
+    $b1 = 0x81; // Text frame + FIN
+    $length = strlen($data);
+    $header = pack('CC', $b1, $length); // Alleen voor data < 126 bytes!
+    
+    // Voor grotere data (zoals players/all) moet het frame complexer, 
+    // maar voor commando's volstaat dit vaak:
+    fwrite($sp, $header . $data);
 
-    $res = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    // 5. Respons lezen (optioneel, voor commando's vaak niet nodig)
+    $res = fread($sp, 4096);
+    fclose($sp);
 
     return $res;
 }
-// Test call
-print_r(json_decode(maCommand("players/all"), true));
-
+echo maCommand("players/all");
 
 function hassGroupManager(string $speaker_entity, bool $join = true) {
     if ($join) {
