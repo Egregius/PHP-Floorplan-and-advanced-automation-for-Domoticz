@@ -10,47 +10,57 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-$res = lmsRequest("slim.request", ["", ["serverstatus", 0, 100]]);
+// Definieer je ID's op basis van de LMS-output
+$lms_living = "aa:aa:62:60:c5:b2";
+$lms_buiten = "aa:aa:47:78:37:58";
+$lms_garage = "aa:aa:a0:67:e7:93";
+$lms_keuken = "aa:aa:ea:56:13:67";
 
-echo '<pre>'; print_r($res); echo '</pre>';
 
-//if(isPlayerOnline('58:7a:62:60:c5:b2')) echo 'ja'; else echo 'nee';
+if (isPlayerOnline($lms_buiten)) echo 'ja';else echo 'nee';
 
-function isPlayerOnline($speaker_mac) {
+
+/**
+ * Voeg een speaker toe aan de Living-groep
+ */
+function lmsJoinLiving($speaker_id) {
+    global $lms_living;
+    // Commando: <slave_id> sync <master_id>
+    return lmsRequest("slim.request", [$speaker_id, ["sync", $lms_living]]);
+}
+
+/**
+ * Haal een speaker uit de groep
+ */
+function lmsUnsync($speaker_id) {
+    return lmsRequest("slim.request", [$speaker_id, ["sync", "-"]]);
+}
+
+/**
+ * Controleer of een specifieke speler online en verbonden is in LMS
+ */
+function isPlayerOnline($speaker_id) {
     $res = lmsRequest("slim.request", ["", ["serverstatus", 0, 100]]);
+    
     if (!isset($res['result']['players_loop'])) return false;
 
     foreach ($res['result']['players_loop'] as $player) {
-        if ($player['playerid'] === $speaker_mac) {
-            return ($player['isplaying'] == 1 || $player['connected'] == 1);
+        if ($player['playerid'] === $speaker_id) {
+            // connected == 1 betekent dat de AirPlay bridge de speaker ziet
+            return ($player['connected'] == 1);
         }
     }
     return false;
 }
 
-
-function lmsUnsync($speaker_mac) {
-    return lmsRequest("slim.request", [
-        $speaker_mac, 
-        ["sync", "-"] // De "-" vertelt LMS om de speler uit elke groep te halen
-    ]);
-}
-
-
-function lmsJoinLiving($new_speaker_mac) {
-    $living_mac = "58:7a:62:60:c5:b2"; // De MAC van je bekabelde Living
-
-    // Het commando 'sync' vertelt de nieuwe speaker om de master te volgen
-    return lmsRequest("slim.request", [
-        $new_speaker_mac, 
-        ["sync", $living_mac]
-    ]);
-}    
+/**
+ * De algemene Request functie
+ */
 function lmsRequest($method, $params) {
-    $host = '192.168.2.6'; // IP van je Debian CT
+    $host = '192.168.2.6'; 
     $port = 9000;
 
-    $data = json_encode([
+    $payload = json_encode([
         "id" => 1,
         "method" => "slim.request",
         "params" => $params
@@ -58,7 +68,7 @@ function lmsRequest($method, $params) {
 
     $ch = curl_init("http://$host:$port/jsonrpc.js");
     curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     
@@ -66,9 +76,6 @@ function lmsRequest($method, $params) {
     curl_close($ch);
     return json_decode($result, true);
 }
-
-
-
 function getMaQueueStatus() {
     $ch = curl_init();
     // We bevragen de MA server direct op poort 8095
