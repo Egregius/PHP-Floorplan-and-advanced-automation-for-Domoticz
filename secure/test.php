@@ -12,15 +12,22 @@ $d=fetchdata();
 echo 'OK';
 //hassplaylist('EDM - 1');
     
-hassGroupManager('media_player.bose_st_20_buiten',false);
+echo hassGroupManager('media_player.bose_st_20_buiten',false);
 
 function hassGroupManager(string $speaker_entity, bool $join = true) {
-    $service = $join ? 'join' : 'unjoin'; // Music Assistant gebruikt join/unjoin voor groepen
-    
-    $payload = json_encode([
-        "entity_id" => "media_player.groep", // De 'master' groep entiteit
-        "members"   => [$speaker_entity]     // De speaker die stroom krijgt
-    ]);
+    if ($join) {
+        $service = 'join';
+        $payload = [
+            "entity_id" => "media_player.groep", // De groep waar hij bij moet
+            "members"   => [$speaker_entity]
+        ];
+    } else {
+        $service = 'unjoin';
+        // Bij unjoin is de speaker ZELF vaak het target van de service
+        $payload = [
+            "entity_id" => $speaker_entity
+        ];
+    }
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "http://192.168.2.26:8123/api/services/music_assistant/$service");
@@ -29,12 +36,13 @@ function hassGroupManager(string $speaker_entity, bool $join = true) {
         'Content-Type: application/json', 
         'Authorization: Bearer ' . hasstoken()
     ]);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $res = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     
-    return $res;
+    return "Code: $httpCode - Respons: $res";
 }
 
 function getMaQueueStatus() {
