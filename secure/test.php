@@ -9,87 +9,10 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-
-
-
+echo 'OK';
+hassplaylist('EDM - 1');
     
-function maCommand($method, $params = []) {
-    global $matoken;
-    $host = '192.168.2.26';
-    $port = 8095;
 
-    // 1. Open verbinding
-    $sp = fsockopen($host, $port, $errno, $errstr, 5);
-    if (!$sp) return "Error: $errstr ($errno)";
-
-    // 2. WebSocket Handshake
-    $key = base64_encode(random_bytes(16));
-    $header = "GET /api/websocket HTTP/1.1\r\n" .
-              "Host: $host:$port\r\n" .
-              "Upgrade: websocket\r\n" .
-              "Connection: Upgrade\r\n" .
-              "Sec-WebSocket-Key: $key\r\n" .
-              "Sec-WebSocket-Version: 13\r\n" .
-              "Authorization: Bearer $matoken\r\n\r\n";
-    fwrite($sp, $header);
-    fread($sp, 2048); // Lees handshake respons (negeren we voor nu)
-
-    // 3. JSON-RPC Payload
-    $id = time();
-    $data = json_encode([
-        "jsonrpc" => "2.0",
-        "id"      => $id,
-        "method"  => $method,
-        "params"  => $params
-    ]);
-
-    // 4. WebSocket Frame opbouwen (simpele versie voor korte berichten)
-    $b1 = 0x81; // Text frame + FIN
-    $length = strlen($data);
-    $header = pack('CC', $b1, $length); // Alleen voor data < 126 bytes!
-    echo $header;
-    // Voor grotere data (zoals players/all) moet het frame complexer, 
-    // maar voor commando's volstaat dit vaak:
-    fwrite($sp, $header . $data);
-
-    // 5. Respons lezen (optioneel, voor commando's vaak niet nodig)
-    $res = fread($sp, 4096);
-    fclose($sp);
-
-    return $res;
-}
-echo maCommand("players/all");
-
-function hassGroupManager(string $speaker_entity, bool $join = true) {
-    if ($join) {
-        $service = 'join';
-        $payload = [
-            "entity_id" => "media_player.groep", // De groep waar hij bij moet
-            "members"   => [$speaker_entity]
-        ];
-    } else {
-        $service = 'unjoin';
-        // Bij unjoin is de speaker ZELF vaak het target van de service
-        $payload = [
-            "entity_id" => $speaker_entity
-        ];
-    }
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "http://192.168.2.26:8123/api/services/music_assistant/$service");
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json', 
-        'Authorization: Bearer ' . hasstoken()
-    ]);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $res = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    
-    return "Code: $httpCode - Respons: $res";
-}
 
 function getMaQueueStatus() {
     $ch = curl_init();
