@@ -12,8 +12,30 @@ $d=fetchdata();
 echo 'OK';
 //hassplaylist('EDM - 1');
     
-    print_r(json_decode(getMaQueueStatus(),true));
+hassGroupManager('media_player.bose_st_20_buiten',false);
 
+function hassGroupManager(string $speaker_entity, bool $join = true) {
+    $service = $join ? 'join' : 'unjoin'; // Music Assistant gebruikt join/unjoin voor groepen
+    
+    $payload = json_encode([
+        "entity_id" => "media_player.groep", // De 'master' groep entiteit
+        "members"   => [$speaker_entity]     // De speaker die stroom krijgt
+    ]);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "http://192.168.2.26:8123/api/services/music_assistant/$service");
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json', 
+        'Authorization: Bearer ' . hasstoken()
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $res = curl_exec($ch);
+    curl_close($ch);
+    
+    return $res;
+}
 
 function getMaQueueStatus() {
     $ch = curl_init();
