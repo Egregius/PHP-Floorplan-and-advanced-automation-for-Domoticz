@@ -12,34 +12,36 @@ $d=fetchdata();
 echo 'OK';
 //hassplaylist('EDM - 1');
     
-
-echo maCommand("players/unsync", [
-    "player_id" => "media_player.bose_st_20_buiten"
-]);
-
 function maCommand($method, $params = []) {
-    global $matoken;
-    $url = "http://192.168.2.26:8095/api/command";
+//    global $matoken; // Gebruik hier je MA token of je HA token (beiden werken vaak via dit pad)
+    
+    // Gebruik de HA poort en het MA-specifieke JSON-RPC endpoint
+    $url = "http://192.168.2.26:8123/api/mass/jsonrpc";
+
     $payload = json_encode([
-        "method" => $method,
-        "params" => $params,
-        "id" => 1,
-        "jsonrpc" => "2.0"
+        "jsonrpc" => "2.0",
+        "id"      => time(),
+        "method"  => $method,
+        "params"  => $params
     ]);
 
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'Authorization: Bearer ' . $matoken
+        'Authorization: Bearer ' . hasstoken(), // Gebruik hier je HA token
     ]);
 
     $res = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    return json_decode($res, true);
+
+    return $res;
 }
+// Test call
+print_r(json_decode(maCommand("players/all"), true));
 
 
 function hassGroupManager(string $speaker_entity, bool $join = true) {
