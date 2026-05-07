@@ -47,7 +47,7 @@ function maCommand($method, $params = []) {
     $b1 = 0x81; // Text frame + FIN
     $length = strlen($data);
     $header = pack('CC', $b1, $length); // Alleen voor data < 126 bytes!
-    
+    echo $header;
     // Voor grotere data (zoals players/all) moet het frame complexer, 
     // maar voor commando's volstaat dit vaak:
     fwrite($sp, $header . $data);
