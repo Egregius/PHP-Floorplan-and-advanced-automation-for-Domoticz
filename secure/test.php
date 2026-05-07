@@ -12,7 +12,35 @@ $d=fetchdata();
 echo 'OK';
 //hassplaylist('EDM - 1');
     
-echo hassGroupManager('media_player.bose_st_20_buiten',false);
+
+echo maCommand("players/unsync", [
+    "player_id" => "media_player.bose_st_20_buiten"
+]);
+
+function maCommand($method, $params = []) {
+    global $matoken;
+    $url = "http://192.168.2.26:8095/api/command";
+    $payload = json_encode([
+        "method" => $method,
+        "params" => $params,
+        "id" => 1,
+        "jsonrpc" => "2.0"
+    ]);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $matoken
+    ]);
+
+    $res = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($res, true);
+}
+
 
 function hassGroupManager(string $speaker_entity, bool $join = true) {
     if ($join) {
