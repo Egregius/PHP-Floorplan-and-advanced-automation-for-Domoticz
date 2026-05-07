@@ -9,9 +9,60 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-echo 'OK';
-hassplaylist('EDM - 1');
+
+if(isPlayerOnline('58:7a:62:60:c5:b2')) echo 'ja'; else echo 'nee';
+
+function isPlayerOnline($speaker_mac) {
+    $res = lmsRequest("slim.request", ["", ["serverstatus", 0, 100]]);
+    if (!isset($res['result']['players_loop'])) return false;
+
+    foreach ($res['result']['players_loop'] as $player) {
+        if ($player['playerid'] === $speaker_mac) {
+            return ($player['isplaying'] == 1 || $player['connected'] == 1);
+        }
+    }
+    return false;
+}
+
+
+function lmsUnsync($speaker_mac) {
+    return lmsRequest("slim.request", [
+        $speaker_mac, 
+        ["sync", "-"] // De "-" vertelt LMS om de speler uit elke groep te halen
+    ]);
+}
+
+
+function lmsJoinLiving($new_speaker_mac) {
+    $living_mac = "58:7a:62:60:c5:b2"; // De MAC van je bekabelde Living
+
+    // Het commando 'sync' vertelt de nieuwe speaker om de master te volgen
+    return lmsRequest("slim.request", [
+        $new_speaker_mac, 
+        ["sync", $living_mac]
+    ]);
+}    
+function lmsRequest($method, $params) {
+    $host = '192.168.2.6'; // IP van je Debian CT
+    $port = 9000;
+
+    $data = json_encode([
+        "id" => 1,
+        "method" => "slim.request",
+        "params" => $params
+    ]);
+
+    $ch = curl_init("http://$host:$port/jsonrpc.js");
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($result, true);
+}
+
 
 
 function getMaQueueStatus() {
