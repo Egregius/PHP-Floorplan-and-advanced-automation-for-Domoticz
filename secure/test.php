@@ -13,184 +13,142 @@ $d=fetchdata();
 //hassplaylist('spotify://playlist/EDM - 1');
     
     
+
 musicAssistantPlayPlaylist(
-    'EDM - 1',
     '192.168.2.26',
-    $matoken
+    $matoken,
+    'EDM - 1',
 );
 
 
 function musicAssistantPlayPlaylist(
-    string $playlistName,
-    string $maHost,
-    string $token
-): bool {
+    string $server,
+    string $token,
+    string $playlistName
+): array {
 
-    $wsUrl = "ws://{$maHost}:8095/ws";
+    // -----------------------------
+    // 1. Players ophalen
+    // -----------------------------
 
-    // WebSocket connectie openen
-    $key = base64_encode(random_bytes(16));
+    $players = maApi($server, $token, [
+        'message_id' => 1,
+        'command'    => 'players/all'
+    ]);
 
-    $headers =
-        "GET /ws HTTP/1.1\r\n" .
-        "Host: {$maHost}:8095\r\n" .
-        "Upgrade: websocket\r\n" .
-        "Connection: Upgrade\r\n" .
-        "Sec-WebSocket-Key: {$key}\r\n" .
-        "Sec-WebSocket-Version: 13\r\n\r\n";
-
-    $socket = fsockopen($maHost, 8095, $errno, $errstr, 10);
-
-    if (!$socket) {
-        throw new Exception("WebSocket connectie mislukt: $errstr ($errno)");
+    if (empty($players['result'])) {
+        throw new Exception('Geen players gevonden');
     }
 
-    fwrite($socket, $headers);
+    // Eerste actieve player nemen
+    $player = null;
 
-    // Handshake response lezen
-    while (!feof($socket)) {
-        $line = fgets($socket);
+    foreach ($players['result'] as $p) {
 
-        if (rtrim($line) === '') {
+        if (!empty($p['available'])) {
+            $player = $p;
             break;
         }
     }
 
-    // Auth sturen
-    $authPayload = [
-        'message_id' => 1,
-        'command'    => 'auth',
-        'args'       => [
-            'access_token' => $token
-        ]
-    ];
-
-    sendWsFrame($socket, json_encode($authPayload));
-
-    // Auth response lezen
-    readWsFrame($socket);
-
-    // Default player ophalen
-    $payload = [
-        'message_id' => 2,
-        'command'    => 'players/default'
-    ];
-
-    sendWsFrame($socket, json_encode($payload));
-
-    $response = json_decode(readWsFrame($socket), true);
-
-    if (empty($response['result']['player_id'])) {
-        throw new Exception("Geen default player gevonden");
+    if (!$player) {
+        throw new Exception('Geen beschikbare player gevonden');
     }
 
-    $playerId = $response['result']['player_id'];
+    $playerId = $player['player_id'];
 
-    // Playlist zoeken
-    $payload = [
-        'message_id' => 3,
+    // -----------------------------
+    // 2. Playlist zoeken
+    // -----------------------------
+
+    $playlists = maApi($server, $token, [
+        'message_id' => 2,
         'command'    => 'music/playlists'
-    ];
+    ]);
 
-    sendWsFrame($socket, json_encode($payload));
+    $playlist = null;
 
-    $response = json_decode(readWsFrame($socket), true);
-
-    $playlistId = null;
-
-    foreach ($response['result'] as $playlist) {
+    foreach ($playlists['result'] as $p) {
 
         if (
-            isset($playlist['name']) &&
-            strtolower($playlist['name']) === strtolower($playlistName)
+            isset($p['name']) &&
+            strtolower($p['name']) === strtolower($playlistName)
         ) {
-            $playlistId = $playlist['item_id'];
+            $playlist = $p;
             break;
         }
     }
 
-    if (!$playlistId) {
+    if (!$playlist) {
         throw new Exception("Playlist niet gevonden: {$playlistName}");
     }
 
-    // Playlist starten
-    $payload = [
-        'message_id' => 4,
+    // -----------------------------
+    // 3. Playlist afspelen
+    // -----------------------------
+
+    $result = maApi($server, $token, [
+        'message_id' => 3,
         'command'    => 'player_queues/play_media',
         'args'       => [
             'queue_id' => $playerId,
             'media'    => [
                 'media_type' => 'playlist',
-                'item_id'    => $playlistId
+                'item_id'    => $playlist['item_id'],
+                'provider'   => $playlist['provider']
             ]
         ]
-    ];
+    ]);
 
-    sendWsFrame($socket, json_encode($payload));
-
-    fclose($socket);
-
-    return true;
+    return $result;
 }
 
 
 /**
- * WebSocket frame sturen
+ * Algemene Music Assistant API helper
  */
-function sendWsFrame($socket, string $payload): void
-{
-    $frame = [];
 
-    $frame[0] = 129;
+function maApi(
+    string $server,
+    string $token,
+    array $payload
+): array {
 
-    $length = strlen($payload);
+    $ch = curl_init();
 
-    if ($length <= 125) {
-        $frame[1] = $length | 128;
-    } elseif ($length <= 65535) {
-        $frame[1] = 126 | 128;
-        $frame[2] = ($length >> 8) & 255;
-        $frame[3] = $length & 255;
-    } else {
-        throw new Exception('Payload te groot');
+    curl_setopt_array($ch, [
+        CURLOPT_URL            => "http://{$server}:8095/api",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token
+        ],
+        CURLOPT_POSTFIELDS     => json_encode($payload),
+        CURLOPT_TIMEOUT        => 15
+    ]);
+
+    $response = curl_exec($ch);
+
+    if ($response === false) {
+        throw new Exception(curl_error($ch));
     }
 
-    $mask = random_bytes(4);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-    $frame = pack('C*', ...$frame) . $mask;
+    curl_close($ch);
 
-    for ($i = 0; $i < $length; $i++) {
-        $frame .= $payload[$i] ^ $mask[$i % 4];
+    if ($httpCode >= 400) {
+        throw new Exception("HTTP error {$httpCode}: {$response}");
     }
 
-    fwrite($socket, $frame);
-}
+    $json = json_decode($response, true);
 
-
-/**
- * WebSocket frame lezen
- */
-function readWsFrame($socket): string
-{
-    $header = fread($socket, 2);
-
-    if (strlen($header) < 2) {
-        return '';
+    if (!$json) {
+        throw new Exception("Ongeldige JSON response: {$response}");
     }
 
-    $bytes = unpack('C2', $header);
-
-    $length = $bytes[2] & 127;
-
-    if ($length === 126) {
-        $extended = fread($socket, 2);
-        $data = unpack('n', $extended);
-        $length = $data[1];
-    } elseif ($length === 127) {
-        throw new Exception('Gigantische frames niet ondersteund');
-    }
-
-    return fread($socket, $length);
+    return $json;
 }
 
 function getMaQueueStatus() {
