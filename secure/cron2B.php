@@ -49,7 +49,7 @@ foreach ($devices as $ip => $vol) {
 //								bosekey("NEXT_TRACK", 0, 101);
 							} else {
 								lg('Adding '.$cleantitle.' to history','bose');
-								$history[$cleantitle] = 1;
+								$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
 								if (count($history) > 10000) {
 									reset($history);
 									$oldestKey = key($history);
@@ -109,6 +109,8 @@ foreach ($devices as $ip => $vol) {
 							lg('play_scheduled_playlist','bose');
 							play_scheduled_playlist();
 							$lastplay=$time;
+							sleep(1);
+							bosevolume($vol,101, 'TV aan');
 //							playBoseHybride();
 						}
 						
