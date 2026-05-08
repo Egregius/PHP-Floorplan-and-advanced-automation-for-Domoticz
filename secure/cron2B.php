@@ -1,6 +1,13 @@
 <?php
-$status=file_get_contents('http://192.168.2.6/api/status');
-echo $status;
+$status=json_decode(file_get_contents('http://192.168.2.6/api/status'),true);
+if($status) {
+	foreach ($status as $i) {
+		if ($i['online']==1) {
+			print_r($i);
+		}
+	}
+}
+echo PHP_EOL.'-------------------------------------------------------------------------------------------------------------------------------'.PHP_EOL;
 /*foreach ($devices as $ip => $vol) {
     $startrun = hrtime(true);
     $status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
