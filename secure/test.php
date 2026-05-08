@@ -9,10 +9,189 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-echo 'OK';
-hassplaylist('EDM - 1');
-    
 
+//hassplaylist('spotify://playlist/EDM - 1');
+    
+    
+musicAssistantPlayPlaylist(
+    'EDM - 1',
+    '192.168.2.26',
+    $matoken
+);
+
+
+function musicAssistantPlayPlaylist(
+    string $playlistName,
+    string $maHost,
+    string $token
+): bool {
+
+    $wsUrl = "ws://{$maHost}:8095/ws";
+
+    // WebSocket connectie openen
+    $key = base64_encode(random_bytes(16));
+
+    $headers =
+        "GET /ws HTTP/1.1\r\n" .
+        "Host: {$maHost}:8095\r\n" .
+        "Upgrade: websocket\r\n" .
+        "Connection: Upgrade\r\n" .
+        "Sec-WebSocket-Key: {$key}\r\n" .
+        "Sec-WebSocket-Version: 13\r\n\r\n";
+
+    $socket = fsockopen($maHost, 8095, $errno, $errstr, 10);
+
+    if (!$socket) {
+        throw new Exception("WebSocket connectie mislukt: $errstr ($errno)");
+    }
+
+    fwrite($socket, $headers);
+
+    // Handshake response lezen
+    while (!feof($socket)) {
+        $line = fgets($socket);
+
+        if (rtrim($line) === '') {
+            break;
+        }
+    }
+
+    // Auth sturen
+    $authPayload = [
+        'message_id' => 1,
+        'command'    => 'auth',
+        'args'       => [
+            'access_token' => $token
+        ]
+    ];
+
+    sendWsFrame($socket, json_encode($authPayload));
+
+    // Auth response lezen
+    readWsFrame($socket);
+
+    // Default player ophalen
+    $payload = [
+        'message_id' => 2,
+        'command'    => 'players/default'
+    ];
+
+    sendWsFrame($socket, json_encode($payload));
+
+    $response = json_decode(readWsFrame($socket), true);
+
+    if (empty($response['result']['player_id'])) {
+        throw new Exception("Geen default player gevonden");
+    }
+
+    $playerId = $response['result']['player_id'];
+
+    // Playlist zoeken
+    $payload = [
+        'message_id' => 3,
+        'command'    => 'music/playlists'
+    ];
+
+    sendWsFrame($socket, json_encode($payload));
+
+    $response = json_decode(readWsFrame($socket), true);
+
+    $playlistId = null;
+
+    foreach ($response['result'] as $playlist) {
+
+        if (
+            isset($playlist['name']) &&
+            strtolower($playlist['name']) === strtolower($playlistName)
+        ) {
+            $playlistId = $playlist['item_id'];
+            break;
+        }
+    }
+
+    if (!$playlistId) {
+        throw new Exception("Playlist niet gevonden: {$playlistName}");
+    }
+
+    // Playlist starten
+    $payload = [
+        'message_id' => 4,
+        'command'    => 'player_queues/play_media',
+        'args'       => [
+            'queue_id' => $playerId,
+            'media'    => [
+                'media_type' => 'playlist',
+                'item_id'    => $playlistId
+            ]
+        ]
+    ];
+
+    sendWsFrame($socket, json_encode($payload));
+
+    fclose($socket);
+
+    return true;
+}
+
+
+/**
+ * WebSocket frame sturen
+ */
+function sendWsFrame($socket, string $payload): void
+{
+    $frame = [];
+
+    $frame[0] = 129;
+
+    $length = strlen($payload);
+
+    if ($length <= 125) {
+        $frame[1] = $length | 128;
+    } elseif ($length <= 65535) {
+        $frame[1] = 126 | 128;
+        $frame[2] = ($length >> 8) & 255;
+        $frame[3] = $length & 255;
+    } else {
+        throw new Exception('Payload te groot');
+    }
+
+    $mask = random_bytes(4);
+
+    $frame = pack('C*', ...$frame) . $mask;
+
+    for ($i = 0; $i < $length; $i++) {
+        $frame .= $payload[$i] ^ $mask[$i % 4];
+    }
+
+    fwrite($socket, $frame);
+}
+
+
+/**
+ * WebSocket frame lezen
+ */
+function readWsFrame($socket): string
+{
+    $header = fread($socket, 2);
+
+    if (strlen($header) < 2) {
+        return '';
+    }
+
+    $bytes = unpack('C2', $header);
+
+    $length = $bytes[2] & 127;
+
+    if ($length === 126) {
+        $extended = fread($socket, 2);
+        $data = unpack('n', $extended);
+        $length = $data[1];
+    } elseif ($length === 127) {
+        throw new Exception('Gigantische frames niet ondersteund');
+    }
+
+    return fread($socket, $length);
+}
 
 function getMaQueueStatus() {
     $ch = curl_init();
