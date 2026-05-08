@@ -13,6 +13,7 @@ foreach ($devices as $ip => $vol) {
 						bosepreset(boseplaylist(), 101);
 					}
 				}*/
+				if ($status['@attributes']['source'] == 'INVALID_SOURCE') playBoseHybride();
 /*				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
 					$invalidcounter++;
 					if ($invalidcounter > 10) {
@@ -40,18 +41,14 @@ foreach ($devices as $ip => $vol) {
 					} else {
 						
 						$start = hrtime(true);
-						$trackid=ltrim(strrchr($status['trackID'], ':'), ':');
 						$cleantitle=cleanTitle($status['artist'],$status['track']);
-						if ($trackid && $trackid!=$prevtrackid) {
-							$prevtrackid=$trackid;
-							if (isset($history[$trackid])) {
-								lg($trackid.' '.$cleantitle.' skipped op id','bose');
-								bosekey("NEXT_TRACK", 0, 101);
-							} elseif (in_array($cleantitle,$history)) {
-								lg($trackid.' '.$cleantitle.' skipped op title','bose');
+						if ($cleantitle && $cleantitle!=$prevcleantitle) {
+							$prevcleantitle=$cleantitle;
+							if (isset($history[$cleantitle])) {
+								lg($cleantitle.' skipped op id','bose');
 								bosekey("NEXT_TRACK", 0, 101);
 							} else {
-								$history[$trackid] = $cleantitle;
+								$history[$cleantitle] = 1;
 								if (count($history) > 10000) {
 									reset($history);
 									$oldestKey = key($history);
