@@ -17,7 +17,7 @@ $lms_garage = "aa:aa:a0:67:e7:93";
 $lms_keuken = "aa:aa:ea:56:13:67";
 
 
-hassplaylist('EDM - 1');
+hassplaylist('library://playlist/EDM - 1');
 
 
 function hassplaylist($playlist) {
@@ -26,7 +26,7 @@ function hassplaylist($playlist) {
         "entity_id" => "media_player.box_living",
         "media_id" => $playlist,
         "media_type" => "playlist",
-        "enqueue" => "replace_next"
+        "enqueue" => "play"
     ]);
     curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/music_assistant/play_media');
     curl_setopt($ch, CURLOPT_POST, 1);
