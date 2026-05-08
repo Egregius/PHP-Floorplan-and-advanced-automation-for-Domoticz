@@ -17,13 +17,7 @@ $lms_garage = "aa:aa:a0:67:e7:93";
 $lms_keuken = "aa:aa:ea:56:13:67";
 
 
-hassAddon('d5369777_music_assistant_beta','start');
-exit;
-
-
-
-if (isPlayerOnline($lms_buiten)) echo 'ja';else echo 'nee';
-
+hassplaylist('EDM - 1');
 
 /**
  * Voeg een speaker toe aan de Living-groep
@@ -114,7 +108,7 @@ function hassgetgroep() {
 function hassplaylist($playlist) {
     $ch = curl_init();
     $payload = json_encode([
-        "entity_id" => "media_player.groep",
+        "entity_id" => "media_player.box_living",
         "media_id" => $playlist,
         "media_type" => "playlist",
         "enqueue" => "replace_next"
