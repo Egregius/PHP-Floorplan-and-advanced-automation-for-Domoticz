@@ -23,7 +23,7 @@ $response = maApi($server, $matokenbeta, [
 
 print_r($response);
 exit;*/
-
+playBoseHybride();
 
 function playBoseHybride() {
     $target_player_id = "up587a6260c5b2";
@@ -31,7 +31,7 @@ function playBoseHybride() {
 
     // Haal de playlist details op (ID en Naam)
     $playlist = getPlaylistDetails();
-
+	echo '<pre>';print_r($playlist);echo '</pre>';
     $payload = json_encode([
         "uri" => "library://playlist/" . $playlist['id'],
         "name" => $playlist['name'], // Nu dynamisch
