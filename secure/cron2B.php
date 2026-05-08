@@ -1,9 +1,9 @@
 <?php
 foreach ($devices as $ip => $vol) {
-    $startrun = hrtime(true);
-    $status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+	$startrun = hrtime(true);
+	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
-    if (isset($status)) {
+	if (isset($status)) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
 			if ($ip==101) {
@@ -103,11 +103,11 @@ foreach ($devices as $ip => $vol) {
 				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
 					if ($ip==101) playBoseHybride();
 					elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
-//						bosezone($ip,$vol);
-						groupBoseHybride($ip);
+						bosezone($ip,$vol);
+//						groupBoseHybride($ip);
 					} elseif ($ip!=105&&$d['time']<strtotime('20:00')) {
-//						bosezone($ip,$vol);
-						groupBoseHybride($ip);
+						bosezone($ip,$vol);
+//						groupBoseHybride($ip);
 					}
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
