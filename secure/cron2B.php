@@ -1,5 +1,7 @@
 <?php
-foreach ($devices as $ip => $vol) {
+$status=file_get_contents('http://192.168.2.6/api/status');
+echo $status;
+/*foreach ($devices as $ip => $vol) {
     $startrun = hrtime(true);
     $status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
@@ -7,26 +9,26 @@ foreach ($devices as $ip => $vol) {
 		$status = json_decode(json_encode(simplexml_load_string($status)), true);
 		if (is_array($status)) {
 			if ($ip==101) {
-/*				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
-					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
-						lg(basename(__FILE__).':'.__LINE__,'cron2');
-						bosepreset(boseplaylist(), 101);
-					}
-				}*/
-/*				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
-					$invalidcounter++;
-					if ($invalidcounter > 10) {
-						lg('Bose living $invalidcounter = '.$invalidcounter.' Toggling Bose','cron2');
-						bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
-						if ($d['bose'.$ip]->s == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,'cron2');
-						if ($d['boseliving']->s != 'Off') {
-							sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__,'cron2');
-							sleep(5);
-							sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,'cron2');
-							$invalidcounter = 0;
-						}
-					} else lg('Bose living $invalidcounter = '.$invalidcounter);
-				}*/
+//				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
+//					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
+//						lg(basename(__FILE__).':'.__LINE__,'cron2');
+//						bosepreset(boseplaylist(), 101);
+//					}
+//				}
+//				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
+//					$invalidcounter++;
+//					if ($invalidcounter > 10) {
+//						lg('Bose living $invalidcounter = '.$invalidcounter.' Toggling Bose','cron2');
+//						bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
+//						if ($d['bose'.$ip]->s == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,'cron2');
+//						if ($d['boseliving']->s != 'Off') {
+//							sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__,'cron2');
+//							sleep(5);
+//							sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,'cron2');
+//							$invalidcounter = 0;
+//						}
+//					} else lg('Bose living $invalidcounter = '.$invalidcounter);
+//				}
 				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
 						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
@@ -98,18 +100,18 @@ foreach ($devices as $ip => $vol) {
 				}
 			}
 			if (isset($status['@attributes']['source'])) {
-				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
+				if ($d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
 					lg(basename(__FILE__).':'.__LINE__);
 					sw('boseliving', 'On');
 				} elseif ($d['bose'.$ip]->m != 1) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
 				}
-/*				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
-					if ($ip==101) bosepreset(boseplaylist());
-					elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) bosezone($ip,$vol);
-					elseif ($ip!=105&&$d['time']<strtotime('20:00')) bosezone($ip,$vol);
-				}*/
+//				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
+//					if ($ip==101) bosepreset(boseplaylist());
+//					elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) bosezone($ip,$vol);
+//					elseif ($ip!=105&&$d['time']<strtotime('20:00')) bosezone($ip,$vol);
+//				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') store('bose'.$ip, 'On');
 				}
@@ -127,8 +129,8 @@ foreach ($devices as $ip => $vol) {
 	if($elapsedrun<700000) {
 		usleep(700000-$elapsedrun);
 	}
-}
-if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
+}*/
+/*if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
 	if ($d['bose101']->s == 'On' || $d['bose101']->m != 0) storesm('bose101', 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
 }
 if ($d['bose101']->s=='On'
@@ -158,7 +160,7 @@ if ($d['bose101']->s=='On'
 			}
 		}
 	}
-}
+}*/
 if ($d['weg']->s==0&&$d['auto']->s=='On') {
 	if ($d['nas']->s=='Off') {
 		$kodi_last_action=explode('-',$d['kodi_last_action']->s);

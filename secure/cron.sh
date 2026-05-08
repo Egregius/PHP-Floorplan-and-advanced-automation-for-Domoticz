@@ -8,7 +8,7 @@ SCRIPTS=(
   "mqtt_sensor_switch.php"
   "mqtt_zigbee2mqtt.php"
   "cron.php"
-  "cron2.php"
+#  "cron2.php"
   "mqtt__energy.php"
   "mqtt__homewizard.py"
   "mqtt__eufy-security-ws.py"

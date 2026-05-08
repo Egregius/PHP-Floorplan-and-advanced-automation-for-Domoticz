@@ -23,18 +23,30 @@ $response = maApi($server, $matokenbeta, [
 
 print_r($response);
 exit;*/
-playBoseHybride();
 
+groupBoseHybride(106);
+
+//playBoseHybride();
+function groupBoseHybride($ip) {
+	$payload = json_encode(["slaveIp"=>"192.168.2.$ip"]);
+	$ch = curl_init("http://soundtouch.egregius.be/api/join"); 
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    return $response;
+	
+}
 function playBoseHybride() {
     $target_player_id = "up587a6260c5b2";
     $target_player_ip = "192.168.2.101";
-
-    // Haal de playlist details op (ID en Naam)
     $playlist = getPlaylistDetails();
-	echo '<pre>';print_r($playlist);echo '</pre>';
     $payload = json_encode([
         "uri" => "library://playlist/" . $playlist['id'],
-        "name" => $playlist['name'], // Nu dynamisch
+        "name" => $playlist['name'],
         "settings" => [
             "shuffle" => true,
             "repeat" => "off"
@@ -49,10 +61,8 @@ function playBoseHybride() {
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    
     $response = curl_exec($ch);
     curl_close($ch);
-
     return $response;
 }
 
