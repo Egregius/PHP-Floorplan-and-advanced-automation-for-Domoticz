@@ -104,7 +104,8 @@ foreach ($devices as $ip => $vol) {
 					if ($ip==101) {
 						if($lastplay<$time-60) {
 							lg('playBoseHybride','bose');
-							playBoseHybride();
+							play_scheduled_playlist();
+//							playBoseHybride();
 						}
 						$lastplay=$time;
 					} elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {

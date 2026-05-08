@@ -765,35 +765,65 @@ function boseplaylist() {
 	];
 	return $map[$preset];
 }
-function getPlaylistDetails() {
+function getPlaylistDetails(): array
+{
     global $time;
-    $dag = floor($time / 86400);
-    $dow = date("w");
-    $weekend = ($dow == 0 || $dow == 6);
+    $ts      = isset($time) ? $time : time();
+    $dag     = (int) floor($ts / 86400);
+    $dow     = (int) date('w', $ts);
+    $weekend = ($dow === 0 || $dow === 6);
 
     if ($weekend) {
-        if ($dag % 3 == 0) $key = 'MIX-3';
-        elseif ($dag % 2 == 0) $key = 'MIX-2';
-        else $key = 'MIX-1';
+        $key = match($dag % 3) { 0 => 'MIX-3', 1 => 'MIX-1', default => 'MIX-2' };
     } else {
-        if ($dag % 3 == 0) $key = 'EDM-3';
-        elseif ($dag % 2 == 0) $key = 'EDM-2';
-        else $key = 'EDM-1';
+        $key = match($dag % 3) { 0 => 'EDM-3', 1 => 'EDM-1', default => 'EDM-2' };
     }
 
-    // Centraal beheer van ID's en Namen
-    $map = [
-        'EDM-1' => ['id' => '11',  'name' => 'EDM - 1'],
-        'EDM-2' => ['id' => '12',  'name' => 'EDM - 2'],
-        'EDM-3' => ['id' => '13',  'name' => 'EDM - 3'],
+    return [
+        'EDM-1' => ['id' => '11', 'name' => 'EDM - 1'],
+        'EDM-2' => ['id' => '12', 'name' => 'EDM - 2'],
+        'EDM-3' => ['id' => '13', 'name' => 'EDM - 3'],
         'MIX-1' => ['id' => '14', 'name' => 'MIX - 1'],
-        'MIX-2' => ['id' => '15',  'name' => 'MIX - 2'],
-        'MIX-3' => ['id' => '16',  'name' => 'MIX - 3'],
-        'Top' => ['id' => '17',  'name' => 'Top'],
-        'Pop' => ['id' => '18',  'name' => 'Pop'],
-    ];
+        'MIX-2' => ['id' => '15', 'name' => 'MIX - 2'],
+        'MIX-3' => ['id' => '16', 'name' => 'MIX - 3'],
+        'Top'   => ['id' => '17', 'name' => 'Top'],
+        'Pop'   => ['id' => '18', 'name' => 'Pop'],
+    ][$key];
+}
 
-    return $map[$key];
+function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2'): bool
+{
+    global $matokenbeta;
+    $playlist = getPlaylistDetails();
+    $uri      = 'library://playlist/' . $playlist['id'];
+
+    $payload = json_encode([
+        'message_id' => uniqid('php_', true),
+        'command'    => 'player_queues/play_media',
+        'args'       => [
+            'queue_id' => $queue_id,
+            'media'    => [$uri],    // array met URI, niet 'media_id'
+            'option'   => 'replace', // niet 'enqueue'
+        ],
+    ]);
+
+    $ch = curl_init(MA_URL . '/api');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => $payload,
+        CURLOPT_HTTPHEADER     => [
+            'Authorization: Bearer ' . $matokenbeta,
+            'Content-Type: application/json',
+        ],
+        CURLOPT_TIMEOUT => 10,
+    ]);
+
+    $body   = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    return $status >= 200 && $status < 300;
 }
 function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
