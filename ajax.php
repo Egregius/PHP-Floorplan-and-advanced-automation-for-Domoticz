@@ -230,6 +230,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='power') {
 		$d=fetchdata(0);
 		if ($_REQUEST['action']=='On') {
+			bosekey("POWER", 1, $_REQUEST['boseip']);
 			bosezone($_REQUEST['boseip']);
 		} elseif ($_REQUEST['action']=='Off') {
 			bosekey("POWER", 0, $_REQUEST['boseip']);
