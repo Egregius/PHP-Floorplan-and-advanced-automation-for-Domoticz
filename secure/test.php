@@ -11,72 +11,49 @@ $d=fetchdata();
 //$db = Database::getInstance();
 
 //hassplaylist('spotify://playlist/EDM - 1');
-    
-   $response = maApi('192.168.2.26', $matokenbeta, [
+$server   = '192.168.2.26';
+$response = maApi($server, $matokenbeta, [
     'message_id' => 1,
-    'command'    => 'players/all'
+    'command'    => 'music/playlists/library_items',
+    'args'       => [
+        'limit'  => 500,
+        'offset' => 0
+    ]
 ]);
 
-echo '<pre>';
 print_r($response);
-echo '</pre>';
-exit; 
-
-musicAssistantPlayPlaylist(
-    '192.168.2.26',
-    $matokenbeta,
-    'EDM - 1',
-);
+exit;
 
 
-function musicAssistantPlayPlaylist(
-    string $server,
-    string $token,
-    string $playlistName
-): array {
+musicAssistantPlayPlaylist('EDM - 1');
+
+function musicAssistantPlayPlaylist(string $playlistName): array
+{
+    global $matokenbeta;
+
+    $server   = '192.168.2.26';
+    $playerId = 'up587a6260c5b2';
 
     // -----------------------------
-    // 1. Players ophalen
+    // Playlists ophalen
     // -----------------------------
 
-    $players = maApi($server, $token, [
+    $response = maApi($server, $matokenbeta, [
         'message_id' => 1,
-        'command'    => 'players/all'
+        'command'    => 'music/playlists/library_items',
+        'args'       => [
+            'limit'  => 500,
+            'offset' => 0
+        ]
     ]);
 
-    if (empty($players['result'])) {
-        throw new Exception('Geen players gevonden');
+    if (empty($response['result'])) {
+        throw new Exception('Geen playlists gevonden');
     }
-
-    // Eerste actieve player nemen
-    $player = null;
-
-    foreach ($players['result'] as $p) {
-
-        if (!empty($p['available'])) {
-            $player = $p;
-            break;
-        }
-    }
-
-    if (!$player) {
-        throw new Exception('Geen beschikbare player gevonden');
-    }
-
-    $playerId = $player['player_id'];
-
-    // -----------------------------
-    // 2. Playlist zoeken
-    // -----------------------------
-
-    $playlists = maApi($server, $token, [
-        'message_id' => 2,
-        'command'    => 'music/playlists'
-    ]);
 
     $playlist = null;
 
-    foreach ($playlists['result'] as $p) {
+    foreach ($response['result'] as $p) {
 
         if (
             isset($p['name']) &&
@@ -92,29 +69,23 @@ function musicAssistantPlayPlaylist(
     }
 
     // -----------------------------
-    // 3. Playlist afspelen
+    // Playlist afspelen
     // -----------------------------
 
-    $result = maApi($server, $token, [
-        'message_id' => 3,
+    return maApi($server, $matokenbeta, [
+        'message_id' => 2,
         'command'    => 'player_queues/play_media',
         'args'       => [
             'queue_id' => $playerId,
-            'media'    => [
-                'media_type' => 'playlist',
-                'item_id'    => $playlist['item_id'],
-                'provider'   => $playlist['provider']
+
+            // MA 2.9 verwacht meestal URI
+            'media' => [
+                'uri' => $playlist['uri']
             ]
         ]
     ]);
-
-    return $result;
 }
 
-
-/**
- * Algemene Music Assistant API helper
- */
 
 function maApi(
     string $server,
@@ -133,7 +104,7 @@ function maApi(
             'Authorization: Bearer ' . $token
         ],
         CURLOPT_POSTFIELDS     => json_encode($payload),
-        CURLOPT_TIMEOUT        => 15
+        CURLOPT_TIMEOUT        => 20
     ]);
 
     $response = curl_exec($ch);
@@ -142,18 +113,26 @@ function maApi(
         throw new Exception(curl_error($ch));
     }
 
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
     curl_close($ch);
 
-    if ($httpCode >= 400) {
-        throw new Exception("HTTP error {$httpCode}: {$response}");
+    if ($http >= 400) {
+        throw new Exception("HTTP {$http}: {$response}");
     }
 
     $json = json_decode($response, true);
 
-    if (!$json) {
+    if (!is_array($json)) {
         throw new Exception("Ongeldige JSON response: {$response}");
+    }
+
+    if (isset($json['error_code'])) {
+        throw new Exception(
+            ($json['error_code'] ?? 'API_ERROR')
+            . ' - '
+            . ($json['details'] ?? json_encode($json))
+        );
     }
 
     return $json;
