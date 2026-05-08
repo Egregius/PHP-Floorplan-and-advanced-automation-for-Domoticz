@@ -802,8 +802,9 @@ function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2'): bool
         'command'    => 'player_queues/play_media',
         'args'       => [
             'queue_id' => $queue_id,
-            'media'    => [$uri],    // array met URI, niet 'media_id'
-            'option'   => 'replace', // niet 'enqueue'
+            'media'    => [$uri],
+            'option'   => 'replace_next', 
+            'radio_mode' => true,
         ],
     ]);
 	lg($payload,'bose');
