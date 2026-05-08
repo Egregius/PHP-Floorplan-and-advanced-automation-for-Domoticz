@@ -12,11 +12,19 @@ $d=fetchdata();
 
 //hassplaylist('spotify://playlist/EDM - 1');
     
-    
+   $response = maApi('192.168.2.26', $matokenbeta, [
+    'message_id' => 1,
+    'command'    => 'players/all'
+]);
+
+echo '<pre>';
+print_r($response);
+echo '</pre>';
+exit; 
 
 musicAssistantPlayPlaylist(
     '192.168.2.26',
-    $matoken,
+    $matokenbeta,
     'EDM - 1',
 );
 
