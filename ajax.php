@@ -29,7 +29,11 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 	if (isset($nowplaying['artist'],$nowplaying['track'])) {
 		$d['artist']=$nowplaying['artist'];
 		$d['track']=$nowplaying['track'];
-		$d['art']=str_replace('http://192.168.2.26:8097','https://imageproxy.egregius.be',$nowplaying['art']);
+		$replacements = [
+			'http://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
+			'http://192.168.2.101/' => 'https://bose101.egregius.be/'
+		];
+		$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $nowplaying['art']);
 	} else {
 		$d['artist']='';
 		$d['track']='';
