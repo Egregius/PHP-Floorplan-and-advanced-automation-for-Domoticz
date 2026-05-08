@@ -1017,6 +1017,31 @@ function hassservices() {
 	curl_close($ch);
 	return $response;
 }
+function hassAddon($addon,$type) {
+	global $hasstoken;
+    $ch = curl_init();
+    $payload = json_encode([
+        "addon" => $addon
+    ]);
+    curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/hassio/addon_'.$type);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $hasstoken
+    ));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $data = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($httpCode !== 200) {
+        return "Foutcode: " . $httpCode . " - Respons: " . $data;
+    } else {
+        return "Succes!";
+    }
+}
 function hassnotify($title, $message, $target = 'mobile_app_iphone_guy', $critical = false) {
     $token = hasstoken();
     if ($critical) {

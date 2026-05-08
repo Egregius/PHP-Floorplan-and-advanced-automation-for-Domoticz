@@ -17,32 +17,9 @@ $lms_garage = "aa:aa:a0:67:e7:93";
 $lms_keuken = "aa:aa:ea:56:13:67";
 
 
-hassstartma();
+hassAddon('d5369777_music_assistant_beta','start');
 exit;
-function hassstartma() {
-    $ch = curl_init();
-    $payload = json_encode([
-        "addon" => "d5369777_music_assistant_beta"
-    ]);
-    curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/hassio/addon_start');
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . hasstoken()
-    ));
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-    $data = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if ($httpCode !== 200) {
-        echo "Foutcode: " . $httpCode . " - Respons: " . $data;
-    } else {
-        echo "Succes!";
-    }
-}
+
 
 
 if (isPlayerOnline($lms_buiten)) echo 'ja';else echo 'nee';
