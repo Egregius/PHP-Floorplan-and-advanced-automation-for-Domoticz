@@ -48,6 +48,7 @@ foreach ($devices as $ip => $vol) {
 								lg($cleantitle.' skipped op id','bose');
 //								bosekey("NEXT_TRACK", 0, 101);
 							} else {
+								lg('Adding '.$cleantitle.' to history','bose');
 								$history[$cleantitle] = 1;
 								if (count($history) > 10000) {
 									reset($history);
@@ -100,16 +101,17 @@ foreach ($devices as $ip => $vol) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
 				}
-				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
+				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
 						$past=$time-$lastplay;
 						lg($past,'bose');
 						if($past>60) {
 							lg('play_scheduled_playlist','bose');
 							play_scheduled_playlist();
+							$lastplay=$time;
 //							playBoseHybride();
 						}
-						$lastplay=$time;
+						
 					} elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
 						bosezone($ip,$vol);
 //						groupBoseHybride($ip);
