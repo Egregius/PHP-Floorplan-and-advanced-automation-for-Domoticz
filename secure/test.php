@@ -27,10 +27,14 @@ exit;*/
 
 //groupBoseHybride(106);
 
+
+http://soundtouch.egregius.be/api/manager/play_now
+
+{"uri":"library://playlist/17","name":"Top","settings":{"shuffle":false,"repeat":"off"},"player_id":"up587a6260c5b2","ip":"192.168.2.101"}
 playBoseHybride();
 function groupBoseHybride($ip) {
 	$payload = json_encode(["slaveIp"=>"192.168.2.$ip"]);
-	$ch = curl_init("http://soundtouch.egregius.be/api/join"); 
+	$ch = curl_init("http://192.168.2.6/api/join"); 
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
