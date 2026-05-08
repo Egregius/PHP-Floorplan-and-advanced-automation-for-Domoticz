@@ -2,31 +2,55 @@
 header('Access-Control-Allow-Origin: *');
 echo '<pre>';
 $start=microtime(true);
-$user='Guy';
+$user='test';
 require 'functions.php';
 //require '/var/www/authentication.php';
 $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-
-// Definieer je ID's op basis van de LMS-output
-$lms_living = "aa:aa:62:60:c5:b2";
-$lms_buiten = "aa:aa:47:78:37:58";
-$lms_garage = "aa:aa:a0:67:e7:93";
-$lms_keuken = "aa:aa:ea:56:13:67";
+echo 'OK';
+hassplaylist('EDM - 1');
+    
 
 
-hassplaylist('library://playlist/EDM - 1');
+function getMaQueueStatus() {
+    $ch = curl_init();
+    // We bevragen de MA server direct op poort 8095
+    curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8095/api/players/queue/syncgroup_xpctkjzj');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // MA API heeft vaak geen Bearer token nodig als je lokaal zit, 
+    // maar check je MA instellingen als je een 401 krijgt.
+    
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    // In de MA Queue objecten zit vaak de 'metadata' van de huidige stream
+    // of de naam van de actieve lijst.
+    return $data;
+}
 
 
+function hassgetgroep() {
+	$ch=curl_init();
+	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/states/media_player.box_living');
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer '.hasstoken()));
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
+	curl_setopt($ch,CURLOPT_TIMEOUT,5);
+	$response=curl_exec($ch);
+	curl_close($ch);
+	return $response;
+}
 function hassplaylist($playlist) {
     $ch = curl_init();
     $payload = json_encode([
         "entity_id" => "media_player.box_living",
         "media_id" => $playlist,
         "media_type" => "playlist",
-        "enqueue" => "play"
+        "enqueue" => "replace_next"
     ]);
     curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/music_assistant/play_media');
     curl_setopt($ch, CURLOPT_POST, 1);
