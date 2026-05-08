@@ -23,7 +23,8 @@ $response = maApi($server, $matokenbeta, [
 
 print_r($response);
 exit;*/
-
+hassAddon('d5369777_music_assistant_beta','stop');
+exit;
 
 
 playBoseHybride();
