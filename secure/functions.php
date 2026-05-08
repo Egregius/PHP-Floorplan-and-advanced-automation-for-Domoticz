@@ -806,8 +806,8 @@ function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2'): bool
             'option'   => 'replace', // niet 'enqueue'
         ],
     ]);
-
-    $ch = curl_init(MA_URL . '/api');
+	lg($payload,'bose');
+    $ch = curl_init('http://192.168.2.26:8095/api');
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST           => true,
@@ -820,6 +820,7 @@ function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2'): bool
     ]);
 
     $body   = curl_exec($ch);
+    lg($body,'bose');
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 

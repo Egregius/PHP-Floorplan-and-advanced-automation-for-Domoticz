@@ -46,7 +46,7 @@ foreach ($devices as $ip => $vol) {
 							$prevcleantitle=$cleantitle;
 							if (isset($history[$cleantitle])) {
 								lg($cleantitle.' skipped op id','bose');
-								bosekey("NEXT_TRACK", 0, 101);
+//								bosekey("NEXT_TRACK", 0, 101);
 							} else {
 								$history[$cleantitle] = 1;
 								if (count($history) > 10000) {
@@ -102,8 +102,10 @@ foreach ($devices as $ip => $vol) {
 				}
 				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
 					if ($ip==101) {
-						if($lastplay<$time-60) {
-							lg('playBoseHybride','bose');
+						$past=$time-$lastplay;
+						lg($past,'bose');
+						if($past>60) {
+							lg('play_scheduled_playlist','bose');
 							play_scheduled_playlist();
 //							playBoseHybride();
 						}
