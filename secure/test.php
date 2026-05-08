@@ -11,7 +11,7 @@ $d=fetchdata();
 //$db = Database::getInstance();
 
 //hassplaylist('spotify://playlist/EDM - 1');
-$server   = '192.168.2.26';
+/*$server   = '192.168.2.26';
 $response = maApi($server, $matokenbeta, [
     'message_id' => 1,
     'command'    => 'music/playlists/library_items',
@@ -22,10 +22,10 @@ $response = maApi($server, $matokenbeta, [
 ]);
 
 print_r($response);
-exit;
+exit;*/
 
 
-musicAssistantPlayPlaylist('EDM - 1');
+musicAssistantPlayPlaylist('Top');
 
 function musicAssistantPlayPlaylist(string $playlistName): array
 {
@@ -35,25 +35,20 @@ function musicAssistantPlayPlaylist(string $playlistName): array
     $playerId = 'up587a6260c5b2';
 
     // -----------------------------
-    // Playlists ophalen
+    // Playlist ophalen
     // -----------------------------
 
-    $response = maApi($server, $matokenbeta, [
+    $playlists = maApi($server, $matokenbeta, [
         'message_id' => 1,
         'command'    => 'music/playlists/library_items',
         'args'       => [
-            'limit'  => 500,
-            'offset' => 0
+            'limit' => 500
         ]
     ]);
 
-    if (empty($response['result'])) {
-        throw new Exception('Geen playlists gevonden');
-    }
-
     $playlist = null;
 
-    foreach ($response['result'] as $p) {
+    foreach ($playlists as $p) {
 
         if (
             isset($p['name']) &&
@@ -65,11 +60,11 @@ function musicAssistantPlayPlaylist(string $playlistName): array
     }
 
     if (!$playlist) {
-        throw new Exception("Playlist niet gevonden: {$playlistName}");
+        throw new Exception("Playlist niet gevonden");
     }
 
     // -----------------------------
-    // Playlist afspelen
+    // Playlist starten
     // -----------------------------
 
     return maApi($server, $matokenbeta, [
@@ -77,11 +72,7 @@ function musicAssistantPlayPlaylist(string $playlistName): array
         'command'    => 'player_queues/play_media',
         'args'       => [
             'queue_id' => $playerId,
-
-            // MA 2.9 verwacht meestal URI
-            'media' => [
-                'uri' => $playlist['uri']
-            ]
+            'media_id' => $playlist['uri']
         ]
     ]);
 }
@@ -118,21 +109,20 @@ function maApi(
     curl_close($ch);
 
     if ($http >= 400) {
-        throw new Exception("HTTP {$http}: {$response}");
+
+        // Extra debug info
+        throw new Exception(
+            "HTTP {$http}: {$response}\n\nPayload:\n"
+            . json_encode($payload, JSON_PRETTY_PRINT)
+        );
     }
 
     $json = json_decode($response, true);
 
     if (!is_array($json)) {
-        throw new Exception("Ongeldige JSON response: {$response}");
-    }
-
-    if (isset($json['error_code'])) {
-        throw new Exception(
-            ($json['error_code'] ?? 'API_ERROR')
-            . ' - '
-            . ($json['details'] ?? json_encode($json))
-        );
+        return [
+            'raw' => $response
+        ];
     }
 
     return $json;
