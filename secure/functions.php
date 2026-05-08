@@ -724,13 +724,13 @@ function bosevolume($vol,$ip=101, $msg='') {
 	$vol=1*$vol;
 	$xml="<volume>$vol</volume>";
 	bosepost("volume", $xml, $ip, true);
-	if ($ip==101) {
+/*	if ($ip==101) {
 		if ($vol>=50) bosebass(-5, $ip);
 		elseif ($vol>=40) bosebass(-6, $ip);
 		elseif ($vol>=30) bosebass(-7, $ip);
 		elseif ($vol>=20) bosebass(-8, $ip);
 		else bosebass(-9, $ip);
-	}
+	}*/
 	lg('🔊 bosevolume '.$ip.' -> '.$vol.' '.$msg,'bose');
 }
 function bosebass($bass,$ip=101) {
