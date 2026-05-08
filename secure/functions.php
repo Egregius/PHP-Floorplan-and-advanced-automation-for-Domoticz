@@ -765,6 +765,36 @@ function boseplaylist() {
 	];
 	return $map[$preset];
 }
+function getPlaylistDetails() {
+    global $time;
+    $dag = floor($time / 86400);
+    $dow = date("w");
+    $weekend = ($dow == 0 || $dow == 6);
+
+    if ($weekend) {
+        if ($dag % 3 == 0) $key = 'MIX-3';
+        elseif ($dag % 2 == 0) $key = 'MIX-2';
+        else $key = 'MIX-1';
+    } else {
+        if ($dag % 3 == 0) $key = 'EDM-3';
+        elseif ($dag % 2 == 0) $key = 'EDM-2';
+        else $key = 'EDM-1';
+    }
+
+    // Centraal beheer van ID's en Namen
+    $map = [
+        'EDM-1' => ['id' => '11',  'name' => 'EDM - 1'],
+        'EDM-2' => ['id' => '12',  'name' => 'EDM - 2'],
+        'EDM-3' => ['id' => '13',  'name' => 'EDM - 3'],
+        'MIX-1' => ['id' => '14', 'name' => 'MIX - 1'],
+        'MIX-2' => ['id' => '15',  'name' => 'MIX - 2'],
+        'MIX-3' => ['id' => '16',  'name' => 'MIX - 3'],
+        'Top' => ['id' => '17',  'name' => 'Top'],
+        'Pop' => ['id' => '18',  'name' => 'Pop'],
+    ];
+
+    return $map[$key];
+}
 function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
 	if ($d['weg']->s==0||$d['badkamerpower']->s=='On') {

@@ -25,125 +25,35 @@ print_r($response);
 exit;*/
 
 
-musicAssistantPlayPlaylist('Top');
+function playBoseHybride() {
+    $target_player_id = "up587a6260c5b2";
+    $target_player_ip = "192.168.2.101";
 
-function musicAssistantPlayPlaylist(string $playlistName): array
-{
-    global $matokenbeta;
+    // Haal de playlist details op (ID en Naam)
+    $playlist = getPlaylistDetails();
 
-    $server   = '192.168.2.26';
-    $playerId = 'up587a6260c5b2';
-
-    // -----------------------------
-    // Playlist ophalen
-    // -----------------------------
-
-    $playlists = maApi($server, $matokenbeta, [
-        'message_id' => 1,
-        'command'    => 'music/playlists/library_items',
-        'args'       => [
-            'limit' => 500
-        ]
-    ]);
-
-    $playlist = null;
-
-    foreach ($playlists as $p) {
-
-        if (
-            isset($p['name']) &&
-            strtolower($p['name']) === strtolower($playlistName)
-        ) {
-            $playlist = $p;
-            break;
-        }
-    }
-
-    if (!$playlist) {
-        throw new Exception("Playlist niet gevonden");
-    }
-
-    // -----------------------------
-    // Playlist starten
-    // -----------------------------
-
-    return maApi($server, $matokenbeta, [
-        'message_id' => 2,
-        'command'    => 'player_queues/play_media',
-        'args'       => [
-            'queue_id' => $playerId,
-            'media_id' => $playlist['uri']
-        ]
-    ]);
-}
-
-
-function maApi(
-    string $server,
-    string $token,
-    array $payload
-): array {
-
-    $ch = curl_init();
-
-    curl_setopt_array($ch, [
-        CURLOPT_URL            => "http://{$server}:8095/api",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_HTTPHEADER     => [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $token
+    $payload = json_encode([
+        "uri" => "library://playlist/" . $playlist['id'],
+        "name" => $playlist['name'], // Nu dynamisch
+        "settings" => [
+            "shuffle" => true,
+            "repeat" => "off"
         ],
-        CURLOPT_POSTFIELDS     => json_encode($payload),
-        CURLOPT_TIMEOUT        => 20
+        "player_id" => $target_player_id,
+        "ip" => $target_player_ip
     ]);
-
-    $response = curl_exec($ch);
-
-    if ($response === false) {
-        throw new Exception(curl_error($ch));
-    }
-
-    $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    curl_close($ch);
-
-    if ($http >= 400) {
-
-        // Extra debug info
-        throw new Exception(
-            "HTTP {$http}: {$response}\n\nPayload:\n"
-            . json_encode($payload, JSON_PRETTY_PRINT)
-        );
-    }
-
-    $json = json_decode($response, true);
-
-    if (!is_array($json)) {
-        return [
-            'raw' => $response
-        ];
-    }
-
-    return $json;
-}
-
-function getMaQueueStatus() {
-    $ch = curl_init();
-    // We bevragen de MA server direct op poort 8095
-    curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8095/api/players/queue/syncgroup_xpctkjzj');
+	echo $payload;
+    $ch = curl_init("http://192.168.2.6/api/manager/play_now"); 
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // MA API heeft vaak geen Bearer token nodig als je lokaal zit, 
-    // maar check je MA instellingen als je een 401 krijgt.
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
     
     $response = curl_exec($ch);
     curl_close($ch);
 
-    $data = json_decode($response, true);
-
-    // In de MA Queue objecten zit vaak de 'metadata' van de huidige stream
-    // of de naam van de actieve lijst.
-    return $data;
+    return $response;
 }
 
 
