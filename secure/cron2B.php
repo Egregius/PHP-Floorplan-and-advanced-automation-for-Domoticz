@@ -105,12 +105,12 @@ foreach ($devices as $ip => $vol) {
 					if ($ip==101) {
 						$past=$time-$lastplay;
 						lg($past,'bose');
-						if($past>60) {
+						if($past>=60) {
 							lg('play_scheduled_playlist','bose');
 							play_scheduled_playlist();
 							$lastplay=$time;
 							sleep(1);
-							bosevolume($vol,101, 'TV aan');
+							bosevolume($vol,101, 'lijn '.__LINE__);
 //							playBoseHybride();
 						}
 						
