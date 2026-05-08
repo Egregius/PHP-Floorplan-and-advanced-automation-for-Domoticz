@@ -99,17 +99,17 @@ foreach ($devices as $ip => $vol) {
 			}
 			if (isset($status['@attributes']['source'])) {
 				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
-//					lg(basename(__FILE__).':'.__LINE__);
-	//				sw('boseliving', 'On');
+					lg(basename(__FILE__).':'.__LINE__);
+					sw('boseliving', 'On');
 				} elseif ($d['bose'.$ip]->m != 1) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
 				}
-/*				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
+				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||$d['badkamerpower']->s=='On')) {
 					if ($ip==101) bosepreset(boseplaylist());
 					elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) bosezone($ip,$vol);
 					elseif ($ip!=105&&$d['time']<strtotime('20:00')) bosezone($ip,$vol);
-				}*/
+				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') store('bose'.$ip, 'On');
 				}
