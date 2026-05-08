@@ -29,27 +29,11 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 	if (isset($nowplaying['ContentItem']['itemName'])) {
 		$d['artist']=$nowplaying['artist'];
 		$d['track']=$nowplaying['track'];
-		$d['art']=$nowplaying['art'];
-		$d['playlist']=$nowplaying['ContentItem']['itemName'];
-		$trackid=str_replace('spotify:track:','',$nowplaying['trackID']);
-		$d['trackid']=$trackid;
-		
-		$db = Database::getInstance();
-		// Check of de track in TOP staat
-		$stmt = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? AND playlist_id = '4O0G5e4lsBRG5CV485iolD' LIMIT 1");
-		$stmt->execute([$trackid]);
-		$d['top'] = (bool)$stmt->fetch();
-
-		// NIEUW: Check of de track überhaupt in een van je bron-lijsten staat (EDM, Pop, Top)
-//		$stmtLib = $db->prepare("SELECT 1 FROM track_mapping WHERE track_id = ? LIMIT 1");
-//		$stmtLib->execute([$trackid]);
-//		$d['in_library'] = (bool)$stmtLib->fetch();
+		$d['art']=str_replace('http://192.168.2.26:8097','https://imageproxy.egregius.be',$nowplaying['art']);
 	} else {
 		$d['artist']='';
 		$d['track']='';
 		$d['art']='';
-		$d['playlist']='';
-		$d['trackid']='';
 	}
 	$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['volume']=$volume['actualvolume'];
