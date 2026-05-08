@@ -24,9 +24,10 @@ $response = maApi($server, $matokenbeta, [
 print_r($response);
 exit;*/
 
-groupBoseHybride(106);
 
-//playBoseHybride();
+//groupBoseHybride(106);
+
+playBoseHybride();
 function groupBoseHybride($ip) {
 	$payload = json_encode(["slaveIp"=>"192.168.2.$ip"]);
 	$ch = curl_init("http://soundtouch.egregius.be/api/join"); 
