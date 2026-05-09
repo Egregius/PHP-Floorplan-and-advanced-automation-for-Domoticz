@@ -30,6 +30,7 @@ foreach ($devices as $ip => $vol) {
 				}*/
 				lg(print_r($status,true),'bose');
 				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
+					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
 						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 						if (isset($vol)) {
@@ -101,16 +102,26 @@ foreach ($devices as $ip => $vol) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
 				}
-				if ($status['@attributes']['source'] == 'STANDBY' && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
+				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
 						$past=$time-$lastplay;
-						lg($past,'bose');
+						lg($past.' | '.$playlisttries,'bose');
 						if($past>=60) {
 							lg('play_scheduled_playlist','bose');
 							play_scheduled_playlist();
 							$lastplay=$time;
+							$playlisttries++;
 							sleep(1);
 							bosevolume($vol,101, 'lijn '.__LINE__);
+							if($playlisttries>3) {
+								lg('play_scheduled_playlist failed, restarting Music Assistant','bose');
+								hassAddon('d5369777_music_assistant_beta','stop');
+								sleep(20);
+								hassAddon('d5369777_music_assistant_beta','start');
+								sleep(30);
+								play_scheduled_playlist();
+								$playlisttries=0;
+							}
 //							playBoseHybride();
 						}
 						
