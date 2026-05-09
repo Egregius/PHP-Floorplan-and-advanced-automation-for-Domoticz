@@ -27,7 +27,7 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else lg('Bose living $invalidcounter = '.$invalidcounter);
 				}*/
-				lg(print_r($status,true),'bose');
+//				lg(print_r($status,true),'bose');
 				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
@@ -107,7 +107,7 @@ foreach ($devices as $ip => $vol) {
 						lg($past.' | '.$playlisttries,'bose');
 						if($past>=60) {
 							lg('play_scheduled_playlist','bose');
-							play_scheduled_playlist();
+//							play_scheduled_playlist();
 							$lastplay=$time;
 							$playlisttries++;
 							sleep(1);
@@ -115,11 +115,11 @@ foreach ($devices as $ip => $vol) {
 							bosevolume($vol,101, 'lijn '.__LINE__);
 							if($playlisttries>3) {
 								lg('play_scheduled_playlist failed, restarting Music Assistant','bose');
-								hassAddon('d5369777_music_assistant_beta','stop');
-								sleep(20);
-								hassAddon('d5369777_music_assistant_beta','start');
-								sleep(35);
-								play_scheduled_playlist();
+//								hassAddon('d5369777_music_assistant_beta','stop');
+//								sleep(20);
+//								hassAddon('d5369777_music_assistant_beta','start');
+//								sleep(35);
+//								play_scheduled_playlist();
 								$playlisttries=0;
 							}
 //							playBoseHybride();
