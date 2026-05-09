@@ -1,6 +1,5 @@
 <?php
 foreach ($devices as $ip => $vol) {
-	$startrun = hrtime(true);
 	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
 	if (isset($status)) {
@@ -135,7 +134,6 @@ foreach ($devices as $ip => $vol) {
 					}
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
-					lg(__LINE__,'bose');
 					if ($d['bose'.$ip]->s == 'Off') store('bose'.$ip, 'On');
 				}
 			} else {
@@ -147,10 +145,6 @@ foreach ($devices as $ip => $vol) {
 		unset($status);
 	} else {
 		if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
-	}
-	$elapsedrun = round((hrtime(true) - $startrun) / 1e+3, 0);
-	if($elapsedrun<700000) {
-		usleep(700000-$elapsedrun);
 	}
 }
 if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
