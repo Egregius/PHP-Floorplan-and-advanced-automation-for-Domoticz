@@ -135,6 +135,7 @@ foreach ($devices as $ip => $vol) {
 					}
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
+					lg(__LINE__,'bose');
 					if ($d['bose'.$ip]->s == 'Off') store('bose'.$ip, 'On');
 				}
 			} else {
