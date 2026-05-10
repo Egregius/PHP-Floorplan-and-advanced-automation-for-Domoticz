@@ -791,17 +791,20 @@ function getPlaylistDetails(): array
     ][$key];
 }
 
-function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2'): bool
+function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2', int $playlist=null): bool
 {
     global $matokenbeta;
     $dow=date("w");
 	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 //    $playlist = getPlaylistDetails();
-    if($weekend===true) $uri      = 'library://playlist/7';
-    else $uri      = 'library://playlist/8';
-
+	if($playlist>0) {
+		$uri      = 'library://playlist/'.$playlist;
+	} else {
+		if($weekend===true) $uri      = 'library://playlist/7';
+		else $uri      = 'library://playlist/8';
+	}
     $payload = json_encode([
-        'message_id' => uniqid('php_', true),
+//        'message_id' => uniqid('php_', true),
         'command'    => 'player_queues/play_media',
         'args'       => [
             'queue_id' => $queue_id,
@@ -824,7 +827,7 @@ function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2'): bool
     ]);
 
     $body   = curl_exec($ch);
-    lg($body,'bose');
+    lg('body='.$body,'bose');
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
