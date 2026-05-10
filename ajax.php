@@ -205,8 +205,10 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		play_scheduled_playlist($_REQUEST['action']);
 	} elseif ($_REQUEST['command']=='preset') {
 		bosepreset('PRESET_'.$_REQUEST['action'], $_REQUEST['boseip']);
+	} elseif ($_REQUEST['command']=='skipupnp') {
+		ma_next_track();
 	} elseif ($_REQUEST['command']=='skipairplay') {
-		
+		ma_next_track();
 	} elseif ($_REQUEST['command']=='skip') {
 		$db = Database::getInstance();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");

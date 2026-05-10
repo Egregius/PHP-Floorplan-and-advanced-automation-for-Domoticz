@@ -790,7 +790,34 @@ function getPlaylistDetails(): array
         'Pop'   => ['id' => '18', 'name' => 'Pop'],
     ][$key];
 }
+function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
+{
+    global $matokenbeta;
 
+    $payload = json_encode([
+        'message_id' => uniqid('php_', true),
+        'command'    => 'player_queues/next',
+        'args'       => ['queue_id' => $queue_id],
+    ]);
+
+    $ch = curl_init('http://192.168.2.26:8095/api');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => $payload,
+        CURLOPT_HTTPHEADER     => [
+            'Authorization: Bearer ' . $matokenbeta,
+            'Content-Type: application/json',
+        ],
+        CURLOPT_TIMEOUT => 10,
+    ]);
+
+    $body   = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    return $status >= 200 && $status < 300;
+}
 function play_scheduled_playlist(int $playlist=0): bool
 {
     global $matokenbeta;
