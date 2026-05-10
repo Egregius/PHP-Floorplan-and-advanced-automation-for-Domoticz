@@ -725,11 +725,11 @@ function bosevolume($vol,$ip=101, $msg='') {
 	$xml="<volume>$vol</volume>";
 	bosepost("volume", $xml, $ip, true);
 	if ($ip==101) {
-		if ($vol>=50) bosebass(-4, $ip);
-		elseif ($vol>=40) bosebass(-5, $ip);
-		elseif ($vol>=30) bosebass(-6, $ip);
-		elseif ($vol>=20) bosebass(-7, $ip);
-		else bosebass(-8, $ip);
+		if ($vol>=50) bosebass(-2, $ip);
+		elseif ($vol>=40) bosebass(-3, $ip);
+		elseif ($vol>=30) bosebass(-4, $ip);
+		elseif ($vol>=20) bosebass(-5, $ip);
+		else bosebass(-6, $ip);
 	}
 	lg('🔊 bosevolume '.$ip.' -> '.$vol.' '.$msg,'bose');
 }
@@ -927,7 +927,6 @@ function bosepost($method, $xml, $ip=101, $log=false) {
     if ($fp) {
         fwrite($fp, $headers.$xml);
         fclose($fp);
-//        if ($log) lg("💡 Bose $method verstuurd naar $host");
     } else {
         if ($log) lg("❌ Bose socket fout: $errstr ($errno)",'bose');
     }
