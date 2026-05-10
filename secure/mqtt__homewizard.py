@@ -124,7 +124,6 @@ def step_for_value(value):
 def mqtt_publish_key(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"d/e/{key}", value, retain=True, qos=1)
-        log(f"{key} {value}")
         if result.rc != 0:
             log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)
