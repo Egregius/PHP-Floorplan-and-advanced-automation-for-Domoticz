@@ -107,7 +107,7 @@ foreach ($devices as $ip => $vol) {
 						lg($past.' | '.$playlisttries,'bose');
 						if($past>=60) {
 							lg('play_scheduled_playlist','bose');
-//							play_scheduled_playlist();
+							play_scheduled_playlist();
 							$lastplay=$time;
 							$playlisttries++;
 							sleep(1);

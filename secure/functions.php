@@ -794,8 +794,11 @@ function getPlaylistDetails(): array
 function play_scheduled_playlist(string $queue_id = 'up587a6260c5b2'): bool
 {
     global $matokenbeta;
-    $playlist = getPlaylistDetails();
-    $uri      = 'library://playlist/' . $playlist['id'];
+    $dow=date("w");
+	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
+//    $playlist = getPlaylistDetails();
+    if($weekend===true) $uri      = 'library://playlist/7';
+    else $uri      = 'library://playlist/8';
 
     $payload = json_encode([
         'message_id' => uniqid('php_', true),
