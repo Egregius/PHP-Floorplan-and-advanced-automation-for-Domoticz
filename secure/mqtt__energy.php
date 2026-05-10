@@ -266,8 +266,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 					':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
 					':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
 				];
-			lg($q.'
-	'.json_encode($opts));
+//			lg($q.'
+//	'.json_encode($opts));
 			try {
 				$dbverbruik->query($q, $opts);
 			} catch (Exception $e) {
@@ -367,7 +367,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 }
 function lg($msg) {
 	echo $msg."\n";
-	$fp = fopen('/var/log/mqtt/energy.log', "a+");
+	$fp = fopen('/var/log/mqtt/energy'.date("d").'.log', "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
 	$mSecs = $time - floor($time);
