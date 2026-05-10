@@ -202,7 +202,7 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='bass') {
 		bosebass($_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='maplaylist') {
-		play_scheduled_playlist('up587a6260c5b2',$_REQUEST['action']);
+		play_scheduled_playlist($_REQUEST['action']);
 	} elseif ($_REQUEST['command']=='preset') {
 		bosepreset('PRESET_'.$_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='skipairplay') {
