@@ -36,7 +36,7 @@ $dbzonphp = new Database('192.168.30.23', 'dbuser', 'dbuser', 'zon');
 $force = true;
 
 define('BUFFER_SIZE',     16);   // laatste 30 gesynchroniseerde metingen
-define('MAX_AGE_SEC',     60);   // max leeftijd per meter-waarde
+define('MAX_AGE_SEC',     6000);   // max leeftijd per meter-waarde
 define('MIN_ALWAYSON',    50);   // negeer ruis onder 50W
 define('MAX_STD_DEV',      8);   // max toegelaten standaarddeviatie (W)
 define('MIN_BUFFER_FILL', 12);   // wacht tot buffer minstens half gevuld is
