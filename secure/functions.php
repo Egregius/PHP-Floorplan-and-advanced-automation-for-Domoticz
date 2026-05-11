@@ -824,19 +824,28 @@ function play_scheduled_playlist(int $playlist=0): bool
     $dow=date("w");
 	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
 	if($playlist>0) {
-		$uri      = 'library://playlist/'.$playlist;
-	} else {
-		if($weekend===true) $uri      = 'library://playlist/7';
+		if($weekend===true) $playlist      = 7;
 		else $uri      = 'library://playlist/8';
-	}
+	} 
     $payload = json_encode([
         'message_id' => uniqid('php_', true),
         'command'    => 'player_queues/play_media',
         'args'       => [
             'queue_id' => 'up587a6260c5b2',
-            'media'    => [$uri],
+            'media'    => ['library://playlist/'.$playlist],
             'option'   => 'replace_next', 
-//            'radio_mode' => true,
+            "item_id" => $plaulist,
+            "is_playable" => true,
+            "translation_key" => null,
+            "media_type" => "playlist",
+            "available" => true,
+            "image" =>  [
+                "type" => "thumb",
+                "path" => "logo.png",
+                "provider" => "builtin",
+                "remotely_accessible" => false
+            ],
+            "year" => null
         ],
     ],JSON_UNESCAPED_UNICODE);
     echo $uri.'<br>';
