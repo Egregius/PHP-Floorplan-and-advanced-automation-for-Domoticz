@@ -821,20 +821,65 @@ function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
 function play_scheduled_playlist(int $playlist=0): bool
 {
     global $matokenbeta;
-    $dow=date("w");
-	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-	if($playlist>0) {
-		if($weekend===true) $playlist      = 7;
-		else $uri      = 'library://playlist/8';
-	} 
+	if($playlist==0) {
+		$dow=date("w");
+		if($dow==0||$dow==6)$weekend=true; else $weekend=false;
+		if($weekend===true) {
+			$playlist      = 7;
+			$name="Infinite Mix (library)";
+			$sort_name="infinite mix (library)";
+		} else {
+			$playlist      = 8;
+			$name="Infinite Mix (favorites)";
+			$sort_name="infinite mix (favorites)";
+			
+		}
+	} else {
+		$name="Infinite Mix (favorites)";
+		$sort_name="infinite mix (favorites)";
+	}
+	
+	
+/*	
+	
+	
+	{
+    "args": {
+        "queue_id": "up587a6260c5b2",
+        "media": {
+
+            "uri": "library://playlist/8",
+            "is_playable": true,
+            "translation_key": null,
+            "media_type": "playlist",
+            "available": true,
+            "image": {
+                "type": "thumb",
+                "path": "logo.png",
+                "provider": "builtin",
+                "remotely_accessible": false
+            },
+            "year": null
+        }
+    }
+}
+
+*/
+
+
     $payload = json_encode([
         'message_id' => uniqid('php_', true),
         'command'    => 'player_queues/play_media',
         'args'       => [
+            "item_id" => $playlist,
+            "provider" => "library",
+            "name"	=> $name,
+            "version" => "",
+            "sort_name" => $sort_name,
             'queue_id' => 'up587a6260c5b2',
             'media'    => ['library://playlist/'.$playlist],
+            "external_ids" => [],
             'option'   => 'replace_next', 
-            "item_id" => $plaulist,
             "is_playable" => true,
             "translation_key" => null,
             "media_type" => "playlist",
