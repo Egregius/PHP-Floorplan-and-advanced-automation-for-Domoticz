@@ -21,11 +21,11 @@ $response = maApi($server, $matokenbeta, [
     ]
 ]);*/
 
-hassAddon('d5369777_music_assistant_beta','restart');
-					sleep(25);
+//hassAddon('d5369777_music_assistant_beta','restart');
+//					sleep(30);
 					play_scheduled_playlist();
 
-
+/*
 function hassgetgroep() {
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/states/media_player.box_living');
@@ -63,7 +63,7 @@ function hassplaylist($playlist) {
     } else {
         echo "Succes!";
     }
-}
+}*/
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
