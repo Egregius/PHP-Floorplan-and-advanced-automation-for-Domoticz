@@ -101,6 +101,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($d['bose'.$ip]->m != 1) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
+					hassAddon('d5369777_music_assistant_beta','start');
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
@@ -137,14 +138,17 @@ foreach ($devices as $ip => $vol) {
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') {
 						store('bose'.$ip, 'On');
-						if($ip==101) hassAddon('d5369777_music_assistant_beta','restart');
+						
 					}
 				}
 			} else {
 				if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
 			}
 		} else {
-			if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+			if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) {
+				storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+				if($ip==101) hassAddon('d5369777_music_assistant_beta','stop');
+			}
 		}
 		unset($status);
 	} else {
