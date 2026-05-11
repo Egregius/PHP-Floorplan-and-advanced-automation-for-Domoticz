@@ -101,8 +101,10 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($d['bose'.$ip]->m != 1) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
-					hassAddon('d5369777_music_assistant_beta','start');
+					hassAddon('d5369777_music_assistant_beta','restart');
 					sleep(25);
+					play_scheduled_playlist();
+					sleep(10);
 					play_scheduled_playlist();
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {

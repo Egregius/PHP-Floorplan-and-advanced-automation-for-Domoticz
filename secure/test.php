@@ -23,7 +23,7 @@ $response = maApi($server, $matokenbeta, [
 
 //hassAddon('d5369777_music_assistant_beta','restart');
 //					sleep(30);
-					play_scheduled_playlist();
+echo 					play_scheduled_playlist();
 
 /*
 function hassgetgroep() {
