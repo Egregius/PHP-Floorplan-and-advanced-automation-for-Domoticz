@@ -19,16 +19,11 @@ $response = maApi($server, $matokenbeta, [
         'limit'  => 500,
         'offset' => 0
     ]
-]);
+]);*/
 
-print_r($response);
-exit;*/
-play_scheduled_playlist();
-exit;
-
-
-playBoseHybride();
-
+hassAddon('d5369777_music_assistant_beta','restart');
+					sleep(25);
+					play_scheduled_playlist();
 
 
 function hassgetgroep() {
