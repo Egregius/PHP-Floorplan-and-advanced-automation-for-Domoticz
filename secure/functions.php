@@ -866,7 +866,7 @@ function bosezone($ip,$vol='') {
 		if ($time<strtotime('21:00')&&$d['boseliving']->s=='On'&&past('boseliving')>60) {
 			if ($d['bose101']->s=='Off') {
 				lg(basename(__FILE__).':'.__LINE__,'bose');
-				sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
+				//sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 				bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
 				lg('Bose zone time='.$time.'|'.$t+1800,'bose');
 				if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);

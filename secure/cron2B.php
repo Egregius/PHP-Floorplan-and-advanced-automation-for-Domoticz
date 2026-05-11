@@ -135,7 +135,10 @@ foreach ($devices as $ip => $vol) {
 					}
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
-					if ($d['bose'.$ip]->s == 'Off') store('bose'.$ip, 'On');
+					if ($d['bose'.$ip]->s == 'Off') {
+						store('bose'.$ip, 'On');
+						if($ip==101) hassAddon('d5369777_music_assistant_beta','restart');
+					}
 				}
 			} else {
 				if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
