@@ -853,6 +853,7 @@ function play_scheduled_playlist(int $playlist=0): bool
     ]);
 
     $body   = curl_exec($ch);
+    lg('play_scheduled_playlist','bose');
     lg('body='.$body,'bose');
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
