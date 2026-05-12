@@ -10,60 +10,40 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-//hassplaylist('spotify://playlist/EDM - 1');
-/*$server   = '192.168.2.26';
-$response = maApi($server, $matokenbeta, [
-    'message_id' => 1,
-    'command'    => 'music/playlists/library_items',
-    'args'       => [
-        'limit'  => 500,
-        'offset' => 0
-    ]
-]);*/
 
-//hassAddon('d5369777_music_assistant_beta','restart');
-//					sleep(30);
-echo 					play_scheduled_playlist();
+ma_reload_player();
 
-/*
-function hassgetgroep() {
-	$ch=curl_init();
-	curl_setopt($ch,CURLOPT_URL,'http://192.168.2.26:8123/api/states/media_player.box_living');
-	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json','Authorization: Bearer '.hasstoken()));
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
-	curl_setopt($ch,CURLOPT_TIMEOUT,5);
-	$response=curl_exec($ch);
-	curl_close($ch);
-	return $response;
-}
-function hassplaylist($playlist) {
-    $ch = curl_init();
+
+function ma_reload_player(string $queue_id = 'up587a6260c5b2'): bool
+{
+    global $matokenbeta;
+
     $payload = json_encode([
-        "entity_id" => "media_player.box_living",
-        "media_id" => $playlist,
-        "media_type" => "playlist",
-        "enqueue" => "replace_next"
+        'message_id' => uniqid('php_', true),
+        'command'    => 'players/reload',
+        'args'       => ['player_id' => $queue_id],
     ]);
-    curl_setopt($ch, CURLOPT_URL, 'http://192.168.2.26:8123/api/services/music_assistant/play_media');
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . hasstoken()
-    ));
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-    $data = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    $ch = curl_init('http://192.168.2.26:8095/api');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => $payload,
+        CURLOPT_HTTPHEADER     => [
+            'Authorization: Bearer ' . $matokenbeta,
+            'Content-Type: application/json',
+        ],
+        CURLOPT_TIMEOUT => 10,
+    ]);
+
+    $body   = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    if ($httpCode !== 200) {
-        echo "Foutcode: " . $httpCode . " - Respons: " . $data;
-    } else {
-        echo "Succes!";
-    }
-}*/
+
+    return $status >= 200 && $status < 300;
+}
+
+
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
 unset(
