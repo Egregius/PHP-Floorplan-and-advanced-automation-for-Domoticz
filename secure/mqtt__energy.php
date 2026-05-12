@@ -207,10 +207,12 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     static $mqttcache = [];
     static $lastDate = null;
     static $gisteren = null;
-	static $zonref = 0;
-	static $zonavg = 0;
-	static $avg = ['gas' => 0, 'elec' => 0];
-	$vandaag = date("Y-m-d", $time);
+    static $zonref = 0;
+    static $zonavg = 0;
+    static $avg = ['gas' => 0, 'elec' => 0];
+    static $prevGuyData = null; // ← NIEUW
+
+    $vandaag = date("Y-m-d", $time);
     $gisterenDatum = date("Y-m-d", strtotime("-1 day", $time));
 
     // 1. Kwartierpiek ophalen
@@ -237,56 +239,84 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     if ($row = $stmt->fetch()) $zontotaal = $row['Geg_Maand'];
 
     // 5. Tabel 'Guy' updaten (Totaalstanden)
-    $q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
-          VALUES (:date, :gas, :elec, :injectie, :zon, :water)
-          ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), injectie=VALUES(injectie), zon=VALUES(zon), water=VALUES(water)";
-	$opts=[
-            ':date' => $vandaag, ':gas' => $gasStand, ':elec' => $elecStand,
-            ':injectie' => $injectie, ':zon' => $zontotaal, ':water' => $waterStand
-        ];
-    lg($q.'
-'.json_encode($opts));
-    try {
-        $dbverbruik->query($q, $opts);
-    } catch (Exception $e) {
-        lg("❌ Error Guy update: " . $e->getMessage());
+    // ← GEWIJZIGD: alleen schrijven als er iets relevant veranderd is (of na 23:00)
+    $isLateNight = (int)date('H', $time) >= 23;
+    $guyChanged = $prevGuyData === null // eerste run altijd schrijven
+        || $isLateNight
+        || (float)$gasStand   !== (float)$prevGuyData['gas']
+        || (float)$waterStand !== (float)$prevGuyData['water']
+        || ((float)$elecStand - (float)$prevGuyData['elec']) >= 0.1;
+
+    // dagVerbruik check: berekenen we hier alvast vooruit
+    if (!$guyChanged && $gisteren) {
+        $dagElecPreview     = (float)$elecStand - (float)$gisteren['elec'];
+        $dagInjectiePreview = (float)$injectie  - (float)$gisteren['injectie'];
+        $dagVerbruikPreview = (float)$zonvandaag - $dagInjectiePreview + $dagElecPreview;
+        $prevDagVerbruik    = isset($prevGuyData['dagVerbruik']) ? (float)$prevGuyData['dagVerbruik'] : null;
+        if ($prevDagVerbruik === null || ($dagVerbruikPreview - $prevDagVerbruik) >= 0.1) {
+            $guyChanged = true;
+        }
     }
+
+    if ($guyChanged) {
+        $q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
+              VALUES (:date, :gas, :elec, :injectie, :zon, :water)
+              ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), injectie=VALUES(injectie), zon=VALUES(zon), water=VALUES(water)";
+        $opts=[
+                ':date' => $vandaag, ':gas' => $gasStand, ':elec' => $elecStand,
+                ':injectie' => $injectie, ':zon' => $zontotaal, ':water' => $waterStand
+            ];
+        lg($q.'\n'.json_encode($opts));
+        try {
+            $dbverbruik->query($q, $opts);
+        } catch (Exception $e) {
+            lg("❌ Error Guy update: " . $e->getMessage());
+        }
+    }
+    // ← EINDE wijziging stap 5
+
     // 6. Bereken Dagverbruik (Guydag)
     if ($lastDate !== $vandaag) {
-		$q = "SELECT gas, elec, injectie, water FROM `Guy` ORDER BY date DESC LIMIT 1,1";
-		$stmt = $dbverbruik->query($q);
-		$gisteren = $stmt->fetch();
-	}
+        $q = "SELECT gas, elec, injectie, water FROM `Guy` ORDER BY date DESC LIMIT 1,1";
+        $stmt = $dbverbruik->query($q);
+        $gisteren = $stmt->fetch();
+    }
     $dagGas = 0; $dagElec = 0; $dagWater = 0; $dagVerbruik = 0;
 
     if ($gisteren) {
         $dagGas      = round((float)$gasStand - (float)$gisteren['gas'], 3);
         $dagElec     = round((float)$elecStand - (float)$gisteren['elec'], 3);
         if($dagGas>=0&&$dagElec>=0) {
-			$dagWater    = round((float)$waterStand - (float)$gisteren['water'], 3);
-			$dagInjectie = round((float)$injectie - (float)$gisteren['injectie'], 3);
-			$dagVerbruik = round((float)$zonvandaag - $dagInjectie + $dagElec, 3);
-	
-			$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
-				  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
-				  ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
-			$opts=[
-					':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
-					':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
-				];
-//			lg($q.'
-//	'.json_encode($opts));
-			try {
-				$dbverbruik->query($q, $opts);
-			} catch (Exception $e) {
-				lg("❌ Error Guydag update: " . $e->getMessage());
-			}
-		}
+            $dagWater    = round((float)$waterStand - (float)$gisteren['water'], 3);
+            $dagInjectie = round((float)$injectie - (float)$gisteren['injectie'], 3);
+            $dagVerbruik = round((float)$zonvandaag - $dagInjectie + $dagElec, 3);
+    
+            $q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
+                  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
+                  ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
+            $opts=[
+                    ':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
+                    ':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
+                ];
+            try {
+                $dbverbruik->query($q, $opts);
+            } catch (Exception $e) {
+                lg("❌ Error Guydag update: " . $e->getMessage());
+            }
+        }
     } else {
-        // Belangrijk: als gisteren niet gevonden wordt, log dit!
         lg("⚠️ Geen gisteren data gevonden voor $gisterenDatum in tabel Guy.");
     }
-	if ($lastDate !== $vandaag) {
+
+    // ← NIEUW: prevGuyData bijwerken na de berekeningen
+    $prevGuyData = [
+        'gas'        => $gasStand,
+        'elec'       => $elecStand,
+        'water'      => $waterStand,
+        'dagVerbruik'=> $dagVerbruik,
+    ];
+
+    if ($lastDate !== $vandaag) {
 		// 7. Statistieken & Gemiddelden
 		$today = date('Y-m-d');
 		$dy = (int)date('z', strtotime($today)) + 1;
