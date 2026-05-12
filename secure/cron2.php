@@ -105,7 +105,11 @@ function stoploop() {
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
-    gc_collect_cycles();
+	static $cycles=0;
+	if($cycles>=50) {
+		gc_collect_cycles();
+		$cycles=0;
+	} else $cycles++;
 }
 function cleanTitle(string $artists, string $title): string
 {
