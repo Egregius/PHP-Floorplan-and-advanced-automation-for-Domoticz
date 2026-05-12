@@ -49,9 +49,8 @@ def on_connect(client, userdata, flags, rc):
             publish_all_retained()
     else:
         log(f"❌ MQTT connect fout: rc={rc}")
-mqtt_client.on_connect = on_connect
-mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
-mqtt_client.loop_start()
+
+
 TOKEN_FILE = Path("/var/www/html/secure/tokens.json")
 CACHE_FILE = Path("/dev/shm/cache/en.txt")
 TELLER_FILE = Path("/dev/shm/cache/teller.txt")
@@ -82,6 +81,11 @@ if TELLER_FILE.exists():
         teller_publish_state.update(cleaned_data)
     except Exception as e:
         log(f"⚠️ Cache inleesfout (teller.txt): {e}")
+
+mqtt_client.on_connect = on_connect
+mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
+mqtt_client.loop_start()
+
 def load_tokens():
     return json.loads(TOKEN_FILE.read_text()) if TOKEN_FILE.exists() else {}
 def save_tokens(tokens):
