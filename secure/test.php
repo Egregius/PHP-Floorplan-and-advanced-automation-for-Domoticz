@@ -16,59 +16,30 @@ ma_reset_player();
 
 
 
-function ma_reset_player(string $player_id = 'up587a6260c5b2'): bool
+function ma_reset_player(bool $enabled): bool
 {
-    global $matokenbeta;
+	global $matokenbeta;
 
-    $url = 'http://192.168.2.26:8095/api';
+	static $enable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'up587a6260c5b2','values' => ['enabled' => true]]]);
+	static $disable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'up587a6260c5b2','values' => ['enabled' => false]]]);
 
-    // Stap 1: Disable player
-    $payloadDisable = json_encode([
-        'command'  => 'config/players/save',
-        'args'  => [
-            'player_id' => $player_id,
-            'values'    => ['enabled' => false]
-        ]
-    ]);
-
-    // Stap 2: Enable player
-    $payloadEnable = json_encode([
-        'command'  => 'config/players/save',
-        'args'  => [
-            'player_id' => $player_id,
-            'values'    => ['enabled' => true]
-        ]
-    ]);
-
-    $headers = [
-        'Authorization: Bearer ' . $matokenbeta,
-        'Content-Type: application/json',
-    ];
-
-    // Voer Disable uit
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => $payloadDisable,
-        CURLOPT_HTTPHEADER     => $headers,
-    ]);
-   echo curl_exec($ch);
-   echo '<hr>';
-
-    // Wacht 2 seconden zodat MA de player-stream kan afbreken
-    sleep(2);
-
-    // Voer Enable uit
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadEnable);
-    $response = curl_exec($ch);
-    echo $response.'<hr>';
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    return $status === 200;
+	$ch = curl_init('http://192.168.2.26:8095/api');
+	curl_setopt_array($ch, [
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_POST => true,
+		CURLOPT_POSTFIELDS => $enabled ? $enable : $disable,
+		CURLOPT_HTTPHEADER => [
+			'Authorization: Bearer ' . $matokenbeta,
+			'Content-Type: application/json',
+		],
+		CURLOPT_CONNECTTIMEOUT => 2,
+		CURLOPT_TIMEOUT => 5,
+	]);
+	$response = curl_exec($ch);
+	$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	return $status >= 200 && $status < 300;
 }
-
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);

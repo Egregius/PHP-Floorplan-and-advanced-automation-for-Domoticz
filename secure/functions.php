@@ -818,6 +818,31 @@ function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
 
     return $status >= 200 && $status < 300;
 }
+function ma_reset_player(bool $enabled): bool
+{
+	global $matokenbeta;
+
+	static $enable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'up587a6260c5b2','values' => ['enabled' => true]]]);
+	static $disable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'up587a6260c5b2','values' => ['enabled' => false]]]);
+
+	$ch = curl_init('http://192.168.2.26:8095/api');
+	curl_setopt_array($ch, [
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_POST => true,
+		CURLOPT_POSTFIELDS => $enabled ? $enable : $disable,
+		CURLOPT_HTTPHEADER => [
+			'Authorization: Bearer ' . $matokenbeta,
+			'Content-Type: application/json',
+		],
+		CURLOPT_CONNECTTIMEOUT => 2,
+		CURLOPT_TIMEOUT => 5,
+	]);
+	$response = curl_exec($ch);
+	$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	return $status >= 200 && $status < 300;
+}
+
 function play_scheduled_playlist(int $playlist=0): bool
 {
     global $matokenbeta;
