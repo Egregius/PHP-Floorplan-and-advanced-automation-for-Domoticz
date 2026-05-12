@@ -110,6 +110,7 @@ foreach ($devices as $ip => $vol) {
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
+						continue;
 						$past=$time-$lastplay;
 						lg($past.' | '.$playlisttries,'bose');
 						if($past>=60) {
