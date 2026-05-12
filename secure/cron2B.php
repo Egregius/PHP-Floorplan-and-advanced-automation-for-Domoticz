@@ -101,7 +101,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($d['bose'.$ip]->m != 1) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
-					if($d['music_assistant_beta']->s!='On') sw('music_assistant_beta','On',basename(__FILE__).':'.__LINE__,'cron2');
+//					if($d['music_assistant_beta']->s!='On') sw('music_assistant_beta','On',basename(__FILE__).':'.__LINE__,'cron2');
 					ma_enable_player(false);
 					sleep(1);
 					ma_enable_player(true);
@@ -117,7 +117,7 @@ foreach ($devices as $ip => $vol) {
 							ma_enable_player(false);
 							sleep(1);
 							ma_enable_player(true);
-							sleep(8);
+							sleep(10);
 							play_scheduled_playlist();
 							$lastplay=$time;
 							$playlisttries++;

@@ -838,6 +838,7 @@ function ma_enable_player(bool $enabled): bool
 		CURLOPT_TIMEOUT => 5,
 	]);
 	$response = curl_exec($ch);
+	lg('ma_enable_player = '.$response,'bose');
 	$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch);
 	return $status >= 200 && $status < 300;
@@ -889,7 +890,7 @@ function play_scheduled_playlist(int $playlist=0): bool
             "year" => null
         ],
     ],JSON_UNESCAPED_UNICODE);
-	lg($payload,'bose');
+	lg('play_scheduled_playlist = '.$payload,'bose');
     $ch = curl_init('http://192.168.2.26:8095/api');
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
@@ -903,8 +904,7 @@ function play_scheduled_playlist(int $playlist=0): bool
     ]);
 
     $body   = curl_exec($ch);
-    lg('play_scheduled_playlist','bose');
-    lg('body='.$body,'bose');
+    lg('play_scheduled_playlist body='.$body,'bose');
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
