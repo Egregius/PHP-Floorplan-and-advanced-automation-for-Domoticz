@@ -818,7 +818,7 @@ function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
 
     return $status >= 200 && $status < 300;
 }
-function ma_reset_player(bool $enabled): bool
+function ma_enable_player(bool $enabled): bool
 {
 	global $matokenbeta;
 
