@@ -1,6 +1,6 @@
 <?php
 $user='cron300';
-lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' ---------------------------------------------------------','cron300');
+//lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' ---------------------------------------------------------','cron300');
 
 // BEGIN EERSTE BLOK INDIEN ZWEMBAD
 /*if ($d['steenterras']->s=='On') {
