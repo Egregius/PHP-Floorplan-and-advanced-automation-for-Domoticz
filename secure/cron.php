@@ -8,6 +8,7 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
 } else if (!$got_lock && $wouldblock) {
     exit("Another instance is already running; terminating.\n");
 }
+gc_enable();
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting CRON loop...');
 $t = $weekend = $dow = null;
