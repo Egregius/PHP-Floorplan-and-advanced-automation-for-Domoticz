@@ -17,7 +17,7 @@ $saveAndExit = function ($signo) use (&$history) {
     }
     exit;
 };
-
+gc_enable();
 // Luister naar SIGTERM (reboot/systemctl stop) en SIGINT (CTRL+C)
 pcntl_signal(SIGTERM, $saveAndExit);
 pcntl_signal(SIGINT, $saveAndExit);
@@ -105,6 +105,7 @@ function stoploop() {
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
+    gc_collect_cycles();
 }
 function cleanTitle(string $artists, string $title): string
 {

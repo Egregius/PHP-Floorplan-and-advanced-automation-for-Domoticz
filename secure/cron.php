@@ -94,4 +94,5 @@ function stoploop() {
 		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
 		exit;
 	}
+	gc_collect_cycles();
 }

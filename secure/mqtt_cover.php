@@ -10,6 +10,7 @@ if ($lock_file === false || (!$got_lock && !$wouldblock)) {
 }
 ini_set('error_reporting',E_ALL);
 ini_set('display_errors',true);
+gc_enable();
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
@@ -104,4 +105,5 @@ function stoploop() {
 		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
+    gc_collect_cycles();
 }
