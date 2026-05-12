@@ -101,6 +101,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($d['bose'.$ip]->m != 1) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
+					if($d['music_assistant_beta']->s!='On') sw('music_assistant_beta','On',basename(__FILE__).':'.__LINE__,'cron2');
 					hassAddon('d5369777_music_assistant_beta','restart');
 					sleep(25);
 					play_scheduled_playlist();
