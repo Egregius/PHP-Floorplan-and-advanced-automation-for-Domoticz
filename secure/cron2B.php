@@ -110,26 +110,30 @@ foreach ($devices as $ip => $vol) {
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
-						$past=$time-$lastplay;
-						lg($past.' | '.$playlisttries,'bose');
-						if($past>=60) {
-							lg('play_scheduled_playlist','bose');
-							play_scheduled_playlist();
-							$lastplay=$time;
-							$playlisttries++;
-							sleep(1);
-							$vol = ($d['alexslaapt']->s == 1) ? 14 : 22;
-							bosevolume($vol,101, 'lijn '.__LINE__);
-							if($playlisttries>3) {
-								lg('play_scheduled_playlist failed, restarting Music Assistant','bose');
-//								hassAddon('d5369777_music_assistant_beta','stop');
-//								sleep(20);
-//								hassAddon('d5369777_music_assistant_beta','start');
-//								sleep(35);
-//								play_scheduled_playlist();
-								$playlisttries=0;
+						if($d['music_assistant_beta']->s!='On') {
+							sw('music_assistant_beta','On',basename(__FILE__).':'.__LINE__,'cron2');
+						} else {
+							$past=$time-$lastplay;
+							lg($past.' | '.$playlisttries,'bose');
+							if($past>=60) {
+								lg('play_scheduled_playlist','bose');
+								play_scheduled_playlist();
+								$lastplay=$time;
+								$playlisttries++;
+								sleep(1);
+								$vol = ($d['alexslaapt']->s == 1) ? 14 : 22;
+								bosevolume($vol,101, 'lijn '.__LINE__);
+								if($playlisttries>3) {
+									lg('play_scheduled_playlist failed, restarting Music Assistant','bose');
+	//								hassAddon('d5369777_music_assistant_beta','stop');
+	//								sleep(20);
+	//								hassAddon('d5369777_music_assistant_beta','start');
+	//								sleep(35);
+	//								play_scheduled_playlist();
+									$playlisttries=0;
+								}
+	//							playBoseHybride();
 							}
-//							playBoseHybride();
 						}
 						
 					} elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
