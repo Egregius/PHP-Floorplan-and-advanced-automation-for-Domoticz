@@ -1216,44 +1216,6 @@ function hassnotify($title, $message, $target = 'mobile_app_iphone_guy', $critic
     }
     return true;
 }
-function groupBoseHybride($ip) {
-	$payload = json_encode(["slaveIp"=>"192.168.2.$ip"]);
-	$ch = curl_init("http://192.168.2.6/api/join"); 
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    $response = curl_exec($ch);
-    curl_close($ch);
-    return $response;
-	
-}
-function playBoseHybride() {
-    $target_player_id = "up587a6260c5b2";
-    $target_player_ip = "192.168.2.101";
-    $playlist = getPlaylistDetails();
-    $payload = json_encode([
-        "uri" => "library://playlist/" . $playlist['id'],
-        "name" => $playlist['name'],
-        "settings" => [
-            "shuffle" => true,
-            "repeat" => "off"
-        ],
-        "player_id" => $target_player_id,
-        "ip" => $target_player_ip
-    ]);
-	echo $payload;
-    $ch = curl_init("http://192.168.2.6/api/manager/play_now"); 
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    $response = curl_exec($ch);
-    curl_close($ch);
-    return $response;
-}
 function curl($url) {
 	$ch=curl_init();
 	curl_setopt($ch,CURLOPT_URL,$url);
