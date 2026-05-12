@@ -11,37 +11,62 @@ $d=fetchdata();
 //$db = Database::getInstance();
 
 
-ma_reload_player();
+ma_reset_player();
 
 
-function ma_reload_player(string $queue_id = 'up587a6260c5b2'): bool
+
+
+function ma_reset_player(string $player_id = 'up587a6260c5b2'): bool
 {
     global $matokenbeta;
 
-    $payload = json_encode([
-        'message_id' => uniqid('php_', true),
-        'command'    => 'players/reload',
-        'args'       => ['player_id' => $queue_id],
+    $url = 'http://192.168.2.26:8095/api';
+
+    // Stap 1: Disable player
+    $payloadDisable = json_encode([
+        'command'  => 'config/players/save',
+        'args'  => [
+            'player_id' => $player_id,
+            'values'    => ['enabled' => false]
+        ]
     ]);
 
-    $ch = curl_init('http://192.168.2.26:8095/api');
+    // Stap 2: Enable player
+    $payloadEnable = json_encode([
+        'command'  => 'config/players/save',
+        'args'  => [
+            'player_id' => $player_id,
+            'values'    => ['enabled' => true]
+        ]
+    ]);
+
+    $headers = [
+        'Authorization: Bearer ' . $matokenbeta,
+        'Content-Type: application/json',
+    ];
+
+    // Voer Disable uit
+    $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => $payload,
-        CURLOPT_HTTPHEADER     => [
-            'Authorization: Bearer ' . $matokenbeta,
-            'Content-Type: application/json',
-        ],
-        CURLOPT_TIMEOUT => 10,
+        CURLOPT_POSTFIELDS     => $payloadDisable,
+        CURLOPT_HTTPHEADER     => $headers,
     ]);
+   echo curl_exec($ch);
+   echo '<hr>';
 
-    $body   = curl_exec($ch);
-    echo $body;
+    // Wacht 2 seconden zodat MA de player-stream kan afbreken
+    sleep(2);
+
+    // Voer Enable uit
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadEnable);
+    $response = curl_exec($ch);
+    echo $response.'<hr>';
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    return $status >= 200 && $status < 300;
+    return $status === 200;
 }
 
 
