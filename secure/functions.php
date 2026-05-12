@@ -893,7 +893,6 @@ function play_scheduled_playlist(int $playlist=0): bool
             "year" => null
         ],
     ],JSON_UNESCAPED_UNICODE);
-    echo $uri.'<br>';
 	lg($payload,'bose');
     $ch = curl_init('http://192.168.2.26:8095/api');
     curl_setopt_array($ch, [
