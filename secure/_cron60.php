@@ -217,8 +217,8 @@ if (isset($daikin)) {
 
 $mqtt->loopOnce($time);
 unset($query, $row, $sql, $i, $result, $k, $v);
-gc_collect_cycles();
-$vars = get_defined_vars();
+
+/*$vars = get_defined_vars();
 $total_var_size=0;
 foreach ($vars as $name => $value) {
     if (in_array($name, [
@@ -244,4 +244,4 @@ foreach ($vars as $name => $value) {
         }
     } else $memory_cache[$name] = $size;
 }
-unset($vars, $name, $value, $size, $oldSize, $percent);
+unset($vars, $name, $value, $size, $oldSize, $percent);*/
