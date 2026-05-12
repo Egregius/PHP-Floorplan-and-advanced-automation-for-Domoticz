@@ -37,6 +37,7 @@ function ma_reload_player(string $queue_id = 'up587a6260c5b2'): bool
     ]);
 
     $body   = curl_exec($ch);
+    echo $body;
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
