@@ -1455,6 +1455,34 @@ function republishmqtt() {
 		}
 	}
 }
+function WiimStartPreset(int $presetNumber) {
+    $url = "https://192.168.2.9/httpapi.asp?command=MCUKeyShortClick:$presetNumber";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return 'Error: ' . curl_error($ch);
+    }
+    curl_close($ch);
+    return $response;
+}
+function WiimGetMetaInfo() {
+    $url = "https://192.168.2.9/httpapi.asp?command=getMetaInfo";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return 'Error: ' . curl_error($ch);
+    }
+    curl_close($ch);
+    return $response;
+}
 function setBatterijLedBrightness(int $brightness) {
 	$payload = json_encode([ 'status_led_brightness_pct' => $brightness ]);
 	$ch = curl_init("https://battery/api/system");
