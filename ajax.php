@@ -221,6 +221,8 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		bosepreset('PRESET_'.$_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='skipupnp') {
 		ma_next_track();
+	} elseif ($_REQUEST['command']=='skipwiim') {
+		WiimSkipTrack($_REQUEST['action']);
 	} elseif ($_REQUEST['command']=='skipairplay') {
 		ma_next_track();
 	} elseif ($_REQUEST['command']=='skip') {
