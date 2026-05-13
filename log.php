@@ -99,6 +99,7 @@ if (isset($_GET['action'])){
 			$limit = $isDelta ? 500 : max(1, min(200000, $meta['limit']));
 			$raw = shell_exec('tail -n ' . (int)$limit . ' ' . escapeshellarg($path));
 			if (!$raw) continue;
+			$fileMtime = (float)filemtime($path);
 
 			// Merge continuation lines (no leading timestamp) into the previous entry
 			$pending = null;
@@ -109,20 +110,37 @@ if (isset($_GET['action'])){
 				$ts = parseTs($line);
 				if ($ts > 0){
 					if ($pending !== null) $entries[] = $pending;
-					$pending = ['text' => $line, 'ts' => $ts];
+					$pending = ['text' => $line, 'ts' => $ts, 'synthetic' => false];
 				} else {
 					if ($pending !== null)
 						$pending['text'] .= "\n" . $line;
 					else
-						$pending = ['text' => $line, 'ts' => 0];
+						$pending = ['text' => $line, 'ts' => 0, 'synthetic' => false];
 				}
 			}
 			if ($pending !== null) $entries[] = $pending;
 
+			// Assign fallback timestamps to entries without one.
+			// We walk backwards: untimestamped entries get the mtime of the file,
+			// slightly offset so they sort together but after the last known real ts.
+			$lastRealTs = $fileMtime;
+			for ($i = count($entries) - 1; $i >= 0; $i--){
+				if ($entries[$i]['ts'] > 0){
+					$lastRealTs = $entries[$i]['ts'];
+				} else {
+					// Use file mtime as fallback; mark as synthetic so the display
+					// can show a "~" prefix on the timestamp column.
+					$entries[$i]['ts'] = $fileMtime;
+					$entries[$i]['synthetic'] = true;
+				}
+			}
+
 			foreach ($entries as $e){
 				if ($isDelta && $e['ts'] > 0 && $e['ts'] < $grace) continue;
+				$disp = $e['synthetic'] ? ('~' . fmtTs($e['ts'])) : fmtTs($e['ts']);
 				$out[] = ['c' => $e['text'], 'f' => basename($path), 'p' => $path,
-						 't' => $e['ts'], 'd' => fmtTs($e['ts']), 'x' => $meta['format']];
+						 't' => $e['ts'], 'd' => $disp, 'x' => $meta['format'],
+						 'sy' => $e['synthetic'] ? 1 : 0];
 			}
 		}
 		usort($out, fn($a, $b) => $b['t'] <=> $a['t']);
@@ -188,6 +206,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:14
 .ts-warm{color:#7aa8cc}
 .ts-cool{color:#5a7a95}
 .ts-older{color:var(--muted)}
+.ts-synth{font-style:italic;opacity:.65}
 .mc{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--text);line-height:1.4}
 .hl{background:rgba(245,166,35,.36);color:#fff;border-radius:2px;padding:0 1px}
 h1{color:var(--accent);font-size:15px;font-weight:900;font-style:italic;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap}
@@ -401,9 +420,10 @@ function updRow(row, line, filt, ri){
 	const [rCls] = iStyle(p.icon);
 	const wantCls = 'log-row ' + rCls + (line.isNew ? ' is-new' : '');
 	if (row.className !== wantCls) row.className = wantCls;
-	const dispTs = isMobile() && line.d && line.d.length === 8 ? line.d.slice(0,5) : line.d;
+	let dispTs = isMobile() && line.d && line.d.length === 8 ? line.d.slice(0,5) : line.d;
 	const tc = tsC(line.t);
-	if (ch[0].className !== tc) ch[0].className = tc;
+	const tClass = tc + (line.sy ? ' ts-synth' : '');
+	if (ch[0].className !== tClass) ch[0].className = tClass;
 	if (ch[0].textContent !== dispTs) ch[0].textContent = dispTs;
 	// Show first line in row; ▼ marks multi-line entries
 	const firstLine = line.c.split('\n')[0];
@@ -483,7 +503,7 @@ async function fetchLogs(){
 		for (const r of data.lines){
 			const h = djb2(r.c + '|' + r.p);
 			if (hashes.has(h)) continue;
-			hashes.add(h);r.h = h;r.pi = intern(r.p);delete r.p;
+			hashes.add(h);r.h = h;r.pi = intern(r.p);r.sy = r.sy || 0;delete r.p;
 			r.isNew = !firstFetch;
 			if (r.isNew) tpath = pArr[r.pi];
 			if (r.t > highTs) highTs = r.t;

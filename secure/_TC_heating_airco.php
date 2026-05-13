@@ -70,7 +70,8 @@ foreach (array('living','kamer','alex') as $k) {
 					$diffac = (-$dif / 50) * $factor;
 					$trendfac = (-$trend / 10) * $factor;
 					$change=clamp(($diffac + $trendfac),-0.02,0.04);
-					$adjLiving += $change;
+					var_dump($adjLiving);
+					(float)$adjLiving += (float)$change;
 					$adjLiving = clamp($adjLiving, -2, 2);
 					if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 					$set+=$adjLiving;
