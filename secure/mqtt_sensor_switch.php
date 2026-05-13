@@ -1,13 +1,6 @@
 #!/usr/bin/php
 <?php
 declare(strict_types=1);
-$lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
-$got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
-if ($lock_file === false || (!$got_lock && !$wouldblock)) {
-    throw new Exception("Unexpected error opening or locking lock file.");
-} else if (!$got_lock && $wouldblock) {
-    exit("Another instance is already running; terminating.\n");
-}
 ini_set('error_reporting',E_ALL);
 ini_set('display_errors',true);
 gc_enable();
@@ -71,10 +64,10 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 		lg("‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
-        $lastcheck = $time;
-        stoploop();
-        updateWekker($t, $weekend, $dow, $d);
-    }
+		$lastcheck = $time;
+		stoploop();
+		updateWekker($t, $weekend, $dow, $d);
+	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
@@ -111,10 +104,10 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 		lg("️‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
-        $lastcheck = $time;
-        stoploop();
-        updateWekker($t, $weekend, $dow, $d);
-    }
+		$lastcheck = $time;
+		stoploop();
+		updateWekker($t, $weekend, $dow, $d);
+	}
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$t, &$weekend, &$dow, &$lastcheck, &$time, $user) {
@@ -231,10 +224,10 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
-        $lastcheck = $time;
-        stoploop();
-        updateWekker($t, $weekend, $dow, $d);
-    }
+		$lastcheck = $time;
+		stoploop();
+		updateWekker($t, $weekend, $dow, $d);
+	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $status) use ($startloop,$validDevices,&$d,&$alreadyProcessed, &$lastcheck, &$time, $user) {
@@ -258,17 +251,17 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 		lg("• Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
-        $lastcheck = $time;
-        stoploop();
-        updateWekker($t, $weekend, $dow, $d);
-    }
+		$lastcheck = $time;
+		stoploop();
+		updateWekker($t, $weekend, $dow, $d);
+	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
 	$time = time();
 	$d['time']=$time;
-    $mqtt->loopOnce($time);
-    usleep(20000);
+	$mqtt->loopOnce($time);
+	usleep(20000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'sensor');
@@ -280,24 +273,18 @@ function isProcessed(string $topic,string $status,array &$alreadyProcessed): boo
 }
 
 function stoploop() {
-    global $mqtt,$lock_file;
-    $script = __FILE__;
-    if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-        lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...','sensor');
-        $mqtt->disconnect();
-        ftruncate($lock_file, 0);
-		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
-        exit;
-    }
-    if (filemtime($script) > LOOP_START) {
-        lg('🛑 '.basename($script) . ' gewijzigd → restarting ...','sensor');
-        $mqtt->disconnect();
-        ftruncate($lock_file, 0);
-		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
-        exit;
-    }
+	global $mqtt;
+	$script = __FILE__;
+	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
+		lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...','sensor');
+		$mqtt->disconnect();
+		exit;
+	}
+	if (filemtime($script) > LOOP_START) {
+		lg('🛑 '.basename($script) . ' gewijzigd → restarting ...','sensor');
+		$mqtt->disconnect();
+		exit;
+	}
 	static $cycles=0;
 	if($cycles>=50) {
 		gc_collect_cycles();

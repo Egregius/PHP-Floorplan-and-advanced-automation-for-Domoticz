@@ -1,13 +1,6 @@
 #!/usr/bin/php
 <?php
 declare(strict_types=1);
-$lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
-$got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
-if ($lock_file === false || (!$got_lock && !$wouldblock)) {
-    throw new Exception("Unexpected error opening or locking lock file.");
-} else if (!$got_lock && $wouldblock) {
-    exit("Another instance is already running; terminating.\n");
-}
 ini_set('error_reporting',E_ALL);
 ini_set('display_errors',true);
 gc_enable();
@@ -103,22 +96,16 @@ $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'mediaplayer');
 
 function stoploop() {
-    global $mqtt,$lock_file;
+    global $mqtt;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...','mediaplayer');
         $mqtt->disconnect();
-        ftruncate($lock_file, 0);
-		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
         lg('🛑 '.basename($script) . ' gewijzigd → restarting ...','mediaplayer');
         $mqtt->disconnect();
-        ftruncate($lock_file, 0);
-		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php $script > /dev/null 2>&1 &");
         exit;
     }
 	static $cycles=0;

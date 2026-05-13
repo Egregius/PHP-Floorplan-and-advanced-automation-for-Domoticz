@@ -28,3 +28,5 @@ if [ $((MIN % 30)) -eq 0 ]; then
 fi
 # END Github
 #exit
+
+#systemctl enable --now domo-php@mqtt_sensor_switch

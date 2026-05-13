@@ -1,13 +1,6 @@
 #!/usr/bin/php
 <?php
 declare(strict_types=1);
-$lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
-$got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
-if ($lock_file === false || (!$got_lock && !$wouldblock)) {
-    throw new Exception("Unexpected error opening or locking lock file.");
-} else if (!$got_lock && $wouldblock) {
-    exit("Another instance is already running; terminating.\n");
-}
 gc_enable();
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting CRON loop...');
@@ -78,20 +71,13 @@ function checkInterval(&$last, $interval, $time) {
 	return false;
 }
 function stoploop() {
-	global $db,$lock_file;
 	$script = __FILE__;
 	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
 		lg('🛑 functions.php gewijzigd → restarting cron loop...');
-		ftruncate($lock_file, 0);
-		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
 		exit;
 	}
 	if (filemtime(__DIR__ . '/cron.php') > LOOP_START) {
 		lg('🛑 cron.php gewijzigd → restarting cron loop...');
-		ftruncate($lock_file, 0);
-		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
 		exit;
 	}
 	static $cycles=0;
