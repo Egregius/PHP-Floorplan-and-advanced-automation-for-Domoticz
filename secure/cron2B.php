@@ -39,7 +39,6 @@ foreach ($devices as $ip => $vol) {
 						}
 						}
 					} else {
-						
 						$start = hrtime(true);
 						if(isset($status['artist'],$status['track'])) {
 							$cleantitle=cleanTitle($status['artist'],$status['track']);
