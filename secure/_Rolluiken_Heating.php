@@ -9,6 +9,7 @@ if ($d['auto']->s=='On') {
 			if ($d['rwaskamer']->s>0&&$d['alexslaapt']->s==0) sl('rwaskamer', 0);
 			if ($d['ralex']->s>0&&$d['alexslaapt']->s==0) sl('ralex', 0);
 			if ($time>=$t+1800&&$weekend==false&&$d['verlof']->s==0) {
+				if ($d['rwaskamer']->s>0) sl('rwaskamer', 0);
 				if ($d['ralex']->s>0) sl('ralex', 0);
 			}
 		}
@@ -61,13 +62,13 @@ if ($d['auto']->s=='On') {
 	}
 	elseif ($time>=strtotime('22:00')) {
 		if ($d['weg']->s>0&&$d['dag']->s<0) {
-			//foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
+			foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
 			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			//foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
 		} elseif ($d['dag']->s<0) {
-	//		foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
+			foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
 			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			//foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
 		}
 	}
 }
