@@ -44,7 +44,7 @@ $newData = [
 ];
 $alwayson    = (int)getCache('alwayson');
 $peakpower   = (int)getCache('peakpower');
-if($peakpower<4000) $peakpower=4000;
+if($peakpower<4500) $peakpower=4500;
 
 // Alwayson-variabelen in buitenste scope
 $n           = 0;
