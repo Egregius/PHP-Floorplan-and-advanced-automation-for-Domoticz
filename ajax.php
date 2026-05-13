@@ -27,16 +27,17 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 	$nowplaying=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
 	$d['source']=$nowplaying['@attributes']['source'];
 	if (isset($nowplaying['artist'],$nowplaying['track'])) {
-		echo __LINE__.'<br>';
 		if($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast') {
-			echo __LINE__.$nowplaying['artist'].'<br>';
-			echo __LINE__.$nowplaying['track'].'<br>';
 			$wiim=json_decode(WiimGetMetaInfo());
+//			echo '<pre>';print_r($wiim);echo '</pre><hr>';
+			$d['source']='WiiM';
 			$d['artist']=$wiim->metaData->artist;
 			$d['track']=$wiim->metaData->title;
 			$d['art'] = $wiim->metaData->albumArtURI;
+			$d['bitrate'] = $wiim->metaData->bitRate;
+			$d['bitdepth'] = $wiim->metaData->bitDepth;
+			$d['samplerate'] = $wiim->metaData->sampleRate;
 		} else {
-			echo __LINE__.'<br>';
 			$d['artist']=$nowplaying['artist'];
 			$d['track']=$nowplaying['track'];
 			$replacements = [
@@ -52,6 +53,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107
 	}
 	$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['volume']=$volume['actualvolume'];
+	header('Content-Type: application/json; charset=utf-8');
 	echo json_encode($d);
 	exit;
 }

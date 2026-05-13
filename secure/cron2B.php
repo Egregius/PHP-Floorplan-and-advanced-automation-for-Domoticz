@@ -41,12 +41,19 @@ foreach ($devices as $ip => $vol) {
 					} else {
 						$start = hrtime(true);
 						if(isset($status['artist'],$status['track'])) {
+							if($status['artist']=='wiim'&&$status['track']=='dlna cast') {
+								$wiim=json_decode(WiimGetMetaInfo());
+								$status['artist']=$wiim->metaData->artist;
+								$status['track']=$wiim->metaData->title;
+								$wiim=true;
+							} else $wiim=false;
 							$cleantitle=cleanTitle($status['artist'],$status['track']);
 							if ($cleantitle && $cleantitle!=$prevcleantitle) {
 								$prevcleantitle=$cleantitle;
 								if (isset($history[$cleantitle])) {
 									lg($cleantitle.' skipped op id','bose');
-									ma_next_track();
+									if($wiim===true) WiimSkipTrack();
+									else ma_next_track();
 	//								bosekey("NEXT_TRACK", 0, 101);
 								} else {
 									lg('Adding '.$cleantitle.' to history','bose');
