@@ -18,12 +18,14 @@ else {
 	elseif ($totalmin >= 0.7 && $d['buiten_temp']->s<4)        $maxpow = 60;
 	elseif ($totalmin >= 0.5 && $d['buiten_temp']->s<5)        $maxpow = 50;
 
-	if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
-	elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
-	elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
+	if(isset($d['n'])) {
+		if ($d['n'] > 3500 && $maxpow > 40)      $maxpow = 40;
+		elseif ($d['n'] > 3000 && $maxpow > 60)  $maxpow = 60;
+		elseif ($d['n'] > 2500 && $maxpow > 80)  $maxpow = 80;
+	}
 }
 $prevadjLiving??=0;
-$adjLiving??=getCache('adjLiving');
+$adjLiving ??= getCache('adjLiving') ?: 0;
 $daikinpower=floor($d['daikin']->p/100);
 $daikinrunning=$daikinpower>=1?true:false;
 //if($daikinrunning!=$prevdaikinrunning||!isset($prevdaikinrunning)) {
@@ -70,8 +72,7 @@ foreach (array('living','kamer','alex') as $k) {
 					$diffac = (-$dif / 50) * $factor;
 					$trendfac = (-$trend / 10) * $factor;
 					$change=clamp(($diffac + $trendfac),-0.02,0.04);
-					var_dump($adjLiving);
-					(float)$adjLiving += (float)$change;
+					$adjLiving += $change;
 					$adjLiving = clamp($adjLiving, -2, 2);
 					if($prevadjLiving!=$adjLiving) setCache('adjLiving',$adjLiving);
 					$set+=$adjLiving;
