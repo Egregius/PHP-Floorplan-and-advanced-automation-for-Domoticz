@@ -822,8 +822,8 @@ function ma_enable_player(bool $enabled): bool
 {
 	global $matokenbeta;
 
-	static $enable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'up587a6260c5b2','values' => ['enabled' => true]]]);
-	static $disable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'up587a6260c5b2','values' => ['enabled' => false]]]);
+	static $enable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'wiim_uuid:FF98F7F4-1C01-B908-A5FC-2C18FF98F7F4','values' => ['enabled' => true]]]);
+	static $disable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'wiim_uuid:FF98F7F4-1C01-B908-A5FC-2C18FF98F7F4','values' => ['enabled' => false]]]);
 
 	$ch = curl_init('http://192.168.2.26:8095/api');
 	curl_setopt_array($ch, [

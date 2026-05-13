@@ -259,4 +259,5 @@ if (!isset($_REQUEST->t)&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!is
 	}
 	lg('👉🏻 '.$user.$msg);
 }
+http_response_code(200);
 echo 'ok';
