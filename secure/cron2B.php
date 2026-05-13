@@ -41,56 +41,58 @@ foreach ($devices as $ip => $vol) {
 					} else {
 						
 						$start = hrtime(true);
-						$cleantitle=cleanTitle($status['artist'],$status['track']);
-						if ($cleantitle && $cleantitle!=$prevcleantitle) {
-							$prevcleantitle=$cleantitle;
-							if (isset($history[$cleantitle])) {
-								lg($cleantitle.' skipped op id','bose');
-								ma_next_track();
-//								bosekey("NEXT_TRACK", 0, 101);
-							} else {
-								lg('Adding '.$cleantitle.' to history','bose');
-								$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
-								if (count($history) > 10000) {
-									reset($history);
-									$oldestKey = key($history);
-									unset($history[$oldestKey]);
-								}
-							}
-							if (!empty($history) && count($history) % 20 === 0) {
-								$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
-								file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
-								gc_collect_cycles();
-								$vars = get_defined_vars();
-								$total_var_size=0;
-								foreach ($vars as $name => $value) {
-									if (in_array($name, [
-										'GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV',
-										'memory_cache', 'name', 'vars', 'value', 'size', 'oldSize', 'percent', 'usage_report'
-									])) continue;
-									if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
-										$size = 0;
-									} else {
-										try {
-											$size = strlen(serialize($value));
-										} catch (Exception $e) {
-											$size = 0;
-										}
+						if(isset($status['artist'],$status['track'])) {
+							$cleantitle=cleanTitle($status['artist'],$status['track']);
+							if ($cleantitle && $cleantitle!=$prevcleantitle) {
+								$prevcleantitle=$cleantitle;
+								if (isset($history[$cleantitle])) {
+									lg($cleantitle.' skipped op id','bose');
+									ma_next_track();
+	//								bosekey("NEXT_TRACK", 0, 101);
+								} else {
+									lg('Adding '.$cleantitle.' to history','bose');
+									$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
+									if (count($history) > 10000) {
+										reset($history);
+										$oldestKey = key($history);
+										unset($history[$oldestKey]);
 									}
-									$total_var_size += $size;
-									if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
-										$oldSize = $memory_cache[$name];
-										if ($size > ($oldSize * 1.05)) {
-											$percent = round((($size - $oldSize) / $oldSize) * 100, 1);
-											lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
-											$memory_cache[$name] = $size;
-										}
-									} else $memory_cache[$name] = $size;
 								}
-								unset($vars, $name, $value, $size, $oldSize, $percent);
-								lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','bose');
+								if (!empty($history) && count($history) % 20 === 0) {
+									$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
+									file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
+									gc_collect_cycles();
+									$vars = get_defined_vars();
+									$total_var_size=0;
+									foreach ($vars as $name => $value) {
+										if (in_array($name, [
+											'GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV',
+											'memory_cache', 'name', 'vars', 'value', 'size', 'oldSize', 'percent', 'usage_report'
+										])) continue;
+										if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
+											$size = 0;
+										} else {
+											try {
+												$size = strlen(serialize($value));
+											} catch (Exception $e) {
+												$size = 0;
+											}
+										}
+										$total_var_size += $size;
+										if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
+											$oldSize = $memory_cache[$name];
+											if ($size > ($oldSize * 1.05)) {
+												$percent = round((($size - $oldSize) / $oldSize) * 100, 1);
+												lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
+												$memory_cache[$name] = $size;
+											}
+										} else $memory_cache[$name] = $size;
+									}
+									unset($vars, $name, $value, $size, $oldSize, $percent);
+									lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','bose');
+								}
 							}
-						} 
+						}
 					}
 				}
 			}
