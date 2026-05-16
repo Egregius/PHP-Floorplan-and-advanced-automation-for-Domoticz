@@ -119,7 +119,7 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			}
 		} elseif ($_REQUEST['device']=='rkamerl') {
 			sl('rkamerl', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
-			sleep(1);
+			usleep(50000);
 			sl('rkamerr', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
 		} else {
 			sl($_REQUEST['device'], $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);

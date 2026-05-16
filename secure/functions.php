@@ -1125,7 +1125,6 @@ function hass(string $domain, string $service, string $entity = '', array $data 
     fwrite($socket, $request);
     fflush($socket);
     $lastUse = $d['time'];
-    usleep(5000);
 }
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,'media');

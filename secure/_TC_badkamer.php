@@ -1,29 +1,30 @@
 <?php
 $user='TC_badkamer';
-//lg('🕒 '.$user.' '.$d['badkamer_set']->m,'badk');
 $m='';$m2='';
-$preheatbath=$sunheath=false;
-if ($d['badkamer_set']->m==0) {
-	$setBath=10;
-	$m2.=__LINE__.' ';
-} elseif ($d['badkamer_set']->m==1) {
+$preheatbath=false;
+if ($d['badkamer_set']->m==1) {
 	$setBath=$d['badkamer_set']->s;
-	$m2.=__LINE__.' ';
+	$m2.=__LINE__.' '.$setBath;
 } elseif ($d['n']<-500) {
-	$sunheath=true;
 	$setBath=20;
+	$m2.=__LINE__.' '.$setBath;
+} elseif ($d['badkamer_set']->m==0) {
+	$setBath=10;
+	$m2.=__LINE__.' '.$setBath;
 }
 $pastdeurbadkamer=past('deurbadkamer');
-if ($d['weg']->s>2&&$d['badkamer_set']->m==0) $setBath=10;
-elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkamer>57&&($d['raamkamer']->s=='Open'||$d['raamwaskamer']->s=='Open'||$d['raamalex']->s=='Open')) {
+if ($d['weg']->s>2&&$d['badkamer_set']->m==0&&$d['n']>-50) {
+	$setBath=10;$m2.=__LINE__.' ';
+} elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkamer>57&&($d['raamkamer']->s=='Open'||$d['raamwaskamer']->s=='Open'||$d['raamalex']->s=='Open')) {
 	$setBath=5;$m2.=__LINE__.' ';
-} elseif ($d['badkamer_set']->m==0&&($d['deurbadkamer']->s=='Closed'||($d['deurbadkamer']->s=='Open'&&$pastdeurbadkamer<57))) {
+} elseif ($d['badkamer_set']->m==0&&($d['deurbadkamer']->s=='Closed'||($d['deurbadkamer']->s=='Open'&&$pastdeurbadkamer<57))&&$d['badkamer_set']->m>0) {
 	if (past('badkamer_set')>=14400&&$d['lichtbadkamer']->s==0&&$d['buiten_temp']->s<21&&$d['weg']->s<2) {
 		if ($d['badkamer_set']->s>130) {
 			$setBath=10;$m2.=__LINE__.' ';
 			if ($d['badkamer_set']->m>0) storemode('badkamer_set', 0);
 		}
 	} elseif (past('badkamer_set')>=14400&&($d['lichtbadkamer']->s==0&&$d['badkamer_set']->s!=13) || ($d['weg']->s>=2&&$d['badkamer_set']->s!=13)) {
+		setpoint('badkamer_set', 10);
 		$setBath=10;$m2.=__LINE__.' ';
 		if ($d['badkamer_set']->m>0) storemode('badkamer_set', 0);
 	}
@@ -31,7 +32,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 	if ($d['lichtbadkamer']->s==0&&$d['buiten_temp']->s<20&&$d['weg']->s<2) {
 		if ($d['badkamer_set']->s!=10) {$setBath=10;$m2.=__LINE__.' ';}
 	}
-	$setBath       = 10;
+	$setBath       = 10;$m2.=__LINE__.' ';
 	$target    = 20.5;
 	$badkamer  = $d['badkamer_temp']->s;
 	$buitenTempStart = round($d['buiten_temp']->s / 0.5) * 0.5;
@@ -97,7 +98,7 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 		storesmi('badkamer_start_temp', $badkamer, 1, $buitenTempStart);
 		$prevSetbath=1;
 		$msg="_TC_bath: Start leadMinutes={$leadMinutes}	| avgMinPerDegBath={$avgMinPerDegBath}";
-		lg($msg,'badk');
+		lg($msg);
 	} elseif ($time >= $t && $time <= $t_end) {
 		$setBath = $target;
 		$preheatbath=false;
@@ -146,6 +147,9 @@ elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkam
 		setpoint('badkamer_set', 5);
 	}
 }
+if ($d['n']<-500&&$setBath<20) {
+	$setBath=20;$m2.=__LINE__.' ';
+}
 if (isset($setBath)&&$d['heating']->s>=0) {
 	if ($setBath!=$d['badkamer_set']->s) {
 		setpoint('badkamer_set', $setBath, $m2);
@@ -170,9 +174,9 @@ if ($d['heating']->s>=2) {
 		}
 	}
 }
-
+//lg($d['badkamervuur1']->s,'badk');
 $difbadkamer=$d['badkamer_temp']->s-$d['badkamer_set']->s;
-if ($difbadkamer<=-0.5||($prevSetbath==1&&$difbadkamer<=0.1)) {
+if ($d['weg']->s<=2&&($difbadkamer<=-0.5||($prevSetbath==1&&$difbadkamer<=0.1))) {
 	if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On');
 	if ($d['badkamervuur1']->s=='On'&&$d['badkamervuur2']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur2', 'On');
 } elseif ($difbadkamer<=0||($prevSetbath==1&&$difbadkamer<=0)) {
@@ -182,7 +186,7 @@ if ($difbadkamer<=-0.5||($prevSetbath==1&&$difbadkamer<=0.1)) {
 	if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off');
 	if ($d['badkamervuur2']->s=='Off'&&$d['badkamervuur1']->s=='On') sw('badkamervuur1', 'Off');
 }
-
+//lg($m2.' setBath='.$setBath.' dif='.$difbadkamer,'badk');
 //if ($d['wasdroger']->s=='On') {
 //	if (($d['waskamer_temp']->m<65&&past('wasdroger')>3595)||$d['raamwaskamer']->s=='Open') sw('wasdroger', 'Off');
 //} else {
