@@ -1030,7 +1030,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 
     // Bepaal icoon op basis van heating status
     $msg = ($d['heating']->s >= 0) ? "🔥 " : "❄️ ";
-    $msg .= "daikinset [$device] power=$power | mode=$mode | set=$stemp | fan=$fan | spmode={$spm[$spmode]} | maxpow=$maxpow";
+    $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode={$spm[$spmode]}	maxpow=$maxpow";
 
     // 1. Special Mode check (per device)
     if(($prevspmode[$device] ?? null) !== $spmode) {

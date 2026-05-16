@@ -82,9 +82,9 @@ foreach (array('living','kamer','alex') as $k) {
 				$setrounded = clamp(ceil($set*2)/2,10,28);
 		        $setrounded=min($setrounded, $target+1);
 			}
-			if($d['living_set']->m==0&&$d['n']<-600&&$d['living_temp']->s<21) {
+			if($d['living_set']->m==0&&$d['n']<-600&&$d['living_temp']->s<=21) {
 				$lastautosetliving=$time;
-				$target=$setrounded= clamp(ceil(($d['living_temp']->s+0.5)*2)/2,10,21);
+				$target=$setrounded= clamp(ceil(($d['living_temp']->s+1)*2)/2,10,21);
 //				lg($setrounded,'daikin');
 				if($d[$k.'_set']->s!=$setrounded) store('living_set',$setrounded);
 			}
@@ -127,7 +127,7 @@ foreach (array('living','kamer','alex') as $k) {
 				"fan"=>$fan
 			]);
 		}
-		if ($lastautosetliving>$time-3600) $power=1;
+		if ($k=='living'&&$lastautosetliving>$time-3600) $power=1;
         if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
             $daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||
             ($power!=0&&$daikin->$k->lastset <= $time-281))

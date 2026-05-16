@@ -8,7 +8,7 @@ if ($d['badkamer_set']->m==1) {
 } elseif ($d['n']<-500) {
 	$setBath=20;
 	$m2.=__LINE__.' '.$setBath;
-} elseif ($d['badkamer_set']->m==0) {
+} elseif ($d['badkamer_set']->m==0&&$d['n']>0) {
 	$setBath=10;
 	$m2.=__LINE__.' '.$setBath;
 }
@@ -178,14 +178,14 @@ if ($d['heating']->s>=2) {
 //lg($d['badkamervuur1']->s,'badk');
 $difbadkamer=$d['badkamer_temp']->s-$d['badkamer_set']->s;
 if ($d['weg']->s<=2&&($difbadkamer<=-0.5||($prevSetbath==1&&$difbadkamer<=0.1))) {
-	if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On');
-	if ($d['badkamervuur1']->s=='On'&&$d['badkamervuur2']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur2', 'On');
+	if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer);
+	if ($d['badkamervuur1']->s=='On'&&$d['badkamervuur2']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur2', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer);
 } elseif ($difbadkamer<=0||($prevSetbath==1&&$difbadkamer<=0)) {
-	if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On');
-	if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off');
+	if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer);
+	if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer);
 } else {
-	if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off');
-	if ($d['badkamervuur2']->s=='Off'&&$d['badkamervuur1']->s=='On') sw('badkamervuur1', 'Off');
+	if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer);
+	if ($d['badkamervuur2']->s=='Off'&&$d['badkamervuur1']->s=='On') sw('badkamervuur1', 'Off', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer);
 }
 //lg($m2.' setBath='.$setBath.' dif='.$difbadkamer,'badk');
 //if ($d['wasdroger']->s=='On') {
