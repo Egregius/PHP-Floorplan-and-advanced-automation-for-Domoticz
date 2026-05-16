@@ -1,8 +1,16 @@
 <?php
 declare(strict_types=1);
+$lock_file = fopen('/run/lock/'.basename(__FILE__).'.pid', 'c');
+$got_lock = flock($lock_file, LOCK_EX | LOCK_NB, $wouldblock);
+if ($lock_file === false || (!$got_lock && !$wouldblock)) {
+    throw new Exception("Unexpected error opening or locking lock file.");
+} else if (!$got_lock && $wouldblock) {
+    exit("Another instance is already running; terminating.\n");
+}
+
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', true);
-gc_enable();
+
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 
@@ -27,12 +35,12 @@ $dbzonphp = new Database('192.168.30.23', 'dbuser', 'dbuser', 'zon');
 
 $force = true;
 
-define('BUFFER_SIZE',     16);
-define('MAX_AGE_SEC',     6000);
-define('MIN_ALWAYSON',    50);
-define('MAX_STD_DEV',      8);
-define('MIN_BUFFER_FILL', 12);
-define('BUFFER_INTERVAL_SEC', 10);
+define('BUFFER_SIZE',     12);   // laatste 30 gesynchroniseerde metingen
+define('MAX_AGE_SEC',     86400);   // max leeftijd per meter-waarde
+define('MIN_ALWAYSON',    50);   // negeer ruis onder 50W
+define('MAX_STD_DEV',      6);   // max toegelaten standaarddeviatie (W)
+define('MIN_BUFFER_FILL', 8);   // wacht tot buffer minstens half gevuld is
+
 
 // CRUCIAAL: Initialiseer de array met default waarden uit cache om count mismatch te voorkomen
 $storedTeller = json_decode(getCache('teller'), true);
@@ -44,17 +52,6 @@ $newData = [
 ];
 $alwayson    = (int)getCache('alwayson');
 $peakpower   = (int)getCache('peakpower');
-if($peakpower<4500) $peakpower=4500;
-
-// Alwayson-variabelen in buitenste scope
-$n           = 0;
-$z           = 0;
-$b           = 0;
-$a           = 0;
-$timestamps  = ['n' => 0, 'z' => 0, 'b' => 0];
-$powerBuffer = [];
-$lastSample  = 0;
-
 $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson, &$peakpower) {
 	try {
 		lg($topic.'	'.$status);
@@ -82,11 +79,16 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$
 
 $mqtt->subscribe('d/e/+', function (string $topic, string $status)
     use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp,
-        &$force, &$mqtt, &$alwayson, &$peakpower,
-        &$n, &$z, &$b, &$a, &$timestamps)
+        &$force, &$mqtt, &$alwayson, &$peakpower)
 {
-    if($topic==='d/e/alwayson') return;
+    if($topic==='alwayson') return;
     $topic = substr($topic, -1);
+    static $n = 0;
+    static $z = 0;
+    static $b = 0;
+    static $a = 0;
+    static $timestamps  = ['n' => 0, 'z' => 0, 'b' => 0];
+    static $powerBuffer = [];
 
     ${$topic} = $status;
     $timestamps[$topic] = time();
@@ -138,59 +140,56 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
         setCache('energy_prevavg', $newavg);
     }
 
+    // --- Alwayson: wacht tot alle meters recent zijn ---
+    $now = time();
+    $allFresh = ($now - $timestamps['n']) < MAX_AGE_SEC
+             && ($now - $timestamps['z']) < MAX_AGE_SEC
+             && (($now - $timestamps['b']) < MAX_AGE_SEC || $b == 0 || $b == 800);
+
+    if (!$allFresh) return;
+
+    $p = $n + $z - $b;
+    echo "n=$n\tz=$z\tb=$b\tp=$p" . PHP_EOL;
+
+    $powerBuffer[] = $p;
+    if (count($powerBuffer) > BUFFER_SIZE) {
+        array_shift($powerBuffer);
+    }
+
+    if (count($powerBuffer) < MIN_BUFFER_FILL) return;
+
+    $avg    = array_sum($powerBuffer) / count($powerBuffer);
+    $stddev = sqrt(array_sum(array_map(
+        fn($v) => ($v - $avg) ** 2, $powerBuffer
+    )) / count($powerBuffer));
+
+    $sorted = $powerBuffer;
+    sort($sorted);
+    $count  = count($sorted);
+    $median = $count % 2 === 0
+        ? ($sorted[$count/2 - 1] + $sorted[$count/2]) / 2
+        : $sorted[intval($count/2)];
+    $measurement = round($median);
+
+    echo "stddev=" . round($stddev) . "\tmeasurement=$measurement\tstable=" . ($stddev < MAX_STD_DEV ? 'ja' : 'nee') . PHP_EOL;
+
+    if ($stddev < MAX_STD_DEV && $measurement >= MIN_ALWAYSON) {
+        if ($measurement < $alwayson || empty($alwayson)) {
+            $alwayson = $measurement;
+            setCache('alwayson', $alwayson);
+            lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
+            publishmqtt('d/e/alwayson', $alwayson);
+            $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w)
+                  ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
+            $dbverbruik->query($q, [':date' => date('Y-m-d'), ':w' => $alwayson]);
+        }
+    }
+
 }, MqttClient::QOS_AT_LEAST_ONCE);
 
 
 while (true) {
     $mqtt->loop(true, false, null, 50000);
-
-    $now = time();
-    if ($now - $lastSample >= BUFFER_INTERVAL_SEC) {
-        $lastSample = $now;
-
-        $allFresh = ($now - $timestamps['n']) < MAX_AGE_SEC
-                 && ($now - $timestamps['z']) < MAX_AGE_SEC
-                 && (($now - $timestamps['b']) < MAX_AGE_SEC || $b == 0 || $b == 800);
-
-        if ($allFresh) {
-            $p = $n + $z - $b;
-            echo "n=$n\tz=$z\tb=$b\tp=$p" . PHP_EOL;
-
-            $powerBuffer[] = $p;
-            if (count($powerBuffer) > BUFFER_SIZE) {
-                array_shift($powerBuffer);
-            }
-
-            if (count($powerBuffer) >= MIN_BUFFER_FILL) {
-                $avg    = array_sum($powerBuffer) / count($powerBuffer);
-                $stddev = sqrt(array_sum(array_map(
-                    fn($v) => ($v - $avg) ** 2, $powerBuffer
-                )) / count($powerBuffer));
-
-                $sorted = $powerBuffer;
-                sort($sorted);
-                $count  = count($sorted);
-                $median = $count % 2 === 0
-                    ? ($sorted[$count/2 - 1] + $sorted[$count/2]) / 2
-                    : $sorted[intval($count/2)];
-                $measurement = round($median);
-
-                echo "stddev=" . round($stddev) . "\tmeasurement=$measurement\tstable=" . ($stddev < MAX_STD_DEV ? 'ja' : 'nee') . PHP_EOL;
-
-                if ($stddev < MAX_STD_DEV && $measurement >= MIN_ALWAYSON) {
-                    if ($measurement < $alwayson || empty($alwayson)) {
-                        $alwayson = $measurement;
-                        setCache('alwayson', $alwayson);
-                        lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
-                        publishmqtt('d/e/alwayson', $alwayson);
-                        $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w)
-                              ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
-                        $dbverbruik->query($q, [':date' => date('Y-m-d'), ':w' => $alwayson]);
-                    }
-                }
-            }
-        }
-    }
 }
 
 $mqtt->disconnect();
@@ -200,12 +199,10 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     static $mqttcache = [];
     static $lastDate = null;
     static $gisteren = null;
-    static $zonref = 0;
-    static $zonavg = 0;
-    static $avg = ['gas' => 0, 'elec' => 0];
-    static $prevGuyData = null; // ← NIEUW
-
-    $vandaag = date("Y-m-d", $time);
+	static $zonref = 0;
+	static $zonavg = 0;
+	static $avg = ['gas' => 0, 'elec' => 0];
+	$vandaag = date("Y-m-d", $time);
     $gisterenDatum = date("Y-m-d", strtotime("-1 day", $time));
 
     // 1. Kwartierpiek ophalen
@@ -232,84 +229,56 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
     if ($row = $stmt->fetch()) $zontotaal = $row['Geg_Maand'];
 
     // 5. Tabel 'Guy' updaten (Totaalstanden)
-    // ← GEWIJZIGD: alleen schrijven als er iets relevant veranderd is (of na 23:00)
-    $isLateNight = (int)date('H', $time) >= 23;
-    $guyChanged = $prevGuyData === null // eerste run altijd schrijven
-        || $isLateNight
-        || (float)$gasStand   !== (float)$prevGuyData['gas']
-        || (float)$waterStand !== (float)$prevGuyData['water']
-        || ((float)$elecStand - (float)$prevGuyData['elec']) >= 0.1;
-
-    // dagVerbruik check: berekenen we hier alvast vooruit
-    if (!$guyChanged && $gisteren) {
-        $dagElecPreview     = (float)$elecStand - (float)$gisteren['elec'];
-        $dagInjectiePreview = (float)$injectie  - (float)$gisteren['injectie'];
-        $dagVerbruikPreview = (float)$zonvandaag - $dagInjectiePreview + $dagElecPreview;
-        $prevDagVerbruik    = isset($prevGuyData['dagVerbruik']) ? (float)$prevGuyData['dagVerbruik'] : null;
-        if ($prevDagVerbruik === null || ($dagVerbruikPreview - $prevDagVerbruik) >= 0.1) {
-            $guyChanged = true;
-        }
+    $q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
+          VALUES (:date, :gas, :elec, :injectie, :zon, :water)
+          ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), injectie=VALUES(injectie), zon=VALUES(zon), water=VALUES(water)";
+	$opts=[
+            ':date' => $vandaag, ':gas' => $gasStand, ':elec' => $elecStand,
+            ':injectie' => $injectie, ':zon' => $zontotaal, ':water' => $waterStand
+        ];
+    lg($q.'
+'.json_encode($opts));
+    try {
+        $dbverbruik->query($q, $opts);
+    } catch (Exception $e) {
+        lg("❌ Error Guy update: " . $e->getMessage());
     }
-
-    if ($guyChanged) {
-        $q = "INSERT INTO `Guy` (`date`, `gas`, `elec`, `injectie`, `zon`, `water`)
-              VALUES (:date, :gas, :elec, :injectie, :zon, :water)
-              ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), injectie=VALUES(injectie), zon=VALUES(zon), water=VALUES(water)";
-        $opts=[
-                ':date' => $vandaag, ':gas' => $gasStand, ':elec' => $elecStand,
-                ':injectie' => $injectie, ':zon' => $zontotaal, ':water' => $waterStand
-            ];
-        lg($q.'\n'.json_encode($opts));
-        try {
-            $dbverbruik->query($q, $opts);
-        } catch (Exception $e) {
-            lg("❌ Error Guy update: " . $e->getMessage());
-        }
-    }
-    // ← EINDE wijziging stap 5
-
     // 6. Bereken Dagverbruik (Guydag)
     if ($lastDate !== $vandaag) {
-        $q = "SELECT gas, elec, injectie, water FROM `Guy` ORDER BY date DESC LIMIT 1,1";
-        $stmt = $dbverbruik->query($q);
-        $gisteren = $stmt->fetch();
-    }
+		$q = "SELECT gas, elec, injectie, water FROM `Guy` ORDER BY date DESC LIMIT 1,1";
+		$stmt = $dbverbruik->query($q);
+		$gisteren = $stmt->fetch();
+	}
     $dagGas = 0; $dagElec = 0; $dagWater = 0; $dagVerbruik = 0;
 
     if ($gisteren) {
         $dagGas      = round((float)$gasStand - (float)$gisteren['gas'], 3);
         $dagElec     = round((float)$elecStand - (float)$gisteren['elec'], 3);
         if($dagGas>=0&&$dagElec>=0) {
-            $dagWater    = round((float)$waterStand - (float)$gisteren['water'], 3);
-            $dagInjectie = round((float)$injectie - (float)$gisteren['injectie'], 3);
-            $dagVerbruik = round((float)$zonvandaag - $dagInjectie + $dagElec, 3);
-    
-            $q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
-                  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
-                  ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
-            $opts=[
-                    ':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
-                    ':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
-                ];
-            try {
-                $dbverbruik->query($q, $opts);
-            } catch (Exception $e) {
-                lg("❌ Error Guydag update: " . $e->getMessage());
-            }
-        }
+			$dagWater    = round((float)$waterStand - (float)$gisteren['water'], 3);
+			$dagInjectie = round((float)$injectie - (float)$gisteren['injectie'], 3);
+			$dagVerbruik = round((float)$zonvandaag - $dagInjectie + $dagElec, 3);
+	
+			$q = "INSERT INTO `Guydag` (`date`, `gas`, `elec`, `verbruik`, `zon`, `water`)
+				  VALUES (:date, :gas, :elec, :verbruik, :zon, :water)
+				  ON DUPLICATE KEY UPDATE gas=VALUES(gas), elec=VALUES(elec), verbruik=VALUES(verbruik), zon=VALUES(zon), water=VALUES(water)";
+			$opts=[
+					':date' => $vandaag, ':gas' => $dagGas, ':elec' => $dagElec,
+					':verbruik' => $dagVerbruik, ':zon' => $zonvandaag, ':water' => $dagWater
+				];
+//			lg($q.'
+//	'.json_encode($opts));
+			try {
+				$dbverbruik->query($q, $opts);
+			} catch (Exception $e) {
+				lg("❌ Error Guydag update: " . $e->getMessage());
+			}
+		}
     } else {
+        // Belangrijk: als gisteren niet gevonden wordt, log dit!
         lg("⚠️ Geen gisteren data gevonden voor $gisterenDatum in tabel Guy.");
     }
-
-    // ← NIEUW: prevGuyData bijwerken na de berekeningen
-    $prevGuyData = [
-        'gas'        => $gasStand,
-        'elec'       => $elecStand,
-        'water'      => $waterStand,
-        'dagVerbruik'=> $dagVerbruik,
-    ];
-
-    if ($lastDate !== $vandaag) {
+	if ($lastDate !== $vandaag) {
 		// 7. Statistieken & Gemiddelden
 		$today = date('Y-m-d');
 		$dy = (int)date('z', strtotime($today)) + 1;
@@ -535,21 +504,22 @@ class Database {
     }
 }
 function stoploop() {
-    global $mqtt;
+    global $mqtt,$lock_file;
     $script = __FILE__;
     if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
         lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
         $mqtt->disconnect();
+        ftruncate($lock_file, 0);
+		flock($lock_file, LOCK_UN);
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
     if (filemtime($script) > LOOP_START) {
         lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
         $mqtt->disconnect();
+        ftruncate($lock_file, 0);
+		flock($lock_file, LOCK_UN);
+		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
         exit;
     }
-	static $cycles=0;
-	if($cycles>=50) {
-		gc_collect_cycles();
-		$cycles=0;
-	} else $cycles++;
 }
