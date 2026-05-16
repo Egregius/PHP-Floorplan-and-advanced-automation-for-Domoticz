@@ -153,6 +153,7 @@ if ($d['n']<-500&&$setBath<20) {
 if (isset($setBath)&&$d['heating']->s>=0) {
 	if ($setBath!=$d['badkamer_set']->s) {
 		setpoint('badkamer_set', $setBath, $m2);
+		$d['badkamer_set']->s=$setBath;
 	}
 }
 if ($d['heating']->s>=2) {

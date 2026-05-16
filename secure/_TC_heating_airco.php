@@ -84,8 +84,9 @@ foreach (array('living','kamer','alex') as $k) {
 			}
 			if($d['living_set']->m==0&&$d['n']<-600&&$d['living_temp']->s<21) {
 				$lastautosetliving=$time;
-				$target=$setrounded=$d['living_temp']->s+0.5;
-				lg($setrounded,'daikin');
+				$target=$setrounded= clamp(ceil(($d['living_temp']->s+0.5)*2)/2,10,21);
+//				lg($setrounded,'daikin');
+				if($d[$k.'_set']->s!=$setrounded) store('living_set',$setrounded);
 			}
 			if ($time>strtotime('18:30') && $d['media']->s=='On') {
 				$fan=$fanspeeds[clamp(round($dif*10)+2,0,2)];
