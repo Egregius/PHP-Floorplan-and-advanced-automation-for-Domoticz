@@ -5,8 +5,17 @@ $preheatbath=false;
 if ($d['badkamer_set']->m==1) {
 	$setBath=$d['badkamer_set']->s;
 	$m2.=__LINE__.' '.$setBath;
-} elseif ($d['n']<-500) {
+} elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=70) {
+	$setBath=21;
+	$m2.=__LINE__.' '.$setBath;
+} elseif($d['n']<-600&&$d['b']>=0&&$d['c']>=50) {
 	$setBath=20;
+	$m2.=__LINE__.' '.$setBath;
+} elseif($d['n']<-800&&$d['b']>=0&&$d['c']>=30) {
+	$setBath=19;
+	$m2.=__LINE__.' '.$setBath;
+} elseif($d['n']<-1000&&$d['b']>=0&&$d['c']>=10) {
+	$setBath=18;
 	$m2.=__LINE__.' '.$setBath;
 } elseif ($d['badkamer_set']->m==0&&$d['n']>0) {
 	$setBath=10;
