@@ -1,33 +1,11 @@
 <?php
 foreach ($devices as $ip => $vol) {
-continue;
 	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
 	if (isset($status)) {
 		$status = json_decode(json_encode(simplexml_load_string(mb_convert_encoding($status, 'UTF-8', mb_detect_encoding($status, 'UTF-8, ISO-8859-1', true)))), true);
 		if (is_array($status)) {
 			if ($ip==101) {
-/*				if (isset($status['@attributes']['source'])&&$status['@attributes']['source']=='SPOTIFY') {
-					if (isset($status['ContentItem']['@attributes']['type'])&&$status['ContentItem']['@attributes']['type']=='DO_NOT_RESUME') {
-						lg(basename(__FILE__).':'.__LINE__,'cron2');
-						bosepreset(boseplaylist(), 101);
-					}
-				}*/
-/*				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
-					$invalidcounter++;
-					if ($invalidcounter > 10) {
-						lg('Bose living $invalidcounter = '.$invalidcounter.' Toggling Bose','cron2');
-						bosekey("POWER", 0, 101, basename(__FILE__).':'.__LINE__);
-						if ($d['bose'.$ip]->s == 'On') sw('bose'.$ip, 'Off', basename(__FILE__).':'.__LINE__,'cron2');
-						if ($d['boseliving']->s != 'Off') {
-							sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__,'cron2');
-							sleep(5);
-							sw('boseliving', 'On', basename(__FILE__).':'.__LINE__,'cron2');
-							$invalidcounter = 0;
-						}
-					} else lg('Bose living $invalidcounter = '.$invalidcounter);
-				}*/
-//				lg(print_r($status,true),'bose');
 				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
@@ -54,7 +32,6 @@ continue;
 									lg($cleantitle.' skipped op id','cron2');
 									if($wiim===true) Wiim('setPlayerCmd:next');
 									else ma_next_track();
-	//								bosekey("NEXT_TRACK", 0, 101);
 								} else {
 									lg('Adding '.$cleantitle.' to history','bose');
 									$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
