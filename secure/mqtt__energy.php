@@ -51,8 +51,7 @@ $newData = [
     'water'  => $storedTeller['water']
 ];
 $alwayson    = (int)getCache('alwayson');
-$peakpower   = (int)getCache('peakpower');
-$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson, &$peakpower) {
+$mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson) {
 	try {
 		lg($topic.'	'.$status);
 		$time = time();
@@ -79,7 +78,7 @@ $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$
 
 $mqtt->subscribe('d/e/+', function (string $topic, string $status)
     use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp,
-        &$force, &$mqtt, &$alwayson, &$peakpower)
+        &$force, &$mqtt, &$alwayson)
 {
     if($topic==='alwayson') return;
     $topic = substr($topic, -1);
@@ -92,17 +91,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 
     ${$topic} = $status;
     $timestamps[$topic] = time();
-
-    // --- Peakpower zonnepanelen (altijd uitvoeren, onafhankelijk van buffer) ---
-    if ($topic === 'z') {
-        if ($z > $peakpower || empty($peakpower)) {
-            $peakpower = $z;
-            setCache('peakpower', $peakpower);
-            $msg = 'Solar peak power = ' . $peakpower . 'W';
-            shell_exec('/var/www/html/secure/telegram.sh "' . $msg . '" "false" "1" > /dev/null 2>/dev/null &');
-        }
-    }
-
+   
     // --- Kwartierpiek (altijd uitvoeren, onafhankelijk van buffer) ---
     if ($topic === 'a') {
         $newavg  = $a;
@@ -149,7 +138,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
     if (!$allFresh) return;
 
     $p = $n + $z - $b;
-    echo "n=$n\tz=$z\tb=$b\tp=$p" . PHP_EOL;
+//    echo "n=$n\tz=$z\tb=$b\tp=$p" . PHP_EOL;
 
     $powerBuffer[] = $p;
     if (count($powerBuffer) > BUFFER_SIZE) {
@@ -171,7 +160,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
         : $sorted[intval($count/2)];
     $measurement = round($median);
 
-    echo "stddev=" . round($stddev) . "\tmeasurement=$measurement\tstable=" . ($stddev < MAX_STD_DEV ? 'ja' : 'nee') . PHP_EOL;
+//    echo "stddev=" . round($stddev) . "\tmeasurement=$measurement\tstable=" . ($stddev < MAX_STD_DEV ? 'ja' : 'nee') . PHP_EOL;
 
     if ($stddev < MAX_STD_DEV && $measurement >= MIN_ALWAYSON) {
         if ($measurement < $alwayson || empty($alwayson)) {
@@ -236,8 +225,8 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
             ':date' => $vandaag, ':gas' => $gasStand, ':elec' => $elecStand,
             ':injectie' => $injectie, ':zon' => $zontotaal, ':water' => $waterStand
         ];
-    lg($q.'
-'.json_encode($opts));
+/*    lg($q.'
+'.json_encode($opts));*/
     try {
         $dbverbruik->query($q, $opts);
     } catch (Exception $e) {
@@ -385,7 +374,7 @@ function getCache(string $key, $default = false) {
 function publishmqtt($topic,$msg) {
 	global $mqtt;
 	$mqtt->publish($topic,(string)$msg,1,true);
-	lg("🟢 {$topic} {$msg}");
+//	lg("🟢 {$topic} {$msg}");
 	return;
 }
 function alert($name,$msg,$time) {

@@ -24,10 +24,19 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resets
 elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107) {
 	$bose=$_REQUEST['bose'];
 	$d=[];
-	$nowplaying=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/now_playing"))), true);
+	libxml_use_internal_errors(true);
+	$xml_string = @file_get_contents("http://192.168.2." . $bose . ":8090/now_playing");
+	$nowplaying = null;
+	if ($xml_string !== false) {
+		$xml_object = simplexml_load_string($xml_string);
+		if ($xml_object !== false) {
+			$nowplaying = json_decode(json_encode($xml_object), true);
+		}
+	}
+	libxml_clear_errors();
 	$d['source']=$nowplaying['@attributes']['source'];
-	if (isset($nowplaying['artist'],$nowplaying['track'])) {
-		if($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast') {
+	if (isset($nowplaying['artist'],$nowplaying['track'])||$nowplaying['@attributes']['source']=='AUX') {
+		if($nowplaying['@attributes']['source']=='AUX'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
 			$wiim=json_decode(WiimGetMetaInfo());
 //			echo '<pre>';print_r($wiim);echo '</pre><hr>';
 			$d['source']='WiiM';

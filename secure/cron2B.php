@@ -12,7 +12,6 @@ foreach ($devices as $ip => $vol) {
 						bosepreset(boseplaylist(), 101);
 					}
 				}*/
-				if ($status['@attributes']['source'] == 'INVALID_SOURCE') playBoseHybride();
 /*				if ($status['@attributes']['source'] == 'INVALID_SOURCE') {
 					$invalidcounter++;
 					if ($invalidcounter > 10) {
@@ -40,9 +39,9 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else {
 						$start = hrtime(true);
-						if(isset($status['artist'],$status['track'])) {
-							if($status['artist']=='wiim'&&$status['track']=='dlna cast') {
-								$wiim=json_decode(WiimGetMetaInfo());
+						if(isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX') {
+							if($status['@attributes']['source']=='AUX'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
+								$wiim=json_decode(Wiim('getMetaInfo'));
 								$status['artist']=$wiim->metaData->artist;
 								$status['track']=$wiim->metaData->title;
 								$wiim=true;
@@ -51,8 +50,8 @@ foreach ($devices as $ip => $vol) {
 							if ($cleantitle && $cleantitle!=$prevcleantitle) {
 								$prevcleantitle=$cleantitle;
 								if (isset($history[$cleantitle])) {
-									lg($cleantitle.' skipped op id','bose');
-									if($wiim===true) WiimSkipTrack();
+									lg($cleantitle.' skipped op id','cron2');
+									if($wiim===true) Wiim('setPlayerCmd:next');
 									else ma_next_track();
 	//								bosekey("NEXT_TRACK", 0, 101);
 								} else {
@@ -95,12 +94,18 @@ foreach ($devices as $ip => $vol) {
 										} else $memory_cache[$name] = $size;
 									}
 									unset($vars, $name, $value, $size, $oldSize, $percent);
-									lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','bose');
+									lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','cron2');
 								}
 							}
 						}
 					}
-				} else lg(print_r($status,true),'bose');
+				} elseif ($status['@attributes']['source']=="STANDBY") {
+					bosekey("AUX_INPUT", 0, 101);
+					usleep(100000);
+					bosekey("AUX_INPUT", 0, 101);
+				} elseif ($status['@attributes']['source']=="BLUETOOTH") {
+					bosekey("AUX_INPUT", 0, 101);
+				} else lg(print_r($status,true),'cron2');
 			}
 			if (isset($status['@attributes']['source'])) {
 				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
@@ -119,9 +124,9 @@ foreach ($devices as $ip => $vol) {
 				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
 						$past=$time-$lastplay;
-						lg($past.' | '.$playlisttries,'bose');
+						lg($past.' | '.$playlisttries,'cron2');
 						if($past>=60) {
-							lg('play_scheduled_playlist','bose');
+							lg('play_scheduled_playlist','cron2');
 //							ma_enable_player(false);
 //							sleep(1);
 //							ma_enable_player(true);
@@ -133,7 +138,7 @@ foreach ($devices as $ip => $vol) {
 							$vol = ($d['alexslaapt']->s == 1) ? 14 : 22;
 							bosevolume($vol,101, 'lijn '.__LINE__);
 							if($playlisttries>3) {
-								lg('play_scheduled_playlist failed, restarting Music Assistant','bose');
+								lg('play_scheduled_playlist failed, restarting Music Assistant','cron2');
 //								hassAddon('d5369777_music_assistant_beta','stop');
 //								sleep(20);
 //								hassAddon('d5369777_music_assistant_beta','start');
@@ -199,6 +204,7 @@ if ($d['bose101']->s=='On'
 				if ($d['bose106']->s!='Off') store('bose106', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['bose107']->s!='Off') store('bose107', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+				Wiim('setPlayerCmd:stop');
 			}
 		}
 	}

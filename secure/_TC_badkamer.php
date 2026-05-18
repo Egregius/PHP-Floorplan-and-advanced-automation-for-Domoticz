@@ -22,6 +22,7 @@ if ($d['badkamer_set']->m==1) {
 	$m2.=__LINE__.' '.$setBath;
 }
 $pastdeurbadkamer=past('deurbadkamer');
+$prevSetbath   = $d['badkamer_start_temp']->m ?? 0;
 if ($d['weg']->s>2&&$d['badkamer_set']->m==0&&$d['n']>-50) {
 	$setBath=10;$m2.=__LINE__.' ';
 } elseif ($d['badkamer_set']->m==0&&$d['deurbadkamer']->s=='Open'&&$pastdeurbadkamer>57&&($d['raamkamer']->s=='Open'||$d['raamwaskamer']->s=='Open'||$d['raamalex']->s=='Open')) {
@@ -46,7 +47,7 @@ if ($d['weg']->s>2&&$d['badkamer_set']->m==0&&$d['n']>-50) {
 	$badkamer  = $d['badkamer_temp']->s;
 	$buitenTempStart = round($d['buiten_temp']->s / 0.5) * 0.5;
 	$mode      = $d['heating']->s;
-	$prevSetbath   = $d['badkamer_start_temp']->m ?? 0;
+	
 	if(!isset($leadDataBath)) {
 		$contentBath = @file_get_contents('/var/www/leadDataBath.json');
 		$leadDataBath = $contentBath ? json_decode($contentBath, true) ?? [] : [];
