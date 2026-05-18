@@ -22,6 +22,9 @@ function parseTs(string $line): float{
 		$ms  = isset($m[6]) ? ('0.' . $m[6]) : 0;
 		return $sec !== false ? $sec + (float)$ms : 0;
 	}
+	// Journald/syslog: "May 18 14:23:01" at start of line
+	if (preg_match('/^(\w{3})\s+(\d{1,2})\s+(\d{2}):(\d{2}):(\d{2})/', $line, $m))
+		return (float)(strtotime("{$m[1]} {$m[2]} " . date('Y') . " {$m[3]}:{$m[4]}:{$m[5]}") ?: 0);
 	if (preg_match('/(\d{4})\/(\d{2})\/(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $line, $m))
 		return (float)(strtotime("{$m[1]}-{$m[2]}-{$m[3]} {$m[4]}:{$m[5]}:{$m[6]}") ?: 0);
 	if (preg_match('/(\d{2})\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2})/', $line, $m))
@@ -34,6 +37,20 @@ function fmtTs(float $ts): string{
 	if (!$ts) return '';
 	$s = (int)$ts;
 	return date('Ymd') === date('Ymd', $s) ? date('H:i:s', $s) : date('d/m H:i', $s);
+}
+// Strip optional syslog/journald prefix: "May 18 14:23:01 host proc[pid]: content"
+function stripSyslog(string $line): array {
+	if (preg_match('/^(\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})\s+\S+\s+\S+:\s(.*)$/', $line, $m)){
+		$ts = strtotime($m[1] . ' ' . date('Y'));
+		return [$ts ?: 0, $m[2]];
+	}
+	return [0, $line];
+}
+function isPhpContinuation(string $bare): bool {
+	return (bool)preg_match('/^(Stack trace:|#\d+[\s(]|thrown in\s|\{main\}|\s+thrown\s)/i', $bare);
+}
+function isPhpErrorStart(string $bare): bool {
+	return (bool)preg_match('/^PHP\s+(Fatal error|Warning|Notice|Parse error|Deprecated|Strict Standards|Recoverable fatal error)\s*:/i', $bare);
 }
 if (isset($_GET['action'])){
 	header('Content-Type: application/json');
@@ -101,7 +118,7 @@ if (isset($_GET['action'])){
 			if (!$raw) continue;
 			$fileMtime = (float)filemtime($path);
 
-			// Merge continuation lines (no leading timestamp) into the previous entry
+			// First pass: split into raw entries with ts + bare content
 			$pending = null;
 			$entries = [];
 			foreach (explode("\n", trim($raw)) as $line){
@@ -109,16 +126,44 @@ if (isset($_GET['action'])){
 				if ($line === '') continue;
 				$ts = parseTs($line);
 				if ($ts > 0){
+					// Also try to strip a syslog wrapper to get bare content
+					[, $bare] = stripSyslog($line);
 					if ($pending !== null) $entries[] = $pending;
-					$pending = ['text' => $line, 'ts' => $ts, 'synthetic' => false];
+					$pending = ['text' => $line, 'ts' => $ts, 'bare' => $bare, 'synthetic' => false];
 				} else {
 					if ($pending !== null)
 						$pending['text'] .= "\n" . $line;
 					else
-						$pending = ['text' => $line, 'ts' => 0, 'synthetic' => false];
+						$pending = ['text' => $line, 'ts' => 0, 'bare' => $line, 'synthetic' => false];
 				}
 			}
 			if ($pending !== null) $entries[] = $pending;
+
+			// Second pass: re-merge PHP stack trace lines that got their own timestamp
+			// from journald/syslog (each line prefixed individually).
+			// A PHP error block: starts with "PHP Fatal/Warning/...", continues with
+			// "Stack trace:", "#N ...", "{main}", "thrown in ...".
+			$merged = [];
+			foreach ($entries as $e){
+				$bare = $e['bare'];
+				if (!empty($merged) && isPhpContinuation($bare)){
+					// Append bare content (without syslog prefix) to previous entry
+					$merged[count($merged)-1]['text'] .= "\n" . $bare;
+				} elseif (!empty($merged) && isPhpErrorStart($bare)){
+					// New PHP error — check if previous entry is also a PHP error
+					// (e.g. Warning followed by Fatal for same exception): merge them
+					$prev = &$merged[count($merged)-1];
+					if (isPhpErrorStart($prev['bare'])){
+						$prev['text'] .= "\n" . $bare;
+					} else {
+						$merged[] = $e;
+					}
+					unset($prev);
+				} else {
+					$merged[] = $e;
+				}
+			}
+			$entries = $merged;
 
 			// Assign fallback timestamps to entries without one.
 			// We walk backwards: untimestamped entries get the mtime of the file,

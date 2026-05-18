@@ -12,7 +12,7 @@ if ($status=='On') {
 	}
 	if (!isset($weegschaal)||$weegschaal<$time-300) {
 		lg('Fetch weegschaal');
-		exec('curl -4 http://192.168.20.21:9000/hooks/weegschaal -H "Content-Type: application/json" &');
+		exec('curl -s -4 http://192.168.20.21:9000/hooks/weegschaal -H "Content-Type: application/json" &');
 		$weegschaal=$time;
 	}
 }

@@ -26,7 +26,7 @@ foreach ($devices as $ip => $vol) {
 								$wiim=true;
 							} else $wiim=false;
 							$cleantitle=cleanTitle($status['artist'],$status['track']);
-							if ($cleantitle && $cleantitle!=$prevcleantitle && $cleantitle!='unknowunknow') {
+							if ($cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 								$prevcleantitle=$cleantitle;
 								if (isset($history[$cleantitle])) {
 									lg($cleantitle.' skipped op cleantitle','cron2');
@@ -92,12 +92,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($d['bose'.$ip]->m != 1) {
 					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
 					$d['bose'.$ip]->m=1;
-//					if($d['music_assistant_beta']->s!='On') sw('music_assistant_beta','On',basename(__FILE__).':'.__LINE__,'cron2');
-//					ma_enable_player(false);
-//					sleep(1);
-//					ma_enable_player(true);
-//					sleep(8);
-//					play_scheduled_playlist();
+
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
@@ -117,22 +112,14 @@ foreach ($devices as $ip => $vol) {
 							bosevolume($vol,101, 'lijn '.__LINE__);
 							if($playlisttries>3) {
 								lg('play_scheduled_playlist failed, restarting Music Assistant','cron2');
-//								hassAddon('d5369777_music_assistant_beta','stop');
-//								sleep(20);
-//								hassAddon('d5369777_music_assistant_beta','start');
-//								sleep(35);
-//								play_scheduled_playlist();
 								$playlisttries=0;
 							}
-//							playBoseHybride();
 						}
 						
 					} elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
 						bosezone($ip,$vol);
-//						groupBoseHybride($ip);
 					} elseif ($ip!=105&&$d['time']<strtotime('20:00')) {
 						bosezone($ip,$vol);
-//						groupBoseHybride($ip);
 					}
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
@@ -147,7 +134,6 @@ foreach ($devices as $ip => $vol) {
 		} else {
 			if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) {
 				storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
-//				if($ip==101) hassAddon('d5369777_music_assistant_beta','stop');
 			}
 		}
 		unset($status);
@@ -206,24 +192,5 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 				unset($kodi);
 			}
 		}
-	}/* elseif ($d['nas']->s=='On'&&$d['nvidia']->m=='Kodi'&&past('nas')>90) {
-		$kodi_last_action=explode('-',$d['kodi_last_action']->s);
-		if (!isset($lastlibraryupdate)||$lastlibraryupdate<$time-72000) {
-			if(in_array($kodi_last_action[0],['GUI.OnScreensaverDeactivated','GUI.OnScreensaverActivated','window_Beginscherm'])) {
-				$lastlibraryupdate=$time;
-				kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-				kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Scan","params": {"showdialogs": true}}');
-			}
-		}
-		if (
-			(!isset($lastlibraryclean) || $lastlibraryclean < $time - 72000)
-			&& isset($lastlibraryupdate)
-			&& $lastlibraryupdate < $time - 60
-			&& ($d['kodi_last_action']->t < $lastlibraryupdate || $kodi_last_action[0]=='GUI.OnScreensaverActivated')
-		) {
-			$lastlibraryclean=$time;
-			kodi('{"jsonrpc":"2.0","id":1,"method":"Input.Back"}');
-			kodi('{"jsonrpc":"2.0","id":1,"method": "VideoLibrary.Clean","params": {"showdialogs": true}}');
-		}
-	}*/
+	}
 }
