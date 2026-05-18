@@ -53,7 +53,7 @@ $newData = [
 $alwayson    = (int)getCache('alwayson');
 $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson) {
 	try {
-		lg($topic.'	'.$status);
+//		lg($topic.'	'.$status);
 		$time = time();
 		$changed = false;
 
@@ -356,7 +356,7 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 }
 function lg($msg) {
 	echo $msg."\n";
-	$fp = fopen('/var/log/mqtt/energy'.date("d").'.log', "a+");
+	$fp = fopen('/var/log/mqtt/energy.log', "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
 	$mSecs = $time - floor($time);

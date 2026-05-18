@@ -176,7 +176,15 @@ unset($data);
 if ((int)$d['z']>100&&$d['dag']->s>12) {
 	if (!isset($lastuv)||$lastuv<$time-1100) {
 		$lastuv=$time;
-		$uv=json_decode(shell_exec("curl -X GET 'https://api.openuv.io/api/v1/uv?lat=".$lat."&lng=".$lon."' -H 'x-access-token: ".$openuv."'"),true);
+		$ch = curl_init();
+		curl_setopt_array($ch, [
+			CURLOPT_URL => "https://api.openuv.io/api/v1/uv?lat=" . urlencode($lat) . "&lng=" . urlencode($lon),
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPHEADER => ["x-access-token: " . $openuv]
+		]);
+		$response = curl_exec($ch);
+		curl_close($ch);
+		$uv = json_decode($response, true);
 		if (isset($uv['result'])) {
 //			lg(print_r($uv,true));
 			$uvs['openuv']=round($uv['result']['uv'], 1);

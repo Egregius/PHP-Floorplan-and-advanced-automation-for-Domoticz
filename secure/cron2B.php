@@ -26,10 +26,10 @@ foreach ($devices as $ip => $vol) {
 								$wiim=true;
 							} else $wiim=false;
 							$cleantitle=cleanTitle($status['artist'],$status['track']);
-							if ($cleantitle && $cleantitle!=$prevcleantitle) {
+							if ($cleantitle && $cleantitle!=$prevcleantitle && $cleantitle!='unknowunknow') {
 								$prevcleantitle=$cleantitle;
 								if (isset($history[$cleantitle])) {
-									lg($cleantitle.' skipped op id','cron2');
+									lg($cleantitle.' skipped op cleantitle','cron2');
 									if($wiim===true) Wiim('setPlayerCmd:next');
 									else ma_next_track();
 								} else {
@@ -66,7 +66,7 @@ foreach ($devices as $ip => $vol) {
 											$oldSize = $memory_cache[$name];
 											if ($size > ($oldSize * 1.05)) {
 												$percent = round((($size - $oldSize) / $oldSize) * 100, 1);
-												lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
+												lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")",'cron2');
 												$memory_cache[$name] = $size;
 											}
 										} else $memory_cache[$name] = $size;
