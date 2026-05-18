@@ -1,5 +1,6 @@
 <?php
 foreach ($devices as $ip => $vol) {
+continue;
 	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
 	if (isset($status)) {
@@ -51,8 +52,8 @@ foreach ($devices as $ip => $vol) {
 								$prevcleantitle=$cleantitle;
 								if (isset($history[$cleantitle])) {
 									lg($cleantitle.' skipped op id','cron2');
-//									if($wiim===true) Wiim('setPlayerCmd:next');
-//									else ma_next_track();
+									if($wiim===true) Wiim('setPlayerCmd:next');
+									else ma_next_track();
 	//								bosekey("NEXT_TRACK", 0, 101);
 								} else {
 									lg('Adding '.$cleantitle.' to history','bose');
