@@ -135,7 +135,7 @@ foreach ($devices as $ip => $vol) {
 							$lastplay=$time;
 							$playlisttries++;
 							sleep(1);
-							$vol = ($d['alexslaapt']->s == 1) ? 14 : 24;
+							$vol = ($d['alexslaapt']->s == 1) ? 15 : 25;
 							bosevolume($vol,101, 'lijn '.__LINE__);
 							if($playlisttries>3) {
 								lg('play_scheduled_playlist failed, restarting Music Assistant','cron2');

@@ -216,8 +216,9 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
 	if(file_exists('/var/www/html/sounds/'.$sound.'.mp3')) {
 		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
-		$vol=$volume['actualvolume'];
+		if($volume['actualvolume']>$vol) $vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
+		echo $xml;
 		bosepost('speaker', $xml);
 		bosevolume($volume['actualvolume'], 101, basename(__FILE__).':'.__LINE__);
 	}
@@ -781,7 +782,7 @@ function wiimplaylist() {
 		else $preset=1;
 	}
 	
-	return $map[$preset];
+	return $preset;
 }
 
 
@@ -994,7 +995,7 @@ function bosepost($method, $xml, $ip=101, $log=false) {
     $headers .= "Content-Type: application/xml\r\n";
     $headers .= "Content-Length: ".strlen($xml)."\r\n";
     $headers .= "Connection: Close\r\n\r\n";
-    $fp = @fsockopen($host, $port, $errno, $errstr, 0.25);
+    $fp = @fsockopen($host, $port, $errno, $errstr, 1.25);
     if ($fp) {
         fwrite($fp, $headers.$xml);
         fclose($fp);

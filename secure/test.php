@@ -10,8 +10,19 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-print_r(json_decode(WiimGetMetaInfo()));
-
+$statusJson = Wiim("getPlayerStatus");
+$status = json_decode($statusJson, true);
+if ($status && !isset($status['Error'])) {
+    $wasPlaying = (isset($status['status']) && $status['status'] === 'play');
+    $currentPosition = $status['curpos'] ?? 0; 
+    $bellUrl = urlencode("http://192.168.2.2/sounds/doorbell.mp3");
+    Wiim("setPlayerCmd:play:$bellUrl");
+    sleep(20);
+    if ($wasPlaying) {
+        Wiim("setPlayerCmd:resume");
+        Wiim("setPlayerCmd:seek:$currentPosition");
+    }
+}
 
 
 echo '</pre>';
