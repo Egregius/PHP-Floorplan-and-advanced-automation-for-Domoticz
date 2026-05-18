@@ -16,8 +16,14 @@ if ($status=='Open') {
 					if ($d['rkeukenl']->s>0) sl('rkeukenl', 0, basename(__FILE__).':'.__LINE__);
 					if ($d['rkeukenr']->s>0) sl('rkeukenr', 0, basename(__FILE__).':'.__LINE__);
 				}
-				if ($d['bose101']->s=='On') bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
-				if ($d['bose105']->s=='On') bosevolume(32, 105, basename(__FILE__).':'.__LINE__);
+				if ($d['bose101']->s=='On') {
+					$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/volume"))), true);
+					if($volume['actualvolume']<25) bosevolume(25, 101, basename(__FILE__).':'.__LINE__);
+				}
+				if ($d['bose105']->s=='On') {
+					$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.105:8090/volume"))), true);
+					if($volume['actualvolume']<32) bosevolume(32, 105, basename(__FILE__).':'.__LINE__);
+				}
 			}
 		}
 	}

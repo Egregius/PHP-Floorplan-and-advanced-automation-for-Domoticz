@@ -135,7 +135,7 @@ foreach ($devices as $ip => $vol) {
 							$lastplay=$time;
 							$playlisttries++;
 							sleep(1);
-							$vol = ($d['alexslaapt']->s == 1) ? 14 : 22;
+							$vol = ($d['alexslaapt']->s == 1) ? 14 : 24;
 							bosevolume($vol,101, 'lijn '.__LINE__);
 							if($playlisttries>3) {
 								lg('play_scheduled_playlist failed, restarting Music Assistant','cron2');
@@ -204,7 +204,6 @@ if ($d['bose101']->s=='On'
 				if ($d['bose106']->s!='Off') store('bose106', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['bose107']->s!='Off') store('bose107', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				Wiim('setPlayerCmd:stop');
 			}
 		}
 	}
