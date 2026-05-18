@@ -100,7 +100,7 @@ foreach ($devices as $ip => $vol) {
 							}
 						}
 					}
-				}
+				} else lg(print_r($status,true),'bose');
 			}
 			if (isset($status['@attributes']['source'])) {
 				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
