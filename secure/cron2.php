@@ -21,6 +21,7 @@ $lastcheck=$time;
 $lastping=$time;
 define('LOOP_START', $time);
 $invalidcounter=$lastplay=$playlisttries=0;
+$skipped=false;
 $history = file_exists('/var/www/spotifyhistory.json') ? json_decode(file_get_contents('/var/www/spotifyhistory.json'), true) : [];
 $prevcleantitle = !empty($history) ? array_key_last($history) : null;
 
@@ -60,20 +61,22 @@ while (1) {
 	$d['time'] = $time;
 	$d = fetchdata();
 	include 'cron2B.php';
-	$time_elapsed_secs = microtime(true) - $time;
-	$sleep = 10 - $time_elapsed_secs;
-	if ($sleep > 0) {
-		$sleep = round($sleep * 1000000);
-		usleep($sleep);
-	}
-	if ($lastping < $time - 60) {
-		$lastping = $time;
-		$mqtt->publish('p', 'p');
-	}
-	if ($lastcheck < $time - 300) {
-		$lastcheck = $time;
-		stoploop();
-		$d=fetchdata(0);
+	if($skipped===false) {
+		$time_elapsed_secs = microtime(true) - $time;
+		$sleep = 10 - $time_elapsed_secs;
+		if ($sleep > 0) {
+			$sleep = round($sleep * 1000000);
+			usleep($sleep);
+		}
+		if ($lastping < $time - 60) {
+			$lastping = $time;
+			$mqtt->publish('p', 'p');
+		}
+		if ($lastcheck < $time - 300) {
+			$lastcheck = $time;
+			stoploop();
+			$d=fetchdata(0);
+		}
 	}
 }
 

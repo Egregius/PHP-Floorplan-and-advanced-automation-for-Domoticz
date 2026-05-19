@@ -32,6 +32,7 @@ foreach ($devices as $ip => $vol) {
 									lg($cleantitle.' skipped op cleantitle','cron2');
 									if($wiim===true) Wiim('setPlayerCmd:next');
 									else ma_next_track();
+									$skipped=true;
 								} else {
 									lg('Adding '.$cleantitle.' to history','bose');
 									$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
@@ -40,6 +41,7 @@ foreach ($devices as $ip => $vol) {
 										$oldestKey = key($history);
 										unset($history[$oldestKey]);
 									}
+									$skipped=false;
 								}
 								if (!empty($history) && count($history) % 20 === 0) {
 									$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
