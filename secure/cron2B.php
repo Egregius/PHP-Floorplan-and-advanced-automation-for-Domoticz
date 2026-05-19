@@ -26,7 +26,7 @@ foreach ($devices as $ip => $vol) {
 								$wiim=true;
 							} else $wiim=false;
 							$cleantitle=cleanTitle($status['artist'],$status['track']);
-							if ($cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
+							if (1===2 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 								$prevcleantitle=$cleantitle;
 								if (isset($history[$cleantitle])) {
 									lg($cleantitle.' skipped op cleantitle','cron2');
