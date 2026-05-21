@@ -88,7 +88,7 @@ foreach (array('living','kamer','alex') as $k) {
 //				lg($setrounded,'daikin');
 //				if($d[$k.'_set']->s!=$setrounded) store('living_set',$setrounded);
 //			}
-			$set -= 1;
+			$set -= 1.5;
 			$setrounded = clamp(ceil($set*2)/2,10,28);
 			$target=$setrounded;
 			$diffac=$trendfac=$factor=$adjLiving=0;
