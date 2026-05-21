@@ -14,10 +14,10 @@ from websockets import connect
 WS_URL = "ws://192.168.2.26:3000"
 CONFIG_PATH = Path("/var/www/eufy_config.json")
 SUPPRESS_FILE = Path("/dev/shm/cache/timestampweg.txt")
-HASH_FILE = Path("/dev/shm/last_eufy_hash.txt") # Bestand om laatste hash te onthouden
+HASH_FILE = Path("/dev/shm/last_eufy_hash.txt")
 RECONNECT_DELAY = 5
 MAX_TELEGRAM_RETRIES = 6
-SUPPRESS_WINDOW = 300  # 5 minuten in seconden
+SUPPRESS_WINDOW = 300
 last_image_age = None
 
 def log(msg):
@@ -31,8 +31,9 @@ def get_event_age_seconds(data):
         path = custom.get("command", {}).get("value", "")
         match = re.search(r'(\d{14})_c\d+\.jpg', path)
         if match:
-            ts = datetime.strptime(match.group(1), "%Y%m%d%H%M%S")
-            return (datetime.now() - ts).total_seconds()
+            # BUG 2 FIX: datetime.datetime ipv datetime
+            ts = datetime.datetime.strptime(match.group(1), "%Y%m%d%H%M%S")
+            return (datetime.datetime.now() - ts).total_seconds()
     except Exception as e:
         log(f"⚠️ Fout bij parsen bestandsnaam: {e}")
     return None
@@ -42,7 +43,8 @@ def is_suppressed():
         return False
     try:
         content = SUPPRESS_FILE.read_text().strip()
-        if not content: return False
+        if not content:
+            return False
         file_ts = float(content)
         return (time.time() - file_ts) < SUPPRESS_WINDOW
     except Exception as e:
@@ -55,9 +57,7 @@ def is_duplicate(image_bytes):
     if HASH_FILE.exists():
         last_hash = HASH_FILE.read_text().strip()
         if last_hash == current_hash:
-            return True # Is een duplicaat
-    
-    # Sla nieuwe hash op
+            return True
     HASH_FILE.write_text(current_hash)
     return False
 
@@ -75,7 +75,7 @@ def send_telegram_photo(image_bytes, config):
     token = config.get("TELEGRAM_TOKEN")
     chat_ids = config.get("CHAT_IDS", [])
     url = f"https://api.telegram.org/bot{token}/sendPhoto"
-    
+
     for chat_id in chat_ids:
         success = False
         attempt = 0
@@ -90,19 +90,25 @@ def send_telegram_photo(image_bytes, config):
                     success = True
                 else:
                     log(f"⚠️ Telegram fout {response.status_code} op {chat_id}: {response.text}")
-                    if attempt < MAX_TELEGRAM_RETRIES: time.sleep(2)
+                    if attempt < MAX_TELEGRAM_RETRIES:
+                        time.sleep(2)
             except Exception as e:
                 log(f"❌ Netwerkfout Telegram ({chat_id}), poging {attempt}: {e}")
-                if attempt < MAX_TELEGRAM_RETRIES: time.sleep(2)
+                if attempt < MAX_TELEGRAM_RETRIES:
+                    time.sleep(2)
         if not success:
             log(f"🛑 Foto definitief mislukt voor {chat_id} na {MAX_TELEGRAM_RETRIES} pogingen.")
 
 async def handle_eufy():
+    # BUG 1 FIX: global declaratie zodat Python de module-variabele gebruikt
+    global last_image_age
+
     config = load_config()
-    if not config: return
+    if not config:
+        return
 
     log(f"🚀 Eufy-Telegram Bridge actief op {WS_URL}")
-    
+
     while True:
         try:
             async with connect(WS_URL, ping_interval=20) as ws:
@@ -115,7 +121,7 @@ async def handle_eufy():
                     if data.get("type") == "event":
                         event_data = data.get("event", {})
                         if (event_data.get("event") == "command result" and
-                            event_data.get("customData", {}).get("command", {}).get("name") == "stationDownloadImage"):
+                                event_data.get("customData", {}).get("command", {}).get("name") == "stationDownloadImage"):
                             age = get_event_age_seconds(data)
                             if age is not None:
                                 last_image_age = age
