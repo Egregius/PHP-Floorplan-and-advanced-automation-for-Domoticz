@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 echo '<pre>';
 $start=microtime(true);
 $user='test';
-//require 'functions.php';
+require 'functions.php';
 //require '/var/www/authentication.php';
 //$d=fetchdata();
 //$startloop=microtime(true);
@@ -11,33 +11,8 @@ $user='test';
 //$db = Database::getInstance();
 
 
-define('WIIM_IP', '192.168.2.9');
-define('BELL_URL', 'http://192.168.2.2/sounds/doorbell.mp3');
+echo Wiim('EQSetBand:{"EQBand":[{"index":0,"param_name":"band31hz","value":50},{"index":1,"param_name":"band63hz","value":50},{"index":2,"param_name":"band125hz","value":50},{"index":3,"param_name":"band250hz","value":50},{"index":4,"param_name":"band500hz","value":50},{"index":5,"param_name":"band1khz","value":50},{"index":6,"param_name":"band2khz","value":50},{"index":7,"param_name":"band4khz","value":50},{"index":8,"param_name":"band8khz","value":50},{"index":9,"param_name":"band16khz","value":50}]}');
 
-function Wiim(string $cmd) {
-    $url = "https://" . WIIM_IP . "/httpapi.asp?command=$cmd";
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    $response = curl_exec($ch);
-    curl_close($ch);
-    return $response;
-}
-
-// 1. Vraag de huidige status op om het volume te weten
-$statusJson = Wiim("getPlayerStatus");
-$status = json_decode($statusJson, true);
-$currentVol = $status['vol'] ?? 50;
-
-// 2. Bereken het deurbelvolume (bijv. minimaal naar 70)
-$bellVol = ($currentVol < 70) ? 70 : $currentVol;
-
-// 3. Stuur de deurbel als een officiële 'WMS' notificatie-interruptie
-// Formaat: wms_notify:URL:VOLUME
-$encodedUrl = urlencode(BELL_URL);
-echo Wiim("wms_notify:$encodedUrl:$bellVol");
 
 
 
