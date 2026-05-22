@@ -11,10 +11,56 @@ require 'functions.php';
 //$db = Database::getInstance();
 
 
-echo Wiim('EQSetBand:{"EQBand":[{"index":0,"param_name":"band31hz","value":50},{"index":1,"param_name":"band63hz","value":50},{"index":2,"param_name":"band125hz","value":50},{"index":3,"param_name":"band250hz","value":50},{"index":4,"param_name":"band500hz","value":50},{"index":5,"param_name":"band1khz","value":50},{"index":6,"param_name":"band2khz","value":50},{"index":7,"param_name":"band4khz","value":50},{"index":8,"param_name":"band8khz","value":50},{"index":9,"param_name":"band16khz","value":50}]}');
+echo WiimSetEQ([125=>+10,500=>-5,2100=>55]);
 
-
-
+function WiimSetEQ(array $bands): string {
+    $freqMap = [31, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
+    $eqBand = [];
+    foreach ($bands as $inputFreq => $value) {
+        $closestFreq = null;
+        $minDiff = null;
+        foreach ($freqMap as $freq) {
+            $diff = abs($inputFreq - $freq);
+            if ($minDiff === null || $diff < $minDiff) {
+                $minDiff = $diff;
+                $closestFreq = $freq;
+            }
+        }
+        $index = array_search($closestFreq, $freqMap);
+        if ($value >= -50 && $value <= 50 && ($value < 0 || str_contains((string)$inputFreq, '-') || str_contains((string)$value, '+') || $value == 0)) {
+            $wiimValue = round($value + 50);
+        } else {
+            $wiimValue = round($value);
+        }
+        $wiimValue = max(0, min(99, $wiimValue));
+        $name = ($closestFreq >= 1000) ? ($closestFreq / 1000) . 'khz' : $closestFreq . 'hz';
+        $eqBand[$index] = [
+            'index' => $index,
+            'param_name' => 'band' . $name,
+            'value' => (int)$wiimValue
+        ];
+    }
+    if (empty($eqBand)) {
+        return 'Error: No valid bands given.';
+    }
+    ksort($eqBand);
+    return Wiim('EQSetBand:' . json_encode(['EQBand' => array_values($eqBand)]));
+}
+/*
+function Wiim(string $cmd) {
+	$url = "https://192.168.2.9/httpapi.asp?command=$cmd";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return 'Error: ' . curl_error($ch);
+    }
+    curl_close($ch);
+    return $response;
+}*/
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
