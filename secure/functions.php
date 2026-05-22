@@ -1476,7 +1476,7 @@ function republishmqtt() {
 	}
 }
 function Wiim(string $cmd) {
-	$url = "https://192.168.40.9/httpapi.asp?command=$cmd";
+	$url = "https://192.168.2.9/httpapi.asp?command=$cmd";
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -1490,7 +1490,7 @@ function Wiim(string $cmd) {
     return $response;
 }
 function WiimStartPreset(int $presetNumber) {
-    $url = "https://192.168.40.9/httpapi.asp?command=MCUKeyShortClick:$presetNumber";
+    $url = "https://192.168.2.9/httpapi.asp?command=MCUKeyShortClick:$presetNumber";
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -1504,7 +1504,7 @@ function WiimStartPreset(int $presetNumber) {
     return $response;
 }
 function WiimSkipTrack($cmd='next') {
-    $url = "https://192.168.40.9/httpapi.asp?command=setPlayerCmd:$cmd";
+    $url = "https://192.168.2.9/httpapi.asp?command=setPlayerCmd:$cmd";
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -1518,7 +1518,7 @@ function WiimSkipTrack($cmd='next') {
     return $response;
 }
 function WiimGetMetaInfo() {
-    $url = "https://192.168.40.9/httpapi.asp?command=getMetaInfo";
+    $url = "https://192.168.2.9/httpapi.asp?command=getMetaInfo";
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
