@@ -46,21 +46,6 @@ function WiimSetEQ(array $bands): string {
     ksort($eqBand);
     return Wiim('EQSetBand:' . json_encode(['EQBand' => array_values($eqBand)]));
 }
-/*
-function Wiim(string $cmd) {
-	$url = "https://192.168.2.9/httpapi.asp?command=$cmd";
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        return 'Error: ' . curl_error($ch);
-    }
-    curl_close($ch);
-    return $response;
-}*/
 
 echo '</pre>';
 echo '<hr>Time:'.number_format(((microtime(true)-$start)*1000), 6);
