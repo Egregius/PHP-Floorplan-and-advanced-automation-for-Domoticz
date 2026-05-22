@@ -26,7 +26,7 @@ foreach ($devices as $ip => $vol) {
 								$wiim=true;
 							} else $wiim=false;
 							$cleantitle=cleanTitle($status['artist'],$status['track']);
-							if ($d['boseliving']->m === 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
+							if ($d['boseliving']->m == 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 								$prevcleantitle=$cleantitle;
 								if (isset($history[$cleantitle])) {
 									lg($cleantitle.' skipped op cleantitle','cron2');
@@ -34,7 +34,7 @@ foreach ($devices as $ip => $vol) {
 									else ma_next_track();
 									$skipped=true;
 								} else {
-									lg('Adding '.$cleantitle.' to history','bose');
+									lg('Adding '.$cleantitle.' to history','cron2');
 									$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
 									if (count($history) > 10000) {
 										reset($history);
