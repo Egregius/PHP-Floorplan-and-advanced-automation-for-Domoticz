@@ -81,7 +81,7 @@ foreach ($devices as $ip => $vol) {
 							}
 						}
 					}
-				} elseif ($status['@attributes']['source']=="STANDBY") {
+				} elseif ($status['@attributes']['source']=="STANDBY"||$status['@attributes']['source']=="SETUP") {
 					bosekey("AUX_INPUT", 0, 101);
 					usleep(100000);
 					bosekey("AUX_INPUT", 0, 101);
