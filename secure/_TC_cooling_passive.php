@@ -5,7 +5,7 @@ $bigdif=-100;
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
 $daikin ??= new stdClass();
 foreach (array('living','kamer','alex') as $kamer) {
-	$daikin->$k ??= (object)$daikinDefaults;
+	$daikin->$kamer ??= (object)$daikinDefaults;
 	if ($d[$kamer.'_set']->s!='D') {
 		${'dif'.$kamer}=number_format($d[$kamer.'_temp']->s-$d[$kamer.'_set']->s,1);
 		if (${'dif'.$kamer}>$bigdif) $bigdif=${'dif'.$kamer};
@@ -23,7 +23,6 @@ else $spmode=-1;
 $k='kamer';
 $Setkamer=33;
 unset($power);
-
 
 //	if (isset($power)) lg('kamer dif='.$difkamer.' power='.$power); else lg('kamer dif='.$difkamer);
 if ($d['kamer_set']->s=='D') {
