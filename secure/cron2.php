@@ -34,6 +34,8 @@ $devices = [
 	105 => 32,
 	106 => 25,
 	107 => 32,
+	108 => 32,
+	109 => 32,
 ];
 $user='cron2B';
 $boses=array(
@@ -44,6 +46,8 @@ $boses=array(
 	105=>'10-Wit',
 	106=>'Buiten20',
 	107=>'Keuken',
+	108=>'ST-30-2',
+	109=>'ST-20-2',
 );
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;

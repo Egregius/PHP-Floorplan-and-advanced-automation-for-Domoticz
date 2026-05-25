@@ -160,6 +160,8 @@
 				<div class="abs z1" id="bose105"></div>
 				<div class="abs z1" id="bose106"></div>
 				<div class="abs z1" id="bose107"></div>
+				<div class="abs z1" id="bose108"></div>
+				<div class="abs z1" id="bose109"></div>
 				<div class="abs z1 i48" id="lampkast"></div>
 				<div class="abs z1" id="alex" onclick="dimmer('alex')"></div>
 				<div class="abs z1" id="eettafel" onclick="dimmer('eettafel')"></div>
