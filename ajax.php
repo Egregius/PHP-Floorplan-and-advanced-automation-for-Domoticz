@@ -21,7 +21,7 @@ if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['comma
 	exit;
 }
 elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resetsecurity();
-elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=107) {
+elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109) {
 	$bose=$_REQUEST['bose'];
 	$d=[];
 	libxml_use_internal_errors(true);

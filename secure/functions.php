@@ -954,8 +954,8 @@ function bosezone($ip,$vol='') {
 					105 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.105">587A628BB5C0</member></zone>',
 					106 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.106">C4F312F89670</member></zone>',
 					107 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.107">B0D5CC065C20</member></zone>',
-					108 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.108">74DAEA8D8049</member></zone>',
-					109 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.109">20914803AF9C</member></zone>',
+					108 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.108">68C90B5A1F8B</member></zone>',
+					109 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.109">689E1991A700</member></zone>',
 				];
 				if ($d['bose101']->s=='Off'&&$d['bose'.$ip]->s=='Off') {
 					lg(basename(__FILE__).':'.__LINE__,'bose');
