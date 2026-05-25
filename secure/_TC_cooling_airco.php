@@ -5,7 +5,7 @@ $bigdif=-100;
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
 $daikin ??= new stdClass();
 foreach (array('living','kamer','alex') as $kamer) {
-	$daikin->$k ??= (object)$daikinDefaults;
+	$daikin->$kamer ??= (object)$daikinDefaults;
 	if ($d[$kamer.'_set']->s!='D') {
 		${'dif'.$kamer}=number_format($d[$kamer.'_temp']->s-$d[$kamer.'_set']->s,1);
 		if (${'dif'.$kamer}>$bigdif) $bigdif=${'dif'.$kamer};
@@ -60,7 +60,7 @@ if ($d['kamer_set']->m==0&&$d['kamer_set']->s!='D') {
 			if ($difkamer>=0) $power=1;
 			elseif ($difkamer<-1.5) $power=0;
 		}
-		if ($d['kamer_temp']->s>=20&&$d['kamer_temp']->m>=55&&$d['net']<-1000) {
+		if ($d['kamer_temp']->s>=20&&$d['kamer_temp']->m>=55&&$d['n']<-1000) {
 			$power=1;
 			store('kamer_set', 'D', $user.':'.__LINE__, ' Drogen activeren');
 		}
@@ -74,7 +74,7 @@ if ($d['kamer_set']->m==0&&$d['kamer_set']->s!='D') {
 		$d['kamer_set']->s=$Setkamer;
 	}
 } elseif ($d['kamer_set']->m==0&&$d['kamer_set']->s=='D') {
-	if (($d['kamer_temp']->s<17||$d['kamer_temp']->m<50||$d['net']>0||($d['raamkamer']->s=='Open'&&past('raamkamer')>60))&&$d['kamer_set']->s=='D') {
+	if (($d['kamer_temp']->s<17||$d['kamer_temp']->m<50||$d['n']>0||($d['raamkamer']->s=='Open'&&past('raamkamer')>60))&&$d['kamer_set']->s=='D') {
 		$power=0;
 		store('kamer_set', 33, $user.':'.__LINE__, ' Drogen uitschakelen');
 	} else $power=1;
@@ -172,7 +172,7 @@ if ($d['alex_set']->m==0&&$d['alex_set']->s!='D') {
 			if ($difalex>=0) $power=1;
 			elseif ($difalex<-1.5) $power=0;
 		}
-		if ($d['alex_temp']->s>=20&&$d['alex_temp']->m>=55&&$d['net']<-1000) {
+		if ($d['alex_temp']->s>=20&&$d['alex_temp']->m>=55&&$d['n']<-1000) {
 			$power=1;
 			store('alex_set', 'D', $user.':'.__LINE__, ' Drogen activeren');
 		}
@@ -184,7 +184,7 @@ if ($d['alex_set']->m==0&&$d['alex_set']->s!='D') {
 		$d['alex_set']->s=$Setalex;
 	}
 } elseif ($d['alex_set']->m==0&&$d['alex_set']->s=='D') {
-	if (($d['alex_temp']->s<17||$d['alex_temp']->m<50||$d['net']>0||($d['raamalex']->s=='Open'&&past('raamalex')>60))&&$d['alex_set']->s=='D') {
+	if (($d['alex_temp']->s<17||$d['alex_temp']->m<50||$d['n']>0||($d['raamalex']->s=='Open'&&past('raamalex')>60))&&$d['alex_set']->s=='D') {
 		$power=0;
 		store('alex_set', 33, $user.':'.__LINE__, ' Drogen uitschakelen');
 	} else $power=1;
@@ -263,7 +263,7 @@ if ($d['living_set']->m==0&&$d['living_set']->s!='D') {
 			if ($difliving>=0) $power=1;
 			elseif ($difliving<-1.5) $power=0;
 		}
-		if ($d['living_temp']->m>=20&&$d['living_temp']->m>=55&&$d['net']<-1000) {
+		if ($d['living_temp']->m>=20&&$d['living_temp']->m>=55&&$d['n']<-1000) {
 			$power=1;
 			store('living_set', 'D', $user.':'.__LINE__, ' Drogen activeren');
 	}
@@ -276,7 +276,7 @@ if ($d['living_set']->m==0&&$d['living_set']->s!='D') {
 	
 } elseif ($d['living_set']->m==0&&$d['living_set']->s=='D') {
 //		lg($user.':'.__LINE__);
-	if (($d['living_temp']->s<19||$d['living_temp']->m<50||$d['net']>0)&&$d['living_set']->s=='D') {
+	if (($d['living_temp']->s<19||$d['living_temp']->m<50||$d['n']>0)&&$d['living_set']->s=='D') {
 		$power=0;
 		store('living_set', 33, $user.':'.__LINE__, ' Drogen uitschakelen');
 	} else $power=1;
