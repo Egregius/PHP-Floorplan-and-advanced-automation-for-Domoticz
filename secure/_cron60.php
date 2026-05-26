@@ -46,7 +46,7 @@ if ($d['auto']->s=='On') {
 		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) $avg=$avg+$d[$i]->s;
 		$avg=$avg/5;
 		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) {
-			if ($d[$i]->s>$avg+5&&$d[$i]->s>25) alert($i,'T '.$i.'='.$d[$i]->s.'°C. AVG='.round($avg, 1).'°C',3600,false,true);
+			if ($d[$i]->s>$avg+8&&$d[$i]->s>28) alert($i,'T '.$i.'='.$d[$i]->s.'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 		}
 /*		if ($d['lgtv']->s=='On') {
 			if ($d['dag']->s<0&&$d['kristal']->s=='Off'&&past('kristal')>7200&&$d['buiten_temp']->s<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
