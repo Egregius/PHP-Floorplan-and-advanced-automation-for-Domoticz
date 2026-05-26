@@ -19,15 +19,14 @@ $db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
     $trend = round($d[$i.'_temp']->s - $row[$i],2);
-//    if ($trend<=0.05||$trend>=0.05) $trend=0;
     if ((float)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
 }
-
+$sum=0;
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-foreach (array('living','badkamer','kamer','alex','zolder') as $i) $sum=@$sum+$d[$i.'_temp']->s;
-$avg=$sum/6;
-foreach (array('living','badkamer','kamer','alex','zolder') as $i) {
-	if ($d[$i.'_temp']->s>($avg+5)&&$d[$i.'_temp']->s>25) alert($i.'temp','OPGELET: '. $d[$i.'_temp']->s.'° in '.$i,7200,false,2);
+foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) $sum=$sum+$d[$i.'_temp']->s;
+$avg=($sum/6)+8;
+foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
+	if ($d[$i.'_temp']->s>$avg&&$d[$i.'_temp']->s>30) alert($i.'temp',$d[$i.'_temp']->s.'° in '.$i,3600,false,2);
 }
 if ($d['auto']->s=='On') {
 	if ($d['weg']->s==0) {/* ----------------------------------------- THUIS ----------------------------------------------------*/
