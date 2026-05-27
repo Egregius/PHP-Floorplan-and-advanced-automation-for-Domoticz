@@ -36,23 +36,25 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	libxml_clear_errors();
 	$d['source']=$nowplaying['@attributes']['source'];
 	if (isset($nowplaying['artist'],$nowplaying['track'])||$nowplaying['@attributes']['source']=='AUX') {
+		$replacements = [
+			'http://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
+			'https://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
+			'http://192.168.2.101/' => 'https://bose101.egregius.be/'
+		];
 		if($nowplaying['@attributes']['source']=='AUX'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
 			$wiim=json_decode(WiimGetMetaInfo());
 //			echo '<pre>';print_r($wiim);echo '</pre><hr>';
 			$d['source']='WiiM';
 			$d['artist']=$wiim->metaData->artist;
 			$d['track']=$wiim->metaData->title;
-			$d['art'] = $wiim->metaData->albumArtURI;
+			$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $wiim->metaData->albumArtURI);
 			$d['bitrate'] = $wiim->metaData->bitRate;
 			$d['bitdepth'] = $wiim->metaData->bitDepth;
 			$d['samplerate'] = $wiim->metaData->sampleRate;
 		} else {
 			$d['artist']=$nowplaying['artist'];
 			$d['track']=$nowplaying['track'];
-			$replacements = [
-				'http://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
-				'http://192.168.2.101/' => 'https://bose101.egregius.be/'
-			];
+			
 			$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $nowplaying['art']);
 		}
 	} else {
