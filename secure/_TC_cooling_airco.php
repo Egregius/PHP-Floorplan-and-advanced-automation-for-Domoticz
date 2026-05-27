@@ -106,13 +106,14 @@ if ($d['kamer_set']->s<32||$d['kamer_set']->s=='D') {
 			elseif ($set<18) $set=18;
 		}
 		if (!isset($power)) $power=$daikin->$k->power;
-		if (($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2) {
+		if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2)||($power!=0&&$daikin->$k->lastset <= $time-281)) {
 			if(daikinset($k, $power, $mode, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
 				$daikin->$k->power=$power;
 				$daikin->$k->mode=$mode;
 				$daikin->$k->fan=$fan;
 				$daikin->$k->set=$set;
 				$daikin->$k->spmode=$spmode;
+				$daikin->$k->lastset=$time;
 				lg(print_r($daikin,true));
 			}
 		}
@@ -214,13 +215,14 @@ if ($d['alex_set']->s<32||$d['alex_set']->s=='D') {
 			elseif ($set<18) $set=18;
 		}
 		if (!isset($power)) $power=$daikin->$k->power;
-		if (($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2) {
+		if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2)||($power!=0&&$daikin->$k->lastset <= $time-281)) {
 			if(daikinset($k, $power, $mode, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
 				$daikin->$k->power=$power;
 				$daikin->$k->mode=$mode;
 				$daikin->$k->fan=$fan;
 				$daikin->$k->set=$set;
 				$daikin->$k->spmode=$spmode;
+				$daikin->$k->lastset=$time;
 				lg(print_r($daikin,true));
 			}
 		}
@@ -314,13 +316,14 @@ if ($d['living_set']->s<32||$d['living_set']->s=='D') {
 			elseif ($set<18) $set=18;
 		}
 		if (!isset($power)) $power=$daikin->$k->power;
-		if (($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2) {
+		if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2)||($power!=0&&$daikin->$k->lastset <= $time-281)) {
 			if(daikinset($k, $power, $mode, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
 				$daikin->$k->power=$power;
 				$daikin->$k->mode=$mode;
 				$daikin->$k->fan=$fan;
 				$daikin->$k->set=$set;
 				$daikin->$k->spmode=$spmode;
+				$daikin->$k->lastset=$time;
 				lg(print_r($daikin,true));
 			}
 		}
