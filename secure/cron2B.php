@@ -98,7 +98,7 @@ foreach ($devices as $ip => $vol) {
 					$d['bose'.$ip]->m=1;
 
 				}
-				if (($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
+				if (isset($status['playStatus'])&&($status['@attributes']['source'] == 'STANDBY'||$status['playStatus'] == 'STOP_STATE') && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==101) {
 						$past=$time-$lastplay;
 						lg($past.' | '.$playlisttries,'cron2');
