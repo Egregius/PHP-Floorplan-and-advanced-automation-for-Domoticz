@@ -28,6 +28,7 @@ foreach (['living','kamer','alex'] as $k) {
 		$mode=2;
 		$power=1;
 		$set=22;
+		if ($d[$k.'_set']->s!='D') store($k.'_set','D',basename(__FILE__).':'.__LINE__);
 	} elseif ($d[$k.'_set']->m==1&&$d[$k.'_set']->s<33&&$d[$k.'_set']->s<33&&$d['raam'.$k]->s=='Closed') {
 		$mode=3;
 		$power=1;
@@ -68,6 +69,7 @@ foreach (['living','kamer','alex'] as $k) {
 
 		}
 	}
+
 }
 
 
