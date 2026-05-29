@@ -23,13 +23,34 @@ else $spmode=-1;
 
 
 foreach (['living','kamer','alex'] as $k) {
+	$fan='A';
 	if ($d[$k.'_set']->m==0&&$d['raam'.$k]->s=='Closed') {
 		$mode=2;
 		$power=1;
 		$set=22;
 	} elseif ($d[$k.'_set']->m==1&&$d[$k.'_set']->s<33&&$d[$k.'_set']->s<33&&$d['raam'.$k]->s=='Closed') {
-		$mode=4;
+		$mode=3;
 		$power=1;
+		if($d[$k.'_set']->s==1) {
+			$fan=3;
+			$set=18;
+		} elseif($d[$k.'_set']->s==2) {
+			$fan=4;
+			$set=18;
+		} elseif($d[$k.'_set']->s==3) {
+			$fan=5;
+			$set=18;
+		} elseif($d[$k.'_set']->s==4) {
+			$fan=6;
+			$set=18;
+			$spmode=0;
+			$maxpow=80;
+		} elseif($d[$k.'_set']->s==5) {
+			$fan=7;
+			$set=18;
+			$spmode=1;
+			$maxpow=100;
+		}
 		$set=$d[$k.'_set']->s;
 	} else {
 		$mode=2;
