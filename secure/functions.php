@@ -197,9 +197,9 @@ function huisslapen($weg=false) {
 	}
 	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
 	sw(['lampkast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','bosekeuken','boseliving','mac','ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
-	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
-		if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>1800) storemode($i, 0, basename(__FILE__).':'.__LINE__);
-	}
+//	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
+//		if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>1800) storemode($i, 0, basename(__FILE__).':'.__LINE__);
+//	}
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
 
@@ -1086,7 +1086,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     }
 
     // 3. Logging check (per device)
-    if(($prevmsg[$device] ?? null) !== $msg) {
+    if(($prevmsg[$device] ?? null) !== $msg || 1 == 1) {
         lg($msg,'daikin');
         $prevmsg[$device] = $msg;
     }
