@@ -212,7 +212,16 @@ function huisthuis($msg='') {
 	$config = ['main5' => true, 'main24' => false];
 	shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
 	if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
-	setNextubeMode(70,$wifiiot);
+	if($d['dag']->s>0) {
+		if($d['lgtv']->s!='On') {
+			$val=clamp(50+$d['dag']->s,100);
+			setNextubeMode($val,$wifiiot);
+		}
+	} else {
+		if($d['lgtv']->s!='On') {
+			setNextubeMode(51,$wifiiot);
+		}
+	}
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
