@@ -173,7 +173,7 @@ function fbadkamer($level,$power=false) {
 }
 
 function huisslapen($weg=false) {
-	global $d;
+	global $d,$wifiiot;
 	if ($weg===3) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
@@ -200,17 +200,19 @@ function huisslapen($weg=false) {
 //	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
 //		if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>1800) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 //	}
+	setNextubeMode(0,$wifiiot);
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
 
 function huisthuis($msg='') {
-	global $d,$time;
+	global $d,$time,$wifiiot;
 	store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
 	$config = ['main5' => true, 'main24' => false];
 	shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
 	if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
+	setNextubeMode(70,$wifiiot);
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
@@ -1559,3 +1561,55 @@ function convertbytes($size) {
     return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
  }
 function clamp($v,$min,$max){return max($min,min($max,$v));}
+function setNextubeMode(int $brightness, string $wifiiot): bool {
+    $url = 'http://192.168.40.93/api/settings';
+    $data = [
+        "apps" => [["name" => "app1", "app" => "Clock", "theme" => ($brightness > 5 && $brightness <= 50) ? "RedDigits" : "WireMesh", "type" => "24H_NS", "clock_tube5" => "weather"]],
+        "lcd_brightness" => $brightness,
+        "led_brightness" => 59,
+        "backlight_mode" => ($brightness > 5 && $brightness <= 50) ? "Static" : "Off",
+        "backlight_RGB" => array_fill(0, 6, [128, 0, 0]),
+        "enabled_modes" => 1,
+        "rotation_enabled" => false,
+        "rotation_interval_s" => 60,
+        "ssid" => "Egregius_IOT",
+        "password" => $wifiiot,
+        "hostname" => "nextube-remaster",
+        "time_zone" => 2,
+        "ntp_server" => "192.168.2.254",
+        "weather_source" => "openmeteo",
+        "weather_api_key" => "",
+        "City" => "Roeselare, Belgium",
+        "temperature_formate" => "Celsius",
+        "video_site" => "youtube",
+        "youtube_id" => "",
+        "youtube_key" => "",
+        "bili_uid" => "1",
+        "volume" => 20,
+        "music_file" => "",
+        "bell_file" => "/spiffs/audio/bell.wav",
+        "tone_file" => "/spiffs/audio/tremolo3.wav",
+        "timer_file" => "/spiffs/audio/timer.wav",
+        "click_file" => "/spiffs/audio/click.wav",
+        "button_sound" => true,
+        "default_countdown_time" => 1,
+        "pomodoro_work" => 25,
+        "pomodoro_break" => 5,
+        "weather_panel_ms" => 5000,
+        "weather_panel0_en" => true,
+        "weather_panel1_en" => false
+    ];
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($httpCode === 200 && $response !== false) {
+        $responseData = json_decode($response, true);
+        return (isset($responseData['status']) && $responseData['status'] === 'ok');
+    }
+    return false;
+}

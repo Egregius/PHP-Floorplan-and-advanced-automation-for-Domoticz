@@ -5,66 +5,13 @@ $start=microtime(true);
 $user='test';
 require 'functions.php';
 //require '/var/www/authentication.php';
-//$d=fetchdata();
+$d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-setNextubeMode('night');
+echo $d['dag']->s;
 
-
-function setNextubeMode(string $mode): bool {
-    $url = 'http://192.168.40.93/';
-    
-    $data = [
-        "apps" => [["name" => "app1", "app" => "Clock", "theme" => "RedDigits", "type" => "24H_NS", "clock_tube5" => "weather"]],
-        "lcd_brightness" => ($mode === 'day') ? 100 : 55,
-        "led_brightness" => 59,
-        "backlight_mode" => ($mode === 'day') ? "Off" : "Static",
-        "backlight_RGB" => array_fill(0, 6, [128, 0, 0]),
-        "enabled_modes" => 1,
-        "rotation_enabled" => false,
-        "rotation_interval_s" => 60,
-        "ssid" => "Egregius_IOT",
-        "password" => "DitishetdraadloosnetwerkvooronzeIOTspullen9",
-        "hostname" => "nextube-remaster",
-        "time_zone" => 2,
-        "ntp_server" => "192.168.2.254",
-        "weather_source" => "openmeteo",
-        "weather_api_key" => "",
-        "City" => "Roeselare, Belgium",
-        "temperature_formate" => "Celsius",
-        "video_site" => "youtube",
-        "youtube_id" => "",
-        "youtube_key" => "",
-        "bili_uid" => "1",
-        "volume" => 20,
-        "music_file" => "",
-        "bell_file" => "/spiffs/audio/bell.wav",
-        "tone_file" => "/spiffs/audio/tremolo3.wav",
-        "timer_file" => "/spiffs/audio/timer.wav",
-        "click_file" => "/spiffs/audio/click.wav",
-        "button_sound" => true,
-        "default_countdown_time" => 1,
-        "pomodoro_work" => 25,
-        "pomodoro_break" => 5,
-        "weather_panel_ms" => 5000,
-        "weather_panel0_en" => true,
-        "weather_panel1_en" => false
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    return ($httpCode === 200);
-}
 
 
 //echo WiimSetEQ([125=>+10,500=>-5,2100=>55]);
