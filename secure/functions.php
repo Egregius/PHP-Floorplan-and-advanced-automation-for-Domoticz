@@ -1573,7 +1573,7 @@ function clamp($v,$min,$max){return max($min,min($max,$v));}
 function setNextubeMode(int $brightness, string $wifiiot): bool {
     $url = 'http://192.168.40.93/api/settings';
     $data = [
-        "apps" => [["name" => "app1", "app" => "Clock", "theme" => ($brightness > 5 && $brightness <= 50) ? "RedDigits" : "WireMesh", "type" => "24H_NS", "clock_tube5" => "weather"]],
+        "apps" => [["name" => "app1", "app" => "Clock", "theme" => ($brightness > 5 && $brightness <= 50) ? "RedDigits" : "FlipClock", "type" => "24H_NS", "clock_tube5" => "weather"]],
         "lcd_brightness" => $brightness,
         "led_brightness" => 59,
         "backlight_mode" => ($brightness > 5 && $brightness <= 50) ? "Static" : "Off",
