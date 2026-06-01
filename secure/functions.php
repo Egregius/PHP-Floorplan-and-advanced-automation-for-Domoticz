@@ -1571,7 +1571,6 @@ function convertbytes($size) {
  }
 function clamp($v,$min,$max){return max($min,min($max,$v));}
 function setNextubeMode(int $brightness, string $wifiiot): bool {
-	return true;
     $url = 'http://192.168.40.93/api/settings';
     $data = [
         "apps" => [["name" => "app1", "app" => "Clock", "theme" => ($brightness > 5 && $brightness <= 50) ? "Egregius_White" : "Egregius_White", "type" => "24H_NS", "clock_tube5" => "weather"]],
