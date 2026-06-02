@@ -162,9 +162,9 @@ function fbadkamer($level,$power=false) {
 		}
 		if ($d['weg']->s==1&&$d['time']>$t-7200) {
 			if ($power===true&&$d['time']<$t+3600&&$d['boseliving']->s=='Off') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-			if ($d['time']>$t-7200&&$d['living_set']->m==0) {
+			if ($d['time']>$t-7200&&$d['living_set']->m==0&&$d['heating']->s>0&&$d['living_temp']->s<19&&$d['daikin']->s=='Off') {
 				storemode('living_set', 2, basename(__FILE__) . ':' . __LINE__);
-				if($d['heating']->s>0&&$d['living_temp']->s<19&&$d['daikin']->s=='Off') sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
+				sw('daikin', 'On', basename(__FILE__).':'.__LINE__);
 			}
 		}
 		if($sleep===true) usleep(500000);
