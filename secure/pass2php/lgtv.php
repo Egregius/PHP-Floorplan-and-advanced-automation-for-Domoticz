@@ -11,6 +11,6 @@ if ($status=='On') {
 	$pm=strtotime('20:00');
 	if($time>=$am&&$time<$pm) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 	elseif($d['dag']->s<0) sl('zithoek',15,basename(__FILE__).':'.__LINE__);
-	$val=clamp(5+$d['dag']->s,5,100);
+	$val=clamp(1+floor($d['dag']->s/2),1,75);
 	setNextubeMode($val,$wifiiot);
 }
