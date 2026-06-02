@@ -59,7 +59,7 @@ foreach (['living','kamer','alex'] as $k) {
 		$set=33;
 		if ($d[$k.'_set']->s!='Off') store($k.'_set','Off',basename(__FILE__).':'.__LINE__);
 	}
-	if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2)||($power!=0&&$daikin->$k->lastset <= $time-281)) {
+	if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->fan!=$fan)&&$spmode<2)||(($d['daikin']->s=='On'&&$power!=0&&$daikin->$k->lastset <= $time-281)||($d['daikin']->s=='On'&&$power==0&&$daikin->$k->lastset <= $time-281))) {
 		if(daikinset($k, $power, $mode, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
 			$daikin->$k->power=$power;
 			$daikin->$k->mode=$mode;
