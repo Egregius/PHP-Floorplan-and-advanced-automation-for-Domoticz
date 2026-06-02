@@ -166,7 +166,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
         if ($measurement < $alwayson || empty($alwayson)) {
             $alwayson = $measurement;
             setCache('alwayson', $alwayson);
-            lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
+//            lg('💡 New alwayson ' . $alwayson . ' W (stddev=' . round($stddev) . ')');
             publishmqtt('d/e/alwayson', $alwayson);
             $q = "INSERT INTO `alwayson` (`date`, `w`) VALUES (:date, :w)
                   ON DUPLICATE KEY UPDATE `w` = VALUES(`w`)";
