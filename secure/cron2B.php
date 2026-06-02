@@ -8,7 +8,7 @@ foreach ($devices as $ip => $vol) {
 			if ($ip==101) {
 				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if($playlisttries>0) $playlisttries=0;
-					if ($d['media']->s=='On'&&($d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off')))) {
+					if ($d['media']->s=='On'&&$d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off'))) {
 						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 						if (isset($vol)) {
 						$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
