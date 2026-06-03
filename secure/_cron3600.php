@@ -114,14 +114,4 @@ if ($d['weg']->s==0) {
 	foreach (array('living_temp','kamer_temp','alex_temp','badkamer_temp') as $i) {
 		if (past($i)>43150) alert($i,$i.' not updated since '.date("G:i:s", $d[$i]->t),7200);
 	}
-	if($d['dag']->s>0) {
-		if($d['lgtv']->s!='On') {
-			$val=clamp(1+floor($d['dag']->s/2),1,75);
-			setNextubeMode($val,0);
-		}
-	} else {
-		if($d['lgtv']->s!='On') {
-			setNextubeMode(5,50);
-		}
-	}
 }
