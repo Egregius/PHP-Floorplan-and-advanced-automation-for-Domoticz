@@ -5,12 +5,11 @@ if ($status=='On') {
 		storesm('bose101', 'Off', 0, basename(__FILE__).':'.__LINE__);
 		sw('boseliving', 'Off', basename(__FILE__).':'.__LINE__);
 	}
-	setNextubeMode(5,$wifiiot);
-} elseif ($status=='Off'&&$d['boseliving']->s=='Off'&&$d['weg']->s==0) {
+	setNextubeMode();
+} elseif ($status=='Off'&&$d['weg']->s==0) {
 	$am=strtotime('6:00');
 	$pm=strtotime('20:00');
-	if($time>=$am&&$time<$pm) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+	if($d['boseliving']->s=='Off'&&$time>=$am&&$time<$pm) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 	elseif($d['dag']->s<0) sl('zithoek',15,basename(__FILE__).':'.__LINE__);
-	$val=clamp(1+floor($d['dag']->s/2),1,75);
-	setNextubeMode($val,$wifiiot);
+	setNextubeMode();
 }

@@ -117,11 +117,11 @@ if ($d['weg']->s==0) {
 	if($d['dag']->s>0) {
 		if($d['lgtv']->s!='On') {
 			$val=clamp(1+floor($d['dag']->s/2),1,75);
-			setNextubeMode($val,$wifiiot);
+			setNextubeMode($val,0);
 		}
 	} else {
 		if($d['lgtv']->s!='On') {
-			setNextubeMode(5,$wifiiot);
+			setNextubeMode(5,50);
 		}
 	}
 }

@@ -200,7 +200,7 @@ function huisslapen($weg=false) {
 //	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
 //		if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>1800) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 //	}
-	setNextubeMode(0,$wifiiot);
+	setNextubeMode();
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
 }
 
@@ -212,16 +212,7 @@ function huisthuis($msg='') {
 	$config = ['main5' => true, 'main24' => false];
 	shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
 	if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
-	if($d['dag']->s>0) {
-		if($d['lgtv']->s!='On') {
-			$val=clamp(1+floor($d['dag']->s/2),1,75);
-			setNextubeMode($val,$wifiiot);
-		}
-	} else {
-		if($d['lgtv']->s!='On') {
-			setNextubeMode(51,$wifiiot);
-		}
-	}
+	setNextubeMode();
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);
@@ -792,7 +783,6 @@ function wiimplaylist() {
 		elseif ($dag % 2 == 0) $preset=2;
 		else $preset=1;
 	}
-	
 	return $preset;
 }
 
@@ -1570,13 +1560,24 @@ function convertbytes($size) {
     return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
  }
 function clamp($v,$min,$max){return max($min,min($max,$v));}
-function setNextubeMode(int $brightness, string $wifiiot): bool {
-	lg('Set nexttube to '.$brightness,'sl');
+function setNextubeMode(): bool {
+	global $d;
+	if($d['weg']->s>0) {
+		$lcd_brightness=0;
+		$led_brightness=0;
+	} elseif($d['lgtv']->s!='On') {
+		$lcd_brightness=clamp(1+$d['dag']->s,5,75);
+		$led_brightness=0;
+	} else {
+		$lcd_brightness=clamp(1+floor($d['dag']->s/2),1,50);
+		$led_brightness=50;
+	}
+	lg('Set nexttube lcd to '.$lcd_brightness.', led to '.$led_brightness,'sl');
     $url = 'http://192.168.40.93/api/settings';
-    $jsonString = '{"apps":[{"name":"app1","app":"Clock","theme":"Egregius_White","type":"24H_CX","clock_tube5":"weather"}],"lcd_brightness":84,"led_brightness":59,"auto_brightness":false,"night_brightness":21,"night_start_hour":20,"night_end_hour":7,"backlight_mode":"Off","led_effect_speed":5,"backlight_RGB":[[128,0,0],[128,0,0],[128,0,0],[128,0,0],[128,0,0],[128,0,0]],"spectrum_RGB":[50,80,100],"spectrum_lcd_RGB":[30,220,30],"spectrum_led_source":0,"enabled_modes":65,"rotation_enabled":false,"rotation_interval_s":60,"rotation_modes":129,"rotation_weights":[1,1,1,1,1,1,1,1,1,1,1,1],"theme_rotation_enabled":false,"theme_rotation_interval_s":300,"theme_rotation_themes":[],"ssid":"Egregius_IOT","hostname":"nextube-remaster","timezone":"UTC-2:00","ntp_servers":["192.168.2.254","","",""],"date_format":"DD/MM/YY","language":"nl","weather_source":"openmeteo","weather_api_key":"","City":"Roeselare, Belgium","temperature_format":"Celsius","video_site":"youtube","youtube_id":"","youtube_key":"","bili_uid":"1","volume":20,"music_file":"","bell_file":"/spiffs/audio/bell.wav","tone_file":"/spiffs/audio/tremolo3.wav","timer_file":"/spiffs/audio/timer.wav","click_file":"/spiffs/audio/click.wav","button_sound":true,"audio_enabled":true,"mic_enabled":false,"weather_enabled":true,"sht30_temp_offset":0,"social_enabled":false,"youtube_enabled":false,"sub_poll_interval_min":60,"instagram_enabled":false,"tiktok_enabled":false,"instagram_user":"","instagram_method":"internal","tiktok_user":"","tiktok_key":"","tiktok_relay_host":"","mastodon_enabled":false,"mastodon_user":"","mastodon_instance":"","mdns_enabled":false,"mqtt_enabled":false,"mqtt_broker":"192.168.30.22","mqtt_port":1883,"mqtt_user":"mqtt","mqtt_password":"mqtt","mqtt_ha_discovery":false,"wled_sync_enabled":false,"wled_sync_port":21324,"mic_silence_gate":40,"leading_zero":false,"lcd_gamma":[1,1,1,1,1,1],"lcd_init_profile":[0,0,0,0,0,0],"lcd_vcom":[14,14,14,14,14,14],"lcd_invert_mask":0,"lcd_col_offset":[0,0,0,0,0,0],"lcd_row_offset":[0,0,0,0,0,0],"lcd_tube_brightness":[100,100,100,100,100,100],"default_countdown_time":1,"pomodoro_work":25,"pomodoro_break":5,"album_switch_time":2000,"album_shuffle":false,"weather_panel_ms":5000,"weather_panel0_en":true,"weather_panel1_en":false,"weather_panel2_en":true,"tube6_panel_weather":false,"tube6_panel_weekdate":false,"tube6_panel_ht":false,"tube6_panel_temp":true,"tube6_panel_sunrise":false,"tube6_panel_ms":5000,"notify_update_on_display":false,"burnin_auto_enabled":false,"burnin_auto_mask":63,"burnin_auto_duration_s":3600,"burnin_auto_interval":"weekly","burnin_auto_hour":0,"burnin_auto_mode":"colour-cycle"}';
-
-	$data = json_decode($jsonString, true);
-	$data['lcd_brightness'] = $brightness;
+	$data = [];
+	$data['lcd_brightness'] = $lcd_brightness;
+	$data['led_brightness'] = $led_brightness;
+	$data['backlight_mode'] = ($led_brightness == 0) ? 'Off':'Static';
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);

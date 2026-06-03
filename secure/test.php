@@ -11,7 +11,31 @@ $d=fetchdata();
 //$db = Database::getInstance();
 
 echo $d['dag']->s;
+setNextubeModeB(50,0);
 
+function setNextubeModeB(int $lcd_brightness,int $led_brightness): bool {
+	lg('Set nexttube to '.$brightness,'sl');
+    $url = 'http://192.168.40.93/api/settings';
+	$data = [];
+	$data['lcd_brightness'] = $lcd_brightness;
+	$data['led_brightness'] = $led_brightness;
+	$data['backlight_mode'] = ($led_brightness == 0) ? 'Off':'Static';
+	$data=json_encode($data);
+	echo $data;
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($httpCode === 200 && $response !== false) {
+        $responseData = json_decode($response, true);
+        return (isset($responseData['status']) && $responseData['status'] === 'ok');
+    }
+    return false;
+}
 
 
 //echo WiimSetEQ([125=>+10,500=>-5,2100=>55]);
