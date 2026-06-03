@@ -1565,24 +1565,30 @@ function setNextubeMode(): bool {
 	if($d['weg']->s>0) {
 		$lcd_brightness=0;
 		$led_brightness=0;
+		$data = json_decode('[{"apps": [{"name": "app1", "app": "Clock", "theme": "Segments-Red", "type": "24H_CX", "clock_tube5": "weather"}]}]', true);
 	} elseif($d['lgtv']->s!='On') {
 		$lcd_brightness=clamp(1+$d['dag']->s,5,75);
 		$led_brightness=0;
+		$data = json_decode('[{"apps": [{"name": "app1", "app": "Clock", "theme": "Segments", "type": "24H_CX", "clock_tube5": "weather"}]}]', true);
 	} else {
 		$lcd_brightness=clamp(1+floor($d['dag']->s/2),1,50);
 		$led_brightness=50;
+		$data = json_decode('[{"apps": [{"name": "app1", "app": "Clock", "theme": "Segments-Red", "type": "24H_NS", "clock_tube5": "weather"}]}]', true);
 	}
 	lg('Set nexttube lcd to '.$lcd_brightness.', led to '.$led_brightness,'sl');
-	$data = [];
+	
 	$data['lcd_brightness'] = $lcd_brightness;
 	$data['led_brightness'] = $led_brightness;
 	$data['backlight_mode'] = ($led_brightness == 0) ? 'Off':'Static';
+	$data=json_encode($data);
+	echo $data;
     $ch = curl_init('http://192.168.40.93/api/settings');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     $response = curl_exec($ch);
+    echo $response;
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     if ($httpCode === 200 && $response !== false) {
