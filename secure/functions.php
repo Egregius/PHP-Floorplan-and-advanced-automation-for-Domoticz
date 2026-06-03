@@ -1563,7 +1563,6 @@ function clamp($v,$min,$max){return max($min,min($max,$v));}
 function setNextubeMode(): bool {
     global $d;
     static $last_theme = null;
-
     if ($d['weg']->s > 0) {
         $lcd_brightness = 0;
         $led_brightness = 0;
@@ -1580,13 +1579,7 @@ function setNextubeMode(): bool {
         $theme = 'Segments-Red';
         $type = '24H_NS';
     }
-
-    lg('Set nexttube lcd to ' . $lcd_brightness . ', led to ' . $led_brightness, 'sl');
-
-    $data = [
-        'lcd_brightness' => $lcd_brightness
-    ];
-
+    $data = ['lcd_brightness' => $lcd_brightness];
     if ($theme !== $last_theme) {
         $data['led_brightness'] = $led_brightness;
         $data['backlight_mode'] = ($led_brightness == 0) ? 'Off' : 'Static';
@@ -1601,21 +1594,16 @@ function setNextubeMode(): bool {
         ];
         $last_theme = $theme;
     }
-
-    echo '<hr><pre>'; print_r($data); echo '</pre><hr>';
     $data = json_encode($data);
-    echo $data;
-
+    lg('Nextube ' . $data, 'sl');
     $ch = curl_init('http://192.168.40.93/api/settings');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     $response = curl_exec($ch);
-    echo $response;
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-
     if ($httpCode === 200 && $response !== false) {
         $responseData = json_decode($response, true);
         return (isset($responseData['status']) && $responseData['status'] === 'ok');
