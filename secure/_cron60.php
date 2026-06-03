@@ -1,5 +1,6 @@
 <?php
 $user='cron60';
+setNextubeMode();
 //lg('🕒 '.$user);
 $stamp=sprintf("%s", date("Y-m-d H:i"));
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']->s;
