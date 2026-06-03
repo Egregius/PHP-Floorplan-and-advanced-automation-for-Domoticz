@@ -1579,7 +1579,7 @@ function setNextubeMode(): bool {
         $type = '24H_CX';
     } else {
     	$msg=__LINE__;
-        $lcd_brightness = clamp(1 + floor($d['dag']->s / 2), 1, 50);
+        $lcd_brightness = clamp(10 + floor($d['dag']->s / 1), 10, 50);
         $led_brightness = 50;
         $theme = 'Segments-Red';
         $type = '24H_NS';
