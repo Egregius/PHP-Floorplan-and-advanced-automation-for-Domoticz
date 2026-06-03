@@ -1573,12 +1573,11 @@ function setNextubeMode(): bool {
 		$led_brightness=50;
 	}
 	lg('Set nexttube lcd to '.$lcd_brightness.', led to '.$led_brightness,'sl');
-    $url = 'http://192.168.40.93/api/settings';
 	$data = [];
 	$data['lcd_brightness'] = $lcd_brightness;
 	$data['led_brightness'] = $led_brightness;
 	$data['backlight_mode'] = ($led_brightness == 0) ? 'Off':'Static';
-    $ch = curl_init($url);
+    $ch = curl_init('http://192.168.40.93/api/settings');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
