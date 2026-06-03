@@ -260,21 +260,21 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
 if ($d['auto']->s=='On') {
-	if ($d['heating']->s==-2&&$d['living_temp']->s>=19&&$d['dag']->m>117&&$rain<5) { // Airco Cooling
-		if ($wind>=40) 	 $luifel=0;
-		elseif ($wind>=30) $luifel=35;
-		elseif ($wind>=20) $luifel=45;
-		else $luifel=55;
+	if ($d['heating']->s==-2&&$d['living_temp']->s>=20&&$d['dag']->m>117&&$rain<5) { // Airco Cooling
+		if ($wind>=30) 	 $luifel=0;
+		elseif ($wind>=24) $luifel=30;
+		elseif ($wind>=18) $luifel=40;
+		else $luifel=50;
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
 			if ($d['luifel']->s<$luifel&&$d['z']>1500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']->s==-1	&&$d['living_temp']->s>=20 &&$d['dag']->m>117&&$rain<5) { // Passive Cooling
-		if ($wind>=40) 	 $luifel=0;
-		elseif ($wind>=30) $luifel=35;
-		elseif ($wind>=20) $luifel=45;
-		else $luifel=55;
+	} elseif ($d['heating']->s==-1	&&$d['living_temp']->s>=21 &&$d['dag']->m>117&&$rain<5) { // Passive Cooling
+		if ($wind>=30) 	 $luifel=0;
+		elseif ($wind>=24) $luifel=30;
+		elseif ($wind>=18) $luifel=40;
+		else $luifel=50;
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
 			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['zon'].' past='.past('luifel'));
