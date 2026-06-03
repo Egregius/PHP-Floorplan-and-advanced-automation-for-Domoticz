@@ -1563,17 +1563,22 @@ function clamp($v,$min,$max){return max($min,min($max,$v));}
 function setNextubeMode(): bool {
     global $d;
     static $last_theme = null;
+    static $last_brightness = null;
+    $send=false;
     if ($d['weg']->s > 0) {
+    	$msg=__LINE__;
         $lcd_brightness = 0;
         $led_brightness = 0;
         $theme = 'Segments';
         $type = '24H_CX';
-    } elseif ($d['lgtv']->s !== 'On') {
+    } elseif ($d['media']->s != 'On') {
+    	$msg=__LINE__;
         $lcd_brightness = clamp(1 + $d['dag']->s, 5, 75);
         $led_brightness = 0;
         $theme = 'Segments';
         $type = '24H_CX';
     } else {
+    	$msg=__LINE__;
         $lcd_brightness = clamp(1 + floor($d['dag']->s / 2), 1, 50);
         $led_brightness = 50;
         $theme = 'Segments-Red';
@@ -1593,20 +1598,24 @@ function setNextubeMode(): bool {
             ]
         ];
         $last_theme = $theme;
+        $send=true;
     }
-    $data = json_encode($data);
-    lg('Nextube ' . $data, 'sl');
-    $ch = curl_init('http://192.168.40.93/api/settings');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if ($httpCode === 200 && $response !== false) {
-        $responseData = json_decode($response, true);
-        return (isset($responseData['status']) && $responseData['status'] === 'ok');
-    }
+    if($lcd_brightness !== $last_brightness || $send==true) {
+		$data = json_encode($data);
+		lg('Nextube ' . $msg.' '.$data, 'sl');
+		$ch = curl_init('http://192.168.40.93/api/settings');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+		$response = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		if ($httpCode === 200 && $response !== false) {
+			$last_brightness = $lcd_brightness;
+			$responseData = json_decode($response, true);
+			return (isset($responseData['status']) && $responseData['status'] === 'ok');
+		}
+	}
     return false;
 }
