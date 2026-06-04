@@ -1621,7 +1621,6 @@ function setNextubeMode(): bool {
 }
 function setNextubeWeather(array $data): bool {
 	$data = json_encode($data);
-	echo $data;
 	$ch = curl_init('http://192.168.40.93/api/weather');
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_POST, true);
