@@ -29,7 +29,7 @@ foreach ($devices as $ip => $vol) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
 								if ($d['boseliving']->m == 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 									$prevcleantitle=$cleantitle;
-									if (isset($history[$cleantitle])&&1==1) {
+									if (isset($history[$cleantitle])&&1==2) {
 										lg($cleantitle.' skipped op cleantitle','cron2');
 										if($wiim===true) Wiim('setPlayerCmd:next');
 										else ma_next_track();
