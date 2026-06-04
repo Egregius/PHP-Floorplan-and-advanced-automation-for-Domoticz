@@ -1619,3 +1619,20 @@ function setNextubeMode(): bool {
 	}
     return false;
 }
+function setNextubeWeather(array $data): bool {
+	$data = json_encode($data);
+	echo $data;
+	$ch = curl_init('http://192.168.40.93/api/weather');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+	$response = curl_exec($ch);
+	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	if ($httpCode === 200 && $response !== false) {
+		$responseData = json_decode($response, true);
+		return (isset($responseData['status']) && $responseData['status'] === 'ok');
+	}
+	return false;
+}

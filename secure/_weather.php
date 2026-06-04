@@ -216,9 +216,16 @@ $weather['maxt']=$maxtemp;
 $ref = (int)$d['buiten_temp']->m;
 $hum=clamp($hum, $ref - 1, $ref + 1);
 
-if ($d['buiten_temp']->s!=$temp&&$d['buiten_temp']->m!=$hum) storesm('buiten_temp', $temp, $hum);
-elseif ($d['buiten_temp']->s!=$temp) store('buiten_temp', $temp);
-elseif ($d['buiten_temp']->m!=$hum) storemode('buiten_temp', $hum);
+if ($d['buiten_temp']->s!=$temp&&$d['buiten_temp']->m!=$hum) {
+	storesm('buiten_temp', $temp, $hum);
+	setNextubeWeather(['temp_c'=>$temp,'humidity'=>$hum]);
+} elseif ($d['buiten_temp']->s!=$temp) {
+	store('buiten_temp', $temp);
+	setNextubeWeather(['temp_c'=>$temp]);
+} elseif ($d['buiten_temp']->m!=$hum) {
+	storemode('buiten_temp', $hum);
+	setNextubeWeather(['humidity'=>$hum]);
+}
 
 
 if (count($winds)>=4) {

@@ -16,7 +16,7 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-echo setNextubeMode();
+setNextubeWeather(['temp_c'=>10.5,'humidity'=>50]);
 
 
 

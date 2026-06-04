@@ -4,9 +4,9 @@ if ($d['brander']->s!='Off') sw('brander', 'Off', $user.':'.__LINE__);
 $bigdif=-100;
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
 $daikin ??= new stdClass();
-foreach (array('living','kamer','alex') as $kamer) {
+foreach (['living','kamer','alex'] as $k) {
 	$daikin->$kamer ??= (object)$daikinDefaults;
-	if ($d[$kamer.'_set']->s!='D') {
+	if ($d[$k.'_set']->s!='D'&&$d[$k.'_set']->s!='Off') {
 		${'dif'.$kamer}=number_format($d[$kamer.'_temp']->s-$d[$kamer.'_set']->s,1);
 		if (${'dif'.$kamer}>$bigdif) $bigdif=${'dif'.$kamer};
 	}
@@ -49,6 +49,8 @@ if ($d['kamer_set']->s=='D') {
 } elseif(past('raamkamer')>300&&past('deurkamer')>300) {
 	$power=0;
 	$mode=3;
+	$set=22;
+	$fan='A';
 	if ($daikin->$k->power!=$power||$daikin->$k->mode!=$mode) {
 		if(daikinset($k, $power, $mode, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
 			$daikin->$k->power=$power;
