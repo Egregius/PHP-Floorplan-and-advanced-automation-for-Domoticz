@@ -1571,16 +1571,16 @@ function setNextubeMode(): bool {
         $led_brightness = 0;
         $theme = 'Segments';
         $type = '24H_CX';
-    } elseif ($d['media']->s != 'On') {
+    } elseif ($d['media']->s == 'On') {
     	$msg=__LINE__;
-        $lcd_brightness = clamp(1 + $d['dag']->s, 5, 75);
-        $led_brightness = 0;
+        $lcd_brightness = clamp(1 + floor($d['dag']->s/2), 2, 50);
+        $led_brightness = 60;
         $theme = 'Segments';
         $type = '24H_CX';
     } else {
     	$msg=__LINE__;
-        $lcd_brightness = clamp(3 + floor($d['dag']->s / 2), 5, 50);
-        $led_brightness = 50;
+        $lcd_brightness = clamp(5 + $d['dag']->s, 5, 80);
+        $led_brightness = 0;
         $theme = 'Segments';
         $type = '24H_NS';
     }
