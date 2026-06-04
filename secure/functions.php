@@ -1576,13 +1576,13 @@ function setNextubeMode(): bool {
         $lcd_brightness = clamp(1 + floor($d['dag']->s/2), 2, 50);
         $led_brightness = 60;
         $theme = 'Segments';
-        $type = '24H_CX';
+        $type = '24H_NS';
     } else {
     	$msg=__LINE__;
         $lcd_brightness = clamp(5 + $d['dag']->s, 5, 80);
         $led_brightness = 0;
         $theme = 'Segments';
-        $type = '24H_NS';
+        $type = '24H_CX';
     }
     $data = ['lcd_brightness' => $lcd_brightness];
     if ($theme !== $last_theme) {
@@ -1621,6 +1621,7 @@ function setNextubeMode(): bool {
 }
 function setNextubeWeather(array $data): bool {
 	$data = json_encode($data);
+	lg('Nextube weather '.$data, 'sl');
 	$ch = curl_init('http://192.168.40.93/api/weather');
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_POST, true);
