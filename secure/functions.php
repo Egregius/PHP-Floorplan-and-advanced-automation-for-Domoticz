@@ -297,7 +297,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
 	$d[$name]->t=$d['time'];
 	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if ($name==='rbureel' && $level===100) {
-		usleep(250000);
+		usleep(280000);
 		hass('cover', 'set_cover_position', $entity, ['position' => 0]);
     }
 }
@@ -1120,7 +1120,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
             'tcp://192.168.2.26:8123',
             $errno,
             $errstr,
-            0.4,
+            0.6,
             STREAM_CLIENT_CONNECT
         );
         if (!$socket) {
