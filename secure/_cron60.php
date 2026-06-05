@@ -52,7 +52,7 @@ if ($d['auto']->s=='On') {
 /*		if ($d['lgtv']->s=='On') {
 			if ($d['dag']->s<0&&$d['kristal']->s=='Off'&&past('kristal')>7200&&$d['buiten_temp']->s<10) sw('kristal', 'On', basename(__FILE__).':'.__LINE__);
 		}*/
-		if ($d['living_set']->s!='D'&&$d['living_temp']->s>22&&$d['living_temp']->s>$d['living_set']->s+1&&$d['brander']->s=='On') alert('livingtemp', 'Te warm in living, '.$d['living_temp']->s.' °C. Controleer verwarming', 3600, false);
+		if ($d['living_set']->s!='D'&&$d['living_set']->s!='Off'&&$d['living_temp']->s>22&&$d['living_temp']->s>$d['living_set']->s+1&&$d['brander']->s=='On') alert('livingtemp', 'Te warm in living, '.$d['living_temp']->s.' °C. Controleer verwarming', 3600, false);
 		if ($time>=strtotime('16:00')) {
 			if ($d['raamalex']->s=='Open'&&$d['alex_temp']->s<8) alert('raamalex', 'Raam Alex dicht doen, '.$d['alex_temp']->s.' °C.', 1799,	false);
 			if ($d['raamkamer']->s=='Open'&&$d['alex_temp']->s<8) alert('raamkamer', 'Raam kamer dicht doen, '.$d['kamer_temp']->s.' °C.', 1799,	false);

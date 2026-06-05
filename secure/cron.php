@@ -3,7 +3,7 @@
 declare(strict_types=1);
 gc_enable();
 require '/var/www/html/secure/functions.php';
-lg('🟢 Starting CRON loop...');
+lg('🟢 Starting CRON loop...','cron');
 $t = $weekend = $dow = null;
 $time=time();
 $db = Database::getInstance();
@@ -56,8 +56,8 @@ while (true) {
 		}
 		if (checkInterval($last300, 300, $time)) {include '_cron300.php';updateWekker($t, $weekend, $dow, $d);}
 		if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
-		if (checkInterval($last900, 900, $time)) include '_cron900.php';
 		if (checkInterval($last90, 90, $time)) include '_weather.php';
+		if (checkInterval($last900, 900, $time)) include '_cron900.php';
 	}
 	
 	$next = floor($time / 10) * 10 + 10;
