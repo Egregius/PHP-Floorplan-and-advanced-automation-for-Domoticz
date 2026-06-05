@@ -1,6 +1,6 @@
 <?php
 $user='WEATHER';
-//lg ('Weather');
+lg ('Fetching Weather','weather');
 $maxtemp=-100;
 $mintemp=100;
 $temps=[];
@@ -223,19 +223,7 @@ if ($d['buiten_temp']->s!=$temp&&$d['buiten_temp']->m!=$hum) {
 } elseif ($d['buiten_temp']->m!=$hum) {
 	storemode('buiten_temp', $hum);
 }
-$icon=(int)substr($weather['i'],0,2);
-$icons=[
-	1 => 'sun',
-	2 => 'fewClouds',
-	3 => 'fewClouds',
-	4 => 'overcastClouds',
-	9 => 'rain',
-	10 => 'rain',
-	11 => 'thunderstorm',
-	13 => 'snow',
-	50 => 'fog',
-];
-setNextubeWeather($temp,$hum,$icons[$icon]);
+
 
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 0);
@@ -270,8 +258,23 @@ $weather['uvm']=round($weather['uvm'],1);
 //if($rain!=$rains['prev']) lgtype('Rains',json_encode($rains).' '.$rain);
 //if($wind!=$winds['prev']) lgtype('Winds',json_encode($winds).' '.$wind);
 if (!isset($weathercache)||$weathercache!==$weather) {
-	publishmqtt('d/w',json_encode($weather));
+	$data=json_encode($weather);
+	lg($data,'weather');
+	publishmqtt('d/w',$data);
 	$weathercache=$weather;
+	$icon=(int)substr($weather['i'],0,2);
+	$icons=[
+		1 => 'sun',
+		2 => 'fewClouds',
+		3 => 'fewClouds',
+		4 => 'overcastClouds',
+		9 => 'rain',
+		10 => 'rain',
+		11 => 'thunderstorm',
+		13 => 'snow',
+		50 => 'fog',
+	];
+	setNextubeWeather($temp,$hum,$icons[$icon]);
 }
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);

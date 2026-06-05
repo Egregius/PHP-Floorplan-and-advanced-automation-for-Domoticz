@@ -1602,7 +1602,7 @@ function setNextubeMode(): bool {
     }
     if($lcd_brightness !== $last_brightness || $send==true) {
 		$data = json_encode($data);
-		lg('Nextube ' . $msg.' '.$data, 'sl');
+		lg('Nextube ' . $msg.' '.$data, 'nextube');
 		$ch = curl_init('http://192.168.40.93/api/settings');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -1648,7 +1648,7 @@ function setNextubeWeather($temp,$hum,$icon): bool {
 	}
 	$data = json_encode($data);
 	if($send==true) {
-		lg('Nextube weather '.$data, 'sl');
+		lg('Nextube weather '.$data, 'nextube');
 		$ch = curl_init('http://192.168.40.93/api/weather');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -1661,6 +1661,6 @@ function setNextubeWeather($temp,$hum,$icon): bool {
 			$responseData = json_decode($response, true);
 			return (isset($responseData['status']) && $responseData['status'] === 'ok');
 		}
-	} else lg('Nextube weather '.$data.' [ignored]', 'sl');
+	} else lg('Nextube weather '.$data.' [ignored]', 'nextube');
 	return false;
 }

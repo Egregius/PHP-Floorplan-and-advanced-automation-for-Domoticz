@@ -15,11 +15,9 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-include '_weather.php';
-// setNextubeWeather(22,88,3);
+//echo Wiim("setPlayerCmd:playindex:15");
+echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
 
-
-//echo WiimSetEQ([125=>+10,500=>-5,2100=>55]);
 
 function WiimSetEQ(array $bands): string {
     $freqMap = [31, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
