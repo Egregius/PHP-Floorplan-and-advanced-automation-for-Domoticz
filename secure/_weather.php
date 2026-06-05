@@ -223,7 +223,19 @@ if ($d['buiten_temp']->s!=$temp&&$d['buiten_temp']->m!=$hum) {
 } elseif ($d['buiten_temp']->m!=$hum) {
 	storemode('buiten_temp', $hum);
 }
-setNextubeWeather($temp,$hum,(int)substr($weather['i'],0,2));
+$icon=(int)substr($weather['i'],0,2);
+$icons=[
+	1 => 'sun',
+	2 => 'fewClouds',
+	3 => 'fewClouds',
+	4 => 'overcastClouds',
+	9 => 'rain',
+	10 => 'rain',
+	11 => 'thunderstorm',
+	13 => 'snow',
+	50 => 'fog',
+];
+setNextubeWeather($temp,$hum,$icons[$icon]);
 
 if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 0);

@@ -15,8 +15,8 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 //$db = Database::getInstance();
-
-setNextubeWeather(22,88,3);
+include '_weather.php';
+// setNextubeWeather(22,88,3);
 
 
 //echo WiimSetEQ([125=>+10,500=>-5,2100=>55]);

@@ -1642,7 +1642,7 @@ function setNextubeWeather($temp,$hum,$icon): bool {
 		$send=true;
 	}
 	if($icon!=$last_icon) {
-		$data['weather_code']=$icon;
+		$data['icon']=$icon;
 		$last_icon=$icon;
 		$send=true;
 	}
