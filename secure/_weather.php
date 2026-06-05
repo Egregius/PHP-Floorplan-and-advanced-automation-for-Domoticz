@@ -274,7 +274,7 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 		13 => 'snow',
 		50 => 'fog',
 	];
-	setNextubeWeather($temp,$hum,$icons[$icon]);
+	setNextubeWeather(round($temp,1),$hum,$icons[$icon]);
 }
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
