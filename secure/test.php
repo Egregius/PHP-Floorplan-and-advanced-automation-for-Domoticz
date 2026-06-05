@@ -16,8 +16,7 @@ $d=fetchdata();
 //$d['time']=$startloop;
 //$db = Database::getInstance();
 
-setNextubeWeather(['temp_c'=>10.5,'humidity'=>50]);
-
+setNextubeWeather(22,88,3);
 
 
 //echo WiimSetEQ([125=>+10,500=>-5,2100=>55]);

@@ -1579,7 +1579,7 @@ function setNextubeMode(): bool {
         $type = '24H_CX';
     } else {
     	$msg=__LINE__;
-        $lcd_brightness = clamp(5 + $d['dag']->s, 5, 80);
+        $lcd_brightness = clamp(15 + $d['dag']->s, 15, 90);
         $led_brightness = 0;
         $theme = 'Segments';
         $type = '24H_CX';
@@ -1619,20 +1619,48 @@ function setNextubeMode(): bool {
 	}
     return false;
 }
-function setNextubeWeather(array $data): bool {
-	$data = json_encode($data);
-	lg('Nextube weather '.$data, 'sl');
-	$ch = curl_init('http://192.168.40.93/api/weather');
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-	$response = curl_exec($ch);
-	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	curl_close($ch);
-	if ($httpCode === 200 && $response !== false) {
-		$responseData = json_decode($response, true);
-		return (isset($responseData['status']) && $responseData['status'] === 'ok');
+function setNextubeWeather($temp,$hum,$icon): bool {
+	global $lat,$lon;
+	static $last_temp=null;
+	static $last_hum=null;
+	static $last_icon=null;
+	$temp=round($temp);
+	$send=false;
+	$data=[];
+	if($last_temp==null) {
+		$data['lat']=$lat;
+		$data['lon']=$lon;
 	}
+	if($temp!=$last_temp) {
+		$data['temp_c']=$temp;
+		$last_temp=$temp;
+		$send=true;
+	}
+	if($hum!=$last_hum) {
+		$data['humidity']=$hum;
+		$last_hum=$hum;
+		$send=true;
+	}
+	if($icon!=$last_icon) {
+		$data['weather_code']=$icon;
+		$last_icon=$icon;
+		$send=true;
+	}
+	$data = json_encode($data);
+	if($send==true) {
+		lg('Nextube weather '.$data, 'sl');
+		$ch = curl_init('http://192.168.40.93/api/weather');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+		$response = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		if ($httpCode === 200 && $response !== false) {
+			$responseData = json_decode($response, true);
+			return (isset($responseData['status']) && $responseData['status'] === 'ok');
+		}
+	} else lg('Nextube weather '.$data.' [ignored]', 'sl');
 	return false;
 }
