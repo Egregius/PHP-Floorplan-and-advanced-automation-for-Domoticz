@@ -30,10 +30,11 @@ foreach ($devices as $ip => $vol) {
 								if ($d['boseliving']->m == 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 									$prevcleantitle=$cleantitle;
 									if (isset($history[$cleantitle])&&1==1) {
-										lg($cleantitle.' skipped op cleantitle','cron2');
-										if($wiim===true) Wiim('setPlayerCmd:next');
-										else ma_next_track();
-										$skipped=true;
+										if(!in_array($cleantitle, $toplist)) {
+											lg($cleantitle.' skipped op cleantitle','cron2');
+											if($wiim===true) Wiim('setPlayerCmd:next');
+											else ma_next_track();
+										}
 									} else {
 										lg('Adding '.$cleantitle.' to history','cron2');
 										$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
@@ -42,7 +43,6 @@ foreach ($devices as $ip => $vol) {
 											$oldestKey = key($history);
 											unset($history[$oldestKey]);
 										}
-										$skipped=false;
 									}
 									if (!empty($history) && count($history) % 20 === 0) {
 										$elapsed = round((hrtime(true) - $start) / 1e+6, 3);

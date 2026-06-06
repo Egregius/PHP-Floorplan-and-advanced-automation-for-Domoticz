@@ -59,7 +59,12 @@ $connectionSettings=(new ConnectionSettings)
 	->setKeepAliveInterval(60);
 $mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
 $mqtt->connect($connectionSettings,true);
-
+$toplist=[];
+$db = Database::getInstance();
+$stmt=$db->query("SELECT clean_title FROM track_mapping WHERE playlist_id='4O0G5e4lsBRG5CV485iolD';");
+while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
+	if (isset($row[0])) $toplist[]=$row[0];
+}
 while (1) {
 	$time = time();
 	$d['time'] = $time;
