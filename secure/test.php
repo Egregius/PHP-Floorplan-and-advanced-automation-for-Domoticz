@@ -19,13 +19,17 @@ $d=fetchdata();
 
 
 Wiim('setPlayerCmd:stop');
-sleep(2);
+sleep(1);
+Wiim('setPlayerCmd:play:'.urlencode('https://icecast.vrtcdn.be/radio1-mid.mp3'));
+sleep(4);
 Wiim('setPlayerCmd:switchmode:line-in');
-sleep(2);
+sleep(1);
+Wiim('setPlayerCmd:switchmode:wifi');
+sleep(1);
 $preset=wiimplaylist();
-echo Wiim("MCUKeyShortClick:$preset");
-//sleep(1);
-//echo Wiim("setPlayerCmd:playindex:0");
+Wiim("MCUKeyShortClick:$preset");
+sleep(1);
+Wiim("setPlayerCmd:playindex:1");
 
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
 
