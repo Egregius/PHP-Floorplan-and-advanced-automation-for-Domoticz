@@ -18,13 +18,14 @@ $d=fetchdata();
 //echo Wiim('getPlayerStatus');
 
 
-//Wiim('setPlayerCmd:stop');
-//sleep(5);
-
-//$preset=wiimplaylist();
-//echo Wiim("MCUKeyShortClick:$preset");
+Wiim('setPlayerCmd:stop');
+sleep(2);
+Wiim('setPlayerCmd:switchmode:line-in');
+sleep(2);
+$preset=wiimplaylist();
+echo Wiim("MCUKeyShortClick:$preset");
 //sleep(1);
-echo Wiim("setPlayerCmd:playindex:0");
+//echo Wiim("setPlayerCmd:playindex:0");
 
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
 
