@@ -155,6 +155,8 @@ if ($d['bose101']->s=='On'
 	&&$d['bose105']->s=='Off'
 	&&$d['bose106']->s=='Off'
 	&&$d['bose107']->s=='Off'
+	&&$d['bose108']->s=='Off'
+	&&$d['bose109']->s=='Off'
 	&&($d['weg']->s>0||($d['eettafel']->s==0&&($d['lgtv']->s=='On'||$d['nvidia']->s=='On')))
 	&&past('bose101')>300
 	&&past('boseliving')>1800
@@ -171,6 +173,8 @@ if ($d['bose101']->s=='On'
 				if ($d['bose105']->s!='Off') store('bose105', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['bose106']->s!='Off') store('bose106', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['bose107']->s!='Off') store('bose107', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+				if ($d['bose108']->s!='Off') store('bose108', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+				if ($d['bose109']->s!='Off') store('bose109', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 			}
 		}
