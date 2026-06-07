@@ -1,6 +1,6 @@
 <?php
 $user='WEATHER';
-lg ('Fetching Weather','weather');
+//lg ('Fetching Weather','weather');
 $maxtemp=-100;
 $mintemp=100;
 $temps=[];
