@@ -68,10 +68,10 @@ function check_en_slapen($locatie, $status, &$d) {
 		huisslapen(true);
 		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
 	} elseif ($locatie === 'slaapkamer') {
-		if ($d['kamer']->s > 5) {
-			sl('kamer', 5, basename(__FILE__).':'.__LINE__);
-		} elseif (($d['dag']->s<-4||$d['rkamerr']->s>90)&&past('kamer')>7200&&$d['time'] > strtotime('21:00')&&$d['time'] < strtotime('23:00')) {
-			sl('kamer', 1, basename(__FILE__).':'.__LINE__);
+		if ($d['kamer1']->s > 5) {
+			sl('kamer1', 5, basename(__FILE__).':'.__LINE__);
+		} elseif (($d['dag']->s<-4||$d['rkamerr']->s>90)&&past('kamer1')>7200&&$d['time'] > strtotime('21:00')&&$d['time'] < strtotime('23:00')) {
+			sl('kamer1', 1, basename(__FILE__).':'.__LINE__);
 		}
 		huisslapen();
 	}
