@@ -1621,11 +1621,12 @@ function setNextubeMode(): bool {
 	}
     return false;
 }
-function setNextubeWeather($temp,$hum,$icon): bool {
+function setNextubeWeather($temp,$hum,$icon,$rain): bool {
 	$data=[];
 	$data['temp_c']=$temp;
 	$data['humidity']=$hum;
 	$data['icon']=$icon;
+	$data['condition']=$rain;
 	$data = json_encode($data);
 	lg('Nextube weather '.$data, 'nextube');
 	$ch = curl_init('http://192.168.40.93/api/weather');
