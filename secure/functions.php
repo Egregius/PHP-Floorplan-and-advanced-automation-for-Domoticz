@@ -222,10 +222,10 @@ function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 		$volume=@json_decode(@json_encode(@simplexml_load_string(@file_get_contents('http://192.168.2.101:8090/volume'))), true);
 		if($volume['actualvolume']>$vol) $vol=$volume['actualvolume'];
 		$xml="<play_info><app_key>UJvfKvnMPgzK6oc7tTE1QpAVcOqp4BAY</app_key><url>http://192.168.2.2/sounds/$raw.mp3</url><service>$sound</service><reason>$sound</reason><message>$sound</message><volume>$vol</volume></play_info>";
-		echo $xml;
-		bosepost('speaker', $xml);
+		echo $xml.'<br>';
+		echo bosepost('speaker', $xml);
 		bosevolume($volume['actualvolume'], 101, basename(__FILE__).':'.__LINE__);
-	}
+	} else echo 'File '.$sound.' not found';
 }
 function alert($name,$msg,$ttl,$silent=true,$to=1) {
 	global $d;

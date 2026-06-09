@@ -18,6 +18,10 @@ $d=fetchdata();
 //echo Wiim('getPlayerStatus');
 
 
+//echo boseplayinfo("doorbell", 60, basename(__FILE__).':'.__LINE__, 101);
+echo Wiim('playPromptUrl');
+
+/*
 Wiim('setPlayerCmd:stop');
 sleep(1);
 Wiim('setPlayerCmd:play:'.urlencode('https://icecast.vrtcdn.be/radio1-mid.mp3'));
@@ -30,7 +34,7 @@ $preset=wiimplaylist();
 Wiim("MCUKeyShortClick:$preset");
 sleep(1);
 Wiim("setPlayerCmd:playindex:1");
-
+*/
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
 
 
