@@ -56,6 +56,8 @@ function check_en_slapen($locatie, $status, &$d) {
 		104 => 'Garage',
 		105 => '10-Wit',
 		106 => 'Buiten20',
+		108=>'ST-30-2',
+		109=>'ST-20-2',
 	];
 	foreach ($boses as $k => $v) {
 		if ($d['bose'.$k]->m === 1) {
@@ -1649,7 +1651,7 @@ function cleanTitle(string $artists, string $title): string
 
 	if ($replace === null) {
 		$replace = [
-			'albummix','clubedit','clubmix','edit','extended',
+			'albummix','clubedit','clubmix','edit','extended','album',
 			'feat','ft','featuring',
 			'festivalmix','mixedit','originalmix','original',
 			'radio','radioedit','radiomix','radioversion',
@@ -1669,7 +1671,7 @@ function cleanTitle(string $artists, string $title): string
 	sort($arr);
 
 	$str = implode('', $arr) . $title;
-
+	$str = preg_replace('/[^a-z0-9]/', '', $str);
 	$str = preg_replace('/\b(' . implode('|', array_map('preg_quote', $replace)) . ')\b/', '', $str);
 
 	$str = preg_replace('/[^a-z0-9]/', '', $str);

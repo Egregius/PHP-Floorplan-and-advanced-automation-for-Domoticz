@@ -21,10 +21,11 @@ foreach ($devices as $ip => $vol) {
 						if(isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX') {
 							if($status['@attributes']['source']=='AUX'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
+								
 								$status['artist']=$wiim->metaData->artist;
 								$status['track']=$wiim->metaData->title;
-								$wiim=true;
-							} else $wiim=false;
+								$wiimplaying=true;
+							} else $wiimplaying=false;
 							if(isset($status['artist'],$status['track'])) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
 								if ($d['boseliving']->m == 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
@@ -32,7 +33,7 @@ foreach ($devices as $ip => $vol) {
 									if (isset($history[$cleantitle])&&1==1) {
 										if(!in_array($cleantitle, $toplist)) {
 											lg($cleantitle.' skipped op cleantitle','cron2');
-											if($wiim===true) Wiim('setPlayerCmd:next');
+											if($wiimplaying===true) Wiim('setPlayerCmd:next');
 											else ma_next_track();
 										}
 									} else {
@@ -77,6 +78,19 @@ foreach ($devices as $ip => $vol) {
 										unset($vars, $name, $value, $size, $oldSize, $percent);
 										lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','cron2');
 									}
+								} elseif (isset($wiim)) {
+//									lg(print_r($wiim,true),'cron2');
+									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
+										$wiimunknown++;
+										lg($wiimunknown,'cron2');
+										if($wiimunknown>10) {
+											$wiimunknown=0;
+											Wiim("MCUKeyShortClick:$preset");
+											sleep(1);
+											Wiim("setPlayerCmd:playindex:1");
+										}
+									}
+									unset($wiim);
 								}
 							}
 						}
