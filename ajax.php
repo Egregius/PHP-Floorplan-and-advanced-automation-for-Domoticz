@@ -39,7 +39,8 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 		$replacements = [
 			'http://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
 			'https://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
-			'http://192.168.2.101/' => 'https://bose101.egregius.be/'
+			'http://192.168.2.101/' => 'https://bose101.egregius.be/',
+			'https://192.168.2.9/' => 'https://wiim.egregius.be/',
 		];
 		if($nowplaying['@attributes']['source']=='AUX'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
 			$wiim=json_decode(WiimGetMetaInfo());
