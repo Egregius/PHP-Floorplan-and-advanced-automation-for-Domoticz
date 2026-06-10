@@ -1,5 +1,6 @@
 <?php
 if ($status=='On') {
+	$d['8badkamer8']=$time;
 	if ($d['lichtbadkamer']->s>0) sl('lichtbadkamer', 0, basename(__FILE__).':'.__LINE__);
 	if ($d['weg']->s==1&&$d['time']>=$t-3600&&$d['time']<$t+3600) {
 		huisthuis();
