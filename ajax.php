@@ -50,8 +50,8 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 			$d['track']=$wiim->metaData->title;
 			$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $wiim->metaData->albumArtURI);
 			$d['bitrate'] = $wiim->metaData->bitRate;
-			$d['bitdepth'] = $wiim->metaData->bitDepth;
-			$d['samplerate'] = $wiim->metaData->sampleRate;
+			$d['bitdepth'] = $wiim->metaData->bitDepth == 32 ? 24 : $wiim->metaData->bitDepth;
+			$d['samplerate'] = number_format($wiim->metaData->sampleRate/1000, 1, ',','');
 			$d['cleantitle']=cleanTitle($wiim->metaData->artist,$wiim->metaData->title);
 		} else {
 			$d['artist']=$nowplaying['artist'];
