@@ -82,9 +82,10 @@ foreach ($devices as $ip => $vol) {
 //									lg(print_r($wiim,true),'cron2');
 									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
 										$wiimunknown++;
-										lg($wiimunknown,'cron2');
+										lg('$wiimunknown = '.$wiimunknown,'cron2');
 										if($wiimunknown>10) {
 											$wiimunknown=0;
+											$preset=wiimplaylist();
 											Wiim("MCUKeyShortClick:$preset");
 											sleep(1);
 											Wiim("setPlayerCmd:playindex:1");
