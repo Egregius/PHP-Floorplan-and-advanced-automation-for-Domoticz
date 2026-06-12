@@ -20,7 +20,7 @@ $d=fetchdata();
 $lastcheck=$time;
 $lastping=$time;
 define('LOOP_START', $time);
-$invalidcounter=$lastplay=$playlisttries=$wiimunknown=0;
+$invalidcounter=$lastplay=$playlisttries=$wiimunknown=$historyruns=0;
 
 $skipped=false;
 $history = file_exists('/var/www/spotifyhistory.json') ? json_decode(file_get_contents('/var/www/spotifyhistory.json'), true) : [];

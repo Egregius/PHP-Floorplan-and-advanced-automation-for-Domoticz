@@ -30,7 +30,7 @@ foreach ($devices as $ip => $vol) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
 								if ($d['boseliving']->m == 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 									$prevcleantitle=$cleantitle;
-									if (isset($history[$cleantitle])&&1==1) {
+									if (isset($history[$cleantitle])&&1==2) {
 										if(!in_array($cleantitle, $toplist)) {
 											lg($cleantitle.' skipped op cleantitle','cron2');
 											if($wiimplaying===true) Wiim('setPlayerCmd:next');
@@ -39,13 +39,13 @@ foreach ($devices as $ip => $vol) {
 									} else {
 										lg('Adding '.$cleantitle.' to history','cron2');
 										$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
-										if (count($history) > 100) {
+										while (count($history) > 100) {
 											reset($history);
 											$oldestKey = key($history);
 											unset($history[$oldestKey]);
 										}
 									}
-									if (!empty($history) && count($history) % 20 === 0) {
+									if ($historyruns>50) {
 										$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
 										file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 										gc_collect_cycles();
@@ -77,7 +77,9 @@ foreach ($devices as $ip => $vol) {
 										}
 										unset($vars, $name, $value, $size, $oldSize, $percent);
 										lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','cron2');
+										$historyruns=0;
 									}
+									$historyruns++;
 								} elseif (isset($wiim)) {
 //									lg(print_r($wiim,true),'cron2');
 									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
