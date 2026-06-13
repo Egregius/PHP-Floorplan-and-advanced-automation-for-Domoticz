@@ -1,4 +1,5 @@
 <?php
+
 header('Access-Control-Allow-Origin: *');
 
 ini_set('display_errors', 1);
@@ -17,14 +18,12 @@ $d=fetchdata();
 //$db = Database::getInstance();
 //echo Wiim('getPlayerStatus');
 
-print_r(json_decode(Wiim('getPresetInfo'),true));
 
 //echo boseplayinfo("doorbell", 60, basename(__FILE__).':'.__LINE__, 101);
-echo Wiim('setPlayerCmd:playPromptUrl:https:\/\/home.egregius.be\/sounds\/doorbell.mp3');
-
-//echo Wiim('setPlayerCmd:clear_playlist');
-//$preset=wiimplaylist();
-//echo Wiim("MCUKeyShortClick:$preset");
+Wiim("setPlayerCmd:playPromptUrl:" . urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
+sleep(5);
+$preset=wiimplaylist();
+Wiim("MCUKeyShortClick:$preset");
 //echo Wiim("setPlayerCmd:playindex:1");
 
 /*
