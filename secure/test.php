@@ -17,9 +17,15 @@ $d=fetchdata();
 //$db = Database::getInstance();
 //echo Wiim('getPlayerStatus');
 
+print_r(json_decode(Wiim('getPresetInfo'),true));
 
 //echo boseplayinfo("doorbell", 60, basename(__FILE__).':'.__LINE__, 101);
-echo Wiim('playPromptUrl');
+echo Wiim('setPlayerCmd:playPromptUrl:https:\/\/home.egregius.be\/sounds\/doorbell.mp3');
+
+//echo Wiim('setPlayerCmd:clear_playlist');
+//$preset=wiimplaylist();
+//echo Wiim("MCUKeyShortClick:$preset");
+//echo Wiim("setPlayerCmd:playindex:1");
 
 /*
 Wiim('setPlayerCmd:stop');

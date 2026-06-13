@@ -4,9 +4,8 @@
 if($status=='Off') {
 	if($d['music_assistant_beta']->s!='Off') sw('music_assistant_beta','Off',basename(__FILE__).':'.__LINE__);
 	Wiim('setPlayerCmd:stop');
+	Wiim('setPlayerCmd:clear_playlist');
 } elseif($status=='On') {
 	$preset=wiimplaylist();
 	Wiim("MCUKeyShortClick:$preset");
-	sleep(1);
-	Wiim("setPlayerCmd:playindex:1");
 }
