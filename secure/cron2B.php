@@ -30,7 +30,7 @@ foreach ($devices as $ip => $vol) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
 								if ($d['boseliving']->m == 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 									$prevcleantitle=$cleantitle;
-									if (isset($history[$cleantitle])&&1==2) {
+									if (isset($history[$cleantitle])&&1==1) {
 										if(!in_array($cleantitle, $toplist)) {
 											lg($cleantitle.' skipped op cleantitle','cron2');
 											if($wiimplaying===true) Wiim('setPlayerCmd:next');
@@ -39,7 +39,7 @@ foreach ($devices as $ip => $vol) {
 									} else {
 										lg('Adding '.$cleantitle.' to history','cron2');
 										$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
-										while (count($history) > 100) {
+										while (count($history) > (157*5)) {
 											reset($history);
 											$oldestKey = key($history);
 											unset($history[$oldestKey]);
