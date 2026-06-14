@@ -22,6 +22,7 @@ function updateWekker(&$t, &$weekend, &$dow, &$d) {
 //		$t=strtotime('6:20');
 }
 function check_en_slapen($locatie, $status, &$d) {
+	global $time;
 	$x = 0;
 	if ($locatie === 'voordeur') {
 		if ($d['deurvoordeur']->s !== 'Open' || $status !== 'On') return;
@@ -66,7 +67,11 @@ function check_en_slapen($locatie, $status, &$d) {
 		}
 	}
 	if ($x > 0) return;
-	if ($locatie === 'voordeur' || $locatie === 'poort') {
+	if ($locatie === 'voordeur') {
+		$d['8inkom_4_pressed']=$time;
+//		huisslapen(true);
+		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
+	} elseif ($locatie === 'poort') {
 		huisslapen(true);
 		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
 	} elseif ($locatie === 'slaapkamer') {
