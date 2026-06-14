@@ -76,6 +76,6 @@ function nextube_image($sun, $clouds, $rain, $temperature, $mintemp, $maxtemp, $
 if (isset($_GET['f'])) {
     nextube_image(90, 60, 45, 19.1, 12.4, 22.8, $_GET['f']);
 } else {
-    nextube_image(90, 60, 45, 19.1, 12.4, 22.8, 'png');
+    nextube_image(0, 100, 100, 19.1, 12.4, 22.8, 'png');
 }
 ?>
