@@ -96,6 +96,8 @@ foreach($d as $n=>$row) {
 					<td>'.$n.'</td>';
 			if ($row->s=='D') echo '
 					<td>Drogen</td>';
+			elseif ($row->s=='Off') echo '
+					<td>Off</td>';
 			else echo '
 					<td>'.number_format($row->s, 1, ',', '').' °C</td>';
 			if ($row->m==0) {

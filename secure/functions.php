@@ -1572,44 +1572,37 @@ function clamp($v,$min,$max){return max($min,min($max,$v));}
 function setNextubeMode(): bool {
     global $d;
     static $last_theme = null;
-    static $last_brightness = null;
+    static $last_lcd_brightness = null;
+    static $last_led_brightness = null;
+    static $last_backlightmode = null;
     $send=false;
     if ($d['weg']->s > 0) {
     	$msg=__LINE__;
         $lcd_brightness = 0;
         $led_brightness = 0;
-        $theme = 'Segments';
-        $type = '24H_CX';
     } elseif ($d['media']->s == 'On') {
     	$msg=__LINE__;
         $lcd_brightness = clamp(1 + floor($d['dag']->s/2), 2, 50);
         $led_brightness = 60;
-        $theme = 'Segments';
-        $type = '24H_CX';
     } else {
     	$msg=__LINE__;
         $lcd_brightness = clamp(15 + $d['dag']->s, 15, 90);
         $led_brightness = 0;
-        $theme = 'Segments';
-        $type = '24H_CX';
     }
-    $data = ['lcd_brightness' => $lcd_brightness];
-    if ($theme !== $last_theme) {
-        $data['led_brightness'] = $led_brightness;
-        $data['backlight_mode'] = ($led_brightness == 0) ? 'Off' : 'Static';
-        $data['apps'] = [
-            [
-                'name' => 'app1',
-                'app' => 'Clock',
-                'theme' => $theme,
-                'type' => $type,
-                'clock_tube5' => 'weather'
-            ]
-        ];
-        $last_theme = $theme;
-        $send=true;
+    $backlighgtmode = ($led_brightness == 0) ? 'Off' : 'Static';
+    if($lcd_brightness !== $last_lcd_brightness) {
+    	 $data['lcd_brightness'] = $lcd_brightness;
+    	 $send=true;
     }
-    if($lcd_brightness !== $last_brightness || $send==true) {
+    if($led_brightness !== $last_led_brightness) {
+    	 $data['led_brightness'] = $led_brightness;
+    	 $send=true;
+    }
+    if($backlighgtmode !== $last_backlightmode) {
+    	 $data['backlight_mode'] = $backlighgtmode;
+    	 $send=true;
+    }
+    if ($send==true) {
 		$data = json_encode($data);
 		lg('Nextube ' . $msg.' '.$data, 'nextube');
 		$ch = curl_init('http://192.168.40.93/api/settings');
@@ -1621,7 +1614,9 @@ function setNextubeMode(): bool {
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		if ($httpCode === 200 && $response !== false) {
-			$last_brightness = $lcd_brightness;
+			$last_lcd_brightness = $lcd_brightness;
+			$last_led_brightness = $led_brightness;
+			$last_backlightmode=$backlighgtmode;
 			$responseData = json_decode($response, true);
 			return (isset($responseData['status']) && $responseData['status'] === 'ok');
 		}
