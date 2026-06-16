@@ -1,6 +1,4 @@
 <?php
-//if($status=='On') hassAddon('d5369777_music_assistant_beta','start');
-//else
 if($status=='Off') {
 	Wiim('setPlayerCmd:stop');
 } elseif($status=='On') {
