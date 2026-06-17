@@ -268,7 +268,7 @@ function nextube_image(
         $ndash = "\xe2\x80\x93";   // UTF-8 –  (U+2013)
 
         $mainStr  = sprintf("%.1f%s", $temperature, $deg);
-        $rangeStr = sprintf("%.0f%s %s %.0f%s", $mintemp, $deg, $ndash, $maxtemp, $deg);
+        $rangeStr = sprintf("%.0f%s%s%.0f%s", $mintemp, $deg, $ndash, $maxtemp, $deg);
 
         // Auto-shrink main temp if too wide (e.g. "-19.5°")
         $fs1 = 30;
