@@ -1,4 +1,4 @@
-const VERSION = '1.3';
+const VERSION = '1.4';
 const CACHE_NAME = 'floorplan-cache-' + VERSION;
 const PRE_CACHE_ASSETS = [
     '/',
@@ -15,6 +15,8 @@ const PRE_CACHE_ASSETS = [
 	'/images/p_Off.png',
 	'/images/ST30_On.png',
 	'/images/ST30_Off.png',
+	'/images/ST10_On.png',
+	'/images/ST10_Off.png',
 	'/images/Thuis.png',
 	'/images/weg.png',
 	'/images/Slapen.png',
@@ -62,38 +64,23 @@ const CACHE_EXCLUDED = [
 ];
 self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
-    const url = e.request.url;
-    if (CACHE_EXCLUDED.some(pattern => url.includes(pattern))) return;
-    if (NETWORK_FIRST.some(pattern => url.includes(pattern))) {
-        e.respondWith(
-            fetch(e.request).then(networkResponse => {
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                    return networkResponse;
-                }
-                const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME).then(cache => {
-                    cache.put(e.request, responseToCache);
-                });
-                return networkResponse;
-            }).catch(() => {
-                return caches.match(e.request);
-            })
-        );
-        return;
-    }
+    if (CACHE_EXCLUDED.some(pattern => e.request.url.includes(pattern))) return;
     e.respondWith(
         caches.match(e.request).then(cachedResponse => {
             if (cachedResponse) return cachedResponse;
-            return fetch(e.request).then(networkResponse => {
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return fetch(e.request)
+                .then(networkResponse => {
+                    if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                        return networkResponse;
+                    }
+                    const clone = networkResponse.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
                     return networkResponse;
-                }
-                const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME).then(cache => {
-                    cache.put(e.request, responseToCache);
+                })
+                .catch(() => {
+                    console.warn('[SW] Fetch mislukt en geen cache voor: ' + e.request.url);
+                    return new Response('', { status: 503, statusText: 'Offline' });
                 });
-                return networkResponse;
-            }).catch(() => {});
         })
     );
 });
