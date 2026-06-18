@@ -98,7 +98,7 @@ foreach ($devices as $ip => $vol) {
 									$historyruns++;
 								} elseif (isset($wiim)) {
 //									lg(print_r($wiim,true),'cron2');
-									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow'&&1==2) {
+									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
 										$wiimunknown++;
 										lg('$wiimunknown = '.$wiimunknown,'cron2');
 										if($wiimunknown>10) {
