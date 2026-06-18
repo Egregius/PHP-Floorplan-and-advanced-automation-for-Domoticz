@@ -33,7 +33,7 @@ foreach ($devices as $ip => $vol) {
 						if(isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX') {
 							if($status['@attributes']['source']=='AUX'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
-								
+								lg(print_r($wiim,true),'cron2');
 								$status['artist']=$wiim->metaData->artist;
 								$status['track']=$wiim->metaData->title;
 								$wiimplaying=true;
@@ -98,7 +98,7 @@ foreach ($devices as $ip => $vol) {
 									$historyruns++;
 								} elseif (isset($wiim)) {
 //									lg(print_r($wiim,true),'cron2');
-									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
+									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow'&&1==2) {
 										$wiimunknown++;
 										lg('$wiimunknown = '.$wiimunknown,'cron2');
 										if($wiimunknown>10) {
