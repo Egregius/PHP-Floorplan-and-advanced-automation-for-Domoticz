@@ -566,7 +566,7 @@ function storesp($name,$s,$p,$msg='',$log='store') {
 	}
 	return $affected ?? 0;
 }
-function storep($name,$p,$msg='',$log='store') {
+function storep($name,$p,$msg='',$log='store',$updatetime=true) {
 	global $d,$user;
     if((string)$d[$name]->p==(string)$p) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
@@ -576,8 +576,13 @@ function storep($name,$p,$msg='',$log='store') {
 			$d[$name]->p=$p;
 			$d[$name]->t=$d['time'];
 			$db=Database::getInstance();
-			$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
-			$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
+			if($updatetime==true) {
+				$stmt=$db->prepare("UPDATE devices SET p = :p, t = :t WHERE n = :n");
+				$stmt->execute([':p'=>$p,':t'=>$d['time'],':n'=>$name]);
+			} else {
+				$stmt=$db->prepare("UPDATE devices SET p = :p WHERE n = :n");
+				$stmt->execute([':p'=>$p,':n'=>$name]);
+			}
 			$affected=$stmt->rowCount();
 			break;
 		} catch (PDOException $e) {

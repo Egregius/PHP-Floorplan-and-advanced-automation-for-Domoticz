@@ -70,7 +70,6 @@
 			<div class="abs z0" id="deurgarage"></div>
 			<div class="abs z0" id="deurwc"></div>
 			<div class="abs z0" id="deurkamer"></div>
-			<div class="abs z0" id="deurwaskamer"></div>
 			<div class="abs z0" id="deuralex"></div>
 			<div class="abs z0" id="zlivinga"></div>
 			<div class="abs z0" id="zlivingb"></div>
@@ -102,7 +101,6 @@
 			<div class="abs stamp" id="tdeurgarage"></div>
 			<div class="abs stamp" id="tachterdeur"></div>
 			<div class="abs stamp" id="tdeurkamer"></div>
-			<div class="abs stamp" id="tdeurwaskamer"></div>
 			<div class="abs stamp" id="tdeuralex"></div>
 			<div class="abs stamp" id="tdeurwc"></div>
 			<div class="abs stamp" id="talexslaapt"></div>

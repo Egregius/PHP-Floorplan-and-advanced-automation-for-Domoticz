@@ -124,7 +124,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 			$rel_increase = ($old > 0) ? (($status - $old) / $old) : 1;
 			$time_passed = ($time - $oldt) >= 60;
 			if ($rel_increase > $treshold || $rel_increase < -$treshold || $time_passed) {
-				storep('daikin',$status,$rel_increase.'	> '.$treshold,'daikin_kwh');
+				storep('daikin',$status,$rel_increase.'	> '.$treshold,'daikin_kwh',false);
 			}
 			return;
 		} elseif ($device === 'sun_solar_elevation') {

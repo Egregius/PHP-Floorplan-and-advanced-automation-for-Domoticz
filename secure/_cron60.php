@@ -202,7 +202,8 @@ if ($d['auto']->s=='On') {
 	}
 }*/
 if (isset($daikin)) {
-	lg(print_r($daikin,true),'cron60');
+//	lg("living_set {$d['living_set']->s} kamer_set {$d['kamer_set']->s} alex_set {$d['alex_set']->s} daikin {$d['daikin']->s} {$d['daikin']->p} ".past('daikin'),'daikin');
+//	lg(print_r($daikin,true),'daikin');
 	if (
 			$daikin->living->power==0
 		&&	$daikin->kamer->power==0
