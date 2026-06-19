@@ -24,6 +24,7 @@ else $spmode=-1;
 
 foreach (['living','kamer','alex'] as $k) {
 	$fan='A';
+	$fan=7;
 	if (($d[$k.'_set']->m==0||$d[$k.'_set']->m==2)&&($d['raam'.$k]->s=='Closed'||($d['raam'.$k]->s=='Open'&&past('raam'.$k)<=60))) {
 		$mode=2;
 		$power=1;
