@@ -202,6 +202,7 @@ if ($d['auto']->s=='On') {
 	}
 }*/
 if (isset($daikin)) {
+	lg(print_r($daikin,true),'cron60');
 	if (
 			$daikin->living->power==0
 		&&	$daikin->kamer->power==0

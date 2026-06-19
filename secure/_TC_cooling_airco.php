@@ -71,10 +71,9 @@ foreach (['living','kamer','alex'] as $k) {
 	
 			}
 		}
-	} elseif (isset($power) && $power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
+	} elseif ($power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
 		sw('daikin','On');
 	}
-	unset($power);
 }
 
 
