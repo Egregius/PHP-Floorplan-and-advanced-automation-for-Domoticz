@@ -38,9 +38,11 @@ foreach (['living','kamer','alex'] as $k) {
 		} elseif($d[$k.'_set']->s==2) {
 			$fan=4;
 			$set=18;
+			$maxpow=50;
 		} elseif($d[$k.'_set']->s==3) {
 			$fan=5;
 			$set=18;
+			$maxpow=60;
 		} elseif($d[$k.'_set']->s==4) {
 			$fan=6;
 			$set=18;
