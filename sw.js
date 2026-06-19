@@ -61,6 +61,9 @@ const NETWORK_FIRST = [
 const CACHE_EXCLUDED = [
     'ajax.php',
     'd.php',
+		'temp.php',
+		'hum.php',
+		
 ];
 self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
