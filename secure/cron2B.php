@@ -1,5 +1,5 @@
 <?php
-if($cron2runs%100==0) {
+if($cron2runs%500==0) {
 	$skiptracks=[];
 	$db = Database::getInstance();
 	static $stmt = null;
@@ -8,7 +8,7 @@ if($cron2runs%100==0) {
 	while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
 		$skiptracks[]=$row[0];
 	}
-	lg(print_r($skiptracks,true),'cron2');
+//	lg(print_r($skiptracks,true),'cron2');
 }
 foreach ($devices as $ip => $vol) {
 	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);

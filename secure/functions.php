@@ -1501,8 +1501,8 @@ function Wiim(string $cmd) {
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
-        return 'Error: ' . curl_error($ch);
-    }
+        lg('Error: ' . $url.'='.curl_error($ch),'wiim');
+    } elseif($cmd!='getMetaInfo') lg($cmd,'wiim');
     curl_close($ch);
     return $response;
 }
@@ -1515,8 +1515,8 @@ function WiimStartPreset(int $presetNumber) {
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
-        return 'Error: ' . curl_error($ch);
-    }
+        lg('Error: ' . $url.'='.curl_error($ch),'wiim');
+    } else lg('StartPreset '.$presetNumber,'wiim');
     curl_close($ch);
     return $response;
 }
@@ -1529,8 +1529,8 @@ function WiimSkipTrack($cmd='next') {
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
-        return 'Error: ' . curl_error($ch);
-    }
+        lg('Error: ' . $url.'='.curl_error($ch),'wiim');
+    } else lg("setPlayerCmd:$cmd",'wiim');
     curl_close($ch);
     return $response;
 }
@@ -1543,7 +1543,7 @@ function WiimGetMetaInfo() {
     curl_setopt($ch, CURLOPT_TIMEOUT, 2);
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
-        return 'Error: ' . curl_error($ch);
+        lg('Error: ' . $url.'='.curl_error($ch),'wiim');
     }
     curl_close($ch);
     return $response;
