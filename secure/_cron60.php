@@ -81,16 +81,29 @@ if ($d['auto']->s=='On') {
 				);
 			}
 		} elseif ($d['heating']->s<0) { //Cooling
-			if (($d['buiten_temp']->s>$d['kamer_temp']->s
-				&&$d['buiten_temp']->s>$d['waskamer_temp']->s
-				&&$d['buiten_temp']->s>$d['alex_temp']->s)
-				&&$d['buiten_temp']->s>=18
-				&&($d['kamer_temp']->s>=18
-				||$d['waskamer_temp']->s>=18
-				||$d['alex_temp']->s>=18)
-				&&($d['raamkamer']->s=='Open'
-				||($d['raamwaskamer']->s=='Open'&&($d['deurkamer']->s=='Open'||$d['deuralex']->s=='Open'))
-				||$d['raamalex']->s=='Open')
+			if (
+				(
+					(
+						$d['buiten_temp']->s > $d['kamer_temp']->s &&
+						$d['buiten_temp']->s > $d['waskamer_temp']->s &&
+						$d['buiten_temp']->s > $d['alex_temp']->s
+					) || 
+					($d['kamer_temp']->icon + $d['waskamer_temp']->icon + $d['alex_temp']->icon) > 0.2
+				) &&
+				$d['buiten_temp']->s >= 18 &&
+				(
+					$d['kamer_temp']->s >= 18 ||
+					$d['waskamer_temp']->s >= 18 ||
+					$d['alex_temp']->s >= 18
+				) &&
+				(
+					$d['raamkamer']->s == 'Open' ||
+					$d['raamalex']->s == 'Open' ||
+					(
+						$d['raamwaskamer']->s == 'Open' && 
+						($d['deurkamer']->s == 'Open' || $d['deuralex']->s == 'Open')
+					)
+				) 
 			) {
 				alert(
 					'ramenboven',
