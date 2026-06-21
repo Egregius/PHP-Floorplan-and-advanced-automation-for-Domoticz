@@ -1051,7 +1051,7 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	return FALSE;
 }
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
-    global $d, $time, $lastfetch, $daikin, $spm, $iotvlan;
+    global $d, $time, $lastfetch;
     static $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
 
     $lastfetch = $time;
@@ -1068,7 +1068,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 
     // Bepaal icoon op basis van heating status
     $msg = ($d['heating']->s >= 0) ? "🔥 " : "❄️ ";
-    $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode={$spm[$spmode]}	maxpow=$maxpow";
+    $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode=$spmode	maxpow=$maxpow";
 
     // 1. Special Mode check (per device)
     if(($prevspmode[$device] ?? null) !== $spmode) {
