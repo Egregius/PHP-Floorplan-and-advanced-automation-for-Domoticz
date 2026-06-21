@@ -24,7 +24,6 @@ else $spmode=-1;
 
 foreach (['living','kamer','alex'] as $k) {
 	$fan='A';
-	$fan=7;
 	if (($d[$k.'_set']->m==0||$d[$k.'_set']->m==2)&&($d['raam'.$k]->s=='Closed'||($d['raam'.$k]->s=='Open'&&past('raam'.$k)<=60))) {
 		$mode=2;
 		$power=1;
@@ -54,8 +53,7 @@ foreach (['living','kamer','alex'] as $k) {
 			$set=18;
 			$spmode=1;
 			$maxpow=100;
-		}
-		$set=$d[$k.'_set']->s;
+		} else $set=$d[$k.'_set']->s;
 	} else {
 		$mode=2;
 		$power=0;
@@ -71,14 +69,11 @@ foreach (['living','kamer','alex'] as $k) {
 				$daikin->$k->set=$set;
 				$daikin->$k->spmode=$spmode;
 				$daikin->$k->lastset=$time;
-	
 			}
 		}
 	} elseif ($power==1 && $d['daikin']->s=='Off' && past('daikin')>900) {
 		sw('daikin','On');
 	}
 }
-
-
 require('_Rolluiken_Cooling.php');
 require('_TC_badkamer.php');
