@@ -40,7 +40,7 @@ if ($d['auto']->s=='On') {
 		}
 	}
 
-	elseif ($d['dag']->s<$zonelevatie||$time<strtotime('3:00')) {
+	elseif ($d['dag']->s<$zonelevatie+7||$time<strtotime('3:00')) {
 		if ($d['weg']->s>0) {
 			foreach ($benedenall as $i) {
 				if ($d[$i]->s<88) sl($i, 100, basename(__FILE__).':'.__LINE__);
