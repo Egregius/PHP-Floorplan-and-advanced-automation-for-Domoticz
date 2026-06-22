@@ -47,7 +47,7 @@ if ($d['auto']->s=='On') {
 			}
 			foreach ($boven as $i) {
 				if ($i=='rwaskamer') {
-					if ($d['deurwaskamer']->s=='Closed'&&$d[$i]->s<50) sl($i, 83, basename(__FILE__).':'.__LINE__);
+					if ($d['weg']->s>=2&&$d[$i]->s<50) sl($i, 83, basename(__FILE__).':'.__LINE__);
 				} elseif ($i=='rkamerl') {
 					if ($d['weg']->s>=2&&$d[$i]->s<50) sl($i, 100, basename(__FILE__).':'.__LINE__);
 				} elseif ($i=='rkamerr') {
