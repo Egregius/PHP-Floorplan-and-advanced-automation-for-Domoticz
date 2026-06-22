@@ -1,6 +1,6 @@
 <?php
 if ($status=='Open'&&$d['auto']->s=='On') {
-	$last=getCache('wc');
+	$last=(int)getCache('wc');
 	if ($d['time']>$last+5&&$d['wc']->s!='On') {
 		zwave('wc','binary',1,'ON');
 		sw('wc', 'On', basename(__FILE__).':'.__LINE__);
