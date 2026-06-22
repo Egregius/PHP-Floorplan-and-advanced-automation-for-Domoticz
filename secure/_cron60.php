@@ -112,9 +112,9 @@ if ($d['auto']->s=='On') {
 					'ramenboven',
 					'Ramen boven dicht doen, te warm buiten.
 					Buiten = '.round($d['buiten_temp']->s, 1).',
-					kamer = '.$d['kamer_temp']->s.',
-					waskamer = '.$d['waskamer_temp']->s.',
-					Alex = '.$d['alex_temp']->s,
+					Kamer = '.$d['kamer_temp']->s.',
+					Alex = '.$d['alex_temp']->s?'
+					Trend = '.round($trendboven,5),
 					3600,
 					false,
 					2,
