@@ -68,8 +68,7 @@ function check_en_slapen($locatie, $status, &$d) {
 	}
 	if ($x > 0) return;
 	if ($locatie === 'voordeur') {
-		$d['8inkom_4_pressed']=$time;
-//		huisslapen(true);
+		huisslapen(true);
 		sl('zoldertrap', 0, basename(__FILE__).':'.__LINE__, true);
 	} elseif ($locatie === 'poort') {
 		huisslapen(true);

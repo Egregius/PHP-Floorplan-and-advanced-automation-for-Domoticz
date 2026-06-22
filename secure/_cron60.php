@@ -18,10 +18,13 @@ $stamp = date('Y-m-d H:i:s', $time - 600);
 $sql = "SELECT buiten,living,badkamer,kamer,waskamer,alex,zolder FROM temp ORDER BY stamp DESC LIMIT 10,1";
 $db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
+$trendboven=0;
 foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
-    $trend = round($d[$i.'_temp']->s - $row[$i],2);
+    $trend = $d[$i.'_temp']->s - $row[$i];
+    if(in_array($i,['kamer','alex'])) $trendboven+=$trend;
+    $trend=round($trend,2);
     if ((float)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
-    if(in_array($i,['kamer','alex','waskamer'])) $trendboven[$i]=$trend;
+    
 }
 $sum=0;
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -30,7 +33,7 @@ $avg=($sum/6)+8;
 foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
 	if ($d[$i.'_temp']->s>$avg&&$d[$i.'_temp']->s>30) alert($i.'temp',$d[$i.'_temp']->s.'° in '.$i,3600,false,2);
 }
-lg(print_r($trendboven,true),'cron60');
+
 if ($d['auto']->s=='On') {
 	if ($d['weg']->s==0) {/* ----------------------------------------- THUIS ----------------------------------------------------*/
 //		if ($d['zon']==0&&$d['tuintafel']->s=='Off'&&$d['rliving']->s<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
@@ -85,12 +88,10 @@ if ($d['auto']->s=='On') {
 		} elseif ($d['heating']->s<0) { //Cooling
 			if (
 				(
-					(
-						$d['buiten_temp']->s > $d['kamer_temp']->s &&
-						$d['buiten_temp']->s > $d['waskamer_temp']->s &&
-						$d['buiten_temp']->s > $d['alex_temp']->s
-					) || 
-					(($d['kamer_temp']->icon + $d['waskamer_temp']->icon + $d['alex_temp']->icon)/3 > 0 )
+					$d['buiten_temp']->s > $d['kamer_temp']->s ||
+					$d['buiten_temp']->s > $d['waskamer_temp']->s ||
+					$d['buiten_temp']->s > $d['alex_temp']->s || 
+					$trendboven > 0.1
 				) &&
 				$d['buiten_temp']->s >= 18 &&
 				(
