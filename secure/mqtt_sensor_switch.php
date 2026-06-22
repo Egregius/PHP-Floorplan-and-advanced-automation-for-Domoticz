@@ -101,7 +101,7 @@ $mqtt->subscribe('homeassistant/binary_sensor/+/state', function (string $topic,
 			}
 		}
 	} catch (Throwable $e) {
-		lg("️‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
+		lg("️‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $status.' '.$e->getMessage(),'sensor');
 	}
 	if ($lastcheck < $time - $d['rand']) {
 		$lastcheck = $time;
