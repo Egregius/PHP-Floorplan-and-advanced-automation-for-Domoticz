@@ -35,6 +35,7 @@ foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
 }
 
 if ($d['auto']->s=='On') {
+	if($d['time']>=strtotime('8:00')&&$d['time']<=strtotime('18:00')&&$d['time']%1800==0) sw('vleermuizen', 'On', basename(__FILE__).':'.__LINE__);
 	if ($d['weg']->s==0) {/* ----------------------------------------- THUIS ----------------------------------------------------*/
 //		if ($d['zon']==0&&$d['tuintafel']->s=='Off'&&$d['rliving']->s<50) sw('tuintafel', 'On', basename(__FILE__).':'.__LINE__);
 //		elseif (($d['zon']>0||$d['rliving']->s>50)&&$d['tuintafel']->s=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
@@ -106,7 +107,7 @@ if ($d['auto']->s=='On') {
 						$d['raamwaskamer']->s == 'Open' && 
 						($d['deurkamer']->s == 'Open' || $d['deuralex']->s == 'Open')
 					)
-				) 
+				) && $d['time']>strtotime('9:00')
 			) {
 				alert(
 					'ramenboven',
