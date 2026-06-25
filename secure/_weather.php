@@ -5,6 +5,7 @@ $maxtemp=-100;
 $mintemp=100;
 $temps=[];
 $winds=[];
+$clouds=[];
 $rains=[];
 $hums=[];
 $uvs=[];
@@ -38,6 +39,7 @@ if (isset($ow['current'])) {
 	if($uvs['ow']>$weather['uvm'])$weather['uvm']=$uvs['ow'];
 	$winds['ow']=round($ow['current']['wind_speed'] * 3.6,1);
 	if (isset($ow['current']['wind_gust'])) $winds['ow_gust']=round($ow['current']['wind_gust'] * 3.6,1);
+	if (isset($ow['current']['clouds'])) $clouds['ow']=$ow['current']['clouds'];
 	$weather['i']=$ow['current']['weather'][0]['icon'];
 	$rains['ow'] = ($ow['current']['rain']['1h'] ?? 0) * 100;
 	foreach ($ow['hourly'] as $i) {
@@ -66,6 +68,7 @@ if (isset($wa['current']['temp_c'])) {
 	$rains['wa']=$wa['current']['precip_mm']*100;
 	$uvs['wa']=$wa['current']['uv'];
 	if($uvs['wa']>$weather['uvm'])$weather['uwm']=$uvs['wa'];
+	if (isset($wa['current']['clouds'])) $clouds['ow']=$wa['current']['clouds'];
 }
 unset($wa);
 
@@ -125,6 +128,7 @@ if (isset($vc['currentConditions']['temp'])) {
 	$winds['vc_gust']=$vc['currentConditions']['windgust'];
 	if($uvs['vc']>$weather['uvm'])$weather['uvm']=$uvs['vc'];
 	$rains['vc']=$vc['currentConditions']['precip']*100;
+	if (isset($vc['currentConditions']['cloudcover'])) $clouds['ow']=$vc['currentConditions']['cloudcover'];
 }
 unset($vc);
 //lg(__LINE__.' https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour');
@@ -229,6 +233,11 @@ if (count($winds)>=4) {
 	$wind=round(array_sum($winds)/count($winds), 0);
 	$weather['w']=$wind;
 }
+if (count($clouds)>=1) {
+	$clouds=round(array_sum($clouds)/count($clouds), 0);
+	$clouds=clamp($clouds,0,100);
+	$sun=100-$clouds;
+} else $clouds=0;
 if (count($rains) >= 2) {
 //	lg('$rains='.print_r($rains,true));
     $rain = min(100,array_sum($rains) / count($rains));
@@ -262,20 +271,12 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 	lg($data,'weather');
 	publishmqtt('d/w',$data);
 	$weathercache=$weather;
-	$icon=(int)substr($weather['i'],0,2);
-	$icons=[
-		1 => 'sun',
-		2 => 'fewClouds',
-		3 => 'fewClouds',
-		4 => 'overcastClouds',
-		9 => 'rain',
-		10 => 'rain',
-		11 => 'thunderstorm',
-		13 => 'snow',
-		50 => 'fog',
-	];
-	if($d['weg']->s==0) setNextubeWeather(round($temp,1),$hum,$icons[$icon],($rain<10?round($rain,1):round($rain,0)));
+	$fog=0;
+	$snow=0;
+	$thunder=0;
+	
 }
+if($d['weg']->s==0) nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,$wind);
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
 if ($d['auto']->s=='On') {
