@@ -274,7 +274,6 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 	$fog=0;
 	$snow=0;
 	$thunder=0;
-	
 }
 if($d['weg']->s==0) nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,$wind);
 //$avg=null;
