@@ -68,7 +68,7 @@ if (isset($wa['current']['temp_c'])) {
 	$rains['wa']=$wa['current']['precip_mm']*100;
 	$uvs['wa']=$wa['current']['uv'];
 	if($uvs['wa']>$weather['uvm'])$weather['uwm']=$uvs['wa'];
-	if (isset($wa['current']['clouds'])) $clouds['ow']=$wa['current']['clouds'];
+	if (isset($wa['current']['clouds'])) $clouds['wa']=$wa['current']['clouds'];
 }
 unset($wa);
 
@@ -128,7 +128,7 @@ if (isset($vc['currentConditions']['temp'])) {
 	$winds['vc_gust']=$vc['currentConditions']['windgust'];
 	if($uvs['vc']>$weather['uvm'])$weather['uvm']=$uvs['vc'];
 	$rains['vc']=$vc['currentConditions']['precip']*100;
-	if (isset($vc['currentConditions']['cloudcover'])) $clouds['ow']=$vc['currentConditions']['cloudcover'];
+	if (isset($vc['currentConditions']['cloudcover'])) $clouds['vc']=$vc['currentConditions']['cloudcover'];
 }
 unset($vc);
 //lg(__LINE__.' https://www.yr.no/api/v0/locations/2-2787889/forecast/currenthour');
@@ -234,6 +234,7 @@ if (count($winds)>=4) {
 	$weather['w']=$wind;
 }
 if (count($clouds)>=1) {
+	lg(print_r($clouds,true), 'nextube');
 	$clouds=round(array_sum($clouds)/count($clouds), 0);
 	$clouds=clamp($clouds,0,100);
 	$sun=100-$clouds;
