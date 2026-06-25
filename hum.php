@@ -186,7 +186,6 @@ createChart('chartMaand', <?php echo json_encode($maandData); ?>);
 
 <?php
 $ms = ((61 - date("s")) * 1000) + 62000;
-echo "<div style='padding:20px; color:#444; font-size: 0.8em;'>$udevice | Update in " . ($ms / 1000) . "s</div>";
 echo '<script>setTimeout(() => { window.location.reload(); }, ' . $ms . ');</script>';
 $db->close();
 ?>

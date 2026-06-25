@@ -275,7 +275,11 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 	$snow=0;
 	$thunder=0;
 }
-if($d['weg']->s==0) nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,$wind);
+if($d['weg']->s==0) {
+	$wind=clamp($wind*2,0,100);
+	nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,$wind);
+	lg("sun $sun,clouds $clouds,rain $rain,temp $temp,min $mintemp,max $maxtemp,fog $fog,snow $snow,thunder $thunder,wind $wind",'nextube');
+}
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
 if ($d['auto']->s=='On') {

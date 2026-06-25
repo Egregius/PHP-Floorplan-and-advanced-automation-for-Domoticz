@@ -156,17 +156,17 @@ function get_image_data(GdImage $im, string $format, int $W, int $H): string {
 }
 
 function nextube_image(
-    float  $sun     = 0,
-    float  $clouds  = 0,
-    float  $rain    = 0,
+    float  $sun         = 0,
+    float  $clouds      = 0,
+    float  $rain        = 0,
     float  $temperature = 0,
-    float  $mintemp = 0,
-    float  $maxtemp = 0,
-    float  $fog     = 0,
-    float  $snow    = 0,
-    float  $thunder = 0,
-    float  $wind    = 0,
-    string $format  = 'jpg'
+    float  $mintemp     = 0,
+    float  $maxtemp     = 0,
+    float  $fog         = 0,
+    float  $snow        = 0,
+    float  $thunder     = 0,
+    float  $wind        = 0,
+    string $format      = 'jpg'
 ): void {
     $W = 80; $H = 160;
 
@@ -287,7 +287,7 @@ function nextube_image(
     push_to_nextube(5, $imgData1, $format);
     imagedestroy($im1);
 
-    // ── IMAGE 2: TEMPERATURE (Screen-wide & Progress bar) ───────────────────
+    // ── IMAGE 2: TEMPERATURE ────────────────────────────────────────────────
     $im2 = generate_base_background($W, $H, $sun, $clouds, $fog, $snow, $thunder);
     $C2  = fn($r,$g,$b)    => imagecolorallocate($im2, (int)$r, (int)$g, (int)$b);
     $CA2 = fn($r,$g,$b,$a) => imagecolorallocatealpha($im2, (int)$r, (int)$g, (int)$b, min(127,(int)$a));
@@ -296,61 +296,82 @@ function nextube_image(
     elseif ($temperature >= 20) [$tR,$tG,$tB] = [255, 186, 102];
     elseif ($temperature >= 10) [$tR,$tG,$tB] = [155, 202, 255];
     else                        [$tR,$tG,$tB] = [125, 180, 255];
-    $tCol   = $C2($tR, $tG, $tB);
-    $dimCol = $C2((int)($tR*.65), (int)($tG*.65), (int)($tB*.65));
+    $tCol = $C2($tR, $tG, $tB);
 
-    $font =  '/var/www/html/fonts/JetBrainsMono.woff2';
+    $font = '/var/www/html/fonts/JetBrainsMono.woff2';
     if (file_exists($font)) {
-        // Hoofdtemperatuur: komma in plaats van punt, geen graden symbool
-        $mainStr = str_replace('.', ',', sprintf("%.1f", $temperature));
-        $minStr  = sprintf("%.0f", $mintemp);
-        $maxStr  = sprintf("%.0f", $maxtemp);
+        $absTemp = abs($temperature);
+        $intPart = (int)$absTemp;
+        $decPart = (int)round(($absTemp - $intPart) * 10);
+        if ($decPart === 10) { $intPart++; $decPart = 0; }
+        
+        $intStr = ($temperature < 0 && ($intPart > 0 || $decPart > 0) ? '-' : '') . $intPart;
+        $decStr = (string)$decPart;
 
-        // 1. Grote Hoofdtemperatuur (Bovenkant scherm)
-        $fs1 = 54; $b1 = imagettfbbox($fs1, 0, $font, $mainStr);
-        while (($b1[2] - $b1[0]) > ($W - 4) && $fs1 > 15) {
-            $fs1--; $b1 = imagettfbbox($fs1, 0, $font, $mainStr);
-        }
-        imagettftext($im2, $fs1, 0, (int)(($W - ($b1[2] - $b1[0])) / 2) - $b1[0], 62, $tCol, $font, $mainStr);
+        $minStr = sprintf("%.0f", $mintemp);
+        $maxStr = sprintf("%.0f", $maxtemp);
+
+        $fsInt = 52; 
+        $fsDec = 26;
+        $gap = 2; // Exacte witruimte in pixels tussen het hele getal en de decimaal
+
+        do {
+            $bInt = imagettfbbox($fsInt, 0, $font, $intStr);
+            $bDec = imagettfbbox($fsDec, 0, $font, $decStr);
+            
+            $wInt = $bInt[2] - $bInt[0];
+            $wDec = $bDec[2] - $bDec[0];
+            $totalTextWidth = $wInt + $wDec + $gap;
+
+            if ($totalTextWidth <= ($W - 4) || $fsInt <= 15) {
+                break;
+            }
+            $fsInt--;
+            $fsDec = (int)($fsInt / 2);
+        } while (true);
+
+        // startX berekend vanaf de absolute linkerkant van de bounding box om verschuivingen te tackelen
+        $startX = (int)(($W - $totalTextWidth) / 2) - $bInt[0];
+        $baselineY = 62;
+        $floatY = 38;
+
+        imagettftext($im2, $fsInt, 0, $startX, $baselineY, $tCol, $font, $intStr);
+        // Decimaal start nu gegarandeerd NA het hele getal (startX + wInt + gap)
+        imagettftext($im2, $fsDec, 0, $startX + $wInt + $gap, $floatY, $tCol, $font, $decStr);
 
         // 2. Visuele Temperatuurbalk (Midden van scherm)
         $barX1 = 8; $barX2 = $W - 8; $barY = 82; $barH = 6;
         $totalBarW = $barX2 - $barX1;
-        // Achtergrond balk (semi-transparant donker)
         imagefilledrectangle($im2, $barX1, $barY, $barX2, $barY + $barH, $CA2(0, 0, 0, 75));
         
-        // Bereken positie huidige temp binnen min/max range
         $range = $maxtemp - $mintemp;
         $pct = ($range > 0) ? ($temperature - $mintemp) / $range : 0.5;
         $pct = max(0, min(1, $pct));
         $fillX = (int)($barX1 + ($totalBarW * $pct));
 
-        // Gevulde actieve balk deel
         if ($fillX > $barX1) {
             imagefilledrectangle($im2, $barX1, $barY, $fillX, $barY + $barH, $CA2($tR, $tG, $tB, 30));
         }
-        // Subtiele indicator stip op de huidige stand
         imagefilledellipse($im2, $fillX, (int)($barY + $barH / 2), 6, 6, $tCol);
 
         // 3. Grote Min/Max Waarden (Onderkant scherm)
-        $fsMin = 26; $bMin = imagettfbbox($fsMin, 0, $font, $minStr);
-        while (($bMin[2] - $bMin[0]) > (($W / 2) - 6) && $fsMin > 10) {
+        $fsMin = 32; $bMin = imagettfbbox($fsMin, 0, $font, $minStr);
+        while (($bMin[2] - $bMin[0]) > (($W / 2) - 4) && $fsMin > 10) {
             $fsMin--; $bMin = imagettfbbox($fsMin, 0, $font, $minStr);
         }
-        imagettftext($im2, $fsMin, 0, 6 - $bMin[0], 134, $C2(130, 185, 255), $font, $minStr);
+        imagettftext($im2, $fsMin, 0, 4 - $bMin[0], 138, $C2(130, 185, 255), $font, $minStr);
 
-        $fsMax = 26; $bMax = imagettfbbox($fsMax, 0, $font, $maxStr);
-        while (($bMax[2] - $bMax[0]) > (($W / 2) - 6) && $fsMax > 10) {
+        $fsMax = 32; $bMax = imagettfbbox($fsMax, 0, $font, $maxStr);
+        while (($bMax[2] - $bMax[0]) > (($W / 2) - 4) && $fsMax > 10) {
             $fsMax--; $bMax = imagettfbbox($fsMax, 0, $font, $maxStr);
         }
-        imagettftext($im2, $fsMax, 0, $W - 6 - ($bMax[2] - $bMax[0]) - $bMax[0], 134, $C2(255, 130, 100), $font, $maxStr);
+        imagettftext($im2, $fsMax, 0, $W - 4 - ($bMax[2] - $bMax[0]) - $bMax[0], 138, $C2(255, 130, 100), $font, $maxStr);
 
     } else {
-        // Fallback GD built-in fonts
         $ms = str_replace('.', ',', sprintf("%.1f", $temperature));
         $rs = sprintf("%.0f/%.0f", $mintemp, $maxtemp);
         imagestring($im2, 5, (int)(($W - imagefontwidth(5)*strlen($ms))/2), 35, $ms, $tCol);
-        imagestring($im2, 4, (int)(($W - imagefontwidth(4)*strlen($rs))/2), 105, $rs, $dimCol);
+        imagestring($im2, 4, (int)(($W - imagefontwidth(4)*strlen($rs))/2), 105, $rs, $tCol);
     }
 
     $imgData2 = get_image_data($im2, $format, $W, $H);
