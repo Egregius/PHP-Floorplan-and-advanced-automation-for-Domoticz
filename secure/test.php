@@ -15,7 +15,14 @@ require 'functions.php';
 $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
-echo Wiim('getsyslog');
+
+
+
+
+
+
+
+
 
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
 
