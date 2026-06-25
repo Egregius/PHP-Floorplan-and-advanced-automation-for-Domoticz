@@ -1069,19 +1069,6 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     $msg = ($d['heating']->s >= 0) ? "🔥 " : "❄️ ";
     $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode=$spmode	maxpow=$maxpow";
 
-    // 1. Special Mode check (per device)
-    if(($prevspmode[$device] ?? null) !== $spmode) {
-        $msg .= ' + spmode';
-        usleep(100000);
-        if ($spmode === -1) {
-            if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
-        } elseif ($spmode === 0) {
-            if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
-        } elseif ($spmode === 1) {
-            if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
-        } else return false;
-        $prevspmode[$device] = $spmode;
-    }
 
     // 2. Max Power check (globaal voor alle units)
     // We gebruiken 'all' als key zodat dit maar 1x per loop-ronde gebeurt
@@ -1097,6 +1084,20 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
             usleep(50000); // Korte pauze tussen units om netwerk/Daikin-stack niet te overbelasten
         }
         $prevmaxpow['all'] = $maxpow;
+    }
+
+    // 1. Special Mode check (per device)
+    if(($prevspmode[$device] ?? null) !== $spmode) {
+        $msg .= ' + spmode';
+        usleep(100000);
+        if ($spmode === -1) {
+            if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
+        } elseif ($spmode === 0) {
+            if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
+        } elseif ($spmode === 1) {
+            if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
+        } else return false;
+        $prevspmode[$device] = $spmode;
     }
 
     // 3. Logging check (per device)
