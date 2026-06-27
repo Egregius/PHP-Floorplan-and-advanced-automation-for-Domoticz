@@ -1043,7 +1043,6 @@ function sirene($msg) {
 function http_get($url, $retries = 2, $timeout = 2) {
 	$ctx = stream_context_create(['http' => ['timeout' => $timeout]]);
 	for ($i=0; $i <= $retries; $i++) {
-		lg($url,'http_get');
 		$data = @file_get_contents($url, false, $ctx);
 		if ($data !== FALSE) return $data;
 		usleep(200000);
@@ -1053,22 +1052,17 @@ function http_get($url, $retries = 2, $timeout = 2) {
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
     global $d, $time, $lastfetch;
     static $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
-
     $lastfetch = $time;
     $ips = [
         'living' => 161,
         'kamer'  => 162,
         'alex'   => 163,
     ];
-
     $base = "http://192.168.40.{$ips[$device]}";
     $url = "$base/aircon/set_control_info?pow=$power&mode=$mode&stemp=$stemp&f_rate=$fan&shum=0&f_dir=0";
-
     if(!http_get($url)) return false;
-
     $msg .= ($d['heating']->s >= 0) ? " 🔥 " : " ❄️ ";
     $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode=$spmode	maxpow=$maxpow";
-
     if(($prevmaxpow['all'] ?? null) !== $maxpow) {
         $msg .= ' + maxpow (all)';
         usleep(100000);
@@ -1083,7 +1077,6 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
         }
         $prevmaxpow['all'] = $maxpow;
     }
-
     if(($prevspmode[$device] ?? null) !== $spmode) {
         $msg .= ' + spmode';
         usleep(100000);
@@ -1096,12 +1089,10 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
         } else return false;
         $prevspmode[$device] = $spmode;
     }
-
     if(($prevmsg[$device] ?? null) !== $msg || 1 == 1) {
         lg($msg,'daikin');
         $prevmsg[$device] = $msg;
     }
-
     return true;
 }
 function hasstoken() {

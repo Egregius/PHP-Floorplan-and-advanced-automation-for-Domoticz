@@ -1,7 +1,7 @@
 <?php
 $user=basename(__FILE__);
 if ($d['brander']->s!='Off') sw('brander', 'Off', $user.':'.__LINE__);
-$bigdif=-100;
+$bigdif=0;
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
 $daikin ??= new stdClass();
 foreach (['living','kamer','alex'] as $k) {
@@ -11,10 +11,8 @@ foreach (['living','kamer','alex'] as $k) {
 		if (${'dif'.$k}>$bigdif) $bigdif=${'dif'.$k};
 	}
 }
-lg($bigdif,'daikin');
 if($d['buiten_temp']->s>30) $bigdif*=1.5;
 elseif($d['buiten_temp']->s>26) $bigdif*=1.2;
-lg($bigdif,'daikin');
 
 if ($bigdif>=2.2) $maxpow=100;
 elseif ($bigdif>=1.8) $maxpow=90;
