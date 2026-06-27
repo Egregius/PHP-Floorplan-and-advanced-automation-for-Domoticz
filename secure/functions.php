@@ -1066,7 +1066,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     if(!http_get($url)) return false;
 
     // Bepaal icoon op basis van heating status
-    $msg = ($d['heating']->s >= 0) ? "🔥 " : "❄️ ";
+    $msg .= ($d['heating']->s >= 0) ? " 🔥 " : " ❄️ ";
     $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode=$spmode	maxpow=$maxpow";
 
 
