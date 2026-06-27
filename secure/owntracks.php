@@ -9,7 +9,7 @@ if (isset($_GET['user'])) {
 				$d=fetchdata();
 				if($d['weg']->s==2) {
 					setCache('timestampweg',$time);
-					hassnotify('🏠 Huis thuis', 'door '.$user, 'mobile_app_iphone_guy', false);
+					//hassnotify('🏠 Huis thuis', 'door '.$user, 'mobile_app_iphone_guy', false);
 					setCache('remoteauto', time());
 					sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 					huisthuis('Huis thuis door '.$user);
