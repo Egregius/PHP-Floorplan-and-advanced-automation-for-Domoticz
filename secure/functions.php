@@ -1043,6 +1043,7 @@ function sirene($msg) {
 function http_get($url, $retries = 2, $timeout = 2) {
 	$ctx = stream_context_create(['http' => ['timeout' => $timeout]]);
 	for ($i=0; $i <= $retries; $i++) {
+		lg($url,'http_get');
 		$data = @file_get_contents($url, false, $ctx);
 		if ($data !== FALSE) return $data;
 		usleep(200000);
@@ -1065,28 +1066,24 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 
     if(!http_get($url)) return false;
 
-    // Bepaal icoon op basis van heating status
     $msg .= ($d['heating']->s >= 0) ? " 🔥 " : " ❄️ ";
     $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode=$spmode	maxpow=$maxpow";
 
-
-    // 2. Max Power check (globaal voor alle units)
-    // We gebruiken 'all' als key zodat dit maar 1x per loop-ronde gebeurt
     if(($prevmaxpow['all'] ?? null) !== $maxpow) {
         $msg .= ' + maxpow (all)';
         usleep(100000);
         foreach($ips as $name => $ip) {
             $en_demand = ($maxpow === 100) ? 0 : 1;
             $m_pow = $maxpow;
-            $url = "$base/aircon/set_demand_control?type=1&en_demand=$en_demand&mode=0&max_pow=$m_pow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+            $loop_base = "http://192.168.40.$ip";
+            $url = "$loop_base/aircon/set_demand_control?type=1&en_demand=$en_demand&mode=0&max_pow=$m_pow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
 
             if(!http_get($url)) return false;
-            usleep(50000); // Korte pauze tussen units om netwerk/Daikin-stack niet te overbelasten
+            usleep(50000);
         }
         $prevmaxpow['all'] = $maxpow;
     }
 
-    // 1. Special Mode check (per device)
     if(($prevspmode[$device] ?? null) !== $spmode) {
         $msg .= ' + spmode';
         usleep(100000);
@@ -1100,7 +1097,6 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
         $prevspmode[$device] = $spmode;
     }
 
-    // 3. Logging check (per device)
     if(($prevmsg[$device] ?? null) !== $msg || 1 == 1) {
         lg($msg,'daikin');
         $prevmsg[$device] = $msg;

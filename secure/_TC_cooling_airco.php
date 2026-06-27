@@ -11,11 +11,19 @@ foreach (['living','kamer','alex'] as $k) {
 		if (${'dif'.$k}>$bigdif) $bigdif=${'dif'.$k};
 	}
 }
-if ($bigdif>=2) $maxpow=100;
-elseif ($bigdif>=1.5) $maxpow=80;
-elseif ($bigdif>=1) $maxpow=60;
-elseif ($bigdif>=0.5) $maxpow=50;
+lg($bigdif,'daikin');
+if($d['buiten_temp']->s>30) $bigdif*=1.5;
+elseif($d['buiten_temp']->s>26) $bigdif*=1.2;
+lg($bigdif,'daikin');
+
+if ($bigdif>=2.2) $maxpow=100;
+elseif ($bigdif>=1.8) $maxpow=90;
+elseif ($bigdif>=1.4) $maxpow=80;
+elseif ($bigdif>=1.0) $maxpow=70;
+elseif ($bigdif>=0.6) $maxpow=60;
+elseif ($bigdif>=0.3) $maxpow=50;
 else $maxpow=40;
+
 if ($d['weg']->s>0) $maxpow=40;
 if ($maxpow<=40) {$maxpow=40;$spmode=-1;}
 elseif ($maxpow>=100) {$maxpow=100;$spmode=0;}
