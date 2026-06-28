@@ -48,7 +48,6 @@ self.addEventListener('activate', (event) => {
     );
 });
 const NETWORK_FIRST = [
-	'index.php',
     'temp.php',
     'tempbig.php',
     'hum.php',
@@ -61,10 +60,13 @@ const NETWORK_FIRST = [
 const CACHE_EXCLUDED = [
     'ajax.php',
     'd.php',
-		'log.php',
-		'temp.php',
-		'hum.php',
-		
+	'log.php',
+	'temp.php',
+	'hum.php',
+    'floorplan.cache.php',
+    'floorplan.doorsensors.php',
+    'kodi.php',
+    'kodicontrol.php'		
 ];
 self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
