@@ -43,7 +43,7 @@ if ($d['houtterras']->s=='On') {
 if ($d['weg']->s>0) {
 	if ($d['kookplaat']->s=='On') sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dysonlader']->s=='On') sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
-	if ($d['steenterras']->s=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
+//	if ($d['steenterras']->s=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['tuintafel']->s=='On') sw('tuintafel','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['weg']->s>1) {
 		foreach (array('living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel') as $i) {

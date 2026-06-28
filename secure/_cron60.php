@@ -204,7 +204,7 @@ if ($d['auto']->s=='On') {
 	if ($d['rliving']->s>60&&$d['achterdeur']->s=='Closed') {
 		if ($d['tuin']->s=='On') sw('tuin', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['tuintafel']->s=='On') sw('tuintafel', 'Off', basename(__FILE__).':'.__LINE__);
-		if ($d['steenterras']->s=='On') sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
+//		if ($d['steenterras']->s=='On') sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
 		if ($d['terras']->s>0) sl('terras', 0, basename(__FILE__).':'.__LINE__);
 	}
 
