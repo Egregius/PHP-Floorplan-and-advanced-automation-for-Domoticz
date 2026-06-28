@@ -203,7 +203,7 @@ function huisslapen($weg=false) {
 		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);
 	}
 	sl(['hall','inkom','eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','terras'], 0, basename(__FILE__).':'.__LINE__);
-	sw(['lampkast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat','steenterras','tuintafel','bosekeuken','boseliving','mac','ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
+	sw(['lampkast','garageled','garage','pirgarage','pirkeuken','pirliving','pirinkom','pirhall','tuin','zolderg','wc','grohered','kookplaat'/*,'steenterras'*/,'tuintafel','bosekeuken','boseliving','mac','ipaddock','zetel'], 'Off', basename(__FILE__).':'.__LINE__);
 //	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
 //		if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>1800) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 //	}
