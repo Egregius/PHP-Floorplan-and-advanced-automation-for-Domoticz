@@ -164,6 +164,7 @@ function fbadkamer($level,$power=false) {
 	} else {
 		$sleep=false;
 		if ($power===true&&$d['badkamerpower']->s=='Off') {
+			if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
 			sw('badkamerpower', 'On', basename(__FILE__).':'.__LINE__);
 			$sleep=true;
 		}
@@ -198,7 +199,7 @@ function huisslapen($weg=false) {
 	} else {
 		store('weg', 1, basename(__FILE__).':'.__LINE__);
 		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":0,"guest":0}\' > /dev/null 2>&1 &');
-		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius']->s!=0) store('Egregius',0,basename(__FILE__).':'.__LINE__);
 		if($d['Egregius5']->s!=0) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
 		if($d['VanOns']->s!=0) store('VanOns',0,basename(__FILE__).':'.__LINE__);
 	}

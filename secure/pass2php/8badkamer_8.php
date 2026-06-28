@@ -10,6 +10,7 @@ if ($status=='On') {
 	if ($d['badkamerpower']->s!='Off') {
 		sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
 		if($d['bose103']->s=='On') storesm('bose103','Off',0, basename(__FILE__).':'.__LINE__);
+		if($d['Egregius']->s!=0) store('Egregius',0,basename(__FILE__).':'.__LINE__);
 	}
 	if (!isset($weegschaal)||$weegschaal<$time-300) {
 		lg('Fetch weegschaal');
