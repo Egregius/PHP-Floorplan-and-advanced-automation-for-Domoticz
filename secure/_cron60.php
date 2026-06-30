@@ -3,7 +3,7 @@ $user='cron60';
 setNextubeMode();
 //lg('🕒 '.$user);
 $stamp=sprintf("%s", date("Y-m-d H:i"));
-foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) ${$i}=$d[$i.'_temp']->s;
+foreach (['buiten','living','badkamer','kamer','waskamer','alex','zolder'] as $i) ${$i}=$d[$i.'_temp']->s;
 /*$livingtemps = json_decode(getCache('livingtemps'),true)??[];
 $livingtemps[]=$living;
 $livingtemps=array_slice($livingtemps,-8);
@@ -12,14 +12,14 @@ $temp=round(array_sum($livingtemps)/count($livingtemps),2);
 $living=$temp;
 lg('livingtemps_cron60='.json_encode($livingtemps,JSON_NUMERIC_CHECK).'=>'.$temp);
 if ($temp!=$d['living_temp']->s) store('living_temp',$temp);*/
-foreach (array('buiten','living','kamer','alex','badkamer') as $i) ${$i.'_hum'}=$d[$i.'_temp']->m;
+foreach (['buiten','living','kamer','alex','badkamer'] as $i) ${$i.'_hum'}=$d[$i.'_temp']->m;
 $query="INSERT IGNORE INTO temp (stamp,buiten,living,badkamer,kamer,waskamer,alex,zolder,living_hum,kamer_hum,alex_hum,badkamer_hum,buiten_hum)  VALUES ('$stamp','$buiten','$living','$badkamer','$kamer','$waskamer','$alex','$zolder','$living_hum','$kamer_hum','$alex_hum','$badkamer_hum','$buiten_hum');";
 $stamp = date('Y-m-d H:i:s', $time - 600);
 $sql = "SELECT buiten,living,badkamer,kamer,waskamer,alex,zolder FROM temp ORDER BY stamp DESC LIMIT 10,1";
 $db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 $trendboven=0;
-foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') as $i) {
+foreach (['buiten','living','badkamer','kamer','waskamer','alex','zolder'] as $i) {
     $trend = $d[$i.'_temp']->s - $row[$i];
     if(in_array($i,['kamer','alex'])) $trendboven+=$trend;
     $trend=round($trend,2);
@@ -28,9 +28,9 @@ foreach (array('buiten','living','badkamer','kamer','waskamer','alex','zolder') 
 }
 $sum=0;
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
-foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) $sum=$sum+$d[$i.'_temp']->s;
+foreach (['living','badkamer','kamer','waskamer','alex','zolder'] as $i) $sum=$sum+$d[$i.'_temp']->s;
 $avg=($sum/6)+8;
-foreach (array('living','badkamer','kamer','waskamer','alex','zolder') as $i) {
+foreach (['living','badkamer','kamer','waskamer','alex','zolder'] as $i) {
 	if ($d[$i.'_temp']->s>$avg&&$d[$i.'_temp']->s>30) alert($i.'temp',$d[$i.'_temp']->s.'° in '.$i,3600,false,2);
 }
 
@@ -50,9 +50,9 @@ if ($d['auto']->s=='On') {
 			}
 		}
 		$avg=0;
-		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) $avg=$avg+$d[$i]->s;
+		foreach (['living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp'] as $i) $avg=$avg+$d[$i]->s;
 		$avg=$avg/5;
-		foreach (array('living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp') as $i) {
+		foreach (['living_temp','kamer_temp','waskamer_temp','alex_temp','zolder_temp'] as $i) {
 			if ($d[$i]->s>$avg+8&&$d[$i]->s>28) alert($i,'T '.$i.'='.$d[$i]->s.'°C. AVG='.round($avg, 1).'°C',3600,false,true);
 		}
 /*		if ($d['lgtv']->s=='On') {
@@ -130,7 +130,7 @@ if ($d['auto']->s=='On') {
 //		}
 	} elseif ($d['weg']->s>=2) {/* ----------------------------------- WEG ------------------------------------------------------*/
 		$uit=600;
-		foreach (array('pirhall') as $i) {
+		foreach (['pirhall'] as $i) {
 			if ($d[$i]->s!='Off') {
 				if (past($i)>$uit) {
 					ud($i, 0, 'Off');
@@ -138,7 +138,7 @@ if ($d['auto']->s=='On') {
 				}
 			}
 		}
-		foreach (array('kamer',/*'waskamer',*/'alex','lichtbadkamer') as $i) {
+		foreach (['kamer',/*'waskamer',*/'alex','lichtbadkamer'] as $i) {
 			if ($d[$i]->s>0) {
 				if (past($i)>$uit) {
 					if ($d[$i]->s>0) {
@@ -150,7 +150,7 @@ if ($d['auto']->s=='On') {
 		}
 	} elseif ($d['weg']->s>=1) {/* ----------------------------------- SLAPEN OF WEG --------------------------------------------*/
 		$uit=600;
-		foreach (array('lampkast','garage','tuin','voordeur','zolderg','mac','ipaddock','zetel') as $i) {
+		foreach (['lampkast','garage','tuin','voordeur','zolderg','mac','ipaddock','zetel'] as $i) {
 			if ($d[$i]->s=='On') {
 				if (past($i)>$uit) {
 					sw($i, 'Off', basename(__FILE__).':'.__LINE__);
@@ -158,7 +158,7 @@ if ($d['auto']->s=='On') {
 				}
 			}
 		}
-		foreach (array('eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','hall','inkom','terras') as $i) {
+		foreach (['eettafel','zithoek','bureellinks','bureelrechts','wasbak','snijplank','hall','inkom','terras'] as $i) {
 			if ($d[$i]->s>0) {
 				if (past($i)>$uit) {
 					sl($i, 0, basename(__FILE__).':'.__LINE__);

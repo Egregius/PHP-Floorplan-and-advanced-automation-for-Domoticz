@@ -152,10 +152,13 @@ function fhall() {
 	} else finkom();
 	if ($d['weg']->s==0&&$d['alexslaapt']->s==1&&$d['rkamerl']->s>70&&$d['rkamerr']->s>70&&$d['time']>=strtotime('21:30')&&$d['time']<=strtotime('23:00')&&$d['kamer']->s==0&&past('kamer')>7200) {
 		sl('kamer1', 1, basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
-		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
+		
 	}
 	if ($d['boseliving']->s=='Off'&&$d['time']>$t-3600&&$d['time']<$t+3600) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+	if($d['Egregius']->s!=1) {
+		shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
+		store('Egregius',1,basename(__FILE__).':'.__LINE__);
+	}
 }
 function fbadkamer($level,$power=false) {
 	global $d,$t;
@@ -164,7 +167,10 @@ function fbadkamer($level,$power=false) {
 	} else {
 		$sleep=false;
 		if ($power===true&&$d['badkamerpower']->s=='Off') {
-			if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
+			if($d['Egregius']->s!=1) {
+				shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
+				store('Egregius',1,basename(__FILE__).':'.__LINE__);
+			}
 			sw('badkamerpower', 'On', basename(__FILE__).':'.__LINE__);
 			$sleep=true;
 		}

@@ -234,7 +234,7 @@ if (count($winds)>=4) {
 	$weather['w']=$wind;
 }
 if (count($clouds)>=1) {
-	lg(print_r($clouds,true), 'nextube');
+//	lg(print_r($clouds,true), 'nextube');
 	$clouds=round(array_sum($clouds)/count($clouds), 0);
 	$clouds=clamp($clouds,0,100);
 	$sun=100-$clouds;
@@ -269,7 +269,7 @@ $weather['uvm']=round($weather['uvm'],1);
 //if($wind!=$winds['prev']) lgtype('Winds',json_encode($winds).' '.$wind);
 if (!isset($weathercache)||$weathercache!==$weather) {
 	$data=json_encode($weather);
-	lg($data,'weather');
+//	lg($data,'weather');
 	publishmqtt('d/w',$data);
 	$weathercache=$weather;
 	$fog=0;
@@ -279,7 +279,7 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 if($d['weg']->s==0) {
 	$wind=clamp($wind*2,0,100);
 	nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,$wind);
-	lg("sun $sun,clouds $clouds,rain $rain,temp $temp,min $mintemp,max $maxtemp,fog $fog,snow $snow,thunder $thunder,wind $wind",'nextube');
+//	lg("sun $sun,clouds $clouds,rain $rain,temp $temp,min $mintemp,max $maxtemp,fog $fog,snow $snow,thunder $thunder,wind $wind",'nextube');
 }
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
