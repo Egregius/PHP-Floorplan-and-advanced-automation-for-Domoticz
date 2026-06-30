@@ -1327,48 +1327,6 @@ function Wiim(string $cmd) {
     curl_close($ch);
     return $response;
 }
-function WiimStartPreset(int $presetNumber) {
-    $url = "https://192.168.2.9/httpapi.asp?command=MCUKeyShortClick:$presetNumber";
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        lg('Error: ' . $url.'='.curl_error($ch),'wiim');
-    } else lg('StartPreset '.$presetNumber,'wiim');
-    curl_close($ch);
-    return $response;
-}
-function WiimSkipTrack($cmd='next') {
-    $url = "https://192.168.2.9/httpapi.asp?command=setPlayerCmd:$cmd";
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        lg('Error: ' . $url.'='.curl_error($ch),'wiim');
-    } else lg("setPlayerCmd:$cmd",'wiim');
-    curl_close($ch);
-    return $response;
-}
-function WiimGetMetaInfo() {
-    $url = "https://192.168.2.9/httpapi.asp?command=getMetaInfo";
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        lg('Error: ' . $url.'='.curl_error($ch),'wiim');
-    }
-    curl_close($ch);
-    return $response;
-}
 function setCache(string $key, $value): bool {
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
 }
@@ -1435,32 +1393,8 @@ function setNextubeMode(): bool {
 	}
     return false;
 }
-function setNextubeWeather($temp,$hum,$icon,$rain): bool {
-	$data=[];
-	$data['temp_c']=$temp;
-	$data['humidity']=$hum;
-	$data['icon']=$icon;
-	$data['condition']=$rain;
-	$data = json_encode($data);
-	lg('Nextube weather '.$data, 'nextube');
-	$ch = curl_init('http://192.168.40.93/api/weather');
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-	$response = curl_exec($ch);
-	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	curl_close($ch);
-	if ($httpCode === 200 && $response !== false) {
-		$responseData = json_decode($response, true);
-		return (isset($responseData['status']) && $responseData['status'] === 'ok');
-	}
-	return false;
-}
-function cleanTitle(string $artists, string $title): string
-{
+function cleanTitle(string $artists, string $title): string {
 	static $replace = null;
-
 	if ($replace === null) {
 		$replace = [
 			'albummix','clubedit','clubmix','edit','extended','album',
@@ -1473,20 +1407,14 @@ function cleanTitle(string $artists, string $title): string
 			'videoedit','7"',
 		];
 	}
-
 	$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $artists));
 	$title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title));
-
 	$title = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
-
 	$arr = array_map('trim', explode(',', $artists));
 	sort($arr);
-
 	$str = implode('', $arr) . $title;
 	$str = preg_replace('/[^a-z0-9]/', '', $str);
 	$str = preg_replace('/\b(' . implode('|', array_map('preg_quote', $replace)) . ')\b/', '', $str);
-
 	$str = preg_replace('/[^a-z0-9]/', '', $str);
-
 	return $str;
 }

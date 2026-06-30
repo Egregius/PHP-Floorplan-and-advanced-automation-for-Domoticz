@@ -43,7 +43,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 			'https://192.168.2.9/' => 'https://wiim.egregius.be/',
 		];
 		if($nowplaying['@attributes']['source']=='AUX'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
-			$wiim=json_decode(WiimGetMetaInfo());
+			$wiim=json_decode(Wiim('getMetaInfo'));
 //			echo '<pre>';print_r($wiim);echo '</pre><hr>';
 			$d['source']='WiiM';
 			$d['artist']=$wiim->metaData->artist;
@@ -232,12 +232,8 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 		play_scheduled_playlist($_REQUEST['action']);
 	} elseif ($_REQUEST['command']=='preset') {
 		bosepreset('PRESET_'.$_REQUEST['action'], $_REQUEST['boseip']);
-	} elseif ($_REQUEST['command']=='skipupnp') {
-		ma_next_track();
 	} elseif ($_REQUEST['command']=='skipwiim') {
-		WiimSkipTrack($_REQUEST['action']);
-	} elseif ($_REQUEST['command']=='skipairplay') {
-		ma_next_track();
+		Wiim('setPlayerCmd:'.$_REQUEST['action']);
 	} elseif ($_REQUEST['command']=='skip') {
 		$db = Database::getInstance();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
