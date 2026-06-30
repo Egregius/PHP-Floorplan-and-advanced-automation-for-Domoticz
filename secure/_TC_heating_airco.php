@@ -107,30 +107,6 @@ foreach (array('living','kamer','alex') as $k) {
 			if (($k=='kamer' && ($time<strtotime('10:00')||$d['weg']->s==1)) ||
 				($k=='alex' && $d['alexslaapt']->s==1)) $fan='B';
 		}
-		if ($k=='living'&&$target>16) {
-//			$msg='🔥 set = '.number_format($set,3,',','').' ⇉ ceil = '.number_format($setrounded,1,',','').' ⇉ trend = '.$trend.' factor = '.round($factor,3).' diffac = '.$diffac.' trendfac = '.$trendfac.' change = '.$change.' maxpow='.$maxpow.' daikinpower='.$daikinpower.(isset($line)?'	['.$line.']':'');
-//			if($msg!=$prevmsg) {
-//				lg($msg);
-//				publishmqtt('d/i',date("G:i:s").'|'.number_format($setrounded,1,',','').'|'.number_format($set,2,',','').'|'.number_format(($diffac + $trendfac),3,',','').'|'.round($factor,3).'|'.$maxpow.' '. $fan);
-//				$prevmsg=$msg;
-//				unset($line);
-//			}
-			lgcsv('trend_living', [
-				"Living target"=>number_format($target,1,',',''),
-				"Living temp"=>number_format($d['living_temp']->s,2,',',''),
-				"set"=>number_format($set,3,',',''),
-				"setrounded"=>number_format($setrounded,1,',',''),
-				"daikinpower"=>$d['daikin']->p,
-				"trend"=>$trend,
-				"factor"=>round($factor,3),
-				"diffac"=>$diffac,
-				"trendfac"=>$trendfac,
-				"change"=>$change,
-				"adjLiving"=>$adjLiving,
-				"maxpow"=>$maxpow,
-				"fan"=>$fan
-			]);
-		}
 		if ($k=='living'&&$lastautosetliving>$time-3600) $power=1;
 		if ($daikin->$k->power!=$power || $daikin->$k->mode!=4 || $daikin->$k->set!=$setrounded ||
 			$daikin->$k->fan!=$fan || $daikin->$k->spmode!=$spmode || $daikin->$k->maxpow != $maxpow ||

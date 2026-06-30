@@ -105,10 +105,6 @@ function fgarage() {
 			zwave('poort','binary',2,'ON');
 			sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 		}
-		if ($d['garageled']->m!=1) {
-			storemode('garageled',1);
-			setBatterijLedBrightness(40);
-		}
 	}
 }
 function fkeuken() {
@@ -407,15 +403,13 @@ function isCli(): bool {
 function publishmqtt($topic,$msg,$log='') {
 	global $mqtt,$user;
 	if($mqtt&&$mqtt->isConnected()) {
-		lgmqtt("🟢 MQTT	".($user??'')."	{$topic}	{$msg}	{$log}");
-	$mqtt->publish($topic,$msg,1,true);
+		$mqtt->publish($topic,$msg,1,true);
 	} else {
 		$connectionSettings=(new ConnectionSettings)
 		->setUsername('mqtt')
 		->setPassword('mqtt');
 		$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
 		$mqtt->connect($connectionSettings,true);
-		lgmqtt("🛑 MQTT	".($user??'')." {$topic}	{$msg}	{$log}");
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
@@ -706,35 +700,6 @@ function lg($msg,$file='default') {
 	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
 	fclose($fp);
 }
-function lgmqtt($msg) {
-	$fp = fopen("/var/log/mqtt/publish.log", "a+");
-	$time = microtime(true);
-	$dFormat = "d-m H:i:s";
-	$mSecs = $time - floor($time);
-	$mSecs = substr(number_format($mSecs, 3), 1);
-	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
-	fclose($fp);
-}
-function lgtype($type,$msg) {
-	$fp = fopen("/var/log/domotica/$type.log", "a+");
-	$time = microtime(true);
-	$dFormat = "d-m H:i:s";
-	$mSecs = $time - floor($time);
-	$mSecs = substr(number_format($mSecs, 3), 1);
-	fwrite($fp, sprintf("%s%s %s\n", date($dFormat), $mSecs, $msg));
-	fclose($fp);
-}
-function lgcsv($type, array $data) {
-    $file = "/var/www/csv/$type-".date("Y-m-d").".csv";
-    $exists = file_exists($file);
-    $row = array_merge(['timestamp' => date("H:i:s")], $data);
-    $fp = fopen($file, "a+");
-    if (!$exists) {
-        fputcsv($fp, array_keys($row), ";");
-    }
-    fputcsv($fp, array_values($row), ";");
-    fclose($fp);
-}
 function bosekey($key,$sleep=75000,$ip=101,$msg=null) {
 	lg('bosekey '.$ip.' '.$key.' '.$msg,'bose');
 	$xml="<key state=\"press\" sender=\"Gabbo\">$key</key>";
@@ -760,9 +725,6 @@ function bosebass($bass,$ip=101) {
 	$bass=1*$bass;
 	$xml="<bass>$bass</bass>";
 	bosepost("bass", $xml, $ip);
-}
-function bosepreset($preset,$ip=101) {
-	bosekey($preset, 0, $ip, true);
 }
 function boseplaylist() {
 	global $time;
@@ -805,33 +767,6 @@ function wiimplaylist() {
 	}
 	return $preset;
 }
-
-
-function getPlaylistDetails(): array
-{
-    global $time;
-    $ts      = isset($time) ? $time : time();
-    $dag     = (int) floor($ts / 86400);
-    $dow     = (int) date('w', $ts);
-    $weekend = ($dow === 0 || $dow === 6);
-
-    if ($weekend) {
-        $key = match($dag % 3) { 0 => 'MIX-3', 1 => 'MIX-1', default => 'MIX-2' };
-    } else {
-        $key = match($dag % 3) { 0 => 'EDM-3', 1 => 'EDM-1', default => 'EDM-2' };
-    }
-
-    return [
-        'EDM-1' => ['id' => '11', 'name' => 'EDM - 1'],
-        'EDM-2' => ['id' => '12', 'name' => 'EDM - 2'],
-        'EDM-3' => ['id' => '13', 'name' => 'EDM - 3'],
-        'MIX-1' => ['id' => '14', 'name' => 'MIX - 1'],
-        'MIX-2' => ['id' => '15', 'name' => 'MIX - 2'],
-        'MIX-3' => ['id' => '16', 'name' => 'MIX - 3'],
-        'Top'   => ['id' => '17', 'name' => 'Top'],
-        'Pop'   => ['id' => '18', 'name' => 'Pop'],
-    ][$key];
-}
 function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
 {
     global $matokenbeta;
@@ -855,98 +790,6 @@ function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
     ]);
 
     $body   = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    return $status >= 200 && $status < 300;
-}
-function ma_enable_player(bool $enabled): bool
-{
-	global $matokenbeta;
-
-	static $enable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'wiim_uuid:FF98F7F4-1C01-B908-A5FC-2C18FF98F7F4','values' => ['enabled' => true]]]);
-	static $disable= json_encode(['command' => 'config/players/save','args' => ['player_id' => 'wiim_uuid:FF98F7F4-1C01-B908-A5FC-2C18FF98F7F4','values' => ['enabled' => false]]]);
-
-	$ch = curl_init('http://192.168.2.26:8095/api');
-	curl_setopt_array($ch, [
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_POST => true,
-		CURLOPT_POSTFIELDS => $enabled ? $enable : $disable,
-		CURLOPT_HTTPHEADER => [
-			'Authorization: Bearer ' . $matokenbeta,
-			'Content-Type: application/json',
-		],
-		CURLOPT_CONNECTTIMEOUT => 2,
-		CURLOPT_TIMEOUT => 5,
-	]);
-	$response = curl_exec($ch);
-	lg('ma_enable_player = '.$response,'bose');
-	$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	curl_close($ch);
-	return $status >= 200 && $status < 300;
-}
-
-function play_scheduled_playlist(int $playlist=0): bool
-{
-    global $matokenbeta;
-	if($playlist==0) {
-		$dow=date("w");
-		if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-		if($weekend===true) {
-			$playlist      = 7;
-			$name="Infinite Mix (library)";
-			$sort_name="infinite mix (library)";
-		} else {
-			$playlist      = 8;
-			$name="Infinite Mix (favorites)";
-			$sort_name="infinite mix (favorites)";
-			
-		}
-	} else {
-		$name="Infinite Mix (favorites)";
-		$sort_name="infinite mix (favorites)";
-	}
-    $payload = json_encode([
-        'message_id' => uniqid('php_', true),
-        'command'    => 'player_queues/play_media',
-        'args'       => [
-            "item_id" => $playlist,
-            "provider" => "library",
-            "name"	=> $name,
-            "version" => "",
-            "sort_name" => $sort_name,
-            'queue_id' => 'wiim_uuid:FF98F7F4-1C01-B908-A5FC-2C18FF98F7F4',
-            'media'    => ['library://playlist/'.$playlist],
-            "external_ids" => [],
-            'option'   => 'replace', 
-            "is_playable" => true,
-            "translation_key" => null,
-            "media_type" => "playlist",
-            "available" => true,
-            "image" =>  [
-                "type" => "thumb",
-                "path" => "logo.png",
-                "provider" => "builtin",
-                "remotely_accessible" => false
-            ],
-            "year" => null
-        ],
-    ],JSON_UNESCAPED_UNICODE);
-	lg('play_scheduled_playlist = '.$payload,'bose');
-    $ch = curl_init('http://192.168.2.26:8095/api');
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => $payload,
-        CURLOPT_HTTPHEADER     => [
-            'Authorization: Bearer ' . $matokenbeta,
-            'Content-Type: application/json',
-        ],
-        CURLOPT_TIMEOUT => 10,
-    ]);
-
-    $body   = curl_exec($ch);
-    lg('play_scheduled_playlist body='.$body,'bose');
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
@@ -1103,17 +946,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     return true;
 }
 function hasstoken() {
-	global $user;
-	switch ($user) {
-		case 'cron10': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2YmQ0NDZjNTgyZTY0NDU5YTkxNmE4ZThmZDVhNWFjNCIsImlhdCI6MTc0OTMxODM1NywiZXhwIjoyMDY0Njc4MzU3fQ.S6oPTz8PrEChIU2Ogx4qFgcCBLzKy8tLeFKA_NfDbH8';
-		case 'cron60': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiZTc4NDhiOGNhMmY0OTIyODQxOGJkMDAyYmJkMDM0YyIsImlhdCI6MTc0OTMxOTM3NSwiZXhwIjoyMDY0Njc5Mzc1fQ.gn-THiHH1yf_CugxLoqNvbeftRxW_CsLJ2lPWt5c2Ro';
-		case 'cron300': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzNTE5NjQ1Zjk5NzY0MDcxYjIyODU3Mzg2YmQ3NWIzYiIsImlhdCI6MTc1MDE1MjI1NSwiZXhwIjoyMDY1NTEyMjU1fQ.eMWEEwlxDQL-t4xhpqwenJ1xZh8Ct44vQ1f5_5RB-UU';
-		case 'cron3600': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2MjliNzVmZTY3ZDc0MWI0YmM3NDc2ZDA5ODQzNTEyOCIsImlhdCI6MTc1MDE1MjM2NCwiZXhwIjoyMDY1NTEyMzY0fQ.76X_fwqF1JVeZKN6Vrv-H7DrzGQ2NJnIQbIr7yCHCrI';
-		case 'heating': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjNDk4ZDU1MTA2ZWI0MWJkYWE3ZWZjNTMwMmEyYzg3NiIsImlhdCI6MTc1MDE1MjQxMCwiZXhwIjoyMDY1NTEyNDEwfQ.kKqGJU4ALE6_HMQ5c4kwtcW8IeOVhhBc4Spg3lmheJs';
-		case 'Guy': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMTQ1ZThmNjYyNTk0Mjk5OWM2ZTUyMWNhZWY3MTUxYSIsImlhdCI6MTc0ODQwMDM0OCwiZXhwIjoyMDYzNzYwMzQ4fQ.SDUxztRFwr9p7w29LQ-_fDa5l4KB1cOTrz_riHQCFlY';
-		case 'Kirby': return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxNGM2YmJhY2EwMzY0NzYwOTI4Y2VhMjdjZDVjOWEwNCIsImlhdCI6MTc1MDE1MjQ2MSwiZXhwIjoyMDY1NTEyNDYxfQ.IrQG72soNQcprvzDwKajkuQnmG-kULIiBS35sKLDxsI';
-		default: return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODYzYTllZGY2OGI0ZTc4YjFkOGFkOWQ4YzM3MDRhMiIsImlhdCI6MTc1MDE1MjUwOCwiZXhwIjoyMDY1NTEyNTA4fQ.U-t5m66b9sx7QCWVXEStmt6AIcSN0zbSHHKnR13zEu0';
-	}
+	return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODYzYTllZGY2OGI0ZTc4YjFkOGFkOWQ4YzM3MDRhMiIsImlhdCI6MTc1MDE1MjUwOCwiZXhwIjoyMDY1NTEyNTA4fQ.U-t5m66b9sx7QCWVXEStmt6AIcSN0zbSHHKnR13zEu0';
 }
 
 function hass(string $domain, string $service, string $entity = '', array $data = []): void {
@@ -1374,12 +1207,6 @@ final class Device {
     public ?int  $rt;
     public ?int  $f;
 }
-function roundUpToAny($n,$x=5) {
-	return round(($n+$x/2)/$x)*$x;
-}
-function roundDownToAny($n,$x=5) {
-	return floor($n/$x) * $x;
-}
 function isoToLocalTimestamp(string $isoTime): int {
 	$utc = new DateTime($isoTime, new DateTimeZone("UTC"));
 	$utc->setTimezone(new DateTimeZone(date_default_timezone_get()));
@@ -1542,25 +1369,11 @@ function WiimGetMetaInfo() {
     curl_close($ch);
     return $response;
 }
-function setBatterijLedBrightness(int $brightness) {
-	$payload = json_encode([ 'status_led_brightness_pct' => $brightness ]);
-	$ch = curl_init("https://battery/api/system");
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-	curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Authorization: Bearer 9D03BCA88274A4C1603E4D0F5DD21AB0", "X-Api-Version: 2", "Content-Type: application/json" ]);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-	curl_exec($ch);
-	curl_close($ch);
-}
 function setCache(string $key, $value): bool {
-//	lg("setCache $key $value","setcache");
     return file_put_contents('/dev/shm/cache/' . $key .'.txt', $value, LOCK_EX) !== false;
 }
 function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
-//	if($key!=='en') lg("getCache $key $data","getcache");
     return $data === false ? $default : $data;
 }
 function convertbytes($size) {

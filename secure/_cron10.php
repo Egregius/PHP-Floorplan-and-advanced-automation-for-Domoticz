@@ -6,10 +6,6 @@ if ($d['auto']->s=='On') {
 	$i=39;
 	if ($d['pirgarage']->s=='Off'&&$d['pirgarage2']->s=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garageled')>$i) {
 		if ($d['garageled']->s=='On') sw('garageled', 'Off');
-		if ($d['garageled']->m!=0) {
-			storemode('garageled',0);
-			setBatterijLedBrightness(0);
-		}
 	}
 	$i=119;
 	if ($d['garage']->s=='On'&&$d['pirgarage']->s=='Off'&&$d['pirgarage2']->s=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garage')>$i) sw('garage', 'Off');

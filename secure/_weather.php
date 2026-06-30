@@ -263,13 +263,8 @@ if (count($rains) >= 2) {
 if($weather['uv']>$weather['uvm'])$weather['uvm']=$weather['uv'];
 $weather['uv']=round($weather['uv'],1);
 $weather['uvm']=round($weather['uvm'],1);
-//lg(print_r($uvs,true));
-//if($temp!=$temps['prev']) lgtype('Temps',json_encode($temps).' '.$temp);
-//if($rain!=$rains['prev']) lgtype('Rains',json_encode($rains).' '.$rain);
-//if($wind!=$winds['prev']) lgtype('Winds',json_encode($winds).' '.$wind);
 if (!isset($weathercache)||$weathercache!==$weather) {
 	$data=json_encode($weather);
-//	lg($data,'weather');
 	publishmqtt('d/w',$data);
 	$weathercache=$weather;
 	$fog=0;
@@ -279,7 +274,6 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 if($d['weg']->s==0) {
 	$wind=clamp($wind*2,0,100);
 	nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,$wind);
-//	lg("sun $sun,clouds $clouds,rain $rain,temp $temp,min $mintemp,max $maxtemp,fog $fog,snow $snow,thunder $thunder,wind $wind",'nextube');
 }
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);

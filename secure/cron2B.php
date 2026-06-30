@@ -132,30 +132,11 @@ foreach ($devices as $ip => $vol) {
 
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||(isset($status['playStatus'])&&$status['playStatus'] == 'STOP_STATE')) && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
-					if ($ip==101) {
-						$past=$time-$lastplay;
-//						lg($past.' | '.$playlisttries,'cron2');
-						if($past>=60) {
-							lg('play_scheduled_playlist','cron2');
-//							ma_enable_player(false);
-//							sleep(1);
-//							ma_enable_player(true);
-//							sleep(10);
-//							play_scheduled_playlist();
-							$lastplay=$time;
-							$playlisttries++;
-							sleep(1);
-							$vol = ($d['alexslaapt']->s == 1) ? 20 : 28;
-							bosevolume($vol,101, 'lijn '.__LINE__);
-							if($playlisttries>3) {
-								lg('play_scheduled_playlist failed, restarting Music Assistant','cron2');
-								$playlisttries=0;
-							}
-						}
-						
-					} elseif ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
+					if ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
+						$vol = ($d['alexslaapt']->s == 1) ? 20 : 28;
 						bosezone($ip,$vol);
 					} elseif ($ip!=105&&$d['time']<strtotime('20:00')) {
+						$vol = ($d['alexslaapt']->s == 1) ? 20 : 28;
 						bosezone($ip,$vol);
 					}
 				}
