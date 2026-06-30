@@ -90,14 +90,12 @@ if ($d['auto']->s=='On') {
 			if (
 				(
 					$d['buiten_temp']->s > $d['kamer_temp']->s ||
-					$d['buiten_temp']->s > $d['waskamer_temp']->s ||
 					$d['buiten_temp']->s > $d['alex_temp']->s || 
 					$trendboven > 0.1
 				) &&
 				$d['buiten_temp']->s >= 18 &&
 				(
 					$d['kamer_temp']->s >= 18 ||
-					$d['waskamer_temp']->s >= 18 ||
 					$d['alex_temp']->s >= 18
 				) &&
 				(
@@ -107,7 +105,7 @@ if ($d['auto']->s=='On') {
 						$d['raamwaskamer']->s == 'Open' && 
 						($d['deurkamer']->s == 'Open' || $d['deuralex']->s == 'Open')
 					)
-				) && $d['time']>strtotime('9:00')
+				) && $d['time']>strtotime('9:00') && $d['time']<strtotime('20:00')
 			) {
 				alert(
 					'ramenboven',
