@@ -98,8 +98,8 @@ if ($d['auto']->s=='On') {
 					$d['alex_temp']->s >= 18
 				) &&
 				(
-					$d['raamkamer']->s == 'Open' ||
-					$d['raamalex']->s == 'Open' ||
+					($d['raamkamer']->s == 'Open' && $d['deurkamer']->s == 'Open')||
+					($d['raamalex']->s == 'Open' && $d['deuralex']->s == 'Open') ||
 					(
 						$d['raamwaskamer']->s == 'Open' && 
 						($d['deurkamer']->s == 'Open' || $d['deuralex']->s == 'Open')
