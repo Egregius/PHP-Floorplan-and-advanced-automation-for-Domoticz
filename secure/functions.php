@@ -1107,15 +1107,16 @@ function hassnotify($title, $message, $target = 'mobile_app_iphone_guy', $critic
     return true;
 }
 function curl($url) {
-	$ch=curl_init();
-	curl_setopt($ch,CURLOPT_URL,$url);
-	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: application/json'));
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
-	curl_setopt($ch,CURLOPT_TIMEOUT,5);
-	$data=curl_exec($ch);
-	curl_close($ch);
-	return $data;
+	static $ch = null;
+	if ($ch === null) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+	}
+	curl_setopt($ch, CURLOPT_URL, $url);
+	return curl_exec($ch);
 }
 final class Database {
     private static ?PDO $instance = null;
