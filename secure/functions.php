@@ -151,10 +151,6 @@ function fhall() {
 		
 	}
 	if ($d['boseliving']->s=='Off'&&$d['time']>$t-3600&&$d['time']<$t+3600) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-	if($d['Egregius']->s!=1) {
-		shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
-		store('Egregius',1,basename(__FILE__).':'.__LINE__);
-	}
 }
 function fbadkamer($level,$power=false) {
 	global $d,$t;
