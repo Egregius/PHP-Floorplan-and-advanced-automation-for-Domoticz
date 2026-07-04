@@ -55,7 +55,7 @@ foreach ($devices as $ip => $vol) {
 									} else {
 										lg('Adding '.$cleantitle.' to history','cron2');
 										$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
-										while (count($history) > (157*5)) {
+										while (count($history) > (157*8)) {
 											reset($history);
 											$oldestKey = key($history);
 											unset($history[$oldestKey]);
