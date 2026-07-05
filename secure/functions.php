@@ -1418,8 +1418,8 @@ function cleanTitle(string $artists, string $title): string {
 
 function berekenWaterWachttijdSeconden(float $temperatuur): int {
     $minTemp = 15.0;
-    $maxTemp = 35.0;
-    $maxWachtUren = 36;
+    $maxTemp = 32.0;
+    $maxWachtUren = 24;
     $minWachtUren = 8;
     if ($temperatuur <= $minTemp) {
         return $maxWachtUren * 3600;
