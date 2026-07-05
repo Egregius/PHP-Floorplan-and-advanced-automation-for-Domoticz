@@ -89,8 +89,8 @@ if ($d['auto']->s=='On') {
     if ($d['deurvoordeur']->s=='Closed'&&$d['voordeur']->s=='On') {
     	$past=past('voordeur');
     	$pastweg=past('weg');
-    	if ($d['weg']->s==0&&$d['dag']->s>0&&$past>5&&$pastweg>5) sw('voordeur', 'Off');
-    	elseif ($d['weg']->s==0&&$past>55&&$pastweg>180) sw('voordeur', 'Off');
+    	if ($d['weg']->s==0&&$d['dag']->s>0&&$past>5&&$pastweg>5) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+    	elseif ($d['weg']->s==0&&$past>55&&$pastweg>180) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif ($d['weg']->s>0&&$past>55&&$pastweg>120) sw('voordeur', 'Off');
 	}
 if ($d['weg']->s<=2&&$d['n']<-1200&&$d['b']>0&&$d['grohered']->s=='Off') sw('grohered', 'On', ' n='.$d['n'].'W b='.$d['b'].'W', true);
@@ -98,3 +98,4 @@ elseif ($d['grohered']->s=='On'&&past('8keuken_8')>1800&&$d['n']>100&&$d['b']<0&
 if ($d['regenpomp']->s=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off');
 $pastwater=past('water');
 if ($d['water']->s=='On'&&$pastwater>70&&$pastwater>=$d['water']->m) sw('water', 'Off');
+elseif($pastwater>berekenWaterWachttijdSeconden($d['buiten_temp']->s)) sw('water', 'On');

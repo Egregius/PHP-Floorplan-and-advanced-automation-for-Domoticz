@@ -1415,3 +1415,19 @@ function cleanTitle(string $artists, string $title): string {
 	$str = preg_replace('/[^a-z0-9]/', '', $str);
 	return $str;
 }
+
+function berekenWaterWachttijdSeconden(float $temperatuur): int {
+    $minTemp = 15.0;
+    $maxTemp = 35.0;
+    $maxWachtUren = 36;
+    $minWachtUren = 8;
+    if ($temperatuur <= $minTemp) {
+        return $maxWachtUren * 3600;
+    }
+    if ($temperatuur >= $maxTemp) {
+        return $minWachtUren * 3600;
+    }
+    $factor = ($temperatuur - $minTemp) / ($maxTemp - $minTemp);
+    $wachtUren = $maxWachtUren - ($factor * ($maxWachtUren - $minWachtUren));
+    return (int) round($wachtUren * 3600);
+}
