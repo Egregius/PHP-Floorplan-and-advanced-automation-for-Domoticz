@@ -1416,18 +1416,20 @@ function cleanTitle(string $artists, string $title): string {
 	return $str;
 }
 
-function berekenWaterWachttijdSeconden(float $temperatuur): int {
-    $minTemp = 15.0;
-    $maxTemp = 32.0;
-    $maxWachtUren = 24;
-    $minWachtUren = 8;
-    if ($temperatuur <= $minTemp) {
-        return $maxWachtUren * 3600;
+function berekenWaterDuurSeconden(
+    float $maxTemp,
+    float $minTempGrens = 15.0,
+    float $maxTempGrens = 35.0,
+    int $minDuur = 30,
+    int $maxDuur = 90
+): int {
+    if ($maxTemp <= $minTempGrens) {
+        return $minDuur;
     }
-    if ($temperatuur >= $maxTemp) {
-        return $minWachtUren * 3600;
+    if ($maxTemp >= $maxTempGrens) {
+        return $maxDuur;
     }
-    $factor = ($temperatuur - $minTemp) / ($maxTemp - $minTemp);
-    $wachtUren = $maxWachtUren - ($factor * ($maxWachtUren - $minWachtUren));
-    return (int) round($wachtUren * 3600);
+    $factor = ($maxTemp - $minTempGrens) / ($maxTempGrens - $minTempGrens);
+    $duur = $minDuur + ($factor * ($maxDuur - $minDuur));
+    return (int) round($duur);
 }

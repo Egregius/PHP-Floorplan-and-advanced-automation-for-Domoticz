@@ -1,7 +1,7 @@
 <?php
 $user='cron3600';
 //lg($user);
-$uur=date('G');
+$uur=(int)date('G');
 if ($uur%4==0||LOOP_START>$time-60) {
 //	lg('🕒 '.$user.' ===================================================================================================================================================','cron3600');
 //	if ($uur==0) {
@@ -108,6 +108,15 @@ if ($uur%4==0||LOOP_START>$time-60) {
 			lg("Geen temperatuurdata voor $yesterday gevonden.",'cron3600');
 		}
 	}
+}
+
+
+if ((in_array($uur, [7, 14, 21])&&isset($maxtemp)&&$maxtemp>10&& $pastwater > 3000)||$pastwater>43200) {
+    $waterDuur = (isset($maxtemp)) ? berekenWaterDuurSeconden($maxtemp) : 60;
+    $eindtijd = $time + $waterDuur;
+    storemode('water', $eindtijd);
+    sw('water', 'On', basename(__FILE__) . ':' . __LINE__);
+    telegram('Water geven gedurende '.$waterDuur.' seconden');
 }
 
 if ($d['weg']->s==0) {
