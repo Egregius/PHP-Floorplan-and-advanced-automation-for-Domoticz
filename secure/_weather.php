@@ -272,34 +272,34 @@ if (!isset($weathercache)||$weathercache!==$weather) {
 	$thunder=0;
 }
 if($d['weg']->s==0) {
-	$wind=clamp($wind*2,0,100);
-	nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,$wind);
+	nextube_image($sun,$clouds,$rain,$temp,$mintemp,$maxtemp,$fog,$snow,$thunder,clamp($wind*2,0,100));
 }
 //$avg=null;
 //if ($d['buiten_temp']['icon']!=$avg) storeicon('buiten_temp',$avg);
 if ($d['auto']->s=='On') {
-	if ($d['heating']->s==-2&&$d['living_temp']->s>=20&&$d['dag']->m>117&&$rain<5) { // Airco Cooling
+	if ($d['heating']->s==-2&&$d['living_temp']->s>=20&&$d['dag']->m>117&&$rain<10) { // Airco Cooling
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=24) $luifel=30;
 		elseif ($wind>=18) $luifel=40;
 		else $luifel=50;
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
+//			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['z'].' past='.past('luifel'));
 			if ($d['luifel']->s<$luifel&&$d['z']>1500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']->s==-1	&&$d['living_temp']->s>=21 &&$d['dag']->m>117&&$rain<5) { // Passive Cooling
+	} elseif ($d['heating']->s==-1	&&$d['living_temp']->s>=21 &&$d['dag']->m>117&&$rain<10) { // Passive Cooling
 		if ($wind>=30) 	 $luifel=0;
 		elseif ($wind>=24) $luifel=30;
 		elseif ($wind>=18) $luifel=40;
 		else $luifel=50;
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
-			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['z'].' past='.past('luifel'));
+//			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['z'].' past='.past('luifel'));
 			if ($d['luifel']->s<$luifel&&$d['z']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
-	} elseif ($d['heating']->s==0&&$d['living_temp']->s>=21&&$d['dag']->m>117&&$rain<5) { // Neutral
+	} elseif ($d['heating']->s==0&&$d['living_temp']->s>=21&&$d['dag']->m>117&&$rain<10) { // Neutral
 		if ($wind>=40) 	 $luifel=0;
 		elseif ($wind>=30) $luifel=35;
 		elseif ($wind>=20) $luifel=45;
