@@ -97,4 +97,4 @@ if ($d['weg']->s<=2&&$d['n']<-1200&&$d['b']>0&&$d['grohered']->s=='Off') sw('gro
 elseif ($d['grohered']->s=='On'&&past('8keuken_8')>1800&&$d['n']>100&&$d['b']<0&&$d['wasbak']->s==0&&$d['snijplank']->s==0) sw('grohered', 'Off', ' n='.$d['n'].'W b='.$d['b'].'W',true);
 if ($d['regenpomp']->s=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off');
 $pastwater=past('water');
-if ($d['water']->s=='On'&&$pastwater>70&&$pastwater>=$d['water']->m) sw('water', 'Off', basename(__FILE__).':'.__LINE__);
+if ($d['water']->s=='On'&&$pastwater>50&&$pastwater>=$d['water']->m) sw('water', 'Off', basename(__FILE__).':'.__LINE__);
