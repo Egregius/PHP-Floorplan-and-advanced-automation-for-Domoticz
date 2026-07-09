@@ -150,7 +150,12 @@ function fhall() {
 		sl('kamer1', 1, basename(__FILE__).':'.__LINE__);
 		
 	}
-	if ($d['boseliving']->s=='Off'&&$d['time']>$t-3600&&$d['time']<$t+3600) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['boseliving']->s=='Off'&&$d['time']>$t-3600&&$d['time']<$t+3600) {
+		sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":1}\' > /dev/null 2>&1 &');
+		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
+	}
 }
 function fbadkamer($level,$power=false) {
 	global $d,$t;
@@ -219,7 +224,7 @@ function huisthuis($msg='') {
 	shell_exec('php /var/www/setSSID.php \'{"main5":1}\' > /dev/null 2>&1 &');
 	if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
 	setNextubeMode();
-	if ($d['boseliving']->s=='Off'&&$d['time']>$t-3600&&$d['time']<strtotime('18:00')) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+	if ($d['boseliving']->s=='Off'&&$d['time']>strtotime('5:00')&&$d['time']>$t-3600&&$d['time']<strtotime('18:00')) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);

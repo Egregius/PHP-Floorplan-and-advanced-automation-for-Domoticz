@@ -117,7 +117,7 @@ if ((in_array($uur, [7, 13, 19])&&isset($maxtemp)&&$maxtemp>10&& $pastwater > 30
     sw('water', 'On', basename(__FILE__) . ':' . __LINE__);
     telegram('Water geven gedurende '.$waterDuur.' seconden');
 }
-
+if(in_array($uur, [11])) sw('vleermuizen', 'On', basename(__FILE__).':'.__LINE__);
 if ($d['weg']->s==0) {
 	foreach (array('living_temp','kamer_temp','alex_temp','badkamer_temp') as $i) {
 		if (past($i)>43150) alert($i,$i.' not updated since '.date("G:i:s", $d[$i]->t),7200);
