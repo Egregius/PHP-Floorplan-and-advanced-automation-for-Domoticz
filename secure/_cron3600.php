@@ -112,7 +112,7 @@ if ($uur%4==0||LOOP_START>$time-60) {
 
 
 if ((in_array($uur, [7, 13, 19])&&isset($maxtemp)&&$maxtemp>10&& $pastwater > 3000)||$pastwater>43200) {
-    $waterDuur = (isset($maxtemp)) ? berekenWaterDuurSeconden($maxtemp, 15, 35, 30, 120) : 60;
+    $waterDuur = (isset($maxtemp)) ? berekenWaterDuurSeconden($maxtemp, 15, 40, 30, 120) : 60;
     storemode('water', $waterDuur);
     sw('water', 'On', basename(__FILE__) . ':' . __LINE__);
     telegram('Water geven gedurende '.$waterDuur.' seconden');
