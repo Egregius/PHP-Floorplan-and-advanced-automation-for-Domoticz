@@ -309,7 +309,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
 	$d[$name]->t=$d['time'];
 	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if ($name==='rbureel' && $level===100) {
-		usleep(300000);
+		usleep(100000);
 		hass('cover', 'set_cover_position', $entity, ['position' => 0]);
     }
 }

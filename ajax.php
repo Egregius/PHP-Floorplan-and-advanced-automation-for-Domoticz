@@ -128,7 +128,10 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='roller') {
 		if ($_REQUEST['device']=='rkeukenl') {
 			foreach(array('rkeukenl', 'rkeukenr') as $i) {
-				if ($d[$i]->s!=$_REQUEST['action']) sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+				if ($d[$i]->s!=$_REQUEST['action']) {
+					sl($i, $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+					usleep(100000);
+				}
 			}
 		} elseif ($_REQUEST['device']=='rkamerl') {
 			sl('rkamerl', $_REQUEST['action'], basename(__FILE__).':'.__LINE__, true);
