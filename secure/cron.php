@@ -28,7 +28,7 @@ if ($d['weg']->s>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off');
 }
 $last10 = $last30 = $last60 = $last300 = $last3600 = $last90 = $last900 = $daikinsun = $time-3600;
-$prevdaikinrunning=false;
+$prevdaikinrunning=$steenautomatischaan=false;
 updateWekker($t, $weekend, $dow, $d);
 foreach ($d as $k=>$v) {
 	if (isset($v->f)&&$v->f===1) publishmqtt('d/'.$k,toJsonClean($v));
