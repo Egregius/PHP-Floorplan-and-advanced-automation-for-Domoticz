@@ -28,12 +28,12 @@ $prevcleantitle = !empty($history) ? array_key_last($history) : null;
 
 $ctx=stream_context_create(array('http'=>array('timeout' =>0.5)));
 $devices = [
-	101 => 20,
-	102 => 25,
+	101 => 32,
+	102 => 32,
 	103 => 32,
 	104 => 32,
 	105 => 32,
-	106 => 25,
+	106 => 32,
 	107 => 32,
 	108 => 32,
 	109 => 32,
