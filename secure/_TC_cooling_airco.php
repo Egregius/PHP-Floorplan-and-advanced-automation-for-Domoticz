@@ -71,6 +71,9 @@ foreach (['living','kamer','alex'] as $k) {
 		} else {
 			$set=$d[$k.'_set']->s;
 		}
+	} elseif ($d['weg']->s>=2&&$d['dag']->s>=10&&$d['c']>=10) {
+		$mode=2;
+		$power=1;
 	} else {
 		$mode=2;
 		$power=0;
