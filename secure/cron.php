@@ -412,36 +412,41 @@ function addSample(array &$buffers, $key, $value, $maxSize = ROLLING_BUFFER_SIZE
         array_shift($buffers[$key]);
     }
 }
-function rollingHeld(array $buffers, $key, callable $condition, $n = null) {
+function rollingHeld(array $buffers, $key, callable $condition, $n = null, $mode = 'all') {
     if (empty($buffers[$key])) {
         return false;
     }
     $values = $n ? array_slice($buffers[$key], -$n) : $buffers[$key];
 
-    // nog geen volledig venster verzameld (bv. net na herstart) -> nog niet betrouwbaar
     if (count($values) < ($n ?? ROLLING_BUFFER_SIZE)) {
         return false;
     }
 
     foreach ($values as $v) {
-        if (!$condition($v)) {
-            return false;
+        $matches = $condition($v);
+        if ($mode === 'all' && !$matches) {
+            return false;   // 1 mismatch is genoeg om te falen
+        }
+        if ($mode === 'any' && $matches) {
+            return true;    // 1 match is genoeg om te slagen
         }
     }
-    return true;
+
+    return $mode === 'all'; // 'all': alles klopte -> true. 'any': niets klopte -> false
 }
-function rollingAbove($key, $threshold, $n = 12) {
+
+function rollingAbove($key, $threshold, $n = 12, $mode = 'all') {
     global $rollingBuffers;
     return rollingHeld($rollingBuffers, $key, function ($v) use ($threshold) {
         return $v >= $threshold;
-    }, $n);
+    }, $n, $mode);
 }
 
-function rollingBelow($key, $threshold, $n = 12) {
+function rollingBelow($key, $threshold, $n = 12, $mode = 'all') {
     global $rollingBuffers;
     return rollingHeld($rollingBuffers, $key, function ($v) use ($threshold) {
         return $v <= $threshold;
-    }, $n);
+    }, $n, $mode);
 }
 function socAdjustedWindow($soc, $minWindow, $maxWindow) {
     $soc = max(0, min(100, $soc)); // clamp voor de zekerheid
