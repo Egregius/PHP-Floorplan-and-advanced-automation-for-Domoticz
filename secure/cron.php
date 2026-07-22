@@ -18,10 +18,11 @@ define('ROLLING_AVG_FILE', '/dev/shm/cache/rollingAvg.json');
 define('ROLLING_BUFFER_SIZE', 30);
 
 $rollingBuffers = [];
+
 if (file_exists(ROLLING_AVG_FILE)) {
     $decoded = json_decode(file_get_contents(ROLLING_AVG_FILE), true);
     if (is_array($decoded)) {
-        $rollingBuffers = $decoded ?? [];
+        $rollingBuffers = $decoded;
     }
 }
 
@@ -402,7 +403,6 @@ function addSample(array &$buffers, $key, $value, $maxSize = ROLLING_BUFFER_SIZE
         array_shift($buffers[$key]);
     }
 }
-
 function rollingHeld(array $buffers, $key, callable $condition, $n = null) {
     if (empty($buffers[$key])) {
         return false;
@@ -421,7 +421,6 @@ function rollingHeld(array $buffers, $key, callable $condition, $n = null) {
     }
     return true;
 }
-
 function rollingAbove($key, $threshold, $n = 12) {
     global $rollingBuffers;
     return rollingHeld($rollingBuffers, $key, function ($v) use ($threshold) {
@@ -435,7 +434,11 @@ function rollingBelow($key, $threshold, $n = 12) {
         return $v < $threshold;
     }, $n);
 }
-
+function socAdjustedWindow($soc, $minWindow, $maxWindow) {
+    $soc = max(0, min(100, $soc)); // clamp voor de zekerheid
+    $factor = $soc / 100;          // 0 = leeg, 1 = vol
+    return (int) round($minWindow + $factor * ($maxWindow - $minWindow));
+}
 function saveRollingState(array $buffers) {
     file_put_contents(ROLLING_AVG_FILE, json_encode($buffers));
 }

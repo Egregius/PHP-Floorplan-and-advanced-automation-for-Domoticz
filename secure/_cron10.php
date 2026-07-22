@@ -5,7 +5,6 @@ addSample($rollingBuffers, 'n', $d['n']);
 addSample($rollingBuffers, 'b', $d['b']);
 addSample($rollingBuffers, 'z', $d['z']);
 
-
 //lg('🕒 '.$user,'cron10');
 if ($d['auto']->s=='On') {
 	$i=39;
@@ -98,8 +97,8 @@ if ($d['auto']->s=='On') {
     	elseif ($d['weg']->s==0&&$past>55&&$pastweg>180) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
 		elseif ($d['weg']->s>0&&$past>55&&$pastweg>120) sw('voordeur', 'Off');
 	}
-if ($d['weg']->s<=2&&$d['n']<-1200&&$d['b']>0&&$d['grohered']->s=='Off') sw('grohered', 'On', ' n='.$d['n'].'W b='.$d['b'].'W', true);
-elseif ($d['grohered']->s=='On'&&past('8keuken_8')>1800&&$d['n']>100&&$d['b']<0&&$d['wasbak']->s==0&&$d['snijplank']->s==0) sw('grohered', 'Off', ' n='.$d['n'].'W b='.$d['b'].'W',true);
+if ($d['weg']->s<=2&&rollingBelow('n', -1200, 6)&&rollingAbove('b', 0, 12)&&$d['grohered']->s=='Off') sw('grohered', 'On', ' n='.$d['n'].'W b='.$d['b'].'W', true);
+elseif ($d['grohered']->s=='On'&&past('8keuken_8')>1800&&rollingAbove('n', 100, 3)&&rollingBelow('b', 0, 3)&&$d['wasbak']->s==0&&$d['snijplank']->s==0) sw('grohered', 'Off', ' n='.$d['n'].'W b='.$d['b'].'W',true);
 if ($d['regenpomp']->s=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off');
 $pastwater=past('water');
 if ($d['water']->s=='On'&&$pastwater>50&&$pastwater>=$d['water']->m) sw('water', 'Off', basename(__FILE__).':'.__LINE__);
