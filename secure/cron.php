@@ -15,7 +15,7 @@ define('LOOP_START', $time);
 $user='CRONstart';
 
 define('ROLLING_AVG_FILE', '/dev/shm/cache/rollingAvg.json');
-define('ROLLING_BUFFER_SIZE', 30);
+define('ROLLING_BUFFER_SIZE', 100);
 
 $rollingBuffers = [];
 
