@@ -90,15 +90,21 @@ if ($d['auto']->s=='On') {
 		if ($d['kookplaat_power']->s<125&&past('kookplaat_power')>200&&past('kookplaat')>200) sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	}*/
 }
-    if ($d['deurvoordeur']->s=='Closed'&&$d['voordeur']->s=='On') {
-    	$past=past('voordeur');
-    	$pastweg=past('weg');
-    	if ($d['weg']->s==0&&$d['dag']->s>0&&$past>5&&$pastweg>5) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-    	elseif ($d['weg']->s==0&&$past>55&&$pastweg>180) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
-		elseif ($d['weg']->s>0&&$past>55&&$pastweg>120) sw('voordeur', 'Off');
-	}
-if ($d['weg']->s<=2&&rollingBelow('n', -1200, 6)&&rollingAbove('b', 0, 12)&&$d['grohered']->s=='Off') sw('grohered', 'On', ' n='.$d['n'].'W b='.$d['b'].'W', true);
-elseif ($d['grohered']->s=='On'&&past('8keuken_8')>1800&&rollingAbove('n', 100, 3)&&rollingBelow('b', 0, 3)&&$d['wasbak']->s==0&&$d['snijplank']->s==0) sw('grohered', 'Off', ' n='.$d['n'].'W b='.$d['b'].'W',true);
+if ($d['deurvoordeur']->s=='Closed'&&$d['voordeur']->s=='On') {
+	$past=past('voordeur');
+	$pastweg=past('weg');
+	if ($d['weg']->s==0&&$d['dag']->s>0&&$past>5&&$pastweg>5) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+	elseif ($d['weg']->s==0&&$past>55&&$pastweg>180) sw('voordeur', 'Off', basename(__FILE__).':'.__LINE__);
+	elseif ($d['weg']->s>0&&$past>55&&$pastweg>120) sw('voordeur', 'Off');
+}
+$onWindow  = socAdjustedWindow($d['c'], 12, 3);
+$offWindow = socAdjustedWindow($d['c'], 3, 12);
+
+if ($d['weg']->s<=2 && rollingBelow('n', -1200, $onWindow) && rollingAbove('b', 0, $onWindow) && $d['grohered']->s=='Off')
+    sw('grohered', 'On', ' n='.$d['n'].'W b='.$d['b'].'W c='.$d['c'].'%', true);
+elseif ($d['grohered']->s=='On' && past('8keuken_8')>1800 && rollingAbove('n', 100, $offWindow) && rollingBelow('b', 0, $offWindow) && $d['wasbak']->s==0 && $d['snijplank']->s==0)
+    sw('grohered', 'Off', ' n='.$d['n'].'W b='.$d['b'].'W c='.$d['c'].'%', true);
+
 if ($d['regenpomp']->s=='On'&&past('regenpomp')>50) sw('regenpomp', 'Off');
 $pastwater=past('water');
 if ($d['water']->s=='On'&&$pastwater>50&&$pastwater>=$d['water']->m) sw('water', 'Off', basename(__FILE__).':'.__LINE__);

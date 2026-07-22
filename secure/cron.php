@@ -25,6 +25,15 @@ if (file_exists(ROLLING_AVG_FILE)) {
         $rollingBuffers = $decoded;
     }
 }
+define('POOL_RUNTIME_FILE', '/dev/shm/cache/poolRuntime.json');
+
+$poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time];
+if (file_exists(POOL_RUNTIME_FILE)) {
+    $decoded = json_decode(file_get_contents(POOL_RUNTIME_FILE), true);
+    if (is_array($decoded)) {
+        $poolRuntime = $decoded;
+    }
+}
 
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
@@ -424,14 +433,14 @@ function rollingHeld(array $buffers, $key, callable $condition, $n = null) {
 function rollingAbove($key, $threshold, $n = 12) {
     global $rollingBuffers;
     return rollingHeld($rollingBuffers, $key, function ($v) use ($threshold) {
-        return $v > $threshold;
+        return $v >= $threshold;
     }, $n);
 }
 
 function rollingBelow($key, $threshold, $n = 12) {
     global $rollingBuffers;
     return rollingHeld($rollingBuffers, $key, function ($v) use ($threshold) {
-        return $v < $threshold;
+        return $v <= $threshold;
     }, $n);
 }
 function socAdjustedWindow($soc, $minWindow, $maxWindow) {
