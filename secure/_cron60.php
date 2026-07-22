@@ -1,6 +1,6 @@
 <?php
 $user='cron60';
-saveRollingBuffers($rollingBuffers);
+saveRollingState($rollingBuffers);
 setNextubeMode();
 //lg('🕒 '.$user);
 $stamp=sprintf("%s", date("Y-m-d H:i"));

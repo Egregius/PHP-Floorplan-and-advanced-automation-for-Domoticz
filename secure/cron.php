@@ -14,16 +14,14 @@ $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
 
-define('ROLLING_AVG_FILE', '/tmp/rollingAvg.json');
-define('ROLLING_BUFFER_SIZE', 12);
+define('ROLLING_AVG_FILE', '/dev/shm/cache/rollingAvg.json');
+define('ROLLING_BUFFER_SIZE', 30);
 
 $rollingBuffers = [];
-
 if (file_exists(ROLLING_AVG_FILE)) {
-    $json = file_get_contents(ROLLING_AVG_FILE);
-    $decoded = json_decode($json, true);
+    $decoded = json_decode(file_get_contents(ROLLING_AVG_FILE), true);
     if (is_array($decoded)) {
-        $rollingBuffers = $decoded;
+        $rollingBuffers = $decoded ?? [];
     }
 }
 
@@ -405,19 +403,39 @@ function addSample(array &$buffers, $key, $value, $maxSize = ROLLING_BUFFER_SIZE
     }
 }
 
-function rollingAvg(array $buffers, $key, $n = null) {
+function rollingHeld(array $buffers, $key, callable $condition, $n = null) {
     if (empty($buffers[$key])) {
-        return null;
+        return false;
     }
     $values = $n ? array_slice($buffers[$key], -$n) : $buffers[$key];
-    if (empty($values)) {
-        return null;
+
+    // nog geen volledig venster verzameld (bv. net na herstart) -> nog niet betrouwbaar
+    if (count($values) < ($n ?? ROLLING_BUFFER_SIZE)) {
+        return false;
     }
-    return array_sum($values) / count($values);
+
+    foreach ($values as $v) {
+        if (!$condition($v)) {
+            return false;
+        }
+    }
+    return true;
 }
 
-function saveRollingBuffers(array $buffers) {
-    $tmpFile = ROLLING_AVG_FILE . '.tmp';
-    file_put_contents($tmpFile, json_encode($buffers));
-    rename($tmpFile, ROLLING_AVG_FILE); // atomic, voorkomt corrupte reads
+function rollingAbove($key, $threshold, $n = 12) {
+    global $rollingBuffers;
+    return rollingHeld($rollingBuffers, $key, function ($v) use ($threshold) {
+        return $v > $threshold;
+    }, $n);
+}
+
+function rollingBelow($key, $threshold, $n = 12) {
+    global $rollingBuffers;
+    return rollingHeld($rollingBuffers, $key, function ($v) use ($threshold) {
+        return $v < $threshold;
+    }, $n);
+}
+
+function saveRollingState(array $buffers) {
+    file_put_contents(ROLLING_AVG_FILE, json_encode($buffers));
 }

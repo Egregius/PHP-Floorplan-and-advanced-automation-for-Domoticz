@@ -5,13 +5,7 @@ addSample($rollingBuffers, 'n', $d['n']);
 addSample($rollingBuffers, 'b', $d['b']);
 addSample($rollingBuffers, 'z', $d['z']);
 
-$d['n6']  = rollingAvg($rollingBuffers, 'n', 6);
-$d['n12'] = rollingAvg($rollingBuffers, 'n', 12);
-$d['b6']  = rollingAvg($rollingBuffers, 'b', 6);
-$d['b12'] = rollingAvg($rollingBuffers, 'b', 12);
-$d['z6']  = rollingAvg($rollingBuffers, 'z', 6);
-$d['z12'] = rollingAvg($rollingBuffers, 'z', 12);
-lg($d['n6'].' | '.$d['n12'], 'cron10');
+
 //lg('🕒 '.$user,'cron10');
 if ($d['auto']->s=='On') {
 	$i=39;
