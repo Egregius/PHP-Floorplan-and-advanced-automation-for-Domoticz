@@ -13,6 +13,20 @@ $memory_cache = [];
 $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
+
+define('ROLLING_AVG_FILE', '/tmp/rollingAvg.json');
+define('ROLLING_BUFFER_SIZE', 12);
+
+$rollingBuffers = [];
+
+if (file_exists(ROLLING_AVG_FILE)) {
+    $json = file_get_contents(ROLLING_AVG_FILE);
+    $decoded = json_decode($json, true);
+    if (is_array($decoded)) {
+        $rollingBuffers = $decoded;
+    }
+}
+
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
@@ -379,4 +393,31 @@ function nextube_image(
     imagedestroy($im2);
     
     echo "Images successfully pushed to Nextube.";
+}
+
+function addSample(array &$buffers, $key, $value, $maxSize = ROLLING_BUFFER_SIZE) {
+    if (!isset($buffers[$key])) {
+        $buffers[$key] = [];
+    }
+    $buffers[$key][] = $value;
+    if (count($buffers[$key]) > $maxSize) {
+        array_shift($buffers[$key]);
+    }
+}
+
+function rollingAvg(array $buffers, $key, $n = null) {
+    if (empty($buffers[$key])) {
+        return null;
+    }
+    $values = $n ? array_slice($buffers[$key], -$n) : $buffers[$key];
+    if (empty($values)) {
+        return null;
+    }
+    return array_sum($values) / count($values);
+}
+
+function saveRollingBuffers(array $buffers) {
+    $tmpFile = ROLLING_AVG_FILE . '.tmp';
+    file_put_contents($tmpFile, json_encode($buffers));
+    rename($tmpFile, ROLLING_AVG_FILE); // atomic, voorkomt corrupte reads
 }
