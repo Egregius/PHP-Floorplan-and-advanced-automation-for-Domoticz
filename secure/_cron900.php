@@ -14,8 +14,8 @@ if ($d['steenterras']->s == 'On') {
 }
 $poolRuntime['lastCheck'] = $now;
 
-$minDailyRuntime = 4 * 3600;
-$forceHour = 14;
+$minDailyRuntime = 3 * 3600;
+$forceHour = 13;
 $needsRuntime = $poolRuntime['seconds'] < $minDailyRuntime;
 $mustForceNow = $needsRuntime && (int)date('G') >= $forceHour;
 
