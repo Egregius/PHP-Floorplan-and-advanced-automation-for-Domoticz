@@ -844,8 +844,6 @@ function bosezone($ip,$vol='') {
 						if ($d['alexslaapt']->s==1) bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);
 						else bosevolume(28, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
-
-						if ($d['alexslaapt']->s==1) $vol-=10;
 						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 					}
 				}
