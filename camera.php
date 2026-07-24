@@ -117,7 +117,7 @@ function store($name='',$status='',$msg='',$log='store') {
 		}
 	}
 	if($affected>0/*&&!in_array($name,['dag'])*/){
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		if($d[$name]['f']===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;

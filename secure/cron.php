@@ -446,5 +446,5 @@ function socAdjustedWindow($soc, $minWindow, $maxWindow) {
     return (int) round($minWindow + $factor * ($maxWindow - $minWindow));
 }
 function saveRollingState(array $buffers) {
-    file_put_contents(ROLLING_AVG_FILE, json_encode($buffers));
+    file_put_contents('/dev/shm/cache/rollingAvg.json', json_encode($buffers));
 }

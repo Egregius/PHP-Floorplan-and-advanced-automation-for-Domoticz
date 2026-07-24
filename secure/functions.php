@@ -948,7 +948,7 @@ function hasstoken() {
 	return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODYzYTllZGY2OGI0ZTc4YjFkOGFkOWQ4YzM3MDRhMiIsImlhdCI6MTc1MDE1MjUwOCwiZXhwIjoyMDY1NTEyNTA4fQ.U-t5m66b9sx7QCWVXEStmt6AIcSN0zbSHHKnR13zEu0';
 }
 
-function hass(string $domain, string $service, string $entity = '', array $data = []): void {
+function hass(string $domain, string $service, string $entity = '', array $data = [], int $attempt = 0): bool {
     global $d;
     static $socket = null;
     static $lastUse = 0;
@@ -965,7 +965,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         );
         if (!$socket) {
             lg("❌ HASS socket fout: $errstr ($errno)");
-            return;
+            return false;
         }
         stream_set_blocking($socket, true);
         stream_set_write_buffer($socket, 0);
@@ -986,9 +986,24 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         $domain, $service, hasstoken(), strlen($payload), $payload
     );
 
-    fwrite($socket, $request);
-    fflush($socket);
+    $written = @fwrite($socket, $request);
+
+    if ($written === false || $written < strlen($request)) {
+        @fclose($socket);
+        $socket = null;
+
+        if ($attempt < 1) {
+            lg("⚠️ HASS write mislukt, retry ($domain.$service)");
+            return hass($domain, $service, $entity, $data, $attempt + 1);
+        }
+
+        lg("❌ HASS write definitief mislukt na retry ($domain.$service)");
+        return false;
+    }
+
+    @fflush($socket);
     $lastUse = $d['time'];
+    return true;
 }
 function hassinput($domain,$service,$entity,$input) {
 	lg('HASSinput '.$domain.' '.$service.' '.$entity,'media');
@@ -1256,7 +1271,7 @@ function republishmqtt() {
 			}
 			list($domain, $object_id) = explode('.', $entity_id);
 			$brightness = $attributes['brightness'] ?? 0;
-			$brightness=round((int)$brightness / 2.55);
+//			$brightness=round((int)$brightness / 2.55);
 			if ($brightness!=$i->s) {
 				if ($device=='bureellinks') lg('bureellinks: '.$brightness.'|'.$i->s);
 				elseif ($device=='bureelrechts') lg('bureelrechts: '.$brightness.'|'.$i->s);

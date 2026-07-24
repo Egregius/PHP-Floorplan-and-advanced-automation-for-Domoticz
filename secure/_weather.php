@@ -79,7 +79,7 @@ if (isset($ob['temperature'])&&isset($ob['feeltemperature'])) {
 	$temps['ob']=$ob['temperature'];
 	$temps['ob_f']=$ob['feeltemperature'];
 	$hums['ob']=$ob['humidity'];
-	$rains['ob']=min(100,$ob['rainFallLastHour']*10);
+	if(isset($ob['rainFallLastHour'])) $rains['ob']=min(100,$ob['rainFallLastHour']*10);
 	$winds['ob']=$ob['windspeed'] * 1.609344;
 	if (isset($ob['windgusts'])) $winds['ob_gust']=$ob['windgusts'] * 1.609344;
 }
