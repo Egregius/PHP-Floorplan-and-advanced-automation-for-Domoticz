@@ -101,7 +101,7 @@ function fliving() {
 function fgarage() {
 	global $d;
 	if ($d['auto']->s=='On'&&$d['weg']->s==0&&$d['garage']->s!='On'&&$d['garageled']->s!='On') {
-		if ($d['z']<260) {
+		if ($d['z']<200) {
 			zwave('poort','binary',2,'ON');
 			sw('garageled', 'On', basename(__FILE__).':'.__LINE__);
 		}
@@ -826,12 +826,12 @@ function bosezone($ip,$vol='') {
 					lg(basename(__FILE__).':'.__LINE__,'bose');
 					sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 					if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-					elseif ($d['alexslaapt']->s==1) bosevolume(20, 101, basename(__FILE__).':'.__LINE__);
+					elseif ($d['alexslaapt']->s==1) bosevolume(22, 101, basename(__FILE__).':'.__LINE__);
 					else bosevolume(28, 101, basename(__FILE__).':'.__LINE__);
 					usleep(100000);
 					bosepost('setZone', $mapip[$ip], 101);
 					if ($vol=='') {
-						if ($d['alexslaapt']->s==1) bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);
+						if ($d['alexslaapt']->s==1) bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 						else bosevolume(28, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
 						if ($d['alexslaapt']->s==1) $vol-=10;
@@ -841,7 +841,7 @@ function bosezone($ip,$vol='') {
 					bosepost('setZone',  $mapip[$ip], 101);
 					store('bose'.$ip, 'On');
 					if ($vol=='') {
-						if ($d['alexslaapt']->s==1) bosevolume(20, $ip, basename(__FILE__).':'.__LINE__);
+						if ($d['alexslaapt']->s==1) bosevolume(22, $ip, basename(__FILE__).':'.__LINE__);
 						else bosevolume(28, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
 						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
