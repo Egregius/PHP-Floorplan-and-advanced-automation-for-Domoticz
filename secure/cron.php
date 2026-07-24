@@ -14,22 +14,16 @@ $d['time'] = $time;
 define('LOOP_START', $time);
 $user='CRONstart';
 
-define('ROLLING_AVG_FILE', '/dev/shm/cache/rollingAvg.json');
-define('ROLLING_BUFFER_SIZE', 100);
-
 $rollingBuffers = [];
-
-if (file_exists(ROLLING_AVG_FILE)) {
-    $decoded = json_decode(file_get_contents(ROLLING_AVG_FILE), true);
+if (file_exists('/dev/shm/cache/rollingAvg.json')) {
+    $decoded = json_decode(file_get_contents('/dev/shm/cache/rollingAvg.json'), true);
     if (is_array($decoded)) {
         $rollingBuffers = $decoded;
     }
 }
-define('POOL_RUNTIME_FILE', '/dev/shm/cache/poolRuntime.json');
-
 $poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time];
-if (file_exists(POOL_RUNTIME_FILE)) {
-    $decoded = json_decode(file_get_contents(POOL_RUNTIME_FILE), true);
+if (file_exists('/dev/shm/cache/poolRuntime.json')) {
+    $decoded = json_decode(file_get_contents('/dev/shm/cache/poolRuntime.json'), true);
     if (is_array($decoded)) {
         $poolRuntime = $decoded;
     }
@@ -403,7 +397,7 @@ function nextube_image(
     echo "Images successfully pushed to Nextube.";
 }
 
-function addSample(array &$buffers, $key, $value, $maxSize = ROLLING_BUFFER_SIZE) {
+function addSample(array &$buffers, $key, $value, $maxSize = 60) {
     if (!isset($buffers[$key])) {
         $buffers[$key] = [];
     }
@@ -417,22 +411,20 @@ function rollingHeld(array $buffers, $key, callable $condition, $n = null, $mode
         return false;
     }
     $values = $n ? array_slice($buffers[$key], -$n) : $buffers[$key];
-
-    if (count($values) < ($n ?? ROLLING_BUFFER_SIZE)) {
+    if (count($values) < ($n ?? 60)) {
         return false;
     }
-
+    $minMatches = is_int($mode) ? $mode : count($values);
+    $matches = 0;
     foreach ($values as $v) {
-        $matches = $condition($v);
-        if ($mode === 'all' && !$matches) {
-            return false;   // 1 mismatch is genoeg om te falen
-        }
-        if ($mode === 'any' && $matches) {
-            return true;    // 1 match is genoeg om te slagen
+        if ($condition($v)) {
+            $matches++;
+            if ($matches >= $minMatches) {
+                return true;
+            }
         }
     }
-
-    return $mode === 'all'; // 'all': alles klopte -> true. 'any': niets klopte -> false
+    return false;
 }
 
 function rollingAbove($key, $threshold, $n = 12, $mode = 'all') {

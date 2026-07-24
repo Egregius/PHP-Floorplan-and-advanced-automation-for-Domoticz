@@ -28,9 +28,9 @@ if ($d['steenterras']->s=='Off' && (
     )) {
     sw('steenterras', 'On', basename(__FILE__).':'.__LINE__);
     $steenautomatischaan = true;
-} elseif ($d['steenterras']->s=='On' && $steenautomatischaan==true && (rollingAbove('n', 0, $offWindow)||rollingAbove('n', 1000, 90, 'any')||$d['a'] > 1000) && !$needsRuntime) {
+} elseif ($d['steenterras']->s=='On' && $steenautomatischaan==true && (rollingAbove('n', 0, $offWindow)||rollingAbove('n', 1000, 90, 6)||$d['a'] > 1000) && !$needsRuntime) {
     sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
     $steenautomatischaan = false;
 }
 
-file_put_contents(POOL_RUNTIME_FILE, json_encode($poolRuntime));
+file_put_contents('/dev/shm/cache/poolRuntime.json', json_encode($poolRuntime));
