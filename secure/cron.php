@@ -21,13 +21,14 @@ if (file_exists('/dev/shm/cache/rollingAvg.json')) {
         $rollingBuffers = $decoded;
     }
 }
-$poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time];
+$poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time, 'automatisch' => false];
 if (file_exists('/dev/shm/cache/poolRuntime.json')) {
     $decoded = json_decode(file_get_contents('/dev/shm/cache/poolRuntime.json'), true);
     if (is_array($decoded)) {
         $poolRuntime = $decoded;
     }
 }
+$steenautomatischaan = $poolRuntime['automatisch'] ?? false;
 
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
@@ -44,7 +45,7 @@ if ($d['weg']->s>0) {
 	foreach (['boseliving','bosekeuken','ipaddock','mac','media','zetel'] as $i) sw($i, 'Off');
 }
 $last10 = $last30 = $last60 = $last300 = $last3600 = $last90 = $last900 = $daikinsun = $time-3600;
-$prevdaikinrunning=$steenautomatischaan=false;
+$prevdaikinrunning=false;
 updateWekker($t, $weekend, $dow, $d);
 foreach ($d as $k=>$v) {
 	if (isset($v->f)&&$v->f===1) publishmqtt('d/'.$k,toJsonClean($v));
@@ -394,7 +395,6 @@ function nextube_image(
     push_to_nextube(6, $imgData2, $format);
     imagedestroy($im2);
     
-    echo "Images successfully pushed to Nextube.";
 }
 
 function addSample(array &$buffers, $key, $value, $maxSize = 60) {
