@@ -100,7 +100,12 @@ if ($d['deurvoordeur']->s=='Closed'&&$d['voordeur']->s=='On') {
 $onWindow  = socAdjustedWindow($d['c'], 12, 3);
 $offWindow = socAdjustedWindow($d['c'], 3, 12);
 
-if ($d['weg']->s<=2 && rollingBelow('n', -1200, $onWindow) && rollingAbove('b', 0, $onWindow) && $d['grohered']->s=='Off'&&$d['a']<100)
+if ($d['weg']->s<=2 && $d['grohered']->s=='Off' && $d['a']<100 && (
+        	(rollingBelow('n', -1000, $onWindow) && rollingAbove('b', 0, $onWindow))
+        ||	(rollingBelow('n', -800, $onWindow) && rollingAbove('b', 200, $onWindow))
+        ||	(rollingBelow('n', -600, $onWindow) && rollingAbove('b', 400, $onWindow))
+        ||	(rollingBelow('n', -400, $onWindow) && rollingAbove('b', 600, $onWindow))
+    ))
     sw('grohered', 'On', ' n='.$d['n'].'W b='.$d['b'].'W c='.$d['c'].'%', true);
 elseif ($d['grohered']->s=='On' &&  $d['wasbak']->s==0 && $d['snijplank']->s==0 && past('8keuken_8')>1800 && (
         $d['a']>1000

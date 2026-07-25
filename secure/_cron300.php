@@ -78,3 +78,40 @@ if ($d['weg']->s==0&&$d['badkamerpower']->s=='Off'&&$d['Egregius']->s!=0&&$time>
 	store('Egregius',0,basename(__FILE__).':'.__LINE__);
 	lg('main24 uitgeschakeld','cron300');
 }
+
+if ($poolRuntime['date'] !== date('Y-m-d')) {
+    $poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time];
+}
+
+$now = $time;
+$sinceLastCheck = $now - $poolRuntime['lastCheck'];
+
+if ($d['steenterras']->s == 'On') {
+    $onDuration = min($sinceLastCheck, past('steenterras'));
+    $poolRuntime['seconds'] += $onDuration;
+}
+$poolRuntime['lastCheck'] = $now;
+
+$minDailyRuntime = 3 * 3600;
+$forceHour = 13;
+$needsRuntime = $poolRuntime['seconds'] < $minDailyRuntime;
+$mustForceNow = $needsRuntime && (int)date('G') >= $forceHour;
+
+$onWindow  = socAdjustedWindow($d['c'], 12, 3);
+$offWindow = socAdjustedWindow($d['c'], 3, 12);
+
+if ($d['steenterras']->s=='Off' && (
+        	($d['c']>30 && rollingAbove('b', 0, $onWindow) && rollingBelow('n', -1200, $onWindow))
+		||	($d['c']>30 && rollingAbove('b', 200, $onWindow) && rollingBelow('n', -1000, $onWindow))
+		||	($d['c']>30 && rollingAbove('b', 400, $onWindow) && rollingBelow('n', -800, $onWindow))
+		||	($d['c']>30 && rollingAbove('b', 600, $onWindow) && rollingBelow('n', -600, $onWindow))
+        ||	$mustForceNow
+    )) {
+    sw('steenterras', 'On', basename(__FILE__).':'.__LINE__);
+    $steenautomatischaan = true;
+} elseif ($d['steenterras']->s=='On' && $steenautomatischaan==true && (rollingAbove('n', 0, $offWindow)||rollingAbove('n', 1000, 90, 6)||$d['a'] > 1000) && !$needsRuntime) {
+    sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
+    $steenautomatischaan = false;
+}
+
+file_put_contents('/dev/shm/cache/poolRuntime.json', json_encode($poolRuntime));
