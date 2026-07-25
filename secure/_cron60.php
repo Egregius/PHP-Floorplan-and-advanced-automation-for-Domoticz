@@ -284,8 +284,7 @@ $mustForceNow = $needsRuntime && (int)date('G') >= $forceHour;
 
 $onWindow  = socAdjustedWindow($d['c'], 12, 3);
 $offWindow = socAdjustedWindow($d['c'], 3, 12);
-lg('$onWindow='.$onWindow.' $offWindow='.$offWindow.' $steenautomatischaan='.$steenautomatischaan,'cron');
-if ($d['steenterras']->s=='Off' && (
+if ($d['steenterras']->s=='Off' && past('steenterras') > 290 && (
         	($d['c']>30 && rollingAbove('b', 0, $onWindow) && rollingBelow('n', -1200, $onWindow))
 		||	($d['c']>26 && rollingAbove('b', 200, $onWindow) && rollingBelow('n', -1000, $onWindow))
 		||	($d['c']>22 && rollingAbove('b', 400, $onWindow) && rollingBelow('n', -800, $onWindow))
@@ -299,7 +298,7 @@ if ($d['steenterras']->s=='Off' && (
         rollingAbove('n', 0, $offWindow, (int)ceil($offWindow * 0.5))
         || rollingAbove('n', 1000, 60, (int)ceil($offWindow * 0.2))
         || $d['a'] > 1000
-    ) && !$needsRuntime) {
+    ) && !$needsRuntime && past('steenterras') > 290) {
     sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
     $steenautomatischaan = false;
     $poolRuntime['automatisch'] = false;
