@@ -61,7 +61,7 @@ foreach ($devices as $ip => $vol) {
 											unset($history[$oldestKey]);
 										}
 									}
-									if ($historyruns>50) {
+/*									if ($historyruns>50) {
 										$elapsed = round((hrtime(true) - $start) / 1e+6, 3);
 										file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 										gc_collect_cycles();
@@ -95,7 +95,7 @@ foreach ($devices as $ip => $vol) {
 										lg('🕒 Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' | history: '.count($history).' items | '.$elapsed. ' milliseconds','cron2');
 										$historyruns=0;
 									}
-									$historyruns++;
+									$historyruns++;*/
 								} elseif (isset($wiim)) {
 //									lg(print_r($wiim,true),'cron2');
 									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
@@ -133,10 +133,10 @@ foreach ($devices as $ip => $vol) {
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||(isset($status['playStatus'])&&$status['playStatus'] == 'STOP_STATE')) && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					if ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
-						$vol = ($d['alexslaapt']->s == 1) ? 20 : 28;
+						$vol = ($d['alexslaapt']->s == 1) ? 28 : 32;
 						bosezone($ip,$vol);
 					} elseif ($ip!=105&&$d['time']<strtotime('20:00')) {
-						$vol = ($d['alexslaapt']->s == 1) ? 20 : 28;
+						$vol = ($d['alexslaapt']->s == 1) ? 28 : 32;
 						bosezone($ip,$vol);
 					}
 				}
