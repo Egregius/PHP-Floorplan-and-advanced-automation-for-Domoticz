@@ -277,10 +277,9 @@ if ($d['steenterras']->s == 'On') {
 }
 $poolRuntime['lastCheck'] = $now;
 
-$minDailyRuntime = 3 * 3600;
-$forceHour = 13;
-$needsRuntime = $poolRuntime['seconds'] < $minDailyRuntime;
-$mustForceNow = $needsRuntime && (int)date('G') >= $forceHour;
+$currentHour = (int)date('G');
+$needsRuntime = $poolRuntime['seconds'] < 10800;
+$mustForceNow = $needsRuntime && $currentHour >= 13 && $currentHour <= 18;
 $onWindow  = socAdjustedWindow($d['c'], 12, 3);
 $offWindow = socAdjustedWindow($d['c'], 3, 12);
 
