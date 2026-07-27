@@ -285,7 +285,7 @@ if ($d['auto']->s=='On') {
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
 //			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['z'].' past='.past('luifel'));
-			if ($d['luifel']->s<$luifel&&$d['z']>1500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			if ($d['luifel']->s<$luifel&&rollingAbove('z', 1500, 12)&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($d['heating']->s==-1	&&$d['living_temp']->s>=21 &&$d['dag']->m>117&&$rain<10) { // Passive Cooling
@@ -296,7 +296,7 @@ if ($d['auto']->s=='On') {
 //		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
 //			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['z'].' past='.past('luifel'));
-			if ($d['luifel']->s<$luifel&&$d['z']>2000&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
+			if ($d['luifel']->s<$luifel&&rollingAbove('z', 2000, 12)&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} elseif ($d['heating']->s==0&&$d['living_temp']->s>=21&&$d['dag']->m>117&&$rain<10) { // Neutral
@@ -307,7 +307,7 @@ if ($d['auto']->s=='On') {
 		$luifel=0; // In comment zetten om luifel te activeren.
 //		lg ('luifel $d='.$d['luifel']->s.' $luifel='.$luifel);
 		if ($d['luifel']->m==0) {
-			if ($d['luifel']->s<$luifel&&$d['z']>2500&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__, true);
+			if ($d['luifel']->s<$luifel&&rollingAbove('z', 2500, 12)&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__, true);
 			elseif ($d['luifel']->s>$luifel) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
 		}
 	} else {
