@@ -9,8 +9,12 @@ if (isset($_REQUEST['zon'])) {
 		echo $d[$_REQUEST['fetch']]->s;
 	} elseif (isset($_REQUEST['s'])) {
 		$d=fetchdata();
-		echo $d[$_REQUEST['s']]->s;
-	} if (isset($_REQUEST->m)) {
+		if ($_REQUEST['s']=='boseliving') {
+			$data['status']=$d['boseliving']->s;
+			$data['Ontime']=past('boseliving');
+			echo json_encode($data);
+		} else echo $d[$_REQUEST['s']]->s;
+	} elseif (isset($_REQUEST->m)) {
 		$d=fetchdata();
 		if ($_REQUEST->m=='auto'&&$d['auto']->m==0) echo 0;
 		else echo $d[$_REQUEST->m]->m;
