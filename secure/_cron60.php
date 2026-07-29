@@ -297,10 +297,10 @@ if ($d['steenterras']->s=='Off' && past('steenterras') > 290 && (
     $poolRuntime['automatisch'] = true;
 } elseif ($d['steenterras']->s=='On' && $steenautomatischaan==true && (
         rollingAbove('n', 0, $offWindow, (int)ceil($offWindow * 0.5))
-        || rollingAbove('n', 1000, 60, (int)ceil($offWindow * 0.2))
-        || ($d['c']<20 && rollingBelow('b', 0, $offWindow, 2))
-        || ($d['c']<40 && rollingBelow('b', -200, $offWindow, 2))
-        || ($d['c']<60 && rollingBelow('b', -400, $offWindow, 2))
+        || rollingAbove('n', 1000, 60, $offWindow)
+        || ($d['c']<20 && rollingBelow('b', 0, $offWindow, 3))
+        || ($d['c']<40 && rollingBelow('b', -200, $offWindow, 3))
+        || ($d['c']<60 && rollingBelow('b', -400, $offWindow, 3))
         || $d['a'] > 1000
     ) && !$mustForceNow && past('steenterras') > 290) {
     sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
