@@ -151,6 +151,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='water') {
 		storemode('water', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		sw('water', 'On');
+	} elseif ($_REQUEST['command']=='autoshuffle') {
+		storemode('boseliving', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($_REQUEST['device']=='nas') {
 			if ($_REQUEST['action']=='On') {

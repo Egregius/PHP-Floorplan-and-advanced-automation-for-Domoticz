@@ -10,7 +10,8 @@ if (isset($_REQUEST['zon'])) {
 	} elseif (isset($_REQUEST['s'])) {
 		$d=fetchdata();
 		if ($_REQUEST['s']=='boseliving') {
-			$data['status']=$d['boseliving']->s;
+			if ($d['boseliving']->m==1) $data['status']='Off';
+			else $data['status']=$d['boseliving']->s;
 			$data['Ontime']=past('boseliving');
 			echo json_encode($data);
 		} else echo $d[$_REQUEST['s']]->s;
