@@ -29,8 +29,7 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else {
 						$start = hrtime(true);
-						
-						if(isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX') {
+						if($d['boseliving']->m == 0 && isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX') {
 							if($status['@attributes']['source']=='AUX'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
 //								lg(print_r($wiim,true),'cron2');
@@ -40,7 +39,7 @@ foreach ($devices as $ip => $vol) {
 							} else $wiimplaying=false;
 							if(isset($status['artist'],$status['track'])) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
-								if ($d['boseliving']->m == 1 && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
+								if ($cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 									$prevcleantitle=$cleantitle;
 									if (isset($history[$cleantitle])&&1==1) {
 										if(!in_array($cleantitle, $toplist)) {
