@@ -184,7 +184,7 @@ function fbadkamer($level,$power=false) {
 }
 
 function huisslapen($weg=false) {
-	global $d,$wifiiot;
+	global $d;
 	if ($weg===3) {
 		store('weg', 3, basename(__FILE__).':'.__LINE__);
 		if ($d['badkamerpower']->s=='On') sw('badkamerpower', 'Off', basename(__FILE__).':'.__LINE__);
@@ -217,7 +217,7 @@ function huisslapen($weg=false) {
 }
 
 function huisthuis($msg='') {
-	global $d,$time,$wifiiot;
+	global $d,$t,$time;
 	store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
