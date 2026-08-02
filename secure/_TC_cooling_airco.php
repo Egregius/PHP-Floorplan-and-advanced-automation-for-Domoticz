@@ -70,6 +70,8 @@ foreach (['living','kamer','alex'] as $k) {
 			$spmode=1;
 		} else {
 			$set=$d[$k.'_set']->s;
+			if((int)${'dif'.$k}>2) $spmode=1;
+			elseif((int)${'dif'.$k}>1) $spmode=0;
 		}
 	} elseif ($d['weg']->s>=2&&$d['dag']->s>=10&&$d['c']>=10) {
 		$mode=2;
@@ -80,6 +82,7 @@ foreach (['living','kamer','alex'] as $k) {
 		$set=33;
 		if ($d[$k.'_set']->s!='Off') store($k.'_set','Off',basename(__FILE__).':'.__LINE__);
 	}
+	
 	if ($d['daikin']->s=='On') {
 		if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->spmode!=$spmode||$daikin->$k->fan!=$fan)&&$spmode<2)||(($d['daikin']->s=='On'&&$power!=0&&$daikin->$k->lastset <= $time-291)||($d['daikin']->s=='On'&&$power==0&&$daikin->$k->lastset <= $time-291))) {
 			if(daikinset($k, $power, $mode, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
