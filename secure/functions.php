@@ -899,7 +899,6 @@ function http_get($url, $retries = 2, $timeout = 2) {
 	}
 	return FALSE;
 }
-
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
     global $d, $time, $lastfetch;
     static $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
@@ -922,6 +921,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
             $m_pow = $maxpow;
             $loop_base = "http://192.168.40.$ip";
             $url = "$loop_base/aircon/set_demand_control?type=1&en_demand=$en_demand&mode=0&max_pow=$m_pow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
+
             if(!http_get($url)) return false;
             usleep(50000);
         }
@@ -931,13 +931,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
         $msg .= ' + spmode';
         usleep(100000);
         if ($spmode === -1) {
-            // FIX: -1 used to mean "enable Econo" (set_spmode=1&spmode_kind=2), which
-            // actively caps the compressor. It should mean "no special mode": turn
-            // both Powerful and Econo OFF. Since Daikin's set_special_mode only
-            // toggles one kind per call, send both disable calls.
-            if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
-            usleep(100000);
-            if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=2")) return false;
+            if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
         } elseif ($spmode === 0) {
             if(!http_get("$base/aircon/set_special_mode?set_spmode=0&spmode_kind=1")) return false;
         } elseif ($spmode === 1) {
