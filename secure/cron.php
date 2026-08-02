@@ -62,7 +62,7 @@ while (true) {
 		$last10 = $time;
 		$d = fetchdata();
 		include '_cron10.php';
-		if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;stoploop();}
+		if (checkInterval($last60, 60, $time)) {include '_cron60.php' ;}
 		if (checkInterval($last30, 20, $time))  {
 			$user = 'HEATING';
 			if ($d['heating']->s == -2) include '_TC_cooling_airco.php';
@@ -75,6 +75,7 @@ while (true) {
 		if (checkInterval($last3600, 3600, $time)) include '_cron3600.php';
 		if (checkInterval($last90, 90, $time)) include '_weather.php';
 		if (checkInterval($last900, 900, $time)) include '_cron900.php';
+		stoploop();
 	}
 	
 	$next = floor($time / 10) * 10 + 10;
