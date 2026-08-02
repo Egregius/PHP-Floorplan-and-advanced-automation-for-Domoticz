@@ -7,22 +7,28 @@ $daikinDefaults = ['power'=>99, 'mode'=>99, 'set'=>99, 'fan'=>99, 'spmode'=>99];
 $daikin ??= new stdClass();
 
 $anyCooling = false;
-$anyHighCooling = false;
 
 foreach (['living', 'kamer', 'alex'] as $k) {
     if ($d[$k.'_set']->m == 1 && $d[$k.'_set']->s < 33 && ($d['raam'.$k]->s == 'Closed' || ($d['raam'.$k]->s == 'Open' && past('raam'.$k) <= 60))) {
         $anyCooling = true;
-        if ($d[$k.'_set']->s >= 1 && $d[$k.'_set']->s <= 5) {
-            $anyHighCooling = true;
-        }
     }
 }
 
 foreach (['living', 'kamer', 'alex'] as $k) {
     $daikin->$k ??= (object)$daikinDefaults;
-    if ($d[$k.'_set']->s != 'D' && $d[$k.'_set']->s != 'Off') {
+
+    // FIX: a set value of 1-5 (while m==1) is a POWER LEVEL, not a temperature.
+    // The old code subtracted this level from the room temp regardless, producing
+    // a meaningless "difference" (e.g. 22 - 5 = 17) that pushed $bigdif (and thus
+    // $maxpow) to its max as a side effect. Only compute a real diff when the
+    // room is in direct-temperature manual mode.
+    $isPowerLevel = ($d[$k.'_set']->m == 1 && $d[$k.'_set']->s >= 1 && $d[$k.'_set']->s <= 5);
+
+    if ($d[$k.'_set']->s != 'D' && $d[$k.'_set']->s != 'Off' && !$isPowerLevel) {
         ${'dif'.$k} = number_format($d[$k.'_temp']->s - $d[$k.'_set']->s, 1);
         if (${'dif'.$k} > $bigdif) $bigdif = ${'dif'.$k};
+    } else {
+        ${'dif'.$k} = 0;
     }
 }
 
@@ -53,15 +59,13 @@ foreach (['living', 'kamer', 'alex'] as $k) {
     $fan = 'A';
     $spmode = -1;
     if (($d[$k.'_set']->m == 0 || $d[$k.'_set']->m == 2) && ($d['raam'.$k]->s == 'Closed' || ($d['raam'.$k]->s == 'Open' && past('raam'.$k) <= 60))) {
-        if ($anyHighCooling) {
-            $mode = 3;
-            $power = 0;
-            $set = 33;
-        } elseif ($anyCooling) {
+        if ($anyCooling) {
+            // Another room is actively cooling: join Cool mode at a fixed
+            // setpoint instead of Dry, so this zone adds real cooling demand
+            // and helps the shared compressor ramp up.
             $mode = 3;
             $power = 1;
-            $set = ceil(($d[$k.'_temp']->s + 0.5) * 2) / 2;
-            $set = max(21, min(26, $set));
+            $set = 23;
         } else {
             $mode = 2;
             $power = 1;
@@ -90,7 +94,7 @@ foreach (['living', 'kamer', 'alex'] as $k) {
         $set = 33;
         if ($d[$k.'_set']->s != 'Off') store($k.'_set', 'Off', $user.':'.__LINE__);
     }
-    
+
     if ($d['daikin']->s == 'On') {
         if ((($daikin->$k->set != $set || $daikin->$k->power != $power || $daikin->$k->mode != $mode || $daikin->$k->spmode != $spmode || $daikin->$k->fan != $fan) && $spmode < 2) || ($power != 0 && $daikin->$k->lastset <= $time - 291) || ($power == 0 && $daikin->$k->lastset <= $time - 291)) {
             if (daikinset($k, $power, $mode, $set, $user.':'.__LINE__, $fan, $spmode, $maxpow)) {
