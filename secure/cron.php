@@ -441,6 +441,16 @@ function rollingBelow($key, $threshold, $n = 12, $mode = 'all') {
         return $v <= $threshold;
     }, $n, $mode);
 }
+function rollingAvg(array $buffers, $key, $n = null) {
+    if (empty($buffers[$key])) {
+        return null;
+    }
+    $values = $n ? array_slice($buffers[$key], -$n) : $buffers[$key];
+    if (empty($values)) {
+        return null;
+    }
+    return array_sum($values) / count($values);
+}
 function socAdjustedWindow($soc, $minWindow, $maxWindow) {
     $soc = max(0, min(100, $soc)); // clamp voor de zekerheid
     $factor = $soc / 100;          // 0 = leeg, 1 = vol
