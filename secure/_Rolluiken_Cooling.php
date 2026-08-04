@@ -30,7 +30,6 @@ if ($d['auto']->s=='On') {
 //			if ($d['weg']->s>1&&$d['rliving']->s<86&&$d['living_temp']->s>21) sl('rliving', 86, basename(__FILE__).':'.__LINE__);
 		}
 	}
-
 	elseif ($d['dag']->m>220&&$time<strtotime('22:00')) {
 		if($d['z']>1500) {
 			if ($d['raamwaskamer']->s=='Closed'&&$d['ralex']->s<50) sl('rwaskamer', 84, basename(__FILE__).':'.__LINE__);
@@ -39,7 +38,6 @@ if ($d['auto']->s=='On') {
 //			if ($d['weg']->s>1&&$d['rliving']->s<86&&$d['living_temp']->s>20) sl('rliving', 86, basename(__FILE__).':'.__LINE__);
 		}
 	}
-
 	elseif ($d['dag']->s<$zonelevatie+7||$time<strtotime('3:00')) {
 		if ($d['weg']->s>0) {
 			foreach ($benedenall as $i) {
