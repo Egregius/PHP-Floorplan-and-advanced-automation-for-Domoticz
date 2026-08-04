@@ -16,7 +16,7 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 
-sl('rbureel', 25, basename(__FILE__).':'.__LINE__);
+sl('rbureel', 0, basename(__FILE__).':'.__LINE__);
 
 
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
