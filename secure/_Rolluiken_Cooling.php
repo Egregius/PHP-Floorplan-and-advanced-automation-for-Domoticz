@@ -24,18 +24,18 @@ if ($d['auto']->s=='On') {
 	}
 
 	elseif ($d['dag']->m>118&&$time<strtotime('15:00')) {
-		if($d['z']>1500) {
+		if(rollingAbove('z', 1500, 12)) {
 			if ($d['raamwaskamer']->s=='Closed'&&$d['rwaskamer']->s<84) sl('rwaskamer', 84, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']->s=='Closed'&&$d['ralex']->s<84) sl('ralex', 84, basename(__FILE__).':'.__LINE__);
-//			if ($d['weg']->s>1&&$d['rliving']->s<86&&$d['living_temp']->s>21) sl('rliving', 86, basename(__FILE__).':'.__LINE__);
+			if ($d['weg']->s>=3&&$d['rliving']->s<86&&$d['living_temp']->s>21) sl('rliving', 86, basename(__FILE__).':'.__LINE__);
 		}
 	}
 	elseif ($d['dag']->m>220&&$time<strtotime('22:00')) {
-		if($d['z']>1500) {
+		if(rollingAbove('z', 1500, 12)) {
 			if ($d['raamwaskamer']->s=='Closed'&&$d['ralex']->s<50) sl('rwaskamer', 84, basename(__FILE__).':'.__LINE__);
 			if ($d['raamalex']->s=='Closed'&&$d['ralex']->s<84) sl('ralex', 84, basename(__FILE__).':'.__LINE__);
-			if ($d['rbureel']->s<25&&$d['living_temp']->s>=20) sl('rbureel', 25, basename(__FILE__).':'.__LINE__);
-//			if ($d['weg']->s>1&&$d['rliving']->s<86&&$d['living_temp']->s>20) sl('rliving', 86, basename(__FILE__).':'.__LINE__);
+			if ($d['rbureel']->s<40&&$d['living_temp']->s>=20) sl('rbureel', 40, basename(__FILE__).':'.__LINE__);
+			if ($d['weg']->s>=3&&$d['rliving']->s<86&&$d['living_temp']->s>20) sl('rliving', 86, basename(__FILE__).':'.__LINE__);
 		}
 	}
 	elseif ($d['dag']->s<$zonelevatie+7||$time<strtotime('3:00')) {
