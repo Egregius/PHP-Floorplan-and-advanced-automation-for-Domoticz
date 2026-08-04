@@ -85,7 +85,7 @@ if ($d['auto']->s=='On') {
 					2,
 				);
 			}
-		} elseif ($time>=strtotime('10:00')&&$time<=strtotime('20:00')$d['heating']->s<0) { //Cooling
+		} elseif ($time>=strtotime('10:00')&&$time<=strtotime('20:00')&&$d['heating']->s<0) { //Cooling
 			if (
 				(
 					$d['buiten_temp']->s > $d['kamer_temp']->s ||
