@@ -22,10 +22,10 @@ foreach ($devices as $ip => $vol) {
 					if ($d['media']->s=='On'&&$d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off'))) {
 						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 						if (isset($vol)) {
-						$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
-						if (is_array($vol)) {
-							if($vol['actualvolume']>0) bosevolume(0,101, 'TV aan');
-						}
+							$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
+							if (is_array($vol)) {
+								if($vol['actualvolume']>0) bosevolume(0,101, 'TV aan');
+							}
 						}
 					} else {
 						$start = hrtime(true);
@@ -112,6 +112,18 @@ foreach ($devices as $ip => $vol) {
 								}
 							}
 						}
+						if($d['boseliving']->s=='On') {
+							$pastboseliving=past('boseliving');
+							if($pastboseliving>60&&$pastboseliving<120) {
+								$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
+								if (isset($vol)) {
+									$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
+									if (is_array($vol)) {
+										if($vol['actualvolume']<28) bosevolume(28,101, 'TV aan');
+									}
+								}
+							}
+						}
 					}
 				} elseif ($status['@attributes']['source']=="STANDBY"||$status['@attributes']['source']=="SETUP") {
 					bosekey("AUX_INPUT", 0, 101);
@@ -120,6 +132,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($status['@attributes']['source']=="BLUETOOTH") {
 					bosekey("AUX_INPUT", 0, 101);
 				} else lg(print_r($status,true),'cron2');
+				
 			}
 			if (isset($status['@attributes']['source'])) {
 				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
@@ -131,18 +144,12 @@ foreach ($devices as $ip => $vol) {
 
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||(isset($status['playStatus'])&&$status['playStatus'] == 'STOP_STATE')) && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
-					if ($ip==105&&$d['time']>=strtotime('6:00')&&$d['time']<strtotime('18:00')) {
-						$vol = ($d['alexslaapt']->s == 1) ? 28 : 32;
-						bosezone($ip,$vol);
-					} elseif ($ip!=105&&$d['time']<strtotime('20:00')) {
-						$vol = ($d['alexslaapt']->s == 1) ? 28 : 32;
-						bosezone($ip,$vol);
-					}
+					$vol = ($d['alexslaapt']->s == 1) ? 28 : 32;
+					bosezone($ip,$vol);
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') {
 						store('bose'.$ip, 'On');
-						
 					}
 				}
 			} else {
