@@ -62,7 +62,7 @@ if ($d['auto']->s=='On') {
 			if ($d['raamalex']->s=='Open'&&$d['alex_temp']->s<8) alert('raamalex', 'Raam Alex dicht doen, '.$d['alex_temp']->s.' °C.', 1799,	false);
 			if ($d['raamkamer']->s=='Open'&&$d['alex_temp']->s<8) alert('raamkamer', 'Raam kamer dicht doen, '.$d['kamer_temp']->s.' °C.', 1799,	false);
 		}
-		if ($d['heating']->s>0) { //Heating
+		if ($time>=strtotime('13:00')&&$d['heating']->s>0) { //Heating
 			if ($d['buiten_temp']->s<$d['kamer_temp']->s
 				&&$d['buiten_temp']->s<$d['waskamer_temp']->s
 				&&$d['buiten_temp']->s<$d['alex_temp']->s
@@ -85,7 +85,7 @@ if ($d['auto']->s=='On') {
 					2,
 				);
 			}
-		} elseif ($d['heating']->s<0) { //Cooling
+		} elseif ($time>=strtotime('10:00')&&$time<=strtotime('20:00')$d['heating']->s<0) { //Cooling
 			if (
 				(
 					$d['buiten_temp']->s > $d['kamer_temp']->s ||
