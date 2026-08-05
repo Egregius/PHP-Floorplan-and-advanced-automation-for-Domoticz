@@ -910,7 +910,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode=$spmode	maxpow=$maxpow";
     if(($prevmaxpow['all'] ?? null) !== $maxpow) {
         $msg .= ' + maxpow (all)';
-        usleep(1000000);
+        usleep(1500000);
         foreach($ips as $name => $ip) {
             $en_demand = ($maxpow === 100) ? 0 : 1;
             $m_pow = $maxpow;
@@ -918,13 +918,13 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
             $url = "$loop_base/aircon/set_demand_control?type=1&en_demand=$en_demand&mode=0&max_pow=$m_pow&scdl_per_day=0&moc=0&tuc=0&wec=0&thc=0&frc=0&sac=0&suc=0";
 
             if(!http_get($url)) return false;
-            usleep(50000);
+            usleep(250000);
         }
         $prevmaxpow['all'] = $maxpow;
     }
     if((($prevspmode[$device] ?? null) !== $spmode) || $prevsptime[$device] < $time - 600) {
         $msg .= ' + spmode';
-        usleep(1000000);
+        usleep(1500000);
         if ($spmode === -1) {
             if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
         } elseif ($spmode === 0) {
