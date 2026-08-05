@@ -896,7 +896,7 @@ function http_get($url, $retries = 2, $timeout = 2) {
 }
 function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1, $maxpow=false) {
     global $d, $time, $lastfetch;
-    static $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
+    static $prevsptime = [], $prevspmode = [], $prevmaxpow = [], $prevmsg = [];
     $lastfetch = $time;
     $ips = [
         'living' => 161,
@@ -910,7 +910,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
     $msg .= "daikinset [$device] power=$power	mode=$mode	set=$stemp	fan=$fan	spmode=$spmode	maxpow=$maxpow";
     if(($prevmaxpow['all'] ?? null) !== $maxpow) {
         $msg .= ' + maxpow (all)';
-        usleep(100000);
+        usleep(1000000);
         foreach($ips as $name => $ip) {
             $en_demand = ($maxpow === 100) ? 0 : 1;
             $m_pow = $maxpow;
@@ -922,9 +922,9 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
         }
         $prevmaxpow['all'] = $maxpow;
     }
-    if(($prevspmode[$device] ?? null) !== $spmode) {
+    if((($prevspmode[$device] ?? null) !== $spmode) || $prevsptime[$device] < $time - 600) {
         $msg .= ' + spmode';
-        usleep(100000);
+        usleep(1000000);
         if ($spmode === -1) {
             if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=2")) return false;
         } elseif ($spmode === 0) {
@@ -933,6 +933,7 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
             if(!http_get("$base/aircon/set_special_mode?set_spmode=1&spmode_kind=1")) return false;
         } else return false;
         $prevspmode[$device] = $spmode;
+        $prevsptime[$device] = $time;
     }
     if(($prevmsg[$device] ?? null) !== $msg || 1 == 1) {
         lg($msg,'daikin');
