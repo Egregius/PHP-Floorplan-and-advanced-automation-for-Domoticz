@@ -26,7 +26,8 @@ if ($d['weg']->s>0) $maxpow=40;
 if ($maxpow<=40) $maxpow=40;
 elseif ($maxpow>=100) $maxpow=100;
 
-
+$minspmode=-1;
+$minmode=2;
 foreach (['living','kamer','alex'] as $k) {
 	if ($d[$k.'_set']->m==1&&$d[$k.'_set']->s<33&&($d['raam'.$k]->s=='Closed'||($d['raam'.$k]->s=='Open'&&past('raam'.$k)<=60))) {
 		if($d[$k.'_set']->s==2) {
@@ -37,6 +38,8 @@ foreach (['living','kamer','alex'] as $k) {
 			if($maxpow<80) $maxpow=80;
 		} elseif($d[$k.'_set']->s==5) {
 			if($maxpow<100) $maxpow=100;
+			$minspmode=1;
+			$minmode=3;
 		}
 	}
 }
@@ -80,9 +83,11 @@ foreach (['living','kamer','alex'] as $k) {
 		$set=33;
 		if ($d[$k.'_set']->s!='Off') store($k.'_set','Off',basename(__FILE__).':'.__LINE__);
 	}
+	if($minspmode==1&&$spmode<0) $spmode=1;
+	if($minmode==3&&$mode<3) $mode=3;
 	if ($d['daikin']->s=='On') {
-		if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->spmode!=$spmode||$daikin->$k->fan!=$fan)&&$spmode<2)||(($d['daikin']->s=='On'&&$power!=0&&$daikin->$k->lastset <= $time-291)||($d['daikin']->s=='On'&&$power==0&&$daikin->$k->lastset <= $time-291))) {
-			if(daikinset($k, $power, $mode, $set, basename(__FILE__).':'.__LINE__, $fan, $spmode, $maxpow)) {
+		if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->spmode!=$spmode||$daikin->$k->fan!=$fan)&&$spmode<2)||(($d['daikin']->s=='On'&&$power!=0&&$daikin->$k->lastset <= $time-60)||($d['daikin']->s=='On'&&$power==0&&$daikin->$k->lastset <= $time-60))) {
+			if(daikinset($k, $power, $mode, $set, '', $fan, $spmode, $maxpow)) {
 				$daikin->$k->power=$power;
 				$daikin->$k->mode=$mode;
 				$daikin->$k->fan=$fan;
