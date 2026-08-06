@@ -11,8 +11,13 @@ if (isset($_REQUEST['zon'])) {
 		$d=fetchdata();
 		if ($_REQUEST['s']=='boseliving') {
 			if ($d['boseliving']->m==1) $data['status']='Off';
-			else $data['status']=$d['boseliving']->s;
+			else {
+				$data['status']=$d['boseliving']->s;
+				if($d['boseliving']->s=='On') $data['shuffle']=true;
+				else $data['shuffle']=false;
+			}
 			$data['Ontime']=past('boseliving');
+			if($d['weg']->s>1) $data['shuffle']=true;
 			echo json_encode($data);
 		} else echo $d[$_REQUEST['s']]->s;
 	} elseif (isset($_REQUEST->m)) {

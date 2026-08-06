@@ -111,6 +111,37 @@ foreach ($devices as $ip => $vol) {
 									unset($wiim);
 								}
 							}
+							$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['artist']));
+							$title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['track']));
+							$title   = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
+							$arr     = array_map('trim', explode(',', $artists));
+							sort($arr);
+							$cleanKey = preg_replace('/[^a-z0-9]/', '', implode('', $arr) . $title);
+					
+							if ($cleanKey !== $lastCleanKey) {
+								$data = [
+									'artist' => $status['artist'],
+									'title' => $status['track'],
+									'clean_key' => $cleanKey,
+									'started_at' => date('Y-m-d H:i:s')
+								];
+					
+								$ch = curl_init($apiUrl);
+								curl_setopt_array($ch, [
+									CURLOPT_POST => true,
+									CURLOPT_POSTFIELDS => json_encode($data),
+									CURLOPT_HTTPHEADER => [
+										'Content-Type: application/json',
+										'X-Auth-Token: ' . $secretToken
+									],
+									CURLOPT_RETURNTRANSFER => true,
+									CURLOPT_TIMEOUT => 3
+								]);
+								curl_exec($ch);
+								curl_close($ch);
+					
+								$lastCleanKey = $cleanKey;
+							}
 						}
 						if($d['boseliving']->s=='On') {
 							$pastboseliving=past('boseliving');
