@@ -54,10 +54,7 @@ foreach ($devices as $ip => $vol) {
 									} else {
 										lg('Adding '.$cleantitle.' to history','cron2');
 										$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
-										$stmt=$db->prepare("INSERT IGNORE INTO tracksplayed (stamp,artist,title) VALUES (:stamp,:artist,:title);");
-										$stmt->execute([date("Y-m-d H:i:s"),$status['artist'],$status['track']]);
-										
-										while (count($history) > (2000)) {
+										while (count($history) > (157*8)) {
 											reset($history);
 											$oldestKey = key($history);
 											unset($history[$oldestKey]);
