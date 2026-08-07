@@ -42,11 +42,11 @@ foreach ($devices as $ip => $vol) {
 								if ($cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 									$prevcleantitle=$cleantitle;
 									if (isset($history[$cleantitle])&&1==1) {
-										if(!in_array($cleantitle, $toplist)) {
-											lg($cleantitle.' skipped op cleantitle','cron2');
-											if($wiimplaying===true) Wiim('setPlayerCmd:next');
-											else ma_next_track();
-										}
+//										if(!in_array($cleantitle, $toplist)) {
+//											lg($cleantitle.' skipped op cleantitle','cron2');
+//											if($wiimplaying===true) Wiim('setPlayerCmd:next');
+//											else ma_next_track();
+//										}
 									} elseif(in_array($cleantitle, $skiptracks)) {
 										lg($cleantitle.' skipped, track in remove list','cron2');
 											if($wiimplaying===true) Wiim('setPlayerCmd:next');

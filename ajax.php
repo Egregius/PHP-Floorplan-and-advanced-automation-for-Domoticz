@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
 //session_write_close();
@@ -68,15 +71,43 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	}
 	
 	$d['score'] = 0;
-	if (!empty($d['cleantitle'])) {
-		$db = Database::getInstance();
+	$resolvedTitle = $d['cleantitle'] ?? '';
+	$db = Database::getInstance();
+
+	if (!empty($resolvedTitle)) {
 		$stmt = $db->prepare("SELECT score FROM track_mapping WHERE clean_title = ? LIMIT 1");
-		$stmt->execute([$d['cleantitle']]);
+		$stmt->execute([$resolvedTitle]);
 		$scoreRes = $stmt->fetchColumn();
 		if ($scoreRes !== false && $scoreRes !== null) {
 			$d['score'] = (int)$scoreRes;
 		}
 	}
+
+	if ($d['score'] === 0 && !empty($d['track_id'])) {
+		$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE track_id = ? LIMIT 1");
+		$stmt->execute([$d['track_id']]);
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		if ($row) {
+			$d['score'] = (int)$row['score'];
+			$resolvedTitle = $row['clean_title'];
+		}/* elseif (function_exists('getSpotifyTrackDetails')) {
+			$spotifyTrack = getSpotifyTrackDetails($d['track_id']);
+			if (!empty($spotifyTrack->artists) && !empty($spotifyTrack->name)) {
+				$artists = array_map(fn($a) => $a->name, $spotifyTrack->artists);
+				$resolvedTitle = cleanTitle(implode(' ', $artists), $spotifyTrack->name);
+				
+				$stmt = $db->prepare("SELECT score FROM track_mapping WHERE clean_title = ? LIMIT 1");
+				$stmt->execute([$resolvedTitle]);
+				$scoreRes = $stmt->fetchColumn();
+				if ($scoreRes !== false && $scoreRes !== null) {
+					$d['score'] = (int)$scoreRes;
+				}
+			}
+		}*/
+	}
+	
+	$d['cleantitle'] = $resolvedTitle;
 
 	$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['volume']=$volume['actualvolume'];
