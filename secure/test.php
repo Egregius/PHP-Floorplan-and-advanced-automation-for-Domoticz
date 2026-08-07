@@ -16,7 +16,7 @@ $d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 
-	Wiim('setPlayerCmd:stop');
+//	Wiim('setPlayerCmd:stop');
 	Wiim('setPlayerCmd:clear_playlist');
 
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));

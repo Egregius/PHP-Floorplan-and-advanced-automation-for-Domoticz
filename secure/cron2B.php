@@ -118,7 +118,7 @@ foreach ($devices as $ip => $vol) {
 							sort($arr);
 							$cleanKey = preg_replace('/[^a-z0-9]/', '', implode('', $arr) . $title);
 					
-							if ($cleanKey !== $lastCleanKey) {
+							if ($cleanKey !== $lastCleanKey && $title!='unknow') {
 								$data = [
 									'artist' => $status['artist'],
 									'title' => $status['track'],

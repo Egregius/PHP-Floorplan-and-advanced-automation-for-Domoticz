@@ -5,6 +5,7 @@ if($status=='Off') {
 	Wiim('setPlayerCmd:stop');
 	Wiim('setPlayerCmd:clear_playlist');
 } elseif($status=='On') {
-	$preset=wiimplaylist();
-	Wiim("MCUKeyShortClick:$preset");
+	Wiim('setPlayerCmd:resume');
+//	$preset=wiimplaylist();
+//	Wiim("MCUKeyShortClick:$preset");
 }
