@@ -44,7 +44,6 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 		];
 		if($nowplaying['@attributes']['source']=='AUX'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
 			$wiim=json_decode(Wiim('getMetaInfo'));
-//			echo '<pre>';print_r($wiim);echo '</pre><hr>';
 			$d['source']='WiiM';
 			$d['artist']=$wiim->metaData->artist;
 			$d['track']=$wiim->metaData->title;
@@ -58,12 +57,26 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 			$d['track']=$nowplaying['track'];
 			
 			$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $nowplaying['art']);
+			$d['cleantitle']=cleanTitle($d['artist'],$d['track']);
 		}
 	} else {
 		$d['artist']='';
 		$d['track']='';
 		$d['art']='';
+		$d['cleantitle']='';
 	}
+	
+	$d['score'] = 0;
+	if (!empty($d['cleantitle'])) {
+		$db = Database::getInstance();
+		$stmt = $db->prepare("SELECT score FROM track_mapping WHERE clean_title = ? LIMIT 1");
+		$stmt->execute([$d['cleantitle']]);
+		$scoreRes = $stmt->fetchColumn();
+		if ($scoreRes !== false && $scoreRes !== null) {
+			$d['score'] = (int)$scoreRes;
+		}
+	}
+
 	$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['volume']=$volume['actualvolume'];
 	header('Content-Type: application/json; charset=utf-8');
