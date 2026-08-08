@@ -10,13 +10,8 @@ if (isset($_REQUEST['zon'])) {
 	} elseif (isset($_REQUEST['s'])) {
 		$d=fetchdata();
 		if ($_REQUEST['s']=='shuffle') {
-			if ($d['boseliving']->m==0) {
-				$data['status']=$d['boseliving']->s;
-				if($d['boseliving']->s=='On') $data['shuffle']=true;
-				else $data['shuffle']=false;
-			}
-			if($d['weg']->s>1) $data['shuffle']=true;
-			echo json_encode($data);
+			if ($d['boseliving']->m==0) echo 'On';
+			else echo 'Off';
 		} else echo $d[$_REQUEST['s']]->s;
 	} elseif (isset($_REQUEST->m)) {
 		$d=fetchdata();
@@ -35,5 +30,32 @@ if (isset($_REQUEST['zon'])) {
 		$data=$d[$_REQUEST['count']]->s+1;
 		echo $data;
 		store($_REQUEST['count'], $data, basename(__FILE__).':'.__LINE__);
+	} elseif (isset($_REQUEST['carplay'])) {
+		$d=fetchdata();
+		if($d['boseliving']->s=='On') {
+			if($_REQUEST['carplay']=='On') {
+				sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__);
+				if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+			} elseif($_REQUEST['carplay']=='Off') {
+				if($d['weg']->s==0) {
+					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
+					if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+				} else {
+					if ($d['boseliving']->m==0) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
+				}
+			}
+		} else {
+			if($_REQUEST['carplay']=='On') {
+				if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+			} elseif($_REQUEST['carplay']=='Off') {
+				if($d['weg']->s==0) {
+					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
+					if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+				} else {
+					if ($d['boseliving']->m==0) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
+				}
+			}
+		}
+		echo 'Carplay '.$_REQUEST['carplay'];
 	}
 }
