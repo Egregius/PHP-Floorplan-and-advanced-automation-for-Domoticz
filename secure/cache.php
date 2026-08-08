@@ -10,8 +10,10 @@ if (isset($_REQUEST['zon'])) {
 	} elseif (isset($_REQUEST['s'])) {
 		$d=fetchdata();
 		if ($_REQUEST['s']=='shuffle') {
-			if ($d['boseliving']->m==0) echo 'On';
-			else echo 'Off';
+			if ($d['boseliving']->m==0) {
+				if($d['eettafel']->s==0) echo 'On';
+				else echo 'Pop';
+			} else echo 'Off';
 		} else echo $d[$_REQUEST['s']]->s;
 	} elseif (isset($_REQUEST->m)) {
 		$d=fetchdata();
