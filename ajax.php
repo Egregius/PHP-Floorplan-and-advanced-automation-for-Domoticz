@@ -189,6 +189,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				storemode($_REQUEST['device'], 1, basename(__FILE__).':'.__LINE__);
 			}
 		}
+	} elseif ($_REQUEST['device']=='boseliving'&&$_REQUEST['command']=='mode') {
+		storemode('boseliving', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['device']=='luifel'&&$_REQUEST['command']=='luifel') {
 		storemode('luifel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='mode') {
