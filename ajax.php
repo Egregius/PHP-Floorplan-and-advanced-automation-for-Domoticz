@@ -73,7 +73,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	$resolvedTitle = $d['cleantitle'] ?? '';
 	$db = Database::getInstance();
 	
-	// 1. Probeer eerst te matchen op track_id (meest betrouwbaar)
+	// 1. Probeer eerst te matchen op track_id
 	if (!empty($d['track_id'])) {
 		$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE track_id = ? LIMIT 1");
 		$stmt->execute([$d['track_id']]);
@@ -93,13 +93,27 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 			$d['score'] = (int)$row['score'];
 			$resolvedTitle = $row['clean_title'];
 		} else {
-			// 3. Fallback: probeer met LIKE als WiiM weer eens een deel van de titel mist
+			// 3. Fallback: standaard LIKE met artiest en track
 			$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title LIKE ? LIMIT 1");
-			$stmt->execute(['%' . $d['artist'] . '%' . $d['track'] . '%']);
+			$stmt->execute(['%' . cleanTitle($d['artist'], '') . '%' . cleanTitle('', $d['track']) . '%']);
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
 			if ($row) {
 				$d['score'] = (int)$row['score'];
 				$resolvedTitle = $row['clean_title'];
+			} else {
+				// 4. Extra fallback: split op hoofdwoorden uit de track (bijv. artiest % deel1 % deel2)
+				$cleanArtist = cleanTitle($d['artist'], '');
+				// Pak bijvoorbeeld de eerste 2 à 3 woorden uit de track na cleaning
+				$cleanTrackWords = cleanTitle('', $d['track']);
+				if (!empty($cleanArtist) && !empty($cleanTrackWords)) {
+					$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title LIKE ? AND clean_title LIKE ? LIMIT 1");
+					$stmt->execute([$cleanArtist . '%', '%' . substr($cleanTrackWords, 0, 10) . '%']);
+					$row = $stmt->fetch(PDO::FETCH_ASSOC);
+					if ($row) {
+						$d['score'] = (int)$row['score'];
+						$resolvedTitle = $row['clean_title'];
+					}
+				}
 			}
 		}
 	}
