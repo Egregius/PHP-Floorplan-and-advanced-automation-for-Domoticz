@@ -72,26 +72,9 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	$d['score'] = '?';
 	$resolvedTitle = $d['cleantitle'] ?? '';
 	$db = Database::getInstance();
-	if (!empty($resolvedTitle)) {
-		$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title = ? LIMIT 1");
-		$stmt->execute([$resolvedTitle]);
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ($row) {
-			$d['score'] = (int)$row['score'];
-			$resolvedTitle = $row['clean_title'];
-		} else {
-			$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title LIKE ? LIMIT 1");
-			$stmt->execute([$d['artist'] . '%' . $d['track']]);
-			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			if ($row) {
-				$d['score'] = (int)$row['score'];
-				$resolvedTitle = $row['clean_title'];
-			} else {
-				$d['score'] = '?';
-			}
-		}
-	}
-	if ($d['score'] === 0 && !empty($d['track_id'])) {
+	
+	// 1. Probeer eerst te matchen op track_id (meest betrouwbaar)
+	if (!empty($d['track_id'])) {
 		$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE track_id = ? LIMIT 1");
 		$stmt->execute([$d['track_id']]);
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -100,6 +83,27 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 			$resolvedTitle = $row['clean_title'];
 		}
 	}
+
+	// 2. Als track_id niets opleverde, probeer via clean_title exacte match
+	if ($d['score'] === '?' && !empty($d['cleantitle'])) {
+		$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title = ? LIMIT 1");
+		$stmt->execute([$d['cleantitle']]);
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		if ($row) {
+			$d['score'] = (int)$row['score'];
+			$resolvedTitle = $row['clean_title'];
+		} else {
+			// 3. Fallback: probeer met LIKE als WiiM weer eens een deel van de titel mist
+			$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title LIKE ? LIMIT 1");
+			$stmt->execute(['%' . $d['artist'] . '%' . $d['track'] . '%']);
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			if ($row) {
+				$d['score'] = (int)$row['score'];
+				$resolvedTitle = $row['clean_title'];
+			}
+		}
+	}
+	
 	$d['cleantitle'] = $resolvedTitle;
 	$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['volume']=$volume['actualvolume'];
