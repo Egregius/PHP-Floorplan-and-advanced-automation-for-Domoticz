@@ -1,15 +1,4 @@
 <?php
-if($cron2runs%500==0) {
-	$skiptracks=[];
-	$db = Database::getInstance();
-	static $stmt = null;
-	$stmt ??= $db->prepare("SELECT clean_title FROM track_remove WHERE nas=0");
-	$stmt->execute();
-	while ($row=$stmt->fetch(PDO::FETCH_NUM)) {
-		$skiptracks[]=$row[0];
-	}
-//	lg(print_r($skiptracks,true),'cron2');
-}
 foreach ($devices as $ip => $vol) {
 	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
@@ -47,10 +36,6 @@ foreach ($devices as $ip => $vol) {
 //											if($wiimplaying===true) Wiim('setPlayerCmd:next');
 //											else ma_next_track();
 //										}
-									} elseif(in_array($cleantitle, $skiptracks)) {
-										lg($cleantitle.' skipped, track in remove list','cron2');
-											if($wiimplaying===true) Wiim('setPlayerCmd:next');
-											else ma_next_track();
 									} else {
 										lg('Adding '.$cleantitle.' to history','cron2');
 										$history[$cleantitle] = ($history[$cleantitle] ?? 0) + 1;
@@ -253,4 +238,3 @@ if ($d['weg']->s==0&&$d['auto']->s=='On') {
 		}
 	}
 }
-$cron2runs++;

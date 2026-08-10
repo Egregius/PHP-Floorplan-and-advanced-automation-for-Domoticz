@@ -10,7 +10,7 @@ if (isset($_REQUEST['zon'])) {
 	} elseif (isset($_REQUEST['s'])) {
 		$d=fetchdata();
 		if ($_REQUEST['s']=='shuffle') {
-			if ($d['boseliving']->m==0) {
+			if ($d['boseliving']->m==1) {
 				if($d['eettafel']->s==0) $data['shuffle']='On';
 				else $data['shuffle']='Pop';
 			} else $data['shuffle']='Off';
@@ -39,24 +39,24 @@ if (isset($_REQUEST['zon'])) {
 		if($d['boseliving']->s=='On') {
 			if($_REQUEST['carplay']=='On') {
 				sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__);
-				if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+				if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 			} elseif($_REQUEST['carplay']=='Off') {
 				if($d['weg']->s==0) {
 					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
-					if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+					if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 				} else {
-					if ($d['boseliving']->m==0) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
+					if ($d['boseliving']->m!=0) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
 				}
 			}
 		} else {
 			if($_REQUEST['carplay']=='On') {
-				if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+				if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 			} elseif($_REQUEST['carplay']=='Off') {
 				if($d['weg']->s==0) {
 					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
-					if ($d['boseliving']->m==1) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+					if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 				} else {
-					if ($d['boseliving']->m==0) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
+					if ($d['boseliving']->m!=0) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
 				}
 			}
 		}
