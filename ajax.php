@@ -112,6 +112,29 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 					if ($row) {
 						$d['score'] = (int)$row['score'];
 						$resolvedTitle = $row['clean_title'];
+					} else {
+						// 5. Extra fallback: zoek op artiest (vóór de komma) en het eerste deel van de track (vóór eventuele haakjes)
+						if ($d['score'] === '?') {
+	$baseTrack = cleanTitle('', trim(explode('(', $d['track'])[0]));
+	if (!empty($baseTrack)) {
+		$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title LIKE ? LIMIT 50");
+		$stmt->execute(['%' . $baseTrack . '%']);
+		$bestMatch = null;
+		$highestSimilar = -1;
+		$searchTerm = cleanTitle($d['artist'], $d['track']);
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			similar_text($searchTerm, $row['clean_title'], $percent);
+			if ($percent > $highestSimilar) {
+				$highestSimilar = $percent;
+				$bestMatch = $row;
+			}
+		}
+		if ($bestMatch && $highestSimilar > 30) {
+			$d['score'] = (int)$bestMatch['score'];
+			$resolvedTitle = $bestMatch['clean_title'];
+		}
+	}
+}
 					}
 				}
 			}
