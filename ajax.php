@@ -114,7 +114,9 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 						$resolvedTitle = $row['clean_title'];
 					} else {
 						if ($d['score'] === '?') {
-							$baseTrack = cleanTitle('', trim(explode('(', $d['track'])[0]));
+							$rawTrack = trim(explode('(', $d['track'])[0]);
+							$rawTrack = trim(explode('-', $rawTrack)[0]);
+							$baseTrack = cleanTitle('', $rawTrack);
 							if (!empty($baseTrack)) {
 								$stmt = $db->prepare("SELECT clean_title, score FROM track_mapping WHERE clean_title LIKE ? LIMIT 500");
 								$stmt->execute(['%' . $baseTrack . '%']);
@@ -128,7 +130,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 										$bestMatch = $row;
 									}
 								}
-								if ($bestMatch && $highestSimilar > 64) {
+								if ($bestMatch && $highestSimilar >= 60) {
 									$d['score'] = (int)$bestMatch['score'];
 									$resolvedTitle = $bestMatch['clean_title'];
 								}
