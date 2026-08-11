@@ -135,7 +135,7 @@ foreach ($devices as $ip => $vol) {
 								if (isset($vol)) {
 									$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
 									if (is_array($vol)) {
-										if($vol['actualvolume']<28) bosevolume(28,101, 'TV aan');
+										if($vol['actualvolume']<32) bosevolume(32,101, 'Bose pas ingeschakeld');
 									}
 								}
 							}
@@ -160,8 +160,7 @@ foreach ($devices as $ip => $vol) {
 
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||(isset($status['playStatus'])&&$status['playStatus'] == 'STOP_STATE')) && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
-					$vol = ($d['alexslaapt']->s == 1) ? 28 : 32;
-					bosezone($ip,$vol);
+					bosezone($ip,32);
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') {
