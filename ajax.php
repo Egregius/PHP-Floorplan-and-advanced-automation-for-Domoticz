@@ -38,6 +38,10 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	}
 	libxml_clear_errors();
 	$d['source']=$nowplaying['@attributes']['source'];
+	$d['artist']='';
+	$d['track']='';
+	$d['art']='';
+	$d['cleantitle']='';
 	if (isset($nowplaying['artist'],$nowplaying['track'])||$nowplaying['@attributes']['source']=='AUX') {
 		$replacements = [
 			'http://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
@@ -47,15 +51,17 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 		];
 		if($nowplaying['@attributes']['source']=='AUX'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
 			$wiim=json_decode(Wiim('getMetaInfo'));
-			$d['source']='WiiM';
-			$d['artist']=$wiim->metaData->artist;
-			$d['track']=$wiim->metaData->title;
-			$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $wiim->metaData->albumArtURI);
-			$d['bitrate'] = $wiim->metaData->bitRate;
-			$d['bitdepth'] = $wiim->metaData->bitDepth == 32 ? 24 : $wiim->metaData->bitDepth;
-			$d['samplerate'] = number_format((int)$wiim->metaData->sampleRate/1000, 1, ',','');
-			$d['cleantitle']=cleanTitle($wiim->metaData->artist,$wiim->metaData->title);
-			$d['track_id']=$wiim->metaData->trackId ?? '';
+			if($wiim) {
+				$d['source']='WiiM';
+				$d['artist']=$wiim->metaData->artist;
+				$d['track']=$wiim->metaData->title;
+				$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $wiim->metaData->albumArtURI);
+				$d['bitrate'] = $wiim->metaData->bitRate;
+				$d['bitdepth'] = $wiim->metaData->bitDepth == 32 ? 24 : $wiim->metaData->bitDepth;
+				$d['samplerate'] = number_format((int)$wiim->metaData->sampleRate/1000, 1, ',','');
+				$d['cleantitle']=cleanTitle($wiim->metaData->artist,$wiim->metaData->title);
+				$d['track_id']=$wiim->metaData->trackId ?? '';
+			}
 		} else {
 			$d['artist']=$nowplaying['artist'];
 			$d['track']=$nowplaying['track'];
@@ -63,12 +69,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 			$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $nowplaying['art']);
 			$d['cleantitle']=cleanTitle($d['artist'],$d['track']);
 		}
-	} else {
-		$d['artist']='';
-		$d['track']='';
-		$d['art']='';
-		$d['cleantitle']='';
-	}
+	} 
 	$d['score'] = '?';
 	$resolvedTitle = $d['cleantitle'] ?? '';
 	$db = Database::getInstance();
