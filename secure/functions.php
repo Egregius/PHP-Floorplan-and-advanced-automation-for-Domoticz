@@ -1407,29 +1407,32 @@ function setNextubeMode(): bool {
 }
 function cleanTitle(string $artists, string $title): string
 {
-	static $replace = null;
-	if ($replace === null) {
-		$replace = [
-			'albummix','clubedit','clubmix','edit','extended',
-			'feat','ft','featuring',
-			'festivalmix','mixedit','originalmix',
-			'radioedit','radiomix','radioversion',
-			'remastered','remaster',
-			'remix','rework',
-			'singleversion','version',
-			'videoedit','7"',
-		];
-	}
-	$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $artists));
-	$title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title));
-	$title = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
-	$arr = array_map('trim', explode(',', $artists));
-	sort($arr);
-	$str = implode('', $arr) . $title;
-	$str = preg_replace('/[^a-z0-9]/', '', $str);
-	$str = preg_replace('/\b(' . implode('|', array_map('preg_quote', $replace)) . ')\b/', '', $str);
-	$str = preg_replace('/[^a-z0-9]/', '', $str);
-	return $str;
+    static $replace = null;
+    if ($replace === null) {
+        $replace = [
+            'albummix', 'clubedit', 'clubmix', 'edit', 'extended',
+            'feat', 'ft', 'featuring','original',
+            'festivalmix', 'mixedit', 'originalmix', 'mix',
+            'radioedit', 'radiomix', 'radioversion',
+            'remastered', 'remaster',
+            'remix', 'rework',
+            'singleversion', 'version',
+            'videoedit', '7"',
+        ];
+    }
+    $artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $artists));
+    $title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title));
+    $title = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
+    $arr = array_map('trim', explode(',', $artists));
+    sort($arr);
+    $str = implode('', $arr) . ' ' . $title;
+    $str = preg_replace(
+        '/\b(?:' . implode('|', array_map('preg_quote', $replace)) . ')\b/i',
+        '',
+        $str
+    );
+    $str = preg_replace('/[^a-z0-9]/', '', $str);
+    return $str;
 }
 
 function berekenWaterDuurSeconden(
