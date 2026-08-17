@@ -1368,7 +1368,7 @@ function setNextubeMode(): bool {
         $led_brightness = 60;
     } else {
     	$msg=__LINE__;
-        $lcd_brightness = clamp(15 + $d['dag']->s, 15, 90);
+        $lcd_brightness = clamp(15 + floor($d['dag']->s), 15, 90);
         $led_brightness = 0;
     }
     $backlighgtmode = ($led_brightness == 0) ? 'Off' : 'Static';

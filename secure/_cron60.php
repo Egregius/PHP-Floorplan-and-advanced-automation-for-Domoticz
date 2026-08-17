@@ -21,10 +21,10 @@ $db = Database::getInstance();
 $row = $db->query($sql)->fetch(PDO::FETCH_ASSOC);
 $trendboven=0;
 foreach (['buiten','living','badkamer','kamer','waskamer','alex','zolder'] as $i) {
-    $trend = $d[$i.'_temp']->s - $row[$i];
-    if(in_array($i,['kamer','alex'])) $trendboven+=$trend;
-    $trend=round($trend,2);
-    if ((float)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
+	$trend = $d[$i.'_temp']->s - $row[$i];
+	if(in_array($i,['kamer','alex'])) $trendboven+=$trend;
+	$trend=round($trend,2);
+	if ((float)$d[$i.'_temp']->i != $trend) storeicon($i.'_temp', $trend, basename(__FILE__).':'.__LINE__);
 }
 $sum=0;
 if (!$result = $db->query($query)) die('There was an error running the query ['.$query.' - '.$db->error.']');
@@ -85,7 +85,11 @@ if ($d['auto']->s=='On') {
 					2,
 				);
 			}
-		} elseif ($time>=strtotime('10:00')&&$time<=strtotime('20:00')&&$d['heating']->s<0) { //Cooling
+		} elseif (
+				$time>=strtotime('10:00')
+			&&	$time<=strtotime('20:00')
+			&&	$d['heating']->s<0
+		) { //Cooling
 			if (
 				(
 					$d['buiten_temp']->s > $d['kamer_temp']->s ||
@@ -238,42 +242,42 @@ unset($query, $row, $sql, $i, $result, $k, $v);
 /*$vars = get_defined_vars();
 $total_var_size=0;
 foreach ($vars as $name => $value) {
-    if (in_array($name, [
-        'GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV',
-        'memory_cache', 'name', 'vars', 'value', 'size', 'oldSize', 'percent', 'usage_report'
-    ])) continue;
-    if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
-        $size = 0;
-    } else {
-        try {
-            $size = strlen(serialize($value));
-        } catch (Exception $e) {
-            $size = 0;
-        }
-    }
-    $total_var_size += $size;
-    if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
-        $oldSize = $memory_cache[$name];
-        if ($size > ($oldSize * 1.05)) {
-            $percent = round((($size - $oldSize) / $oldSize) * 100, 1);
-            lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
-            $memory_cache[$name] = $size;
-        }
-    } else $memory_cache[$name] = $size;
+	if (in_array($name, [
+		'GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV',
+		'memory_cache', 'name', 'vars', 'value', 'size', 'oldSize', 'percent', 'usage_report'
+	])) continue;
+	if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
+		$size = 0;
+	} else {
+		try {
+			$size = strlen(serialize($value));
+		} catch (Exception $e) {
+			$size = 0;
+		}
+	}
+	$total_var_size += $size;
+	if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
+		$oldSize = $memory_cache[$name];
+		if ($size > ($oldSize * 1.05)) {
+			$percent = round((($size - $oldSize) / $oldSize) * 100, 1);
+			lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
+			$memory_cache[$name] = $size;
+		}
+	} else $memory_cache[$name] = $size;
 }
 unset($vars, $name, $value, $size, $oldSize, $percent);*/
 
 
 if ($poolRuntime['date'] !== date('Y-m-d')) {
-    $poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time];
+	$poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time];
 }
 
 $now = $time;
 $sinceLastCheck = $now - $poolRuntime['lastCheck'];
 
 if ($d['steenterras']->s == 'On') {
-    $onDuration = min($sinceLastCheck, past('steenterras'));
-    $poolRuntime['seconds'] += $onDuration;
+	$onDuration = min($sinceLastCheck, past('steenterras'));
+	$poolRuntime['seconds'] += $onDuration;
 }
 $poolRuntime['lastCheck'] = $now;
 
@@ -284,25 +288,25 @@ $onWindow  = socAdjustedWindow($d['c'], 30, 12);  // laag SOC -> voorzichtig (30
 $offWindow = socAdjustedWindow($d['c'], 12, 30);  // laag SOC -> snel uit (120s), hoog SOC -> mag wat langer aanhouden (300s)
 
 if ($d['steenterras']->s=='Off' && past('steenterras') > 60 && (
-        ($d['c']>30 && rollingAbove('b', 0, $onWindow) && rollingBelow('n', -1200, $onWindow))
-        || ($d['c']>26 && rollingAbove('b', 200, $onWindow) && rollingBelow('n', -1000, $onWindow))
-        || ($d['c']>22 && rollingAbove('b', 400, $onWindow) && rollingBelow('n', -800, $onWindow))
-        || ($d['c']>18 && rollingAbove('b', 600, $onWindow) && rollingBelow('n', -600, $onWindow))
-        || $mustForceNow
-    )) {
-    sw('steenterras', 'On', basename(__FILE__).':'.__LINE__);
-    $steenautomatischaan = true;
-    $poolRuntime['automatisch'] = true;
+		($d['c']>30 && rollingAbove('b', 0, $onWindow) && rollingBelow('n', -1200, $onWindow))
+		|| ($d['c']>26 && rollingAbove('b', 200, $onWindow) && rollingBelow('n', -1000, $onWindow))
+		|| ($d['c']>22 && rollingAbove('b', 400, $onWindow) && rollingBelow('n', -800, $onWindow))
+		|| ($d['c']>18 && rollingAbove('b', 600, $onWindow) && rollingBelow('n', -600, $onWindow))
+		|| $mustForceNow
+	)) {
+	sw('steenterras', 'On', basename(__FILE__).':'.__LINE__);
+	$steenautomatischaan = true;
+	$poolRuntime['automatisch'] = true;
 } elseif ($d['steenterras']->s=='On' && $steenautomatischaan==true && past('steenterras') > 60 && !$mustForceNow && (
-        rollingAvg($rollingBuffers, 'n', $offWindow) > 300
-        || ($d['c']<20 && rollingBelow('b', 0, $offWindow, 4))
-        || ($d['c']<40 && rollingBelow('b', -200, $offWindow, 4))
-        || ($d['c']<60 && rollingBelow('b', -400, $offWindow, 4))
-        || $d['a'] > 1000
-    )) {
-    sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
-    $steenautomatischaan = false;
-    $poolRuntime['automatisch'] = false;
+		rollingAvg($rollingBuffers, 'n', $offWindow) > 300
+		|| ($d['c']<20 && rollingBelow('b', 0, $offWindow, 4))
+		|| ($d['c']<40 && rollingBelow('b', -200, $offWindow, 4))
+		|| ($d['c']<60 && rollingBelow('b', -400, $offWindow, 4))
+		|| $d['a'] > 1000
+	)) {
+	sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);
+	$steenautomatischaan = false;
+	$poolRuntime['automatisch'] = false;
 }
 
 file_put_contents('/dev/shm/cache/poolRuntime.json', json_encode($poolRuntime));

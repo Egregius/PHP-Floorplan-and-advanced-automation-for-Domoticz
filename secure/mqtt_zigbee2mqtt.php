@@ -21,7 +21,8 @@ define('LOOP_START', $startloop);
 $lastEvent=$startloop;
 $connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
-	->setPassword('mqtt');
+    ->setPassword('mqtt')
+    ->setKeepAliveInterval(60);
 $mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];

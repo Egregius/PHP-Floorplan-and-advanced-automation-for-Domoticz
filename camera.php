@@ -76,7 +76,7 @@ function hass($domain,$service,$entity,$opts=null) {
 function lg($msg) {
 	global $log;
 	if ($log==true) {
-		$fp=fopen('/temp/domoticz.log', "a+");
+		$fp=fopen('/var/log/domotica/camera.log', "a+");
 		$time=microtime(true);
 		$dFormat="Y-m-d H:i:s";
 		$mSecs=$time-floor($time);

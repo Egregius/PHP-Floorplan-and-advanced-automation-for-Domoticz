@@ -25,9 +25,10 @@ $startloop = microtime(true);
 define('LOOP_START', $startloop);
 $connectionSettings = (new ConnectionSettings)
     ->setUsername('mqtt')
-    ->setPassword('mqtt');
+    ->setPassword('mqtt')
+    ->setKeepAliveInterval(60);
 
-$mqtt = new MqttClient('192.168.30.22', 1883, basename(__FILE__), MqttClient::MQTT_3_1);
+$mqtt = new MqttClient('192.168.30.22', 1883, basename(__FILE__) . '_' . getmypid(), MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings, true);
 
 $dbverbruik = new Database('192.168.30.23', 'dbuser', 'dbuser', 'verbruik');
