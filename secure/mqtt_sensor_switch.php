@@ -137,7 +137,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 				$status = round($status / 2) * 2;
 			}
 			if ((float)$d['dag']->s != $status) {
-				store('dag', $status,basename(__FILE__).':'.__LINE__,'dag');
+				store('dag', $status,basename(__FILE__).':'.__LINE__,'none');
 				setCache('dag', $status);
 			}
 			stoploop($d);
@@ -145,7 +145,7 @@ $mqtt->subscribe('homeassistant/sensor/+/state',function (string $topic,string $
 		} elseif ($device === 'sun_solar_azimuth') {
 			$status = round((int)$status / 5) * 5;
 			if ((int)$d['dag']->m != $status) {
-				storemode('dag', $status,basename(__FILE__).':'.__LINE__,'dag');
+				storemode('dag', $status,basename(__FILE__).':'.__LINE__,'none');
 				updateWekker($t, $weekend, $dow, $d);
 			}
 		} elseif (isset($validDevices[$device])) {

@@ -694,6 +694,7 @@ function telegram($msg,$silent=true,$to=1) {
 	lg('✉️  Telegram sent: '.$msg,'telegram');
 }
 function lg($msg,$file='default') {
+	if($file=='none') return;
 	$fp = fopen("/var/log/domotica/$file.log", "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
