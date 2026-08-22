@@ -12,41 +12,11 @@ $start=microtime(true);
 $user='test';
 require 'functions.php';
 //require '/var/www/authentication.php';
-$d=fetchdata();
+//$d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 
-
-$tags = mixOnlyFetchMBTags("isrc:USPR38080067");
-print_r($tags);
-function mixOnlyFetchMBTags(string $query): array
-{
-	sleep(3);
-    $url = 'https://musicbrainz.org/ws/2/recording/?query=' . $query . '&inc=genres+tags&fmt=json&limit=1';
-    $ch  = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 10,
-        CURLOPT_HTTPHEADER     => ['User-Agent: SpotifyDedup/1.0 (egregius.be)'],
-    ]);
-    $response = curl_exec($ch);
-    $code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($code !== 200 || !$response) {
-    	echo $code.'='.$response;
-    	return [];
-    }
-	print_r(json_decode($response));
-    $data = json_decode($response, true);
-    // Neem tags van het eerste resultaat met score 100
-    foreach ($data['recordings'] ?? [] as $rec) {
-        if (($rec['score'] ?? 0) >= 90 && !empty($rec['tags'])) {
-            return $rec['tags'];
-        }
-    }
-    return [];
-}
+telegram(print_r($_GET,true));
 
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
 
