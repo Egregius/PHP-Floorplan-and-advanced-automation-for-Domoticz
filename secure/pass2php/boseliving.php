@@ -6,7 +6,7 @@ if($status=='Off') {
 //	Wiim('setPlayerCmd:clear_playlist');
 	if($d['boseliving']->m!=0) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
 } elseif($status=='On') {
-	Wiim('setPlayerCmd:resume');
+//	Wiim('setPlayerCmd:resume');
 //	$preset=wiimplaylist();
 //	Wiim("MCUKeyShortClick:$preset");
 	if($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
