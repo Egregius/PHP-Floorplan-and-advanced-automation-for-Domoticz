@@ -1,6 +1,6 @@
 <?php
 foreach ($devices as $ip => $vol) {
-	continue;
+//	continue;
 	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
    
 	if (isset($status)) {
@@ -150,7 +150,7 @@ foreach ($devices as $ip => $vol) {
 				} elseif ($status['@attributes']['source']=="BLUETOOTH") {
 					streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
 //					bosekey("AUX_INPUT", 0, 101);
-				} else lg(print_r($status,true),'cron2');
+				}// else lg(print_r($status,true),'cron2');
 				
 			}
 			if (isset($status['@attributes']['source'])) {

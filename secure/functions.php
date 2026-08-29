@@ -1453,11 +1453,11 @@ function berekenWaterDuurSeconden(
     $duur = $minDuur + ($factor * ($maxDuur - $minDuur));
     return (int) round($duur);
 }
-function streborn($ip, $endpoint,$payload) {
+function streborn($ip, $endpoint,$payload, $method='PUT') {
     $ch = curl_init("http://192.168.2.{$ip}:8888/api/{$endpoint}");
     
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
