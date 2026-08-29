@@ -282,7 +282,7 @@ if ($d['steenterras']->s == 'On') {
 $poolRuntime['lastCheck'] = $now;
 
 $currentHour = (int)date('G');
-$needsRuntime = $poolRuntime['seconds'] < 10800;
+$needsRuntime = $poolRuntime['seconds'] < 14400;
 $mustForceNow = $needsRuntime && $currentHour >= 13 && $currentHour <= 18;
 $onWindow  = socAdjustedWindow($d['c'], 30, 12);  // laag SOC -> voorzichtig (300s), hoog SOC -> sneller (120s)
 $offWindow = socAdjustedWindow($d['c'], 12, 30);  // laag SOC -> snel uit (120s), hoog SOC -> mag wat langer aanhouden (300s)
@@ -299,9 +299,9 @@ if ($d['steenterras']->s=='Off' && past('steenterras') > 60 && (
 	$poolRuntime['automatisch'] = true;
 } elseif ($d['steenterras']->s=='On' && $steenautomatischaan==true && past('steenterras') > 60 && !$mustForceNow && (
 		rollingAvg($rollingBuffers, 'n', $offWindow) > 300
-		|| ($d['c']<20 && rollingBelow('b', 0, $offWindow, 4))
-		|| ($d['c']<40 && rollingBelow('b', -200, $offWindow, 4))
-		|| ($d['c']<60 && rollingBelow('b', -400, $offWindow, 4))
+		|| ($d['c']<50 && rollingBelow('b', 0, $offWindow, 4))
+		|| ($d['c']<70 && rollingBelow('b', -100, $offWindow, 4))
+		|| ($d['c']<90 && rollingBelow('b', -200, $offWindow, 4))
 		|| $d['a'] > 1000
 	)) {
 	sw('steenterras', 'Off', basename(__FILE__).':'.__LINE__);

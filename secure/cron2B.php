@@ -19,8 +19,8 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else {
 						$start = hrtime(true);
-						if($d['boseliving']->m == 1 && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX')) {
-							if($status['@attributes']['source']=='AUX'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
+						if($d['boseliving']->m == 1 && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP')) {
+							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
 //								lg(print_r($wiim,true),'cron2');
 								$status['artist']=$wiim->metaData->artist;

@@ -42,14 +42,14 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	$d['track']='';
 	$d['art']='';
 	$d['cleantitle']='';
-	if (isset($nowplaying['artist'],$nowplaying['track'])||$nowplaying['@attributes']['source']=='AUX') {
+	if (isset($nowplaying['artist'],$nowplaying['track'])||$nowplaying['@attributes']['source']=='AUX'||$nowplaying['@attributes']['source']=='UPNP') {
 		$replacements = [
 			'http://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
 			'https://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
 			'http://192.168.2.101/' => 'https://bose101.egregius.be/',
 			'https://192.168.2.9/' => 'https://wiim.egregius.be/',
 		];
-		if($nowplaying['@attributes']['source']=='AUX'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
+		if($nowplaying['@attributes']['source']=='AUX'||$nowplaying['@attributes']['source']=='UPNP'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
 			$wiim=json_decode(Wiim('getMetaInfo'));
 			if($wiim) {
 				$d['source']='WiiM';
