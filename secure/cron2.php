@@ -28,15 +28,15 @@ $prevcleantitle = !empty($history) ? array_key_last($history) : null;
 
 $ctx=stream_context_create(array('http'=>array('timeout' =>0.5)));
 $devices = [
-	101 => 32,
-	102 => 32,
-	103 => 32,
-	104 => 32,
-	105 => 32,
-	106 => 32,
-	107 => 32,
-	108 => 32,
-	109 => 32,
+	101 => 35,
+	102 => 35,
+	103 => 35,
+	104 => 35,
+	105 => 35,
+	106 => 35,
+	107 => 35,
+	108 => 35,
+	109 => 35,
 ];
 $user='cron2B';
 $boses=array(

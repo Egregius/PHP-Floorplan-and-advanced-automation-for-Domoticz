@@ -136,20 +136,20 @@ foreach ($devices as $ip => $vol) {
 								if (isset($vol)) {
 									$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
 									if (is_array($vol)) {
-										if($vol['actualvolume']<32) bosevolume(32,101, 'Bose pas ingeschakeld');
+										if($vol['actualvolume']<35) bosevolume(35,101, 'Bose pas ingeschakeld');
 									}
 								}
 							}
 						}
 					}
 				} elseif ($status['@attributes']['source']=="STANDBY"||$status['@attributes']['source']=="SETUP") {
-					streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
-//					bosekey("AUX_INPUT", 0, 101);
-//					usleep(100000);
-//					bosekey("AUX_INPUT", 0, 101);
+//					streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
+					bosekey("AUX_INPUT", 0, 101);
+					usleep(100000);
+					bosekey("AUX_INPUT", 0, 101);
 				} elseif ($status['@attributes']['source']=="BLUETOOTH") {
-					streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
-//					bosekey("AUX_INPUT", 0, 101);
+//					streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
+					bosekey("AUX_INPUT", 0, 101);
 				}// else lg(print_r($status,true),'cron2');
 				
 			}
