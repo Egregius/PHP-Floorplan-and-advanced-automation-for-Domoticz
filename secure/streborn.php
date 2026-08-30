@@ -37,5 +37,6 @@ if(isset($_GET['bose'],$_GET['key'])) {
 		} elseif($_GET['key']=='power') {
 			sl('boseliving', 'Off', basename(__FILE__).':'.__LINE__);
 		}
-	} else telegram(print_r($_GET,true));
+	} //else 
+	telegram(print_r($_GET,true));
 }
