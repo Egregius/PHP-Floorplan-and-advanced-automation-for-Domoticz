@@ -827,11 +827,11 @@ function bosezone($ip,$vol='') {
 					lg(basename(__FILE__).':'.__LINE__,'bose');
 					sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
 					if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
-					else bosevolume(28, 101, basename(__FILE__).':'.__LINE__);
+					else bosevolume(35, 101, basename(__FILE__).':'.__LINE__);
 					usleep(100000);
 					bosepost('setZone', $mapip[$ip], 101);
 					if ($vol=='') {
-						bosevolume(32, $ip, basename(__FILE__).':'.__LINE__);
+						bosevolume(35, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
 						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 					}
@@ -839,7 +839,7 @@ function bosezone($ip,$vol='') {
 					bosepost('setZone',  $mapip[$ip], 101);
 					store('bose'.$ip, 'On');
 					if ($vol=='') {
-						bosevolume(32, $ip, basename(__FILE__).':'.__LINE__);
+						bosevolume(35, $ip, basename(__FILE__).':'.__LINE__);
 					} else {
 						bosevolume($vol, $ip, basename(__FILE__).':'.__LINE__);
 					}

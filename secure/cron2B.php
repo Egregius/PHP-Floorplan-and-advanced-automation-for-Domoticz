@@ -132,11 +132,11 @@ foreach ($devices as $ip => $vol) {
 						if($d['boseliving']->s=='On') {
 							$pastboseliving=past('boseliving');
 							if($pastboseliving>60&&$pastboseliving<120) {
-								$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
-								if (isset($vol)) {
-									$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
+								$actualvol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
+								if (isset($actualvol)) {
+									$actualvol = json_decode(json_encode(simplexml_load_string($actualvol)), true);
 									if (is_array($vol)) {
-										if($vol['actualvolume']<35) bosevolume(35,101, 'Bose pas ingeschakeld');
+										if($actualvol['actualvolume']<35) bosevolume(35,101, 'Bose pas ingeschakeld');
 									}
 								}
 							}
@@ -163,7 +163,7 @@ foreach ($devices as $ip => $vol) {
 
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||(isset($status['playStatus'])&&$status['playStatus'] == 'STOP_STATE')) && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
-					bosezone($ip,32);
+					bosezone($ip,$vol);
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d['bose'.$ip]->s == 'Off') {
