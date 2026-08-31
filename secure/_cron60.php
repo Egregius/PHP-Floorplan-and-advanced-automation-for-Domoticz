@@ -282,8 +282,8 @@ if ($d['steenterras']->s == 'On') {
 $poolRuntime['lastCheck'] = $now;
 
 $currentHour = (int)date('G');
-$needsRuntime = $poolRuntime['seconds'] < 14400;
-$mustForceNow = $needsRuntime && $currentHour >= 13 && $currentHour <= 18;
+$needsRuntime = $poolRuntime['seconds'] < 18000;
+$mustForceNow = $needsRuntime && $currentHour >= 11 && $currentHour <= 18;
 $onWindow  = socAdjustedWindow($d['c'], 30, 12);  // laag SOC -> voorzichtig (300s), hoog SOC -> sneller (120s)
 $offWindow = socAdjustedWindow($d['c'], 12, 30);  // laag SOC -> snel uit (120s), hoog SOC -> mag wat langer aanhouden (300s)
 
