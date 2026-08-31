@@ -28,13 +28,13 @@ $prevcleantitle = !empty($history) ? array_key_last($history) : null;
 
 $ctx=stream_context_create(array('http'=>array('timeout' =>0.5)));
 $devices = [
-	101 => 35,
+	101 => 36,
 	102 => 35,
 	103 => 35,
 	104 => 35,
 	105 => 35,
 	106 => 40,// Garage
-	107 => 35,
+	107 => 40,// Keuken
 	108 => 35,
 	109 => 35,
 ];
