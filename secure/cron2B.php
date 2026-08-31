@@ -10,11 +10,11 @@ foreach ($devices as $ip => $vol) {
 				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&$d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off'))) {
-						$vol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
-						if (isset($vol)) {
-							$vol = json_decode(json_encode(simplexml_load_string($vol)), true);
-							if (is_array($vol)) {
-								if($vol['actualvolume']>0) bosevolume(0,101, 'TV aan');
+						$actualvol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
+						if (isset($actualvol)) {
+							$actualvol = json_decode(json_encode(simplexml_load_string($actualvol)), true);
+							if (is_array($actualvol)) {
+								if($actualvol['actualvolume']>0) bosevolume(0,101, 'TV aan');
 							}
 						}
 					} else {
@@ -135,7 +135,7 @@ foreach ($devices as $ip => $vol) {
 								$actualvol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 								if (isset($actualvol)) {
 									$actualvol = json_decode(json_encode(simplexml_load_string($actualvol)), true);
-									if (is_array($vol)) {
+									if (is_array($actualvol)) {
 										if($actualvol['actualvolume']<35) bosevolume(35,101, 'Bose pas ingeschakeld');
 									}
 								}
