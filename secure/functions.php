@@ -300,7 +300,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
             : hass('light', 'turn_off', $entity),
 
         'r' => hass('cover', 'set_cover_position', $entity, [
-            'position' => $name === 'rbureel' ? 100 - $level : $level
+            'position' => $name === 'rbureel' ?  $level : $level
         ]),
         'l' => hass('cover', 'set_cover_position', $entity, ['position' => $level]),
         default => null
@@ -311,7 +311,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
 	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if ($name==='rbureel' /*&& $level===100*/) {
 		usleep(200000);
-		hass('cover', 'set_cover_position', $entity, ['position' => 100 - $level]);
+		hass('cover', 'set_cover_position', $entity, ['position' => $level]);
     }
 }
 function resetsecurity() {
