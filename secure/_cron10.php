@@ -7,7 +7,7 @@ addSample($rollingBuffers, 'z', $d['z']);
 
 //lg('🕒 '.$user,'cron10');
 if ($d['auto']->s=='On') {
-	$i=39;
+	$i=59;
 	if ($d['pirgarage']->s=='Off'&&$d['pirgarage2']->s=='Off'&&past('pirgarage')>$i&&past('pirgarage2')>$i&&past('deurgarage')>$i&&past('garageled')>$i) {
 		if ($d['garageled']->s=='On') sw('garageled', 'Off');
 	}
