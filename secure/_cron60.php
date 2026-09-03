@@ -267,7 +267,7 @@ foreach ($vars as $name => $value) {
 }
 unset($vars, $name, $value, $size, $oldSize, $percent);*/
 
-
+/*
 if ($poolRuntime['date'] !== date('Y-m-d')) {
 	$poolRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time];
 }
@@ -308,3 +308,4 @@ if ($d['steenterras']->s=='Off' && past('steenterras') > 60 && (
 }
 
 file_put_contents('/dev/shm/cache/poolRuntime.json', json_encode($poolRuntime));
+*/
