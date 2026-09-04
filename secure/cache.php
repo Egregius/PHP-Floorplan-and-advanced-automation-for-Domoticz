@@ -10,10 +10,13 @@ if (isset($_REQUEST['zon'])) {
 	} elseif (isset($_REQUEST['s'])) {
 		$d=fetchdata();
 		if ($_REQUEST['s']=='shuffle') {
+			$data['shuffle']='Off';
 			if ($d['boseliving']->m==1) {
 				if($d['eettafel']->s==0) $data['shuffle']='On';
-				else $data['shuffle']='Pop';
-			} else $data['shuffle']='Off';
+				else {
+					if (time()>strtotime('12:00')) $data['shuffle']='Pop';
+				}
+			}
 			$data['time']=past('boseliving');
 			echo json_encode($data);
 		} else echo $d[$_REQUEST['s']]->s;
