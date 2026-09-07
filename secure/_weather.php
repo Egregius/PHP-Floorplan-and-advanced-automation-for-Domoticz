@@ -282,7 +282,7 @@ if ($d['auto']->s=='On') {
 		elseif ($wind>=24) $luifel=30;
 		elseif ($wind>=18) $luifel=40;
 		else $luifel=50;
-//		$luifel=0; // In comment zetten om luifel te activeren.
+		$luifel=0; // In comment zetten om luifel te activeren.
 		if ($d['luifel']->m==0) {
 //			lg('• '.basename(__FILE__).':'.__LINE__.' $d[luifel][s]='.$d['luifel']->s.' > $luifel='.$luifel.' zon='.$d['z'].' past='.past('luifel'));
 			if ($d['luifel']->s<$luifel&&rollingAbove('z', 1500, 12)&&past('luifel')>1800) sl('luifel', $luifel, basename(__FILE__).':'.__LINE__);
