@@ -39,12 +39,13 @@ if (isset($_REQUEST['zon'])) {
 		store($_REQUEST['count'], $data, basename(__FILE__).':'.__LINE__);
 	} elseif (isset($_REQUEST['carplay'])) {
 		$d=fetchdata();
+		if($_REQUEST['carplay']!=$d['carplay']->) store('carplay',$_REQUEST['carplay'],basename(__FILE__).':'.__LINE__);
 		if($d['boseliving']->s=='On') {
 			if($_REQUEST['carplay']=='On') {
 				sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__);
 				if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 			} elseif($_REQUEST['carplay']=='Off') {
-				if($d['weg']->s==0) {
+				if($d['weg']->s==0&&$d['guy']->s=='thuis') {
 					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
 					if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 				} else {
@@ -55,7 +56,7 @@ if (isset($_REQUEST['zon'])) {
 			if($_REQUEST['carplay']=='On') {
 				if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 			} elseif($_REQUEST['carplay']=='Off') {
-				if($d['weg']->s==0) {
+				if($d['weg']->s==0&&$d['guy']->s=='thuis') {
 					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
 					if ($d['boseliving']->m!=1) storemode('boseliving',1,basename(__FILE__).':'.__LINE__);
 				} else {
