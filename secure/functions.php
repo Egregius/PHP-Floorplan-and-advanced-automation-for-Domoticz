@@ -152,9 +152,9 @@ function fhall() {
 	}
 	if ($d['boseliving']->s=='Off'&&$d['time']>$t-3600&&$d['time']<$t+3600) {
 		if($d['guy']->s=='thuis') sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
-		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":1}\' > /dev/null 2>&1 &');
+		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":0}\' > /dev/null 2>&1 &');
 		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
-		if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
+		if($d['Egregius5']->s!=1) store('Egregius5',0,basename(__FILE__).':'.__LINE__);
 	}
 }
 function fbadkamer($level,$power=false) {
