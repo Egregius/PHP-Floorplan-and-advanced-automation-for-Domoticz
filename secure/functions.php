@@ -92,7 +92,7 @@ function fliving() {
 				if ($d['wasbak']->s<10) sl('wasbak', 10, basename(__FILE__).':'.__LINE__);
 //				if ($d['zithoek']->s<14) sl('zithoek', 14, basename(__FILE__).':'.__LINE__);
 //				if ($d['eettafel']->s<14) sl('eettafel', 14, basename(__FILE__).':'.__LINE__);
-				if ($d['bureellinks']->s<40) sl('bureellinks', 40, basename(__FILE__).':'.__LINE__);
+//				if ($d['bureellinks']->s<40) sl('bureellinks', 40, basename(__FILE__).':'.__LINE__);
 //				if ($d['bureelrechts']->s<14) sl('bureelrechts', 14, basename(__FILE__).':'.__LINE__);
 			}
 		}
