@@ -42,7 +42,7 @@ if (isset($_REQUEST['zon'])) {
 		store($_REQUEST['count'], $data, basename(__FILE__).':'.__LINE__);
 	} elseif (isset($_REQUEST['carplay'])) {
 		$d=fetchdata();
-		if($_REQUEST['carplay']!=$d['carplay']->) store('carplay',$_REQUEST['carplay'],basename(__FILE__).':'.__LINE__);
+		if($_REQUEST['carplay']!=$d['carplay']->s) store('carplay',$_REQUEST['carplay'],basename(__FILE__).':'.__LINE__);
 		if($d['boseliving']->s=='On') {
 			if($_REQUEST['carplay']=='On') {
 				sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__);
