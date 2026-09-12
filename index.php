@@ -246,7 +246,7 @@
 				<div class="abs z1 i48" style="width:70px;" id="ipaddock"></div>
 				<div class="abs blackmedia">
 					<div class="abs z1 center" style="top:880px;left:110px;"><a href="javascript:navigator_Go('log.php');"><img src="/images/log.png" width="40" height="40" alt="Log"><br>Log</a></div>
-					<div class="abs z1 center" style="top:880px;left:230px;"><a href="javascript:navigator_Go('floorplan.cache.php?nicestatus');"><img src="/images/log.png" width="40" height="40" alt="Cache"><br>Cache</a></div>
+					<div class="abs z1 center" style="top:880px;left:230px;"><a href="javascript:navigator_Go('floorplan.cache.php');"><img src="/images/log.png" width="40" height="40" alt="Cache"><br>Cache</a></div>
 					<div class="abs z1 center" style="top:0px;left:0px;width:100%;">
 						<button class="btn b2" id="verlof" onclick="verlof();">Verlof</button>
 						<button class="btn b2" id="syncs" onclick="syncs();">Syncs</button>
