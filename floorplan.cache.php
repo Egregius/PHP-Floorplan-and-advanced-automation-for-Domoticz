@@ -2,17 +2,14 @@
 $start = microtime(true);
 require 'secure/functions.php';
 require '/var/www/authentication.php';
+$d = fetchdata(0, basename(__FILE__) . ':' . __LINE__);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['device'])) {
 	header('Content-Type: application/json');
 	ob_start();
 	try {
-		$device = $_POST['device'];
 		if (isset($_POST['s'])) {
-			store($device, $_POST['s']);
-		}
-		if (isset($_POST['m'])) {
-			storemode($device, $_POST['m']);
+			storesm($_POST['device'], $_POST['s'],$_POST['m']);
 		}
 		ob_end_clean();
 		echo json_encode(['status' => 'ok']);
@@ -24,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['device'])) {
 	exit;
 }
 
-$d = fetchdata(0, basename(__FILE__) . ':' . __LINE__);
 uasort($d, function ($a, $b) {
 	if (!isset($a->t) && !isset($b->t)) return 0;
 	if (!isset($a->t)) return 1;
@@ -39,7 +35,8 @@ uasort($d, function ($a, $b) {
 	<title>Floorplan</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<meta name="theme-color" content="#121212">
-	<link rel="icon" type="image/png" href="images/domoticzphp48.png"/>
+	<link rel="icon" type="image/png" href="icon.png">
+	<link rel="apple-touch-icon" href="icon.png">
 	<script src="https://mynetpay.be/js/jquery-3.5.1.min.js"></script>
 	<script src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
 	<style>
@@ -106,9 +103,9 @@ uasort($d, function ($a, $b) {
 			text-transform: uppercase;
 			font-size: 0.75rem;
 		}
-		table.dataTable thead th:nth-child(1) { width: 45%; }
+		table.dataTable thead th:nth-child(1) { width: 40%; }
 		table.dataTable thead th:nth-child(2) { width: 30%; }
-		table.dataTable thead th:nth-child(3) { width: 25%; }
+		table.dataTable thead th:nth-child(3) { width: 30%; }
 
 		table.dataTable tbody tr {
 			background: transparent;
@@ -255,72 +252,74 @@ uasort($d, function ($a, $b) {
 			<?php
 			$now = time();
 			foreach ($d as $n => $row) {
-				$s_disp = $row->s ?? '';
-				$m_disp = $row->m ?? '';
-				$raw_s = $row->s ?? '';
-				$raw_m = $row->m ?? '';
-
-				if (str_ends_with($n, '_set')) {
-					if ($row->s == 'D') $s_disp = 'Drogen';
-					elseif ($row->s == 'Off') $s_disp = 'Off';
-					else $s_disp = number_format((float)$row->s, 1, ',', '') . ' °C';
-
-					if ($row->m == 0) $m_disp = 'Auto';
-					else {
-						if ($n === 'living_set' || $n === 'badkamer_set') {
-							if ($row->m == 1) $m_disp = 'Pre-heating';
-							elseif ($row->m == 2) $m_disp = 'Pre-heating ready';
-						} else $m_disp = 'Manueel';
+				if(isset($row->t)) {
+					$s_disp = $row->s ?? '';
+					$m_disp = $row->m ?? '';
+					$raw_s = $row->s ?? '';
+					$raw_m = $row->m ?? '';
+	
+					if (str_ends_with($n, '_set')) {
+						if ($row->s == 'D') $s_disp = 'Drogen';
+						elseif ($row->s == 'Off') $s_disp = 'Off';
+						else $s_disp = number_format((float)$row->s, 1, ',', '') . ' °C';
+	
+						if ($row->m == 0) $m_disp = 'Auto';
+						else {
+							if ($n === 'living_set' || $n === 'badkamer_set') {
+								if ($row->m == 1) $m_disp = 'Pre-heating';
+								elseif ($row->m == 2) $m_disp = 'Pre-heating ready';
+							} else $m_disp = 'Manueel';
+						}
+					} elseif (str_ends_with($n, '_temp')) {
+						$s_disp = number_format((float)$row->s, 1, ',', '') . ' °C';
+						$m_disp = ($n == 'waskamer_temp' || $n == 'zolder_temp') ? '' : $row->m . ' %';
+					} elseif ($row->d=='r') {
+						if ($row->s == 0) $s_disp = 'Open';
+						elseif ($row->s == 100) $s_disp = 'Gesloten';
+						else $s_disp = $row->s . ' % Toe';
+						$m_disp = '';
+					} elseif (str_starts_with($n, '8')) {
+						$s_disp = ''; $m_disp = '';
+					} elseif ($n == 'luifel') {
+						if ($row->s == 0) $s_disp = 'Gesloten';
+						elseif ($row->s == 100) $s_disp = 'Open';
+						else $s_disp = $row->s . ' % Open';
+						$m_disp = ($row->m == 0) ? 'Auto' : 'Manueel';
+					} elseif (in_array($n, array('eettafel', 'zithoek', 'kamer', 'waskamer', 'alex', 'lichtbadkamer'))) {
+						$s_disp = ($row->s == 0) ? 'Off' : $row->s;
+						if ($row->m == 0) $m_disp = '';
+						elseif ($row->m == 1) $m_disp = 'Wake-up';
+						elseif ($row->m == 2) $m_disp = 'Sleep';
+					} elseif ($n == 'Weg') {
+						if ($row->s == 0) $s_disp = 'Thuis';
+						elseif ($row->s == 1) $s_disp = 'Slapen';
+						elseif ($row->s == 2) $s_disp = 'Weg';
+						$m_disp = 'Laatste: ' . date("d-m G:i:s", $row->m);
+					} elseif ($n == 'auto') {
+						$s_disp = ($row->s == 'Off') ? 'Lichten manueel' : (($row->s == 'On') ? 'Lichten automatisch' : $row->s);
+						$m_disp = ($row->m == 0) ? 'Nacht' : (($row->m == 1) ? 'Dag' : '');
+					} elseif ($n == 'heating') {
+						$map = [0=>'0 Neutral', -2=>'-2 Active cooling', -1=>'-1 Passive cooling', 1=>'1 Airco heating', 2=>'2 Gas/Airco heating', 3=>'2 Gas heating'];
+						$s_disp = $map[$row->s] ?? $row->s;
+						$m_disp = '';
+					} else {
+						$s_disp = substr((string)($row->s ?? ''), 0, 20);
+						$m_disp = substr((string)($row->m ?? ''), 0, 20);
 					}
-				} elseif (str_ends_with($n, '_temp')) {
-					$s_disp = number_format((float)$row->s, 1, ',', '') . ' °C';
-					$m_disp = ($n == 'waskamer_temp' || $n == 'zolder_temp') ? '' : $row->m . ' %';
-				} elseif (str_starts_with($n, 'r')) {
-					if ($row->s == 0) $s_disp = 'Open';
-					elseif ($row->s == 100) $s_disp = 'Gesloten';
-					else $s_disp = $row->s . ' % Toe';
-					$m_disp = '';
-				} elseif (str_starts_with($n, '8')) {
-					$s_disp = ''; $m_disp = '';
-				} elseif ($n == 'luifel') {
-					if ($row->s == 0) $s_disp = 'Gesloten';
-					elseif ($row->s == 100) $s_disp = 'Open';
-					else $s_disp = $row->s . ' % Open';
-					$m_disp = ($row->m == 0) ? 'Auto' : 'Manueel';
-				} elseif (in_array($n, array('eettafel', 'zithoek', 'kamer', 'waskamer', 'alex', 'lichtbadkamer'))) {
-					$s_disp = ($row->s == 0) ? 'Off' : $row->s;
-					if ($row->m == 0) $m_disp = '';
-					elseif ($row->m == 1) $m_disp = 'Wake-up';
-					elseif ($row->m == 2) $m_disp = 'Sleep';
-				} elseif ($n == 'Weg') {
-					if ($row->s == 0) $s_disp = 'Thuis';
-					elseif ($row->s == 1) $s_disp = 'Slapen';
-					elseif ($row->s == 2) $s_disp = 'Weg';
-					$m_disp = 'Laatste: ' . date("d-m G:i:s", $row->m);
-				} elseif ($n == 'auto') {
-					$s_disp = ($row->s == 'Off') ? 'Lichten manueel' : (($row->s == 'On') ? 'Lichten automatisch' : $row->s);
-					$m_disp = ($row->m == 0) ? 'Nacht' : (($row->m == 1) ? 'Dag' : '');
-				} elseif ($n == 'heating') {
-					$map = [0=>'0 Neutral', -2=>'-2 Active cooling', -1=>'-1 Passive cooling', 1=>'1 Airco heating', 2=>'2 Gas/Airco heating', 3=>'2 Gas heating'];
-					$s_disp = $map[$row->s] ?? $row->s;
-					$m_disp = '';
-				} else {
-					$s_disp = substr((string)($row->s ?? ''), 0, 20);
-					$m_disp = substr((string)($row->m ?? ''), 0, 20);
+	
+					$t_disp = '';
+					if (isset($row->t)) {
+						if ($row->t < $now - (86400 * 7 * 4)) $t_disp = date('d-m-Y', $row->t);
+						elseif ($row->t < $now - 82800) $t_disp = date('d-m-Y G:i', $row->t);
+						else $t_disp = date("G:i:s", $row->t);
+					}
+	
+					echo '<tr data-device="'.htmlspecialchars($n).'" data-s="'.htmlspecialchars($raw_s).'" data-m="'.htmlspecialchars($raw_m).'">';
+					echo '<td><span class="device-name">'.htmlspecialchars($n).'</span>'.($t_disp !== '' ? '<span class="device-time">'.$t_disp.'</span>' : '').'</td>';
+					echo '<td>'.$s_disp.'</td>';
+					echo '<td>'.$m_disp.'</td>';
+					echo '</tr>';
 				}
-
-				$t_disp = '';
-				if (isset($row->t)) {
-					if ($row->t < $now - (86400 * 7 * 4)) $t_disp = date('d-m-Y', $row->t);
-					elseif ($row->t < $now - 82800) $t_disp = date('d-m-Y G:i', $row->t);
-					else $t_disp = date("G:i:s", $row->t);
-				}
-
-				echo '<tr data-device="'.htmlspecialchars($n).'" data-s="'.htmlspecialchars($raw_s).'" data-m="'.htmlspecialchars($raw_m).'">';
-				echo '<td><span class="device-name">'.htmlspecialchars($n).'</span>'.($t_disp !== '' ? '<span class="device-time">'.$t_disp.'</span>' : '').'</td>';
-				echo '<td><span class="badge">'.$s_disp.'</span></td>';
-				echo '<td>'.$m_disp.'</td>';
-				echo '</tr>';
 			}
 			?>
 			</tbody>
