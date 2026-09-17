@@ -23,9 +23,11 @@ foreach ($devices as $ip => $vol) {
 							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
 //								lg(print_r($wiim,true),'cron2');
-								$status['artist']=$wiim->metaData->artist;
-								$status['track']=$wiim->metaData->title;
-								$wiimplaying=true;
+								if(isset($wiim->metaData)) {
+									$status['artist']=$wiim->metaData->artist;
+									$status['track']=$wiim->metaData->title;
+									$wiimplaying=true;
+								} else continue;
 							} else $wiimplaying=false;
 							if(isset($status['artist'],$status['track'])) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
