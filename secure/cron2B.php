@@ -23,7 +23,7 @@ foreach ($devices as $ip => $vol) {
 							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
 //								lg(print_r($wiim,true),'cron2');
-								if(isset($wiim->metaData)) {
+								if(isset($wiim->metaData->artist)) {
 									$status['artist']=$wiim->metaData->artist;
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
