@@ -323,7 +323,6 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 
 	setCache('energy_vandaag', json_encode($dataArray));
 
-	
 	if ($lastDate !== $vandaag) {
 		$mqttcache = [];
 		$lastDate = $vandaag;
