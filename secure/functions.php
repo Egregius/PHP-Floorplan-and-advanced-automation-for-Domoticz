@@ -805,7 +805,6 @@ function bosezone($ip,$vol='') {
 				else bosevolume(32, 101, basename(__FILE__).':'.__LINE__);
 			}
 			if ($ip>101) {
-				return;
 				if ($d['bose'.$ip]->s=='Off') sw('bose'.$ip, 'On', basename(__FILE__).':'.__LINE__);
 				$mapip = [
 					102 => '<zone master="587A6260C5B2" senderIPAddress="192.168.2.101"><member ipaddress="192.168.2.102">304511BC3CA5</member></zone>',
