@@ -19,10 +19,11 @@ $dow = null;
 $startloop=time();
 define('LOOP_START', $startloop);
 $lastEvent=$startloop;
-$connectionSettings=(new ConnectionSettings)
+$connectionSettings = (new ConnectionSettings)
 	->setUsername('mqtt')
-    ->setPassword('mqtt')
-    ->setKeepAliveInterval(60);
+	->setPassword('mqtt')
+	->setKeepAliveInterval(60)
+	->setConnectTimeout(5);
 $mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
@@ -67,9 +68,19 @@ $mqtt->subscribe('homeassistant/cover/+/current_position',function (string $topi
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$time = time();
-	$mqtt->loopOnce($time);
-	usleep(500000);
+	try {
+		if (!$mqtt->isConnected()) {
+			lg('🟡 Reconnecting '.$user.' loop ','cover');
+			$mqtt->connect($connectionSettings, true);
+		}
+		$time = time();
+		$mqtt->loopOnce($time);
+		usleep(500000);
+	} catch (MqttClientException $e) {
+		sleep(2);
+	} catch (\Throwable $e) {
+		sleep(2);
+	}
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'cover');

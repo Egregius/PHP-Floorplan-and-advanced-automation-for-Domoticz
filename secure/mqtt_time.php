@@ -26,11 +26,11 @@ define('LOOP_START', $time);
 $rand = rand(100, 200);
 $d['rand']=5;
 $lastMessageReceived=true;
-
-$connectionSettings=(new ConnectionSettings)
+$connectionSettings = (new ConnectionSettings)
 	->setUsername('mqtt')
-    ->setPassword('mqtt')
-    ->setKeepAliveInterval(60);
+	->setPassword('mqtt')
+	->setKeepAliveInterval(60)
+	->setConnectTimeout(5);
 $mqtt = new MqttClient('192.168.30.22', 1883, basename(__FILE__) . '_' . getmypid() . VERSIE, MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings, true);
 

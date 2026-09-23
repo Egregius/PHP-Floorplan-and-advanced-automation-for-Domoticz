@@ -20,10 +20,11 @@ $dow = null;
 $startloop=time();
 define('LOOP_START', $startloop);
 $lastEvent=$startloop;
-$connectionSettings=(new ConnectionSettings)
+$connectionSettings = (new ConnectionSettings)
 	->setUsername('mqtt')
-    ->setPassword('mqtt')
-    ->setKeepAliveInterval(60);
+	->setPassword('mqtt')
+	->setKeepAliveInterval(60)
+	->setConnectTimeout(5);
 $mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $validDevices = $alreadyProcessed = [];
@@ -259,10 +260,19 @@ $mqtt->subscribe('homeassistant/switch/+/state',function (string $topic,string $
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$time = time();
-	$d['time']=$time;
-	$mqtt->loopOnce($time);
-	usleep(20000);
+	try {
+		if (!$mqtt->isConnected()) {
+			lg('🟡 Reconnecting '.$user.' loop ','sensor');
+			$mqtt->connect($connectionSettings, true);
+		}
+		$time = time();
+		$mqtt->loopOnce($time);
+		usleep(20000);
+	} catch (MqttClientException $e) {
+		sleep(2);
+	} catch (\Throwable $e) {
+		sleep(2);
+	}
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'sensor');

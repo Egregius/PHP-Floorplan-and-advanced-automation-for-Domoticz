@@ -26,8 +26,8 @@ define('LOOP_START', $startloop);
 $connectionSettings = (new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt')
-	->setKeepAliveInterval(60);
-
+	->setKeepAliveInterval(60)
+	->setConnectTimeout(5);
 $mqtt = new MqttClient('192.168.30.22', 1883, basename(__FILE__) . '_' . getmypid(), MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings, true);
 
@@ -179,7 +179,16 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 
 
 while (true) {
-	$mqtt->loop(true, false, null, 50000);
+	try {
+		if (!$mqtt->isConnected()) {
+			$mqtt->connect($connectionSettings, true);
+		}
+		$mqtt->loop(true, false, null, 100000);
+	} catch (MqttClientException $e) {
+		sleep(2);
+	} catch (\Throwable $e) {
+		sleep(2);
+	}
 }
 
 $mqtt->disconnect();
