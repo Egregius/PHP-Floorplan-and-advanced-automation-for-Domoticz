@@ -19,11 +19,10 @@ $dow = null;
 $startloop=time();
 define('LOOP_START', $startloop);
 $lastEvent=$startloop;
-$connectionSettings = (new ConnectionSettings)
+$connectionSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
-	->setPassword('mqtt')
-	->setKeepAliveInterval(60)
-	->setConnectTimeout(5);
+    ->setPassword('mqtt')
+    ->setKeepAliveInterval(60);
 $mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid().VERSIE,MqttClient::MQTT_3_1);
 $mqtt->connect($connectionSettings,true);
 $alreadyProcessed=[];
@@ -58,7 +57,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'light');
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -68,19 +67,9 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	try {
-		if (!$mqtt->isConnected()) {
-			$mqtt->connect($connectionSettings, true);
-			lg('🟡 Reconnecting '.$user.' loop ','light');
-		}
-		$time = time();
-		$mqtt->loopOnce($time);
-		usleep(100000);
-	} catch (MqttClientException $e) {
-		sleep(2);
-	} catch (\Throwable $e) {
-		sleep(2);
-	}
+	$time = time();
+    $mqtt->loopOnce($time);
+    usleep(100000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'light');
