@@ -179,7 +179,17 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 
 
 while (true) {
-	$mqtt->loop(true, false, null, 50000);
+	try {
+		if (!$mqtt->isConnected()) {
+			lg('🟡 Reconnecting '.$user.' loop ');
+			$mqtt->connect($connectionSettings, true);
+		}
+		$mqtt->loop(true, false, null, 50000);
+	} catch (MqttClientException $e) {
+		sleep(2);
+	} catch (\Throwable $e) {
+		sleep(2);
+	}
 }
 
 $mqtt->disconnect();

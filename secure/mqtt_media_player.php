@@ -89,9 +89,21 @@ $mqtt->publish(
 );
 
 while (true) {
-	$time = time();
-    $mqtt->loopOnce($time);
-    usleep(500000);
+	try {
+		if (!$mqtt->isConnected()) {
+			lg('🟡 Reconnecting '.$user.' loop ');
+			$mqtt->connect($connectionSettings, true);
+		}
+		$time = time();
+		$mqtt->loopOnce($time);
+		usleep(500000);
+	} catch (MqttClientException $e) {
+		lg("🟡 MQTT Cliënt fout in {$user}: " . $e->getMessage() . " (code " . $e->getCode() . ")");
+		sleep(2);
+	} catch (\Throwable $e) {
+		lg("🔴 Onverwachte fout in MQTT {$user}: " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine());
+		sleep(2);
+	}
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'mediaplayer');

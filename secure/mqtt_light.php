@@ -69,15 +69,17 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 while (true) {
 	try {
 		if (!$mqtt->isConnected()) {
-			lg('🟡 Reconnecting '.$user.' loop ','sensor');
+			lg('🟡 Reconnecting '.$user.' loop ');
 			$mqtt->connect($connectionSettings, true);
 		}
 		$time = time();
 		$mqtt->loopOnce($time);
 		usleep(100000);
 	} catch (MqttClientException $e) {
+		lg("🟡 MQTT Cliënt fout in {$user}: " . $e->getMessage() . " (code " . $e->getCode() . ")");
 		sleep(2);
 	} catch (\Throwable $e) {
+		lg("🔴 Onverwachte fout in MQTT {$user}: " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine());
 		sleep(2);
 	}
 }
