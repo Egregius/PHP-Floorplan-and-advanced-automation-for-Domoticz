@@ -108,9 +108,10 @@ if ($d['weg']->s<=2 && $d['grohered']->s=='Off' && $d['a']<100 && (
     ))
     sw('grohered', 'On', ' n='.$d['n'].'W b='.$d['b'].'W c='.$d['c'].'%', true);
 elseif ($d['grohered']->s=='On' &&  $d['wasbak']->s==0 && $d['snijplank']->s==0 && past('8keuken_8')>1800 && (
-        $d['a']>1000
-        || (rollingAbove('n', 100, $offWindow) || rollingAbove('n', 1000, 30, (int)ceil($offWindow * 0.1)))
-           && rollingBelow('b', 0, $offWindow)
+        	$d['a']>1000
+        || rollingAbove('n', 100, $offWindow)
+        || rollingAbove('n', 1000, 30, (int)ceil($offWindow * 0.1))
+        || rollingBelow('b', -50, $offWindow)
     ))
     sw('grohered', 'Off', ' n='.$d['n'].'W b='.$d['b'].'W c='.$d['c'].'%', true);
 
