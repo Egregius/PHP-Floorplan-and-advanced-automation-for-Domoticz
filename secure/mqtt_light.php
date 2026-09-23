@@ -57,7 +57,7 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'light');
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -67,9 +67,19 @@ $mqtt->subscribe('homeassistant/light/+/brightness',function (string $topic,stri
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 while (true) {
-	$time = time();
-    $mqtt->loopOnce($time);
-    usleep(100000);
+	try {
+		if (!$mqtt->isConnected()) {
+			lg('🟡 Reconnecting '.$user.' loop ','sensor');
+			$mqtt->connect($connectionSettings, true);
+		}
+		$time = time();
+		$mqtt->loopOnce($time);
+		usleep(100000);
+	} catch (MqttClientException $e) {
+		sleep(2);
+	} catch (\Throwable $e) {
+		sleep(2);
+	}
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'light');
