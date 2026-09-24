@@ -11,6 +11,7 @@ if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['comma
 		'garmingpx' => 'http://192.168.30.2:9000/hooks/garmingpx',
 		'syncfotos' => 'http://192.168.30.2:9000/hooks/syncfotos',
 		'synccamera' => 'http://192.168.30.2:9000/hooks/synccamera',
+		'agendas' => 'http://192.168.20.21:9000/hooks/agendas',
 		'googlemaps' => 'http://192.168.20.21:9000/hooks/googlemaps',
 		'garminbadges' => 'http://192.168.20.21:9000/hooks/garminbadges',
 		'trakt' => 'http://192.168.20.21:9000/hooks/trakt',
