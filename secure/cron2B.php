@@ -22,12 +22,21 @@ foreach ($devices as $ip => $vol) {
 						if($d['boseliving']->m == 1 && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP')) {
 							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
-//								lg(print_r($wiim,true),'cron2');
+								lg(print_r($wiim,true),'cron2');
 								if(isset($wiim->metaData->artist)) {
 									$status['artist']=$wiim->metaData->artist;
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
-								} else continue;
+									$wiimunknown=0;
+								} else {
+									$wiimunknown++;
+									lg('wiim data not set '.$wiimunknown,'cron2');
+									if($wiimunknown>7) {
+										$preset=wiimplaylist();
+										Wiim('setPlayerCmd:resume');
+									}
+									continue;
+								}
 							} else $wiimplaying=false;
 							if(isset($status['artist'],$status['track'])) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
