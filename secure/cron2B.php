@@ -22,7 +22,7 @@ foreach ($devices as $ip => $vol) {
 						if($d['boseliving']->m == 1 && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP')) {
 							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
-								lg(print_r($wiim,true),'cron2');
+//								lg(print_r($wiim,true),'cron2');
 								if(isset($wiim->metaData->artist)) {
 									$status['artist']=$wiim->metaData->artist;
 									$status['track']=$wiim->metaData->title;
@@ -31,7 +31,16 @@ foreach ($devices as $ip => $vol) {
 								} else {
 									$wiimunknown++;
 									lg('wiim data not set '.$wiimunknown,'cron2');
-									if($wiimunknown>7) {
+									if($wiimunknown>=16) {
+										$wiimunknown=0;
+										Wiim('StartRebootTime:1');
+									}elseif($wiimunknown>=12) {
+										Wiim("MCUKeyShortClick:1");
+										sleep(1);
+										Wiim("setPlayerCmd:loopmode:2");
+										sleep(1);
+										Wiim("setPlayerCmd:next");
+									}elseif($wiimunknown>=8) {
 										$preset=wiimplaylist();
 										Wiim('setPlayerCmd:resume');
 									}
