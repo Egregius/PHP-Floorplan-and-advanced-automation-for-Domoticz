@@ -746,30 +746,22 @@ function boseplaylist() {
 	];
 	return $map[$preset];
 }
-
 function wiimplaylist() {
 	global $time;
-	$dag = floor($time / 86400);
 	$dow = date("w");
-	if ($dow == 6) {
-		$preset = 11;
-	} elseif ($dow == 0) {
-		$preset = 12;
-	} else {
-		$preset = ($dag % 10) + 1;
-	}
-	return $preset;
+	if ($dow == 6) return 11;
+	if ($dow == 0) return 12;
+	$week = floor(($time - 345600) / 604800);
+	$dayIndex = $dow - 1;
+	return ($week % 2 == 0) ? ($dayIndex + 1) : ($dayIndex + 6);
 }
-function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
-{
+function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool {
     global $matokenbeta;
-
     $payload = json_encode([
         'message_id' => uniqid('php_', true),
         'command'    => 'player_queues/next',
         'args'       => ['queue_id' => $queue_id],
     ]);
-
     $ch = curl_init('http://192.168.2.26:8095/api');
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
@@ -781,11 +773,9 @@ function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool
         ],
         CURLOPT_TIMEOUT => 10,
     ]);
-
     $body   = curl_exec($ch);
     $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-
     return $status >= 200 && $status < 300;
 }
 function bosezone($ip,$vol='') {
@@ -935,7 +925,6 @@ function daikinset($device, $power, $mode, $stemp, $msg='', $fan='A', $spmode=-1
 function hasstoken() {
 	return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODYzYTllZGY2OGI0ZTc4YjFkOGFkOWQ4YzM3MDRhMiIsImlhdCI6MTc1MDE1MjUwOCwiZXhwIjoyMDY1NTEyNTA4fQ.U-t5m66b9sx7QCWVXEStmt6AIcSN0zbSHHKnR13zEu0';
 }
-
 function hass(string $domain, string $service, string $entity = '', array $data = [], int $attempt = 0): bool {
     global $d;
     static $socket = null;
@@ -973,9 +962,7 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         "Keep-Alive: timeout=300\r\n\r\n%s",
         $domain, $service, hasstoken(), strlen($payload), $payload
     );
-
     $written = @fwrite($socket, $request);
-
     if ($written === false || $written < strlen($request)) {
         @fclose($socket);
         $socket = null;
@@ -988,7 +975,6 @@ function hass(string $domain, string $service, string $entity = '', array $data 
         lg("❌ HASS write definitief mislukt na retry ($domain.$service)");
         return false;
     }
-
     @fflush($socket);
     $lastUse = $d['time'];
     return true;
@@ -1396,8 +1382,7 @@ function setNextubeMode(): bool {
 	}
     return false;
 }
-function cleanTitle(string $artists, string $title): string
-{
+function cleanTitle(string $artists, string $title): string {
     static $replace = null;
     if ($replace === null) {
         $replace = [
