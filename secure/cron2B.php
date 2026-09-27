@@ -35,13 +35,9 @@ foreach ($devices as $ip => $vol) {
 										$wiimunknown=0;
 										Wiim('StartRebootTime:1');
 									}elseif($wiimunknown>=12) {
-										Wiim("MCUKeyShortClick:1");
-										sleep(1);
-										Wiim("setPlayerCmd:loopmode:2");
-										sleep(1);
-										Wiim("setPlayerCmd:next");
-									}elseif($wiimunknown>=8) {
 										$preset=wiimplaylist();
+										Wiim("MCUKeyShortClick:$preset");
+									}elseif($wiimunknown>=8) {
 										Wiim('setPlayerCmd:resume');
 									}
 									continue;

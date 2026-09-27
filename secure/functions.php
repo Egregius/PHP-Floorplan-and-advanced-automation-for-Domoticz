@@ -749,17 +749,14 @@ function boseplaylist() {
 
 function wiimplaylist() {
 	global $time;
-	$dag=floor($time/86400);
-	$dow=date("w");
-	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-	if ($weekend==true) {
-		if ($dag % 3 == 0) $preset=6;
-		elseif ($dag % 2 == 0) $preset=5;
-		else $preset=4;
+	$dag = floor($time / 86400);
+	$dow = date("w");
+	if ($dow == 6) {
+		$preset = 11;
+	} elseif ($dow == 0) {
+		$preset = 12;
 	} else {
-		if ($dag % 3 == 0) $preset=3;
-		elseif ($dag % 2 == 0) $preset=2;
-		else $preset=1;
+		$preset = ($dag % 10) + 1;
 	}
 	return $preset;
 }
