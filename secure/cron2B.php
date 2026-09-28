@@ -82,10 +82,11 @@ foreach ($devices as $ip => $vol) {
 							}
 							$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['artist']));
 							$title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['track']));
-							$title   = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
-							$arr     = array_map('trim', explode(',', $artists));
-							sort($arr);
-							$cleanKey = preg_replace('/[^a-z0-9]/', '', implode('', $arr) . $title);
+//							$title   = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
+//							$arr     = array_map('trim', explode(',', $artists));
+//							sort($arr);
+//							$cleanKey = preg_replace('/[^a-z0-9]/', '', implode('', $arr) . $title);
+							$cleanKey = cleanTitle($artists,$title);
 							if ($cleanKey !== $lastCleanKey && $title!='unknow') {
 								$data = [
 									'artist' => $status['artist'],
