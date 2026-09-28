@@ -1,49 +1,9 @@
 <?php
 $user='cron300';
-//lg('🕒 | Variabelen: ' . convertbytes($total_var_size) . ' | Intern: ' . convertbytes(memory_get_usage(false)) . ' | Systeem: ' . convertbytes(memory_get_usage(true)).' ---------------------------------------------------------','cron300');
-
-// BEGIN EERSTE BLOK INDIEN ZWEMBAD
-/*if ($d['steenterras']->s=='On') {
-	if (past('steenterras')>10700
-		&&$time>strtotime("16:00")
-		&&$d['houtterras']->s=='Off'
-		&&$d['buiten_temp']->s<27
-	) {
-		sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
-	}
-}else{
-	if (
-			(past('steenterras')>10700&&$time>strtotime("12:59")&&$time<strtotime("15:59"))
-			||
-			(past('steenterras')>10700&&$d['buiten_temp']->s>27)
-	   ) {
-	   	sw('steenterras','On', basename(__FILE__).':'.__LINE__);
-	}
-}
-if ($d['houtterras']->s=='On') {
-	if (past('houtterras')>86398) {
-		sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
-	}
-	if ($d['steenterras']->s=='Off') {
-		sw('steenterras','On', basename(__FILE__).':'.__LINE__);
-	}
-}*/
-//EINDE EERSTE BLOK INDIEN ZWEMBAD
-
-// BEGIN TWEEDE BLOK INDIEN GEEN ZWEMBAD
-//if ($d['achterdeur']->s=='Open') {
-//	if ($d['steenterras']->s=='Off') sw('steenterras','On', basename(__FILE__).':'.__LINE__);
-//	if ($d['houtterras']->s=='Off') sw('houtterras','On', basename(__FILE__).':'.__LINE__);
-//} else {
-//	if ($d['steenterras']->s=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
-//	if ($d['houtterras']->s=='On') sw('houtterras','Off', basename(__FILE__).':'.__LINE__);
-//}
-//EINDE TWEEDE BLOK INDIEN GEEN ZWEMBAD
-
 if ($d['weg']->s>0) {
 	if ($d['kookplaat']->s=='On') sw('kookplaat', 'Off', basename(__FILE__).':'.__LINE__);
 	if ($d['dysonlader']->s=='On') sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
-//	if ($d['steenterras']->s=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
+	if ($d['steenterras']->s=='On') sw('steenterras','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['tuintafel']->s=='On') sw('tuintafel','Off', basename(__FILE__).':'.__LINE__);
 	if ($d['weg']->s>1) {
 		foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
@@ -54,7 +14,6 @@ if ($d['weg']->s>0) {
 	if ($d['dysonlader']->s=='On'&&past('dysonlader')>3600) sw('dysonlader', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
-
 if ($d['auto']->s!='On'&&past('auto')>43200) {
 	sw('auto', 'On', basename(__FILE__).':'.__LINE__);
 	alert('AUTO','AUTO ingeschakeld na 12 uur',60,false,3);
@@ -62,15 +21,4 @@ if ($d['auto']->s!='On'&&past('auto')>43200) {
 
 if ($d['zolderg']->s=='On'&&past('zolderg')>7200&&past('pirgarage')>7200) sw('zolderg', 'Off', basename(__FILE__).':'.__LINE__);
 
-
-
 republishmqtt();
-
-/*
-if ($d['weg']->s==0&&$d['badkamerpower']->s=='Off'&&$d['Egregius']->s!=0&&$time>=$t&&$time<strtotime('9:00')) {
-	shell_exec('php /var/www/setSSID.php \'{"main24":0}\' > /dev/null 2>&1 &');
-	store('Egregius',0,basename(__FILE__).':'.__LINE__);
-	lg('main24 uitgeschakeld','cron300');
-}
-
-*/

@@ -722,30 +722,6 @@ function bosebass($bass,$ip=101) {
 	$xml="<bass>$bass</bass>";
 	bosepost("bass", $xml, $ip);
 }
-function boseplaylist() {
-	global $time;
-	$dag=floor($time/86400);
-	$dow=date("w");
-	if($dow==0||$dow==6)$weekend=true; else $weekend=false;
-	if ($weekend==true) {
-		if ($dag % 3 == 0) $preset='MIX-3';
-		elseif ($dag % 2 == 0) $preset='MIX-2';
-		else $preset='MIX-1';
-	} else {
-		if ($dag % 3 == 0) $preset='EDM-3';
-		elseif ($dag % 2 == 0) $preset='EDM-2';
-		else $preset='EDM-1';
-	}
-	$map = [
-		'EDM-1' => 'PRESET_1',
-		'EDM-2' => 'PRESET_2',
-		'EDM-3' => 'PRESET_3',
-		'MIX-1' => 'PRESET_4',
-		'MIX-2' => 'PRESET_5',
-		'MIX-3' => 'PRESET_6',
-	];
-	return $map[$preset];
-}
 function wiimplaylist() {
 	global $time;
 	$dow = date("w");
@@ -755,29 +731,6 @@ function wiimplaylist() {
 	$dayIndex = $dow - 1;
 	return ($week % 2 == 0) ? ($dayIndex + 1) : ($dayIndex + 6);
 }
-function ma_next_track(string $queue_id = 'up587a6260c5b2'): bool {
-    global $matokenbeta;
-    $payload = json_encode([
-        'message_id' => uniqid('php_', true),
-        'command'    => 'player_queues/next',
-        'args'       => ['queue_id' => $queue_id],
-    ]);
-    $ch = curl_init('http://192.168.2.26:8095/api');
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => $payload,
-        CURLOPT_HTTPHEADER     => [
-            'Authorization: Bearer ' . $matokenbeta,
-            'Content-Type: application/json',
-        ],
-        CURLOPT_TIMEOUT => 10,
-    ]);
-    $body   = curl_exec($ch);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    return $status >= 200 && $status < 300;
-}
 function bosezone($ip,$vol='') {
 	global $d,$time,$dow,$weekend,$t;
 	if ($d['weg']->s==0||$d['badkamerpower']->s=='On') {
@@ -786,7 +739,6 @@ function bosezone($ip,$vol='') {
 			if ($d['bose101']->s=='Off') {
 				lg(basename(__FILE__).':'.__LINE__,'bose');
 				//sw('bose101', 'On', basename(__FILE__).':'.__LINE__);
-				bosekey(boseplaylist(), 750000, 101, basename(__FILE__).':'.__LINE__);
 				lg('Bose zone time='.$time.'|'.$t+1800,'bose');
 				if ($d['lgtv']->s=='On'&&$d['eettafel']->s==0) bosevolume(0, 101, basename(__FILE__).':'.__LINE__);
 				else bosevolume(32, 101, basename(__FILE__).':'.__LINE__);
@@ -1323,10 +1275,6 @@ function getCache(string $key, $default = false) {
     $data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
     return $data === false ? $default : $data;
 }
-function convertbytes($size) {
-    $unit=array('b','kb','mb','gb','tb','pb');
-    return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
- }
 function clamp($v,$min,$max){return max($min,min($max,$v));}
 function setNextubeMode(): bool {
     global $d;

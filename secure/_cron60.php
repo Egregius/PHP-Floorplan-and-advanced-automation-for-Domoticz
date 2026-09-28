@@ -214,12 +214,7 @@ if ($d['auto']->s=='On') {
 
 }
 /* -------------------------------------------- ALTIJD ---------------------------------------------------*/
-/*if ($d['wasmachine']->s=='On') {
-	if ($d['wasmachine_power']->s<3.4&&past('wasmachine')>4200&&past('wasmachine_power')>120) {
-		hassnotify('Wasmachine', 'klaar');
-		sw('wasmachine', 'Off', basename(__FILE__).':'.__LINE__);
-	}
-}*/
+
 if (isset($daikin)) {
 //	lg("living_set {$d['living_set']->s} kamer_set {$d['kamer_set']->s} alex_set {$d['alex_set']->s} daikin {$d['daikin']->s} {$d['daikin']->p} ".past('daikin'),'daikin');
 //	lg(print_r($daikin,true),'daikin');
@@ -238,34 +233,6 @@ if (isset($daikin)) {
 
 $mqtt->loopOnce($time);
 unset($query, $row, $sql, $i, $result, $k, $v);
-
-/*$vars = get_defined_vars();
-$total_var_size=0;
-foreach ($vars as $name => $value) {
-	if (in_array($name, [
-		'GLOBALS', '_POST', '_GET', '_COOKIE', '_FILES', '_SERVER', '_ENV',
-		'memory_cache', 'name', 'vars', 'value', 'size', 'oldSize', 'percent', 'usage_report'
-	])) continue;
-	if ($value instanceof PDO || $value instanceof PDOStatement || is_resource($value)) {
-		$size = 0;
-	} else {
-		try {
-			$size = strlen(serialize($value));
-		} catch (Exception $e) {
-			$size = 0;
-		}
-	}
-	$total_var_size += $size;
-	if (isset($memory_cache[$name]) && $memory_cache[$name] > 0) {
-		$oldSize = $memory_cache[$name];
-		if ($size > ($oldSize * 1.05)) {
-			$percent = round((($size - $oldSize) / $oldSize) * 100, 1);
-			lg("📈 \${$name}	+{$percent}% (" . convertbytes($oldSize) . "	-> " . convertbytes($size) . ")");
-			$memory_cache[$name] = $size;
-		}
-	} else $memory_cache[$name] = $size;
-}
-unset($vars, $name, $value, $size, $oldSize, $percent);*/
 
 /*
 if ($poolRuntime['date'] !== date('Y-m-d')) {
