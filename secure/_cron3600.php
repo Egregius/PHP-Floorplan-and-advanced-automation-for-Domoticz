@@ -60,8 +60,7 @@ if ($uur%4==0||LOOP_START>$time-60) {
 			'Sr'=>date('G:i', $Sunrise),
 			'Ss'=>date('G:i', $Sunset),
 			'Te'=>date('G:i', $CivTwilightEnd),
-			'b'=>$b_hist,
-			'pl'=>$map[boseplaylist($time)],
+			'b'=>$b_hist
 		];
 		if(!isset($ddcache)||$ddcache!=$data) {
 			publishmqtt('d/d',json_encode($data));

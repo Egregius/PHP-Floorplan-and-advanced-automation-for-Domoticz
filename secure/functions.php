@@ -214,11 +214,11 @@ function huisthuis($msg='') {
 	store('weg', 0);
 	if (strlen($msg)>0) lg($msg);
 	else lg('Huis thuis');
-	$config = ['main5' => true, 'main24' => false];
-	shell_exec('php /var/www/setSSID.php \'{"main24":1}\' > /dev/null 2>&1 &');
-	if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
-	setNextubeMode();
 	if ($d['boseliving']->s=='Off'&&$d['time']>strtotime('5:00')&&$d['time']>$t-3600&&$d['time']<strtotime('18:00')) sw('boseliving', 'On', basename(__FILE__).':'.__LINE__);
+	shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":1}\' > /dev/null 2>&1 &');
+	if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
+	if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
+	setNextubeMode();
 }
 function boseplayinfo($sound, $vol=50, $log='', $ip=101) {
 	$raw=rawurlencode($sound);

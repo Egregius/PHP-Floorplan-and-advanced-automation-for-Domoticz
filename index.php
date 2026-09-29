@@ -224,7 +224,6 @@
 						<canvas id="zonvcircle" width="120" height="120"></canvas>
 					</div>
 				</div>
-				<div id="playlist" class="abs z1"></div>
 				<div id="info"></div>
 			</div>
 
