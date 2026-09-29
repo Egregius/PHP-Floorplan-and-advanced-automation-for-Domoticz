@@ -1197,7 +1197,7 @@ function republishmqtt() {
 			}
 			list($domain, $object_id) = explode('.', $entity_id);
 			$brightness = $attributes['brightness'] ?? 0;
-//			$brightness=round((int)$brightness / 2.55);
+			$brightness=round((int)$brightness / 2.55);
 			if ($brightness!=$i->s) {
 				if ($device=='bureellinks') lg('bureellinks: '.$brightness.'|'.$i->s);
 				elseif ($device=='bureelrechts') lg('bureelrechts: '.$brightness.'|'.$i->s);
