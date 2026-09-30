@@ -60,7 +60,7 @@ $mqtt->subscribe('homeassistant/event/+/event_type',function (string $topic,stri
 				include '/var/www/html/secure/pass2php/'.$device.'.php';
 				if (isset($d[$device]->t)) store($device,$status,basename(__FILE__).':'.__LINE__,'sensor');
 			}
-		}// else lg($device);
+		} else lg($device.' = '.$status,'sensor');
 	} catch (Throwable $e) {
 		lg("‼️ Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'sensor');
 	}

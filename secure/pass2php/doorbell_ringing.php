@@ -1,5 +1,5 @@
 <?php
-if ($status=='On'&&$d['deurvoordeur']->s=='Closed') {
+if ($d['deurvoordeur']->s=='Closed') {
 	if ($d['dag']->s<0) sw('voordeur', 'On', basename(__FILE__).':'.__LINE__);
 	if ($time>getCache('ring_ding')+30) {
 		if ($d['deurvoordeur']->s=='Closed') {
