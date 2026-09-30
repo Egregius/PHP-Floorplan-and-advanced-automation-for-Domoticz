@@ -1264,7 +1264,7 @@ function Wiim(string $cmd) {
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
         lg('Error: ' . $url.'='.curl_error($ch),'wiim');
-    } elseif($cmd!='getMetaInfo') lg($cmd,'wiim');
+    } elseif($cmd!='getMetaInfo') lg('Wiim '.$cmd,'wiim');
     curl_close($ch);
     return $response;
 }

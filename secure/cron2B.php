@@ -38,7 +38,7 @@ foreach ($devices as $ip => $vol) {
 										$preset=wiimplaylist();
 										Wiim("MCUKeyShortClick:$preset");
 									}elseif($wiimunknown>=8) {
-										$vandaag = date("Y-m-d", $time);
+										$vandaag = date("Y-m-d");
 										if($vandaag!=$lastdate) {
 											$preset=wiimplaylist();
 											Wiim("MCUKeyShortClick:$preset");
