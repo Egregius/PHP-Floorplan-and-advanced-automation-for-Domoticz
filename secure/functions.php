@@ -1337,7 +1337,7 @@ function cleanTitle(string $artists, string $title): string {
             'albummix', 'clubedit', 'clubmix', 'edit', 'extended',
             'feat', 'ft', 'featuring','original',
             'festivalmix', 'mixedit', 'originalmix', 'mix',
-            'radioedit', 'radiomix', 'radioversion',
+            'radioedit', 'radiomix', 'radioversion', 'radio',
             'remastered', 'remaster',
             'remix', 'rework',
             'singleversion', 'version',
