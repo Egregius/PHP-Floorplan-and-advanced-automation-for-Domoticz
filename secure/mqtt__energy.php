@@ -115,7 +115,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 					try {
 						$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
 						$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
-						if ($prevavg > $kwartierpiek - 200) {
+						if ($prevavg > $kwartierpiek - 2000) {
 							alert('KwartierpiekB',
 								'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL .
 								'Vorige piek deze maand = ' . $kwartierpiek . ' Wh', $time);
