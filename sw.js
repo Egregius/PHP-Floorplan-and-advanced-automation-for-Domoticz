@@ -59,6 +59,7 @@ const NETWORK_FIRST = [
 ];
 const CACHE_EXCLUDED = [
     'ajax.php',
+    'cache.php',
     'd.php',
 	'log.php',
 	'temp.php',

@@ -18,6 +18,7 @@ if (isset($_REQUEST['zon'])) {
 				if($d['eettafel']->s==0) $data['shuffle']='On';
 				else {
 					if (time()>strtotime('12:00')) $data['shuffle']='Pop';
+					else $data['shuffle']='On';
 				}
 			}
 			$data['time']=past('boseliving');
