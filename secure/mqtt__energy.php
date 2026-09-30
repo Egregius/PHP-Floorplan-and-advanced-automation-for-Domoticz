@@ -111,11 +111,14 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 						'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL .
 						'Piek deze maand = ' . $kwartierpiek . ' Wh', $time);
 				}
+				lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
 				if ($newavg < $prevavg) {
 					try {
+						lg('kwartierpiek lijn '.__LINE__);
 						$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
 						$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
 						if ($prevavg > $kwartierpiek - 2000) {
+							lg('kwartierpiek lijn '.__LINE__);
 							alert('KwartierpiekB',
 								'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL .
 								'Vorige piek deze maand = ' . $kwartierpiek . ' Wh', $time);
