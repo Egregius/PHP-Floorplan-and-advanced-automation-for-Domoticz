@@ -27,7 +27,7 @@ foreach ($devices as $ip => $vol) {
 									$status['artist']=$wiim->metaData->artist;
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
-									$wiimunknown=0;
+									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
 								} else {
 									$wiimunknown++;
 									lg('wiim data not set '.$wiimunknown,'cron2');
@@ -73,8 +73,6 @@ foreach ($devices as $ip => $vol) {
 											$wiimunknown=0;
 											$preset=wiimplaylist();
 											Wiim("MCUKeyShortClick:$preset");
-											sleep(1);
-											Wiim("setPlayerCmd:playindex:1");
 										}
 									}
 									unset($wiim);
