@@ -76,25 +76,21 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	$resolvedTitle = $d['cleantitle'] ?? '';
 	$db = Database::getInstance();
 	$playlists_config = [
-		'EDM' => [
-			'4c0A3wTsAYGtPjuvnBSQVz' => 'EDM-0',
-			'1HYGeiybmNCNDH5gqgpMlD' => 'EDM-1',
-			'4PAKU1ueS1ZLGHV6RQ61vU' => 'EDM-2',
-			'00c1C9TicWtR4jT8l6Umtn' => 'EDM-3',
-			'0RC4oPTsTDYeJAQ42r18Xo' => 'EDM-4',
-			'6Di8efQzh5qYyL6Th9GovZ' => 'EDM-5',
-			'6ZAcAvI9J054PToebnPCM6' => 'EDM-6',
-			'2KSNeL9Xgsobjdb0PBDEd3' => 'EDM-7',
-			'4qRh2rWz5i76SsnHjnJX84' => 'EDM-8',
-			'2wZyxbgTwnlgOu7qNCxFXG' => 'EDM-9',
-		],
-		'Pop' => [
-			'4hTylVEtYMWLto7UxmFXVS' => 'POP-0',
-			'6VxheCoIPPcR3PTHUfjDJ6' => 'POP-1',
-			'4ofsYQ8HVOIxNXUwZYuT2C' => 'POP-2',
-			'2y7sX8H7KiFMAYo3NR1Lxz' => 'POP-3',
-			'5NeUAm0FkXS3fWJGnCvzoE' => 'POP-4',
-		]
+		'4c0A3wTsAYGtPjuvnBSQVz' => 'EDM',
+		'1HYGeiybmNCNDH5gqgpMlD' => 'EDM',
+		'4PAKU1ueS1ZLGHV6RQ61vU' => 'EDM',
+		'00c1C9TicWtR4jT8l6Umtn' => 'EDM',
+		'0RC4oPTsTDYeJAQ42r18Xo' => 'EDM',
+		'6Di8efQzh5qYyL6Th9GovZ' => 'EDM',
+		'6ZAcAvI9J054PToebnPCM6' => 'EDM',
+		'2KSNeL9Xgsobjdb0PBDEd3' => 'EDM',
+		'4qRh2rWz5i76SsnHjnJX84' => 'EDM',
+		'2wZyxbgTwnlgOu7qNCxFXG' => 'EDM',
+		'4hTylVEtYMWLto7UxmFXVS' => 'POP',
+		'6VxheCoIPPcR3PTHUfjDJ6' => 'POP',
+		'4ofsYQ8HVOIxNXUwZYuT2C' => 'POP',
+		'2y7sX8H7KiFMAYo3NR1Lxz' => 'POP',
+		'5NeUAm0FkXS3fWJGnCvzoE' => 'POP',
 	];
 	// 1. Probeer eerst te matchen op track_id
 	if (!empty($d['track_id'])) {
@@ -103,6 +99,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		if ($row) {
 			$d['score'] = (int)$row['score'];
+			$d['genre'] = $playlists_config[$row['playlist_id']];
 			$resolvedTitle = $row['clean_title'];
 		}
 	}
@@ -114,6 +111,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		if ($row) {
 			$d['score'] = (int)$row['score'];
+			$d['genre'] = $playlists_config[$row['playlist_id']];
 			$resolvedTitle = $row['clean_title'];
 		} else {
 			// 3. Fallback: standaard LIKE met artiest en track
@@ -122,6 +120,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
 			if ($row) {
 				$d['score'] = (int)$row['score'];
+				$d['genre'] = $playlists_config[$row['playlist_id']];
 				$resolvedTitle = $row['clean_title'];
 			} else {
 				// 4. Extra fallback: split op hoofdwoorden uit de track (bijv. artiest % deel1 % deel2)
@@ -134,6 +133,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 					$row = $stmt->fetch(PDO::FETCH_ASSOC);
 					if ($row) {
 						$d['score'] = (int)$row['score'];
+						$d['genre'] = $playlists_config[$row['playlist_id']];
 						$resolvedTitle = $row['clean_title'];
 					} else {
 						if ($d['score'] === '?') {
@@ -155,6 +155,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 								}
 								if ($bestMatch && $highestSimilar >= 60) {
 									$d['score'] = (int)$bestMatch['score'];
+									$d['genre'] = $playlists_config[$bestMatch['playlist_id']];
 									$resolvedTitle = $bestMatch['clean_title'];
 								}
 							}
