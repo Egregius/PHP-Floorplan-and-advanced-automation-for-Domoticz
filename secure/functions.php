@@ -1055,6 +1055,7 @@ function curl($url) {
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 		curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 	}
+	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
 	curl_setopt($ch, CURLOPT_URL, $url);
 	return curl_exec($ch);
 }

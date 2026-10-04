@@ -28,6 +28,8 @@ foreach ($devices as $ip => $vol) {
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
 									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
+									$data=curl('https://home.egregius.be/ajax.php?bose=101');
+									lg(json_encode($data),'cron2');
 								} else {
 									$wiimunknown++;
 									lg('wiim data not set '.$wiimunknown,'cron2');
