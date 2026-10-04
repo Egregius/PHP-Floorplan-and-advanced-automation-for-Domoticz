@@ -30,6 +30,7 @@ if (file_exists('/dev/shm/cache/poolRuntime.json')) {
 }
 $steenautomatischaan = $poolRuntime['automatisch'] ?? false;
 
+
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;

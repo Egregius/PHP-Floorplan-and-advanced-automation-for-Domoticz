@@ -28,8 +28,22 @@ foreach ($devices as $ip => $vol) {
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
 									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
-									$data=curl('https://home.egregius.be/ajax.php?bose=101');
-									lg(json_encode($data),'cron2');
+									$data=json_decode(curl('https://home.egregius.be/ajax.php?bose=101'),true);
+									
+									if (isset($data['genre'],$data['score'])) {
+//										lg(print_r($data,true));
+										if ($data['genre']=='EDM') $default=125;
+										elseif($data['genre']=='POP') $default=200;
+										lg($data['genre'].' =' .$default);
+										if(isset($default)) {
+											if ($data['score']==$default) {
+												if($d['spotify']->s='On') sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
+											} else {
+												if($d['spotify']->s='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+											}
+										}
+									}
+									
 								} else {
 									$wiimunknown++;
 									lg('wiim data not set '.$wiimunknown,'cron2');
