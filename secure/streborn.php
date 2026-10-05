@@ -31,9 +31,11 @@ if(isset($_GET['bose'],$_GET['key'])) {
 		} elseif($_GET['key']==6) {
 			$data=curl('http://192.168.2.2/ajax.php?bose=101');
 			$data=json_decode($data,true);
-			if(updatescore($data['cleantitle'],null,$data['track_id'])) {
-				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
-				Wiim('setPlayerCmd:next');
+			if(($data['genre']=='EDM'&&$data['score']>=120)||($data['genre']=='POP'&&$data['score']>=195)) {
+				if(updatescore($data['cleantitle'],null,$data['track_id'])) {
+					if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+					Wiim('setPlayerCmd:next');
+				}
 			}
 		} elseif($_GET['key']=='aux') {
 
