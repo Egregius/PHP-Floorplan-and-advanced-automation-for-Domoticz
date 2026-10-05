@@ -40,7 +40,9 @@ foreach ($devices as $ip => $vol) {
 											} else {
 												if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 											}
-										} else sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+										} else {
+											if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+										}
 									}
 								} else {
 									$wiimunknown++;
@@ -207,6 +209,7 @@ if ($d['bose101']->s=='On'
 				if ($d['bose108']->s!='Off') store('bose108', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['bose109']->s!='Off') store('bose109', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+				if ($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 			}
 		}
 	}
