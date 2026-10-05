@@ -2,9 +2,9 @@
 import sys
 import os
 import time
-import json
 import threading
 import requests
+import re
 import html
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
@@ -25,9 +25,7 @@ LOG_PATH = "/var/log/mqtt/wiim.log"
 RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
 
 ALLOWED_KEYS = {
-    "artist", "title", "album", "album_art", "song_id", "subid",
-    "rate_hz", "format_depth", "bitrate", "transportstate",
-    "reltime", "trackduration", "seconds_elapsed", "seconds_total"
+    "artist", "title", "album", "album_art", "transportstate"
 }
 
 mqtt_client = mqtt.Client(client_id="wiim_bridge", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
@@ -38,10 +36,7 @@ last_published_state = {}
 
 current_playback_state = {
     "transportstate": "STOPPED",
-    "reltime": "00:00:00",
-    "trackduration": "00:00:00",
-    "seconds_elapsed": 0,
-    "seconds_total": 0
+    "track_started_at": ""
 }
 state_lock = threading.Lock()
 
@@ -84,9 +79,6 @@ def time_to_seconds(t_str):
         pass
     return 0
 
-def seconds_to_time(sec):
-    return str(timedelta(seconds=sec))
-
 def mqtt_publish(subtopic, value, retain=True):
     global last_published_state
     if last_published_state.get(subtopic) == value:
@@ -100,39 +92,54 @@ def mqtt_publish(subtopic, value, retain=True):
 def parse_and_publish_all(data_dict):
     global current_playback_state
     with state_lock:
+        # Check if song title/ID changed or state became PLAYING to update track_started_at
+        old_state = current_playback_state.get("transportstate")
+        new_state = data_dict.get("transportstate", old_state)
+        old_title = current_playback_state.get("title")
+        new_title = data_dict.get("title", old_title)
+
+        state_changed_to_playing = (old_state != "PLAYING" and new_state == "PLAYING")
+        track_changed = (old_title != new_title and new_title and new_title != "")
+
+        if state_changed_to_playing or track_changed:
+            # Bereken eventuele reltime offset indien aanwezig (bijv. bij hervatten/seeken)
+            reltime_sec = 0
+            if "reltime" in data_dict:
+                reltime_sec = time_to_seconds(data_dict["reltime"])
+            
+            start_time = datetime.now() - timedelta(seconds=reltime_sec)
+            formatted_start = start_time.isoformat()
+            data_dict["started_at"] = formatted_start
+
         for key, val in data_dict.items():
             if val is not None and val != "":
                 k_lower = key.lower()
                 if k_lower in ALLOWED_KEYS:
                     current_playback_state[k_lower] = val
                     mqtt_publish(k_lower, val)
-                
-        if "reltime" in data_dict:
-            current_playback_state["seconds_elapsed"] = time_to_seconds(data_dict["reltime"])
-            mqtt_publish("seconds_elapsed", str(current_playback_state["seconds_elapsed"]))
-            
-        if "trackduration" in data_dict:
-            current_playback_state["seconds_total"] = time_to_seconds(data_dict["trackduration"])
-            mqtt_publish("seconds_total", str(current_playback_state["seconds_total"]))
-            
-        filtered_state = {k: v for k, v in current_playback_state.items() if k in ALLOWED_KEYS}
-        payload = json.dumps(filtered_state)
-        mqtt_publish("state_json", payload)
+        
+       
     
     artist = data_dict.get("artist", "")
     title = data_dict.get("title", "")
-    quality = data_dict.get("quality", "")
-    rate = data_dict.get("rate_hz", "")
-    depth = data_dict.get("format_depth", "")
     if title or artist:
-        log(f"🎶 Artiest: {artist} | Titel: {title} | Album: {data_dict.get('album')} [{quality} {rate}Hz/{depth}bit]")
+        log(f"🎶 Artiest: {artist} | Titel: {title} | Album: {data_dict.get('album')}")
 
 def parse_didl_metadata(didl_xml, current_data):
     if not didl_xml or didl_xml == "NOT_IMPLEMENTED":
         return current_data
     try:
-        clean_meta = html.unescape(didl_xml)
-        track_root = ET.fromstring(clean_meta)
+        # 1. Los alle lagen van encoding op (&amp;amp; -> &amp; -> &)
+        prev = None
+        curr = didl_xml
+        while prev != curr:
+            prev = curr
+            curr = html.unescape(curr)
+            
+        # 2. Repareer losse ampersands die geen geldige XML-entiteit zijn (zoals de & in artiestennamen)
+        fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
+        
+        track_root = ET.fromstring(fixed_xml)
         ns = {
             'dc': 'http://purl.org/dc/elements/1.1/',
             'upnp': 'urn:schemas-upnp-org:metadata-1-0/upnp/',
@@ -143,17 +150,10 @@ def parse_didl_metadata(didl_xml, current_data):
         current_data["artist"] = track_root.find('.//upnp:artist', ns).text if track_root.find('.//upnp:artist', ns) is not None else current_data.get("artist", "")
         current_data["album"] = track_root.find('.//upnp:album', ns).text if track_root.find('.//upnp:album', ns) is not None else current_data.get("album", "")
         current_data["album_art"] = track_root.find('.//upnp:albumArtURI', ns).text if track_root.find('.//upnp:albumArtURI', ns) is not None else current_data.get("album_art", "")
-        
-        current_data["subid"] = track_root.find('.//song:subid', ns).text if track_root.find('.//song:subid', ns) is not None else ""
-        current_data["song_id"] = track_root.find('.//song:id', ns).text if track_root.find('.//song:id', ns) is not None else ""
-        current_data["rate_hz"] = track_root.find('.//song:rate_hz', ns).text if track_root.find('.//song:rate_hz', ns) is not None else ""
-        current_data["format_depth"] = track_root.find('.//song:format_s', ns).text if track_root.find('.//song:format_s', ns) is not None else ""
-        current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else ""
-        current_data["quality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else ""
     except Exception as e:
         log(f"⚠️ Fout bij parsen DIDL: {e}")
     return current_data
-
+    
 def process_event_xml(xml_content):
     data = {}
     try:
@@ -215,21 +215,6 @@ def fetch_position_info():
                 parse_and_publish_all(data)
     except Exception as e:
         log(f"⚠️ SOAP fout: {e}")
-
-def playback_ticker():
-    while True:
-        time.sleep(1)
-        with state_lock:
-            if current_playback_state.get("transportstate") == "PLAYING":
-                sec_elapsed = current_playback_state.get("seconds_elapsed", 0) + 1
-                sec_total = current_playback_state.get("seconds_total", 0)
-                if sec_total > 0 and sec_elapsed > sec_total:
-                    sec_elapsed = sec_total
-                current_playback_state["seconds_elapsed"] = sec_elapsed
-                current_playback_state["reltime"] = seconds_to_time(sec_elapsed)
-                
-                mqtt_publish("reltime", current_playback_state["reltime"])
-                mqtt_publish("seconds_elapsed", str(sec_elapsed))
 
 class UPnPNotificationHandler(BaseHTTPRequestHandler):
     def do_NOTIFY(self):
@@ -300,7 +285,6 @@ def subscription_loop():
 if __name__ == "__main__":
     log("🚀 WiiM UPnP to MQTT Bridge gestart")
     threading.Thread(target=run_http_server, daemon=True).start()
-    threading.Thread(target=playback_ticker, daemon=True).start()
     try:
         subscription_loop()
     except KeyboardInterrupt:
