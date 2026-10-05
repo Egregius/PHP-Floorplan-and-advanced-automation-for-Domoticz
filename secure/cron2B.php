@@ -7,7 +7,7 @@ foreach ($devices as $ip => $vol) {
 		$status = json_decode(json_encode(simplexml_load_string(mb_convert_encoding($status, 'UTF-8', mb_detect_encoding($status, 'UTF-8, ISO-8859-1', true)))), true);
 		if (is_array($status)) {
 			if ($ip==101) {
-				if(isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
+				if((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE')||(isset($status['@attributes']['source'])&&$status['@attributes']['source']=='UPNP')) {
 					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&$d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off'))) {
 						$actualvol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
@@ -19,8 +19,11 @@ foreach ($devices as $ip => $vol) {
 						}
 					} else {
 						$start = hrtime(true);
+//						lg(__LINE__,'cron2');
 						if($d['boseliving']->m == 1 && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP')) {
+//							lg(__LINE__,'cron2');
 							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
+//								lg(__LINE__,'cron2');
 								$wiim=json_decode(Wiim('getMetaInfo'));
 //								lg(print_r($wiim,true),'cron2');
 								if(isset($wiim->metaData->artist)) {
@@ -146,7 +149,7 @@ foreach ($devices as $ip => $vol) {
 					bosekey("AUX_INPUT", 0, 101);
 				} elseif ($status['@attributes']['source']=="INVALID_SOURCE") {
 					bosekey("AUX_INPUT", 0, 101);
-				} else lg(print_r($status,true),'cron2');
+				}// else lg('cron2 line '.__LINE__.' '.print_r($status,true),'cron2');
 				
 			}
 			if (isset($status['@attributes']['source'])) {

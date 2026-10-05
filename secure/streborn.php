@@ -12,16 +12,26 @@ if(isset($_GET['bose'],$_GET['key'])) {
 	if($_GET['bose']==101) {
 		
 		if($_GET['key']==1) {
-
+			$data=curl('http://192.168.2.2/ajax.php?bose=101');
+			$data=json_decode($data,true);
+			updatescore($data['cleantitle'],+1,$data['track_id']);
 		} elseif($_GET['key']==2) {
 
 		} elseif($_GET['key']==3) {
 
 		} elseif($_GET['key']==4) {
+			$data=curl('http://192.168.2.2/ajax.php?bose=101');
+			$data=json_decode($data,true);
+			updatescore($data['cleantitle'],-1,$data['track_id']);
 
 		} elseif($_GET['key']==5) {
 
 		} elseif($_GET['key']==6) {
+			$data=curl('http://192.168.2.2/ajax.php?bose=101');
+			$data=json_decode($data,true);
+			$return=updatescore($data['cleantitle'],null,$data['track_id']);
+			$return=json_decode($return,true);
+			Wiim('setPlayerCmd:next');
 		} elseif($_GET['key']=='aux') {
 
 		} elseif($_GET['key']=='power') {
@@ -29,32 +39,31 @@ if(isset($_GET['bose'],$_GET['key'])) {
 		}
 	} //else 
 //	telegram(print_r($_GET,true));
-	$data=curl('http://192.168.2.2/ajax.php?bose=101');
-	echo $data;
-	$data=json_decode($data,true);
-	echo '<pre>';print_r($data);echo '</pre>';
-	echo updatescore($data['cleantitle'],-1,$data['track_id']);
+	
 	
 //	telegram(print_r($data,true));
 }
 
 
 
-function updatescore($cleantitle,$score_change,$track_id) {
+function updatescore($cleantitle, $score_change, $track_id) {
 	$ch = curl_init('https://secure.egregius.be/spotify/actions.php');
-	$data['cleantitle']=$cleantitle;
-	$data['score_change']=$score_change;
-	$data['track_id']=$track_id;
+	$data = [
+		'cleantitle' => $cleantitle,
+		'score_change' => $score_change,
+		'track_id' => $track_id
+	];
 	
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 	$response = curl_exec($ch);
 	echo $response;
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch);
 	if ($httpCode === 200 && $response !== false) {
+		$responseData = json_decode($response, true);
 		return (isset($responseData['status']) && $responseData['status'] === 'ok');
 	}
+	return false;
 }
