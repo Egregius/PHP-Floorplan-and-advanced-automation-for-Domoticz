@@ -325,6 +325,8 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 				shell_exec('php /var/www/setSSID.php \'{"guest":0}\' > /dev/null 2>&1 &');
 				store('VanOns', 0, basename(__FILE__).':'.__LINE__);
 			}
+		} elseif ($_REQUEST['device']=='spotify') {
+			if($d['spotify']->s=='On') sw('spotify', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		} else {
 			if (str_ends_with($_REQUEST['device'], '_set')) {
 				call_user_func($_REQUEST['command'], $_REQUEST['device'],$_REQUEST['action']);
