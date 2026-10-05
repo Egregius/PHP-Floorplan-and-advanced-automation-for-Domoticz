@@ -143,9 +143,10 @@ foreach ($devices as $ip => $vol) {
 					usleep(100000);
 					bosekey("AUX_INPUT", 0, 101);
 				} elseif ($status['@attributes']['source']=="BLUETOOTH") {
-//					streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
 					bosekey("AUX_INPUT", 0, 101);
-				}// else lg(print_r($status,true),'cron2');
+				} elseif ($status['@attributes']['source']=="INVALID_SOURCE") {
+					bosekey("AUX_INPUT", 0, 101);
+				} else lg(print_r($status,true),'cron2');
 				
 			}
 			if (isset($status['@attributes']['source'])) {

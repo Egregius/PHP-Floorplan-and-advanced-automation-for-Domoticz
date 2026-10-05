@@ -158,10 +158,10 @@ if ($d['weg']->s>2&&$d['badkamer_set']->m==0&&$d['n']>-50) {
 	}
 }
 if (rollingBelow('n', -500, 6)&&$setBath<20) {
-	$setBath=clamp($d['badkamer_temp']->s+0.5,20);$m2.=__LINE__.' ';
+	$setBath=clamp($d['badkamer_temp']->s+0.5,10,20);$m2.=__LINE__.' ';
 }
 if (rollingBelow('n', -1000, 6)&&$setBath<20) {
-	$setBath=clamp($d['badkamer_temp']->s+1,20);$m2.=__LINE__.' ';
+	$setBath=clamp($d['badkamer_temp']->s+1,10,20);$m2.=__LINE__.' ';
 }
 if (isset($setBath)&&$d['heating']->s>=0) {
 	if ($setBath!=$d['badkamer_set']->s) {
