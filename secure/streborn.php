@@ -10,11 +10,12 @@ if(isset($_GET['bose'],$_GET['key'])) {
 	require 'functions.php';
 	$d=fetchdata();
 	if($_GET['bose']==101) {
-		
 		if($_GET['key']==1) {
 			$data=curl('http://192.168.2.2/ajax.php?bose=101');
 			$data=json_decode($data,true);
-			updatescore($data['cleantitle'],+1,$data['track_id']);
+			if(updatescore($data['cleantitle'],+1,$data['track_id'])) {
+				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+			}
 		} elseif($_GET['key']==2) {
 
 		} elseif($_GET['key']==3) {
@@ -22,16 +23,18 @@ if(isset($_GET['bose'],$_GET['key'])) {
 		} elseif($_GET['key']==4) {
 			$data=curl('http://192.168.2.2/ajax.php?bose=101');
 			$data=json_decode($data,true);
-			updatescore($data['cleantitle'],-1,$data['track_id']);
-
+			if(updatescore($data['cleantitle'],-1,$data['track_id'])) {
+				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+			}
 		} elseif($_GET['key']==5) {
 
 		} elseif($_GET['key']==6) {
 			$data=curl('http://192.168.2.2/ajax.php?bose=101');
 			$data=json_decode($data,true);
-			$return=updatescore($data['cleantitle'],null,$data['track_id']);
-			$return=json_decode($return,true);
-			Wiim('setPlayerCmd:next');
+			if(updatescore($data['cleantitle'],null,$data['track_id'])) {
+				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+				Wiim('setPlayerCmd:next');
+			}
 		} elseif($_GET['key']=='aux') {
 
 		} elseif($_GET['key']=='power') {
@@ -63,7 +66,7 @@ function updatescore($cleantitle, $score_change, $track_id) {
 	curl_close($ch);
 	if ($httpCode === 200 && $response !== false) {
 		$responseData = json_decode($response, true);
-		return (isset($responseData['status']) && $responseData['status'] === 'ok');
+		return true;
 	}
 	return false;
 }
