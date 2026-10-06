@@ -128,13 +128,15 @@ foreach ($devices as $ip => $vol) {
 							}
 						}
 						if($d['boseliving']->s=='On') {
-							$pastboseliving=past('boseliving');
-							if($pastboseliving>60&&$pastboseliving<120) {
+							if($boseSetVolume==0) {
 								$actualvol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
 								if (isset($actualvol)) {
 									$actualvol = json_decode(json_encode(simplexml_load_string($actualvol)), true);
 									if (is_array($actualvol)) {
-										if($actualvol['actualvolume']<35) bosevolume(35,101, 'Bose pas ingeschakeld');
+										if($actualvol['actualvolume']<35) {
+											bosevolume(35,101, 'Bose pas ingeschakeld');
+											$boseSetVolume=1;
+										}
 									}
 								}
 							}
@@ -183,7 +185,8 @@ foreach ($devices as $ip => $vol) {
 	}
 }
 if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
-	if ($d['bose101']->s == 'On' || $d['bose101']->m != 0) storesm('bose101', 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+	if ($d['bose101']->s == 'On' || $d['bose101']->m != 'Off') storesm('bose101', 'Off', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+	$boseSetVolume=0;
 }
 if ($d['bose101']->s=='On'
 	&&$d['bose102']->s=='Off'
@@ -214,6 +217,7 @@ if ($d['bose101']->s=='On'
 				if ($d['bose109']->s!='Off') store('bose109', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+				$boseSetVolume=0;
 			}
 		}
 	}
