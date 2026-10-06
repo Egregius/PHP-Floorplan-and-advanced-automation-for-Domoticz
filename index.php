@@ -151,6 +151,7 @@
 			<div id="floorplan" class="view active">
 				<div class="abs leftbuttons" id="heatingbutton" onclick="setView('floorplanheating')"><img src="/images/arrowdown.png" class="i60" alt="Open"></div>
 				<div class="fix floorplan2icon" onclick="setView('floorplanothers')"><img src="/images/plus.png" class="i60" alt="plus"></div>
+				<div class="abs z1" id="queue"></div>
 				<div class="abs z1" id="bose101"></div>
 				<div class="abs z1" id="bose102"></div>
 				<div class="abs z1" id="bose103"></div>
