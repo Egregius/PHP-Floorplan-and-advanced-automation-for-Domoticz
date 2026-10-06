@@ -20,7 +20,7 @@ foreach ($devices as $ip => $vol) {
 					} else {
 						$start = hrtime(true);
 //						lg(__LINE__,'cron2');
-						if($d['boseliving']->m == 1 && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP')) {
+						if($d['boseliving']->m != 'Off' && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP')) {
 //							lg(__LINE__,'cron2');
 							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
 //								lg(__LINE__,'cron2');
