@@ -5,6 +5,7 @@ if($status=='Off') {
 	Wiim('setPlayerCmd:stop');
 //	Wiim('setPlayerCmd:clear_playlist');
 	if($d['boseliving']->m!='Off') storemode('boseliving','Off',basename(__FILE__).':'.__LINE__);
+	if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
 } elseif($status=='On') {
 	$vandaag=date("Y-m-d");
 	if(!isset($d['wiimplaylist'])||$d['wimmplaylist']!=$vandaag) {

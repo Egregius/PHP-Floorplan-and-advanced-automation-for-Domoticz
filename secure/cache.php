@@ -14,6 +14,7 @@ if (isset($_REQUEST['zon'])) {
 		$d=fetchdata();
 		if ($_REQUEST['s']=='shuffle') {
 			$data['shuffle']=$d['boseliving']->m;
+			$data['since']=$d['boseliving']->t;
 			$data['time']=past('boseliving');
 			echo json_encode($data);
 		} else echo $d[$_REQUEST['s']]->s;
