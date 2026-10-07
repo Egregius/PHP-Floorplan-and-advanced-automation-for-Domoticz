@@ -248,7 +248,14 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			}
 		}
 	} elseif ($_REQUEST['device']=='boseliving'&&$_REQUEST['command']=='mode') {
-		storemode('boseliving', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		if ($_REQUEST['action']=='On') {
+			$dow = date("w");
+			if ($dow == 6 || $dow == 0) $pop=25;
+			else $pop=0;
+			storemode('boseliving', $pop, basename(__FILE__).':'.__LINE__);
+		} else {
+			storemode('boseliving', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+		}
 	} elseif ($_REQUEST['device']=='luifel'&&$_REQUEST['command']=='luifel') {
 		storemode('luifel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} elseif ($_REQUEST['command']=='mode') {
