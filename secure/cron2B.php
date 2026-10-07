@@ -39,7 +39,7 @@ foreach ($devices as $ip => $vol) {
 										elseif($data['genre']=='POP') $default=200;
 										if(isset($default)) {
 											if ($data['score']==$default) {
-												if($d['spotify']->s!='On'&&$d['lgtv']->s!='On') sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
+												if($d['spotify']->s!='On'&&$d['lgtv']->s!='On'&&past('spotify')>6) sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
 											} else {
 												if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 											}
