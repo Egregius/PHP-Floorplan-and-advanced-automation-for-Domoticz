@@ -176,7 +176,7 @@ foreach ($devices as $ip => $vol) {
 			}
 		} else {
 			if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) {
-				storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+				if($ip>101) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
 			}
 		}
 		unset($status);
