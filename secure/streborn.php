@@ -13,8 +13,9 @@ if(isset($_GET['bose'],$_GET['key'])) {
 		if($_GET['key']==1) {
 			$data=curl('http://192.168.2.2/ajax.php?bose=101');
 			$data=json_decode($data,true);
-			if(updatescore($data['cleantitle'],+5,$data['track_id'])) {
+			if(updatescore($data['cleantitle'],+10,$data['track_id'])) {
 				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+				if($d['boseliving']->m=='NoScore') Wiim('setPlayerCmd:next');
 			}
 		} elseif($_GET['key']==2) {
 
@@ -23,8 +24,9 @@ if(isset($_GET['bose'],$_GET['key'])) {
 		} elseif($_GET['key']==4) {
 			$data=curl('http://192.168.2.2/ajax.php?bose=101');
 			$data=json_decode($data,true);
-			if(updatescore($data['cleantitle'],-5,$data['track_id'])) {
+			if(updatescore($data['cleantitle'],-10,$data['track_id'])) {
 				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+				if($d['boseliving']->m=='NoScore') Wiim('setPlayerCmd:next');
 			}
 		} elseif($_GET['key']==5) {
 
