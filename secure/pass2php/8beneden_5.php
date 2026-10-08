@@ -17,25 +17,3 @@ if ($status=='On') {
 		}
 	}
 }
-
-function updatescore($cleantitle, $score_change, $track_id) {
-	$ch = curl_init('https://secure.egregius.be/spotify/actions.php');
-	$data = [
-		'cleantitle' => $cleantitle,
-		'score_change' => $score_change,
-		'track_id' => $track_id
-	];
-	
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-	$response = curl_exec($ch);
-	echo $response;
-	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	curl_close($ch);
-	if ($httpCode === 200 && $response !== false) {
-		$responseData = json_decode($response, true);
-		return true;
-	}
-	return false;
-}

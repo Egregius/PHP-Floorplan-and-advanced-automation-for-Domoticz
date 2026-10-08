@@ -31,20 +31,21 @@ foreach ($devices as $ip => $vol) {
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
 									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
-									$data=json_decode(curl('https://home.egregius.be/ajax.php?bose=101'),true);
-									
-									if (isset($data['genre'],$data['score'])) {
-//										lg(print_r($data,true));
-										if ($data['genre']=='EDM') $default=125;
-										elseif($data['genre']=='POP') $default=200;
-										if(isset($default)) {
-											if ($data['score']==$default) {
-												if($d['spotify']->s!='On'&&$d['lgtv']->s!='On'&&past('spotify')>6) sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
+									if($d['boseliving']->m!='NoScore') {
+										$data=json_decode(curl('https://home.egregius.be/ajax.php?bose=101'),true);
+										if (isset($data['genre'],$data['score'])) {
+	//										lg(print_r($data,true));
+											if ($data['genre']=='EDM') $default=125;
+											elseif($data['genre']=='POP') $default=200;
+											if(isset($default)) {
+												if ($data['score']==$default) {
+													if($d['spotify']->s!='On'&&$d['lgtv']->s!='On'&&past('spotify')>6) sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
+												} else {
+													if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+												}
 											} else {
-												if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+												if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 											}
-										} else {
-											if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 										}
 									}
 								} else {
@@ -69,7 +70,7 @@ foreach ($devices as $ip => $vol) {
 							} else $wiimplaying=false;
 							if(isset($status['artist'],$status['track'])) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
-								if ($cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
+								if ($d['boseliving']->m!='NoScore' && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
 									$prevcleantitle=$cleantitle;
 									if (isset($history[$cleantitle])&&1==1) {
 										lg($cleantitle.' skipped op cleantitle','cron2');
