@@ -200,7 +200,7 @@ function huisslapen($weg=false) {
 //	foreach (['living_set','alex_set','kamer_set','badkamer_set'/*,'eettafel','zithoek'*/,'luifel'] as $i) {
 //		if ($d[$i]->m!=0&&$d[$i]->s!='D'&&past($i)>1800) storemode($i, 0, basename(__FILE__).':'.__LINE__);
 //	}
-	if($d['boseliving']->m!=0) storemode('boseliving',0,basename(__FILE__).':'.__LINE__);
+	if($d['boseliving']->m!='Off') storemode('boseliving','Off',basename(__FILE__).':'.__LINE__);
 	setNextubeMode();
 	hass('script', 'turn_on', 'script.alles_uitschakelen');
 	shell_exec('php /var/www/setSSID.php \'{"main24":0,"main5":0,"guest":0}\' > /dev/null 2>&1 &');
