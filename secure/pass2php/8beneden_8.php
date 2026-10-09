@@ -7,6 +7,8 @@ if ($status=='On') {
 			if(updatescore($data['cleantitle'],null,$data['track_id'])) {
 				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 				Wiim('setPlayerCmd:next');
+				usleep(1300000);
+				Wiim('setPlayerCmd:seek:45');
 			}
 		}
 	} else {

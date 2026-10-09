@@ -5,7 +5,9 @@ if ($status=='On') {
 		$data=json_decode($data,true);
 		if(updatescore($data['cleantitle'],-10,$data['track_id'])) {
 			if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
-			if($d['boseliving']->m=='NoScore') Wiim('setPlayerCmd:next');
+			Wiim('setPlayerCmd:next');
+			usleep(1300000);
+			Wiim('setPlayerCmd:seek:45');
 		}
 	} else {
 		if ($d['eettafel']->s==0) {

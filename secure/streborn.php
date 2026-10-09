@@ -15,7 +15,11 @@ if(isset($_GET['bose'],$_GET['key'])) {
 			$data=json_decode($data,true);
 			if(updatescore($data['cleantitle'],+10,$data['track_id'])) {
 				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if($d['boseliving']->m=='NoScore') Wiim('setPlayerCmd:next');
+				if($d['boseliving']->m=='NoScore') {
+					Wiim('setPlayerCmd:next');
+					usleep(1300000);
+					Wiim('setPlayerCmd:seek:45');
+				}
 			}
 		} elseif($_GET['key']==2) {
 
@@ -26,7 +30,11 @@ if(isset($_GET['bose'],$_GET['key'])) {
 			$data=json_decode($data,true);
 			if(updatescore($data['cleantitle'],-10,$data['track_id'])) {
 				if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if($d['boseliving']->m=='NoScore') Wiim('setPlayerCmd:next');
+				if($d['boseliving']->m=='NoScore') {
+					Wiim('setPlayerCmd:next');
+					usleep(1300000);
+					Wiim('setPlayerCmd:seek:45');
+				}
 			}
 		} elseif($_GET['key']==5) {
 
@@ -37,6 +45,10 @@ if(isset($_GET['bose'],$_GET['key'])) {
 				if(updatescore($data['cleantitle'],null,$data['track_id'])) {
 					if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 					Wiim('setPlayerCmd:next');
+					if($d['boseliving']->m=='NoScore') {
+						usleep(1300000);
+						Wiim('setPlayerCmd:seek:45');
+					}
 				}
 			}
 		} elseif($_GET['key']=='aux') {

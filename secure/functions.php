@@ -1410,7 +1410,7 @@ function updatescore($cleantitle, $score_change, $track_id) {
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 	$response = curl_exec($ch);
-	echo $response;
+//	echo $response;
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch);
 	if ($httpCode === 200 && $response !== false) {
