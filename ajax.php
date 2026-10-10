@@ -73,6 +73,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	} 
 	$d['score'] = '?';
 	$d['genre'] = '?';
+	$d['added_at'] = '?';
 	$resolvedTitle = $d['cleantitle'] ?? '';
 	$db = Database::getInstance();
 	$playlists_config = [
@@ -94,11 +95,12 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 	];
 	// 1. Probeer eerst te matchen op track_id
 	if (!empty($d['track_id'])) {
-		$stmt = $db->prepare("SELECT clean_title, score, playlist_id FROM track_mapping WHERE track_id = ? LIMIT 1");
+		$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE track_id = ? LIMIT 1");
 		$stmt->execute([$d['track_id']]);
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		if ($row) {
 			$d['score'] = (int)$row['score'];
+			$d['added_at'] = formatBE($row['added_at']);
 			$d['genre'] = $playlists_config[$row['playlist_id']];
 			$resolvedTitle = $row['clean_title'];
 		}
@@ -106,20 +108,22 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 
 	// 2. Als track_id niets opleverde, probeer via clean_title exacte match
 	if ($d['score'] === '?' && !empty($d['cleantitle'])) {
-		$stmt = $db->prepare("SELECT clean_title, score, playlist_id FROM track_mapping WHERE clean_title = ? LIMIT 1");
+		$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title = ? LIMIT 1");
 		$stmt->execute([$d['cleantitle']]);
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		if ($row) {
 			$d['score'] = (int)$row['score'];
+			$d['added_at'] = formatBE($row['added_at']);
 			$d['genre'] = $playlists_config[$row['playlist_id']];
 			$resolvedTitle = $row['clean_title'];
 		} else {
 			// 3. Fallback: standaard LIKE met artiest en track
-			$stmt = $db->prepare("SELECT clean_title, score, playlist_id FROM track_mapping WHERE clean_title LIKE ? LIMIT 1");
+			$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? LIMIT 1");
 			$stmt->execute(['%' . cleanTitle($d['artist'], '') . '%' . cleanTitle('', $d['track']) . '%']);
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
 			if ($row) {
 				$d['score'] = (int)$row['score'];
+				$d['added_at'] = formatBE($row['added_at']);
 				$d['genre'] = $playlists_config[$row['playlist_id']];
 				$resolvedTitle = $row['clean_title'];
 			} else {
@@ -128,11 +132,12 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 				// Pak bijvoorbeeld de eerste 2 à 3 woorden uit de track na cleaning
 				$cleanTrackWords = cleanTitle('', $d['track']);
 				if (!empty($cleanArtist) && !empty($cleanTrackWords)) {
-					$stmt = $db->prepare("SELECT clean_title, score, playlist_id FROM track_mapping WHERE clean_title LIKE ? AND clean_title LIKE ? LIMIT 1");
+					$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? AND clean_title LIKE ? LIMIT 1");
 					$stmt->execute([$cleanArtist . '%', '%' . substr($cleanTrackWords, 0, 10) . '%']);
 					$row = $stmt->fetch(PDO::FETCH_ASSOC);
 					if ($row) {
 						$d['score'] = (int)$row['score'];
+						$d['added_at'] = formatBE($row['added_at']);
 						$d['genre'] = $playlists_config[$row['playlist_id']];
 						$resolvedTitle = $row['clean_title'];
 					} else {
@@ -141,7 +146,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 							$rawTrack = trim(explode('-', $rawTrack)[0]);
 							$baseTrack = cleanTitle('', $rawTrack);
 							if (!empty($baseTrack)) {
-								$stmt = $db->prepare("SELECT clean_title, score, playlist_id FROM track_mapping WHERE clean_title LIKE ? LIMIT 500");
+								$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? LIMIT 500");
 								$stmt->execute(['%' . $baseTrack . '%']);
 								$bestMatch = null;
 								$highestSimilar = -1;
@@ -155,6 +160,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 								}
 								if ($bestMatch && $highestSimilar >= 60) {
 									$d['score'] = (int)$bestMatch['score'];
+									$d['added_at'] = formatBE($bestMatch['added_at']);
 									$d['genre'] = $playlists_config[$bestMatch['playlist_id']];
 									$resolvedTitle = $bestMatch['clean_title'];
 								}
@@ -404,3 +410,17 @@ if (!isset($_REQUEST->t)&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!is
 }
 http_response_code(200);
 echo 'ok';
+function formatBE($dateStr, $dateonly=true) {
+	if (empty($dateStr)) {
+		return '';
+	}
+	$dt = new DateTime($dateStr);
+	$monthMap = [1=>'jan',2=>'feb',3=>'mar',4=>'apr',5=>'mei',6=>'jun',7=>'jul',8=>'aug',9=>'sep',10=>'okt',11=>'nov',12=>'dec'];
+	$day = $dt->format('j');
+	$month = $monthMap[(int)$dt->format('n')];
+	$year = $dt->format('Y');
+	$time = $dt->format('G:i:s');
+	
+	if($dateonly===true) return ($year === date('Y')) ? "{$day} {$month}" : "{$day} {$month} {$year}";
+	else return ($year === date('Y')) ? "{$day} {$month} {$time}" : "{$day} {$month} {$year} {$time}";
+}
