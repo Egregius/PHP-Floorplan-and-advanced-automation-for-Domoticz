@@ -410,7 +410,7 @@ if (!isset($_REQUEST->t)&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!is
 }
 http_response_code(200);
 echo 'ok';
-function formatBE($dateStr, $dateonly=true) {
+function formatBE($dateStr, $dateonly=true, $stripyear=false) {
 	if (empty($dateStr)) {
 		return '';
 	}
@@ -421,6 +421,6 @@ function formatBE($dateStr, $dateonly=true) {
 	$year = $dt->format('Y');
 	$time = $dt->format('G:i:s');
 	
-	if($dateonly===true) return ($year === date('Y')) ? "{$day} {$month}" : "{$day} {$month} {$year}";
+	if($dateonly===true) return ($stripyear && $year === date('Y')) ? "{$day} {$month}" : "{$day} {$month} {$year}";
 	else return ($year === date('Y')) ? "{$day} {$month} {$time}" : "{$day} {$month} {$year} {$time}";
 }
