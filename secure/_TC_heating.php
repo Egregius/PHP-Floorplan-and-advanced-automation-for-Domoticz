@@ -19,7 +19,7 @@ if ($d['weg']->s<=2&&$d['heating']->s>=1) {
 					(
 						($d['deuralex']->s=='Closed'||($d['deuralex']->s=='Open'&&past('deuralex')<900)||$d['raamalex']->s=='Closed'||$d['ralex']->s==100)
 					&&
-						($d['deurwaskamer']->s=='Closed'||($d['deurwaskamer']->s=='Open'&&past('deurwaskamer')<900)||$d['raamwaskamer']->s=='Closed'||$d['rwaskamer']->s==100)
+						($d['raamwaskamer']->s=='Closed'||$d['rwaskamer']->s==100)
 					&&	$d['raamhall']->s=='Closed'
 					)
 				)
@@ -39,7 +39,7 @@ if ($d['weg']->s<=2&&$d['heating']->s>=1) {
 					(
 						($d['deurkamer']->s=='Closed'||($d['deurkamer']->s=='Open'&&past('deurkamer')<900)||$d['raamkamer']->s=='Closed'||$d['rkamerr']->s==100)
 					&&
-						($d['deurwaskamer']->s=='Closed'||($d['deurwaskamer']->s=='Open'&&past('deurwaskamer')<900)||$d['raamwaskamer']->s=='Closed'||$d['rwaskamer']->s==100)
+						($d['raamwaskamer']->s=='Closed'||$d['rwaskamer']->s==100)
 					&& $d['raamhall']->s=='Closed'
 					)
 				)
