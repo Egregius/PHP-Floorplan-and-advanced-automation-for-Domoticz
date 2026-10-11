@@ -31,7 +31,7 @@ foreach ($devices as $ip => $vol) {
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
 									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
-									if($d['boseliving']->m!='NoScore') {
+									if($d['auto']->s=='On'&&$d['boseliving']->m!='NoScore') {
 										$data=json_decode(curl('https://home.egregius.be/ajax.php?bose=101'),true);
 										if (isset($data['genre'],$data['score'])) {
 	//										lg(print_r($data,true));
