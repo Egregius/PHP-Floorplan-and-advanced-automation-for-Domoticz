@@ -16,7 +16,7 @@ if($status=='Off') {
 		Wiim('setPlayerCmd:resume');
 	}
 	$dow = date("w");
-	if ($dow == 6 || $dow == 0) $pop=25;
-	else $pop=0;
+	if ($dow == 6 || $dow == 0) $pop='On;25';
+	else $pop='On;0';
 	if($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
 }
