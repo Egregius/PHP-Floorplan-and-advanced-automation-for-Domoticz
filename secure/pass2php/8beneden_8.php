@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	if($d['boseliving']->m=='NoScore') {
+	if(substr($d['boseliving']->m,0,7)=='NoScore') {
 		$data=curl('http://192.168.2.2/ajax.php?bose=101');
 		$data=json_decode($data,true);
 		if(($data['genre']=='EDM'&&$data['score']>=120)||($data['genre']=='POP'&&$data['score']>=195)) {
