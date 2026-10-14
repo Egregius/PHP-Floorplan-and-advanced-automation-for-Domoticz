@@ -358,7 +358,11 @@ elseif (isset($_REQUEST['boseip'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='preset') {
 		bosepreset('PRESET_'.$_REQUEST['action'], $_REQUEST['boseip']);
 	} elseif ($_REQUEST['command']=='skipwiim') {
-		Wiim('setPlayerCmd:'.$_REQUEST['action']);
+		if($_REQUEST['action']=='next') {
+			Wiim('setPlayerCmd:next');
+			usleep(1350000);
+			Wiim('setPlayerCmd:seek:60');
+		} else Wiim('setPlayerCmd:'.$_REQUEST['action']);
 	} elseif ($_REQUEST['command']=='skip') {
 		$db = Database::getInstance();
 		$stmt=$db->query("SELECT s FROM devices WHERE n like 'bose101';");
