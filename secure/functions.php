@@ -1403,11 +1403,11 @@ function score($score) {
 	$data=curl('http://192.168.2.2/ajax.php?bose=101');
 	$data=json_decode($data,true);
 	if(isset($data['cleantitle'])&&updatescore($data['cleantitle'],$score,$data['track_id'])) {
-		lg('updatescore ok');
+		lg('updatescore ok '.$data['cleantitle'].' '.$score);
 		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
 		if(substr($d['boseliving']->m,0,7)=='NoScore') {
 			Wiim('setPlayerCmd:next');
-			usleep(1380000);
+			usleep(1450000);
 			Wiim('setPlayerCmd:seek:59');
 		}
 	} else lg('updatescore nok');

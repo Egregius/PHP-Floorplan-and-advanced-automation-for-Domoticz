@@ -16,7 +16,8 @@ require 'functions.php';
 //$startloop=microtime(true);
 //$d['time']=$startloop;
 
-telegram(print_r($_GET,true));
+$wiim=json_decode(Wiim('getMetaInfo'));
+print_r($wiim);
 //echo streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));
 
