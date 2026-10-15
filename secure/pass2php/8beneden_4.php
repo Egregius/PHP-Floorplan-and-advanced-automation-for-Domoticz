@@ -1,4 +1,5 @@
 <?php
 if ($status=='On') {
-	sw('lampkast', 'On','',true);
+	if(substr($d['boseliving']->m,0,7)=='NoScore') score(200);
+	else sw('lampkast', 'On','',true);
 }

@@ -1398,6 +1398,19 @@ function streborn($ip, $endpoint,$payload, $method='PUT') {
     
     return $response;
 }
+function score($score) {
+	global $d;
+	$data=curl('http://192.168.2.2/ajax.php?bose=101');
+	$data=json_decode($data,true);
+	if(updatescore($data['cleantitle'],$score,$data['track_id'])) {
+		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+		if($d['boseliving']->m=='NoScore') {
+			Wiim('setPlayerCmd:next');
+			usleep(1380000);
+			Wiim('setPlayerCmd:seek:59');
+		}
+	}
+}
 function updatescore($cleantitle, $score_change, $track_id) {
 	$ch = curl_init('https://secure.egregius.be/spotify/actions.php');
 	$data = [
