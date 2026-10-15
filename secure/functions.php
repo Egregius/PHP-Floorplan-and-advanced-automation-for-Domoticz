@@ -1405,11 +1405,11 @@ function score($score) {
 	if(isset($data['cleantitle'])&&updatescore($data['cleantitle'],$score,$data['track_id'])) {
 		lg('updatescore ok '.$data['cleantitle'].' '.$score);
 		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
-		if(substr($d['boseliving']->m,0,7)=='NoScore') {
+//		if(substr($d['boseliving']->m,0,7)=='NoScore') {
 			Wiim('setPlayerCmd:next');
 			usleep(1390000);
 			Wiim('setPlayerCmd:seek:59');
-		}
+//		}
 	} else lg('updatescore nok');
 }
 function updatescore($cleantitle, $score, $track_id) {
