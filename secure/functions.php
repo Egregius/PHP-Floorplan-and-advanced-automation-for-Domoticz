@@ -1407,7 +1407,7 @@ function score($score) {
 		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
 		if(substr($d['boseliving']->m,0,7)=='NoScore') {
 			Wiim('setPlayerCmd:next');
-			usleep(1380000);
+			usleep(1390000);
 			Wiim('setPlayerCmd:seek:59');
 		}
 	} else lg('updatescore nok');
