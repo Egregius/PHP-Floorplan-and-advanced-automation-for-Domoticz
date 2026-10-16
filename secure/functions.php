@@ -408,6 +408,7 @@ function publishmqtt($topic,$msg,$log='') {
 		$mqtt->publish($topic,$msg,1,true);
 		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
 	}
+	if($log!='') lg('publishmqtt '.$topic.' '.$msg);
 }
 function storemode($name,$mode,$msg='',$log='store') {
 	global $d,$user;

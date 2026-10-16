@@ -66,5 +66,8 @@ if (isset($_REQUEST['zon'])) {
 			}
 		}
 		echo 'Carplay '.$_REQUEST['carplay'];
+	} elseif (isset($_REQUEST['publishmqtt'])) {
+		print_r($_REQUEST);
+		publishmqtt($_REQUEST['topic'], $_REQUEST['msg']);
 	}
 }

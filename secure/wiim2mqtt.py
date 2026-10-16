@@ -161,7 +161,6 @@ def parse_didl_metadata(didl_xml, current_data):
 			curr = html.unescape(curr)
 			
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
-		log(fixed_xml)
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
 			'dc': 'http://purl.org/dc/elements/1.1/',

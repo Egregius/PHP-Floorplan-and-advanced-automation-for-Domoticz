@@ -234,6 +234,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
 						}
 					}
 				}
+				lg($resolvedTitle, 'mediaplayer');
                 // Publiceer de verrijkte data door
                 publishmqtt('d/wiim/wiim_cleantitle', $resolvedTitle);
                 publishmqtt('d/wiim/wiim_score', $d['wiim']['score']);
