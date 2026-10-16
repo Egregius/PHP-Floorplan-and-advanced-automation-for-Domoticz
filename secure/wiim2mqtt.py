@@ -131,12 +131,16 @@ def parse_and_publish_all(data_dict):
 		if "trackduration" in data_dict:
 			data_dict["trackduration"] = format_track_time(data_dict["trackduration"])
 
-		# Anker de starttijd ALLEEN bij start van spelen of trackwissel (niet op elke reltime update)
-		if state_changed_to_playing or track_changed or not current_playback_state.get("track_started_at"):
-			reltime_sec = 0
-			if "reltime" in data_dict:
-				reltime_sec = time_to_seconds(data_dict["reltime"])
-			start_time = datetime.now() - timedelta(seconds=reltime_sec)
+		# ALS er een actieve reltime binnenkomt (bijv. na een seek of start), herbereken DIRECT de starttijd
+		if "reltime" in data_dict and data_dict["reltime"] and data_dict["reltime"] != "NOT_IMPLEMENTED":
+			reltime_sec = time_to_seconds(data_dict["reltime"])
+			if reltime_sec > 0:
+				start_time = datetime.now() - timedelta(seconds=reltime_sec)
+				current_playback_state["track_started_at"] = start_time.isoformat()
+
+		# Fallback als er nog helemaal geen starttijd bekend is
+		if not current_playback_state.get("track_started_at"):
+			start_time = datetime.now()
 			current_playback_state["track_started_at"] = start_time.isoformat()
 
 		for key, val in data_dict.items():
@@ -147,9 +151,11 @@ def parse_and_publish_all(data_dict):
 						current_playback_state[k_lower] = val
 						mqtt_publish(k_lower, val)
 
-		if state_changed and avtransport_control_url:
-			threading.Thread(target=fetch_position_info, daemon=True).start()
-
+		if state_changed and new_state == "PLAYING" and avtransport_control_url:
+			def delayed_fetch():
+				time.sleep(1)
+				fetch_position_info()
+			threading.Thread(target=delayed_fetch, daemon=True).start()
 def parse_didl_metadata(didl_xml, current_data):
 	if not didl_xml or didl_xml == "NOT_IMPLEMENTED":
 		return current_data

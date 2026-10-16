@@ -157,20 +157,18 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
                 ];
 
                 // 1. Probeer eerst te matchen op track_id
-				if (!empty($d['wiim']['trackid'])) {
-					$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE track_id = ? LIMIT 1");
-					$stmt->execute([$d['wiim']['trackid']]);
-					$row = $stmt->fetch(PDO::FETCH_ASSOC);
-					if ($row) {
-						$d['wiim']['score'] = (int)$row['score'];
-						$d['wiim']['added_at'] = formatBE($row['added_at']);
-						$d['wiim']['genre'] = $playlists_config[$row['playlist_id']];
-						$resolvedTitle = $row['clean_title'];
-					}
+				$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE track_id = ? LIMIT 1");
+				$stmt->execute([$currentTrackId]);
+				$row = $stmt->fetch(PDO::FETCH_ASSOC);
+				if ($row) {
+					$d['wiim']['score'] = (int)$row['score'];
+					$d['wiim']['added_at'] = formatBE($row['added_at']);
+					$d['wiim']['genre'] = $playlists_config[$row['playlist_id']];
+					$resolvedTitle = $row['clean_title'];
 				}
 			
 				// 2. Als track_id niets opleverde, probeer via clean_title exacte match
-				if ($d['wiim']['score'] === '?' && !empty($d['wiim']['cleantitle'])) {
+				if ($d['wiim']['score'] === '?' && empty($resolvedTitle)) {
 					$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title = ? LIMIT 1");
 					$stmt->execute([$d['cleantitle']]);
 					$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -234,7 +232,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
 						}
 					}
 				}
-				lg($resolvedTitle, 'mediaplayer');
+				lg('resolvedTitle = '.$resolvedTitle, 'mediaplayer');
                 // Publiceer de verrijkte data door
                 publishmqtt('d/wiim/wiim_cleantitle', $resolvedTitle);
                 publishmqtt('d/wiim/wiim_score', $d['wiim']['score']);
