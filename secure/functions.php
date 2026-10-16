@@ -1406,11 +1406,17 @@ function score($score) {
 	if(isset($data['cleantitle'])&&updatescore($data['cleantitle'],$score,$data['track_id'])) {
 		lg('updatescore ok '.$data['cleantitle'].' '.$score);
 		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
-//		if(substr($d['boseliving']->m,0,7)=='NoScore') {
+		if(substr($d['boseliving']->m,0,7)=='NoScore'||$score==9999||$score==null) {
 			Wiim('setPlayerCmd:next');
 			usleep(1390000);
 			Wiim('setPlayerCmd:seek:59');
-//		}
+		}
+		publishmqtt('d/wiim/wiim_score', $score);
+		$db=Database::getInstance();
+		$stmt = $db->prepare("SELECT count(track_id) FROM track_mapping WHERE score = ?");
+		$stmt->execute([19]);
+		$aantal = $stmt->fetchColumn();
+		publishmqtt('d/wiim/wiim_noscore', $aantal);
 	} else lg('updatescore nok');
 }
 function updatescore($cleantitle, $score, $track_id) {

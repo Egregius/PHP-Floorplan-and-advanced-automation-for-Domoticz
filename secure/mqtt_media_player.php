@@ -124,7 +124,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
         if (!empty($currentTrackId) && !empty($currentArtist) && !empty($currentTitle)) {
             
             // Check of er daadwerkelijk een nieuw nummer is gestart
-            if ($currentTrackId !== $lastTrackId || $currentArtist !== $lastArtist || $currentTitle !== $lastTitle) {
+            if ($currentTrackId !== $lastTrackId /*|| $currentArtist !== $lastArtist || $currentTitle !== $lastTitle*/) {
                 $d=fetchdata();
                 // Onthoud deze meteen zodat we niet in een loop belanden
                 $lastTrackId = $currentTrackId;
