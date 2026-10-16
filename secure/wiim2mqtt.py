@@ -317,7 +317,7 @@ def position_poll_loop():
 
 def local_tick_loop():
 	while True:
-		time.sleep(1)
+		time.sleep(5)
 		with state_lock:
 			if current_playback_state.get("transportstate") == "PLAYING":
 				if current_playback_state.get("track_started_at"):
