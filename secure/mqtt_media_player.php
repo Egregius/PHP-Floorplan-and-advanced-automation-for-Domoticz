@@ -77,6 +77,25 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
+$mqtt->subscribe('d/wiim/+',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, $user) {
+	try {
+		lg($topic.' '.$status);
+#		$path=explode('/',$topic);
+#		$device=$path[2];
+#		if ($device=='nvidia') {
+#			$time=time();
+#			$d['time']=$time;
+#			$d=fetchdata();
+#			$status = ucfirst(strtolower(trim($status, '"')));
+#			if ($d[$device]->m!=$status) {
+#				storemode($device,$status,'','mediaplayer');
+#			}
+#		}
+	} catch (Throwable $e) {
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+	}
+},MqttClient::QOS_AT_LEAST_ONCE);
+
 $mqtt->publish(
     'homeassistant/sensor/kodi/last_action/config',
     json_encode([

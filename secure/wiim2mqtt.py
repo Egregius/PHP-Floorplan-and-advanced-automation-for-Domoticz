@@ -89,9 +89,9 @@ def mqtt_publish(subtopic, value, retain=True):
         return
     last_published_state[subtopic] = value
     if mqtt_connected:
-        topic = f"d/wiim.{subtopic}"
+        topic = f"d/wiim/wiim_{subtopic}"
         mqtt_client.publish(topic, value, retain=retain, qos=1)
-#        log(f"📤 MQTT PUBLISH -> d/wiim.{subtopic}: {value}")
+#        log(f"📤 MQTT PUBLISH -> d/wiim/wiim_{subtopic}: {value}")
 
 def parse_and_publish_all(data_dict):
     global current_playback_state
