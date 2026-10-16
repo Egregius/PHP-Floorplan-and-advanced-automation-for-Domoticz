@@ -28,7 +28,7 @@ elseif (isset($_REQUEST['device'])&&$_REQUEST['device']=='resetsecurity') resets
 elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109) {
 	$bose=$_REQUEST['bose'];
 	$d=[];
-	libxml_use_internal_errors(true);
+/*	libxml_use_internal_errors(true);
 	$xml_string = @file_get_contents("http://192.168.2." . $bose . ":8090/now_playing");
 	$nowplaying = null;
 	if ($xml_string !== false) {
@@ -36,143 +36,8 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 		if ($xml_object !== false) {
 			$nowplaying = json_decode(json_encode($xml_object), true);
 		}
-	}
-	libxml_clear_errors();
-	$d['source']=$nowplaying['@attributes']['source'];
-	$d['artist']='';
-	$d['track']='';
-	$d['art']='';
-	$d['cleantitle']='';
-	if (isset($nowplaying['artist'],$nowplaying['track'])||$nowplaying['@attributes']['source']=='AUX'||$nowplaying['@attributes']['source']=='UPNP') {
-		$replacements = [
-			'http://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
-			'https://192.168.2.26:8097' => 'https://imageproxy.egregius.be',
-			'http://192.168.2.101/' => 'https://bose101.egregius.be/',
-			'https://192.168.2.9/' => 'https://wiim.egregius.be/',
-		];
-		if($nowplaying['@attributes']['source']=='AUX'||$nowplaying['@attributes']['source']=='UPNP'||($nowplaying['artist']=='wiim'&&$nowplaying['track']=='dlna cast')) {
-			$wiim=json_decode(Wiim('getMetaInfo'));
-			if($wiim) {
-				$d['source']='WiiM';
-				$d['artist']=$wiim->metaData->artist;
-				$d['track']=$wiim->metaData->title;
-				$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $wiim->metaData->albumArtURI);
-				$d['bitrate'] = $wiim->metaData->bitRate;
-				$d['bitdepth'] = $wiim->metaData->bitDepth == 32 ? 24 : $wiim->metaData->bitDepth;
-				$d['samplerate'] = number_format((int)$wiim->metaData->sampleRate/1000, 1, ',','');
-				$d['cleantitle']=cleanTitle($wiim->metaData->artist,$wiim->metaData->title);
-				$d['track_id']=$wiim->metaData->trackId ?? '';
-			}
-		} else {
-			$d['artist']=$nowplaying['artist'];
-			$d['track']=$nowplaying['track'];
-			
-			$d['art'] = str_replace(array_keys($replacements), array_values($replacements), $nowplaying['art']);
-			$d['cleantitle']=cleanTitle($d['artist'],$d['track']);
-		}
-	} 
-	$d['score'] = '?';
-	$d['genre'] = '?';
-	$d['added_at'] = '?';
-	$resolvedTitle = $d['cleantitle'] ?? '';
-	$db = Database::getInstance();
-	$playlists_config = [
-		'4c0A3wTsAYGtPjuvnBSQVz' => 'EDM',
-		'1HYGeiybmNCNDH5gqgpMlD' => 'EDM',
-		'4PAKU1ueS1ZLGHV6RQ61vU' => 'EDM',
-		'00c1C9TicWtR4jT8l6Umtn' => 'EDM',
-		'0RC4oPTsTDYeJAQ42r18Xo' => 'EDM',
-		'6Di8efQzh5qYyL6Th9GovZ' => 'EDM',
-		'6ZAcAvI9J054PToebnPCM6' => 'EDM',
-		'2KSNeL9Xgsobjdb0PBDEd3' => 'EDM',
-		'4qRh2rWz5i76SsnHjnJX84' => 'EDM',
-		'2wZyxbgTwnlgOu7qNCxFXG' => 'EDM',
-		'4hTylVEtYMWLto7UxmFXVS' => 'POP',
-		'6VxheCoIPPcR3PTHUfjDJ6' => 'POP',
-		'4ofsYQ8HVOIxNXUwZYuT2C' => 'POP',
-		'2y7sX8H7KiFMAYo3NR1Lxz' => 'POP',
-		'5NeUAm0FkXS3fWJGnCvzoE' => 'POP',
-	];
-	// 1. Probeer eerst te matchen op track_id
-	if (!empty($d['track_id'])) {
-		$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE track_id = ? LIMIT 1");
-		$stmt->execute([$d['track_id']]);
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ($row) {
-			$d['score'] = (int)$row['score'];
-			$d['added_at'] = formatBE($row['added_at']);
-			$d['genre'] = $playlists_config[$row['playlist_id']];
-			$resolvedTitle = $row['clean_title'];
-		}
-	}
-
-	// 2. Als track_id niets opleverde, probeer via clean_title exacte match
-	if ($d['score'] === '?' && !empty($d['cleantitle'])) {
-		$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title = ? LIMIT 1");
-		$stmt->execute([$d['cleantitle']]);
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ($row) {
-			$d['score'] = (int)$row['score'];
-			$d['added_at'] = formatBE($row['added_at']);
-			$d['genre'] = $playlists_config[$row['playlist_id']];
-			$resolvedTitle = $row['clean_title'];
-		} else {
-			// 3. Fallback: standaard LIKE met artiest en track
-			$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? LIMIT 1");
-			$stmt->execute(['%' . cleanTitle($d['artist'], '') . '%' . cleanTitle('', $d['track']) . '%']);
-			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			if ($row) {
-				$d['score'] = (int)$row['score'];
-				$d['added_at'] = formatBE($row['added_at']);
-				$d['genre'] = $playlists_config[$row['playlist_id']];
-				$resolvedTitle = $row['clean_title'];
-			} else {
-				// 4. Extra fallback: split op hoofdwoorden uit de track (bijv. artiest % deel1 % deel2)
-				$cleanArtist = cleanTitle($d['artist'], '');
-				// Pak bijvoorbeeld de eerste 2 à 3 woorden uit de track na cleaning
-				$cleanTrackWords = cleanTitle('', $d['track']);
-				if (!empty($cleanArtist) && !empty($cleanTrackWords)) {
-					$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? AND clean_title LIKE ? LIMIT 1");
-					$stmt->execute([$cleanArtist . '%', '%' . substr($cleanTrackWords, 0, 10) . '%']);
-					$row = $stmt->fetch(PDO::FETCH_ASSOC);
-					if ($row) {
-						$d['score'] = (int)$row['score'];
-						$d['added_at'] = formatBE($row['added_at']);
-						$d['genre'] = $playlists_config[$row['playlist_id']];
-						$resolvedTitle = $row['clean_title'];
-					} else {
-						if ($d['score'] === '?') {
-							$rawTrack = trim(explode('(', $d['track'])[0]);
-							$rawTrack = trim(explode('-', $rawTrack)[0]);
-							$baseTrack = cleanTitle('', $rawTrack);
-							if (!empty($baseTrack)) {
-								$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? LIMIT 500");
-								$stmt->execute(['%' . $baseTrack . '%']);
-								$bestMatch = null;
-								$highestSimilar = -1;
-								$searchTerm = cleanTitle($d['artist'], $d['track']);
-								while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-									similar_text($searchTerm, $row['clean_title'], $percent);
-									if ($percent > $highestSimilar) {
-										$highestSimilar = $percent;
-										$bestMatch = $row;
-									}
-								}
-								if ($bestMatch && $highestSimilar >= 60) {
-									$d['score'] = (int)$bestMatch['score'];
-									$d['added_at'] = formatBE($bestMatch['added_at']);
-									$d['genre'] = $playlists_config[$bestMatch['playlist_id']];
-									$resolvedTitle = $bestMatch['clean_title'];
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	}*/
 	
-	$d['cleantitle'] = $resolvedTitle;
 	$volume=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.$bose:8090/volume"))), true);
 	$d['volume']=$volume['actualvolume'];
 	header('Content-Type: application/json; charset=utf-8');
@@ -414,17 +279,3 @@ if (!isset($_REQUEST->t)&&!isset($_REQUEST['q'])&&!isset($_REQUEST['bose'])&&!is
 }
 http_response_code(200);
 echo 'ok';
-function formatBE($dateStr, $dateonly=true, $stripyear=false) {
-	if (empty($dateStr)) {
-		return '';
-	}
-	$dt = new DateTime($dateStr);
-	$monthMap = [1=>'jan',2=>'feb',3=>'mar',4=>'apr',5=>'mei',6=>'jun',7=>'jul',8=>'aug',9=>'sep',10=>'okt',11=>'nov',12=>'dec'];
-	$day = $dt->format('j');
-	$month = $monthMap[(int)$dt->format('n')];
-	$year = $dt->format('Y');
-	$time = $dt->format('G:i:s');
-	
-	if($dateonly===true) return ($stripyear && $year === date('Y')) ? "{$day} {$month}" : "{$day} {$month} {$year}";
-	else return ($year === date('Y')) ? "{$day} {$month} {$time}" : "{$day} {$month} {$year} {$time}";
-}

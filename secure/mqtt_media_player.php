@@ -105,10 +105,10 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
                 $d['wiim']['transportstate'] = $status;
                 break;
             case 'wiim_trackduration':
-                $d['wiim']['trackduration'] = formatTrackTime($status);
+                $d['wiim']['trackduration'] = $status;
                 break;
             case 'wiim_reltime':
-                $d['wiim']['reltime'] = formatTrackTime($status);
+                $d['wiim']['reltime'] = $status;
                 break;
             case 'wiim_currenttrackuri':
                 $d['wiim']['trackid'] = str_replace('spotify:track:', '', $status);
@@ -305,23 +305,4 @@ function formatBE($dateStr, $dateonly=true, $stripyear=false) {
 	
 	if($dateonly===true) return ($stripyear && $year === date('Y')) ? "{$day} {$month}" : "{$day} {$month} {$year}";
 	else return ($year === date('Y')) ? "{$day} {$month} {$time}" : "{$day} {$month} {$year} {$time}";
-}
-function formatTrackTime($timeStr) {
-    if (empty($timeStr) || $timeStr === 'NOT_IMPLEMENTED') {
-        return '0:00';
-    }
-    
-    $parts = explode(':', $timeStr);
-    if (count($parts) === 3) {
-        $hours = (int)$parts[0];
-        $minutes = (int)$parts[1];
-        $seconds = (int)$parts[2];
-        
-        // Tel uren mee in minuten als een track langer dan een uur duurt
-        $totalMinutes = ($hours * 60) + $minutes;
-        
-        return sprintf('%d:%02d', $totalMinutes, $seconds);
-    }
-    
-    return $timeStr; // Fallback als het formaat afwijkt
 }
