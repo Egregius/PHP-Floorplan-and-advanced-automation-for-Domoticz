@@ -239,6 +239,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
                 publishmqtt('d/wiim/wiim_score', $d['wiim']['score']);
                 publishmqtt('d/wiim/wiim_added_at', $d['wiim']['added_at']);
                 publishmqtt('d/wiim/wiim_genre', $d['wiim']['genre']);
+                publishmqtt('d/wiim/wiim_trackid', $d['wiim']['trackid']);
             }
         }
 
