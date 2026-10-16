@@ -25,7 +25,7 @@ LOG_PATH = "/var/log/mqtt/wiim.log"
 RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
 
 ALLOWED_KEYS = {
-	"artist", "title", "album", "album_art", "transportstate"
+	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri"
 }
 
 mqtt_client = mqtt.Client(client_id="wiim_bridge", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
@@ -39,6 +39,18 @@ current_playback_state = {
 	"track_started_at": ""
 }
 state_lock = threading.Lock()
+_pending_retained_publish = True
+
+def publish_all_retained():
+	"""Publiceer alles naar MQTT met retain=True als broker verbonden"""
+	if not mqtt_connected:
+		return
+	for k in ALLOWED_KEYS:
+		mqtt_client.publish(f"d/wiim/{k}", '?', retain=True, qos=1)
+	log("📡 Alle retained topics gepubliceerd")
+	sys.exit()
+
+
 
 def log(*args):
 	now = datetime.now()
@@ -61,11 +73,18 @@ def log_raw(raw_data):
 		pass
 
 def on_connect(client, userdata, flags, reason_code, properties):
-	global mqtt_connected
+	global mqtt_connected, _pending_retained_publish
 	if reason_code == 0:
 		mqtt_connected = True
 		log("✅ Verbonden met MQTT Broker")
+		if _pending_retained_publish:
+			_pending_retained_publish = False
+			publish_all_retained()
+	else:
+		log(f"❌ MQTT connect fout: reason_code={reason_code}")
 
+
+		
 mqtt_client.on_connect = on_connect
 mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
 mqtt_client.loop_start()
@@ -85,9 +104,9 @@ def mqtt_publish(subtopic, value, retain=True):
 		return
 	last_published_state[subtopic] = value
 	if mqtt_connected:
-		topic = f"wiim/{subtopic}"
+		topic = f"d/wiim/{subtopic}"
 		mqtt_client.publish(topic, value, retain=retain, qos=1)
-		log(f"📤 MQTT PUBLISH -> wiim/{subtopic}: {value}")
+		log(f"📤 MQTT PUBLISH -> d/wiim/{subtopic}: {value}")
 
 def parse_and_publish_all(data_dict):
 	global current_playback_state
@@ -114,9 +133,9 @@ def parse_and_publish_all(data_dict):
 		for key, val in data_dict.items():
 			if val is not None and val != "":
 				k_lower = key.lower()
-#				if k_lower in ALLOWED_KEYS:
-				current_playback_state[k_lower] = val
-				mqtt_publish(k_lower, val)
+				if k_lower in ALLOWED_KEYS:
+					current_playback_state[k_lower] = val
+					mqtt_publish(k_lower, val)
 		
 	   
 	
