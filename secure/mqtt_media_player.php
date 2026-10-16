@@ -125,7 +125,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
             
             // Check of er daadwerkelijk een nieuw nummer is gestart
             if ($currentTrackId !== $lastTrackId || $currentArtist !== $lastArtist || $currentTitle !== $lastTitle) {
-                
+                $d=fetchdata();
                 // Onthoud deze meteen zodat we niet in een loop belanden
                 $lastTrackId = $currentTrackId;
                 $lastArtist  = $currentArtist;
@@ -239,6 +239,13 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
                 publishmqtt('d/wiim/wiim_added_at', $d['wiim']['added_at']);
                 publishmqtt('d/wiim/wiim_genre', $d['wiim']['genre']);
                 publishmqtt('d/wiim/wiim_trackid', $d['wiim']['trackid']);
+                if($d['auto']->s=='On'&&substr($d['boseliving']->m,0,7)!='NoScore') {
+					if ($d['wiim']['score']==19) {
+						if($d['spotify']->s!='On'&&$d['lgtv']->s!='On'&&past('spotify')>6) sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
+					} else {
+						if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+					}
+				}
             }
         }
 

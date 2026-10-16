@@ -68,7 +68,7 @@ while (1) {
 	include 'cron2B.php';
 	if($skipped===false) {
 		$time_elapsed_secs = microtime(true) - $time;
-		$sleep = 10 - $time_elapsed_secs;
+		$sleep = 20 - $time_elapsed_secs;
 		if ($sleep > 0) {
 			$sleep = round($sleep * 1000000);
 			usleep($sleep);
