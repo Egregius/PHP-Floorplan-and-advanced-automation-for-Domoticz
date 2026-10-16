@@ -25,7 +25,7 @@ LOG_PATH = "/var/log/mqtt/wiim.log"
 RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
 
 ALLOWED_KEYS = {
-	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "reltime", "trackduration"
+	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "reltime", "trackduration", "bitdepth", "samplerate", "bitrate", "actualQuality"
 }
 
 mqtt_client = mqtt.Client(client_id="wiim_bridge", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
@@ -161,6 +161,7 @@ def parse_didl_metadata(didl_xml, current_data):
 			curr = html.unescape(curr)
 			
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
+		log(fixed_xml)
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
 			'dc': 'http://purl.org/dc/elements/1.1/',
@@ -172,6 +173,10 @@ def parse_didl_metadata(didl_xml, current_data):
 		current_data["artist"] = track_root.find('.//upnp:artist', ns).text if track_root.find('.//upnp:artist', ns) is not None else current_data.get("artist", "")
 		current_data["album"] = track_root.find('.//upnp:album', ns).text if track_root.find('.//upnp:album', ns) is not None else current_data.get("album", "")
 		current_data["album_art"] = track_root.find('.//upnp:albumArtURI', ns).text if track_root.find('.//upnp:albumArtURI', ns) is not None else current_data.get("album_art", "")
+		current_data["bitdepth"] = track_root.find('.//song:format_s', ns).text if track_root.find('.//song:format_s', ns) is not None else current_data.get("album_art", "")
+		current_data["samplerate"] = track_root.find('.//song:rate_hz', ns).text if track_root.find('.//song:rate_hz', ns) is not None else current_data.get("album_art", "")
+		current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else current_data.get("album_art", "")
+		current_data["actualQuality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else current_data.get("album_art", "")
 	except Exception as e:
 		log(f"⚠️ Fout bij parsen DIDL: {e}")
 	return current_data
