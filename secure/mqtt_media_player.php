@@ -50,7 +50,7 @@ $mqtt->subscribe('homeassistant/media_player/+/state',function (string $topic,st
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage());
+		lg("Fout in {$user}: ".__LINE__.' '.$topic.' '.$e->getMessage(),'mediaplayer');
 	}
 	if ($lastcheck < $time - $d['rand']) {
         $lastcheck = $time;
@@ -73,27 +73,37 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 			}
 		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'mediaplayer');
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/wiim/+',function (string $topic,string $status) use ($startloop,$validDevices,&$d, &$lastcheck, $user) {
+$mqtt->subscribe('d/wiim/+',function (string $topic,string $status) use ($startloop, $validDevices, &$d, &$lastcheck, &$time, $user) {
 	try {
-		lg($topic.' '.$status);
-#		$path=explode('/',$topic);
-#		$device=$path[2];
-#		if ($device=='nvidia') {
-#			$time=time();
-#			$d['time']=$time;
-#			$d=fetchdata();
-#			$status = ucfirst(strtolower(trim($status, '"')));
-#			if ($d[$device]->m!=$status) {
-#				storemode($device,$status,'','mediaplayer');
-#			}
-#		}
+		if($topic=='d/wiim/wiim_artist') {
+			$time=time();
+			$d['wiim']['artist']=$status;
+		}
+		elseif($topic=='d/wiim/wiim_title') $d['wiim']['title']=$status;
+		elseif($topic=='d/wiim/wiim_album') $d['wiim']['album']=$status;
+		elseif($topic=='d/wiim/wiim_album_art') $d['wiim']['album_art']=$status;
+		elseif($topic=='d/wiim/wiim_transportstate') $d['wiim']['transportstate']=$status;
+		elseif($topic=='d/wiim/wiim_trackduration') $d['wiim']['trackduration']=$status;
+		elseif($topic=='d/wiim/wiim_reltime') $d['wiim']['reltime']=$status;
+		elseif($topic=='d/wiim/wiim_currenttrackuri') {
+			$d['wiim']['trackid']=str_replace('spotify:track:','',$status);
+			if(count($d['wiim'])>=8) {
+				lg(json_encode($d['wiim']),'mediaplayer');
+				
+			}
+		}
 	} catch (Throwable $e) {
-		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage());
+		lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(),'mediaplayer');
 	}
+	if ($lastcheck < $time - $d['rand']) {
+        $lastcheck = $time;
+        stoploop();
+        updateWekker($t, $weekend, $dow, $d);
+    }
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->publish(
