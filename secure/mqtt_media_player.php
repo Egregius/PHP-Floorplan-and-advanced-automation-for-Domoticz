@@ -88,42 +88,17 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use (&$d
 	try {
 		$subtopic = str_replace('wiim_raw/', '', $topic);
 		switch ($subtopic) {
-			case 'wiim_reltime':
-				publishmqtt("d/wiim/wiim_reltime", $status);
-				return;
 			case 'wiim_artist':
 				$time = time();
 				$current['wiim_artist'] = $status;
-				publishmqtt("d/wiim/wiim_artist", $status);
 				break;
 			case 'wiim_title':
 				$current['wiim_title'] = $status;
-				publishmqtt("d/wiim/wiim_title", $status);
 				break;
 			case 'wiim_currenttrackuri':
 				$status=str_replace('spotify:track:', '', $status);
-				publishmqtt("d/wiim/wiim_trackid", $status);
 				$current['wiim_trackid'] = $status;
 				break;
-			case 'wiim_album':
-				publishmqtt("d/wiim/wiim_album", $status);
-				return;
-			case 'wiim_album_art':
-				publishmqtt("d/wiim/wiim_album_art", $status);
-				return;
-			case 'wiim_bitdepth':
-				publishmqtt("d/wiim/wiim_bitdepth", $status);
-				return;
-			case 'wiim_samplerate':
-				publishmqtt("d/wiim/wiim_samplerate", $status);
-				return;
-			case 'wiim_bitrate':
-				publishmqtt("d/wiim/wiim_bitrate", $status);
-				return;
-			case 'wiim_transportstate':
-			case 'wiim_trackduration':
-				publishmqtt("d/wiim/{$subtopic}", $status);
-				return;
 			default:
 				return;
 		}

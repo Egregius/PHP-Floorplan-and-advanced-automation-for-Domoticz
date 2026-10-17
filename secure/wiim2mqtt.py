@@ -27,6 +27,7 @@ RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
 ALLOWED_KEYS = {
 	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "reltime", "trackduration", "bitdepth", "samplerate", "bitrate", "actualQuality"
 }
+RAW_KEYS = {"artist", "title", "currenttrackuri"}
 
 mqtt_client = mqtt.Client(client_id="wiim_bridge", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
 mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
@@ -103,7 +104,7 @@ def format_track_time(time_str):
 		except ValueError:
 			pass
 	elif len(parts) == 2:
-		return time_str # Al in m:ss formaat
+		return time_str
 	return time_str
 
 def mqtt_publish(subtopic, value, retain=True):
@@ -112,8 +113,12 @@ def mqtt_publish(subtopic, value, retain=True):
 		return
 	last_published_state[subtopic] = value
 	if mqtt_connected:
-		topic = f"wiim_raw/wiim_{subtopic}"
-		mqtt_client.publish(topic, value, retain=retain, qos=1)
+		if subtopic in RAW_KEYS:
+			mqtt_client.publish(f"wiim_raw/wiim_{subtopic}", value, retain=retain, qos=1)
+			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
+		else:
+			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
+		
 
 def parse_and_publish_all(data_dict):
 	global current_playback_state
@@ -123,22 +128,17 @@ def parse_and_publish_all(data_dict):
 		old_title = current_playback_state.get("title")
 		new_title = data_dict.get("title", old_title)
 
-		state_changed_to_playing = (old_state != "PLAYING" and new_state == "PLAYING")
-		track_changed = (old_title != new_title and new_title and new_title != "")
 		state_changed = (old_state != new_state)
 
-		# Formatteer trackduration direct naar m:ss indien aanwezig
 		if "trackduration" in data_dict:
 			data_dict["trackduration"] = format_track_time(data_dict["trackduration"])
 
-		# ALS er een actieve reltime binnenkomt (bijv. na een seek of start), herbereken DIRECT de starttijd
 		if "reltime" in data_dict and data_dict["reltime"] and data_dict["reltime"] != "NOT_IMPLEMENTED":
 			reltime_sec = time_to_seconds(data_dict["reltime"])
 			if reltime_sec > 0:
 				start_time = datetime.now() - timedelta(seconds=reltime_sec)
 				current_playback_state["track_started_at"] = start_time.isoformat()
 
-		# Fallback als er nog helemaal geen starttijd bekend is
 		if not current_playback_state.get("track_started_at"):
 			start_time = datetime.now()
 			current_playback_state["track_started_at"] = start_time.isoformat()
@@ -149,13 +149,14 @@ def parse_and_publish_all(data_dict):
 				if k_lower in ALLOWED_KEYS:
 					if k_lower != "reltime":
 						current_playback_state[k_lower] = val
-						mqtt_publish(k_lower, val)
+					mqtt_publish(k_lower, val)
 
 		if state_changed and new_state == "PLAYING" and avtransport_control_url:
 			def delayed_fetch():
 				time.sleep(1)
 				fetch_position_info()
 			threading.Thread(target=delayed_fetch, daemon=True).start()
+
 def parse_didl_metadata(didl_xml, current_data):
 	if not didl_xml or didl_xml == "NOT_IMPLEMENTED":
 		return current_data
@@ -178,10 +179,10 @@ def parse_didl_metadata(didl_xml, current_data):
 		current_data["artist"] = track_root.find('.//upnp:artist', ns).text if track_root.find('.//upnp:artist', ns) is not None else current_data.get("artist", "")
 		current_data["album"] = track_root.find('.//upnp:album', ns).text if track_root.find('.//upnp:album', ns) is not None else current_data.get("album", "")
 		current_data["album_art"] = track_root.find('.//upnp:albumArtURI', ns).text if track_root.find('.//upnp:albumArtURI', ns) is not None else current_data.get("album_art", "")
-		current_data["bitdepth"] = track_root.find('.//song:format_s', ns).text if track_root.find('.//song:format_s', ns) is not None else current_data.get("album_art", "")
-		current_data["samplerate"] = track_root.find('.//song:rate_hz', ns).text if track_root.find('.//song:rate_hz', ns) is not None else current_data.get("album_art", "")
-		current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else current_data.get("album_art", "")
-		current_data["actualQuality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else current_data.get("album_art", "")
+		current_data["bitdepth"] = track_root.find('.//song:format_s', ns).text if track_root.find('.//song:format_s', ns) is not None else current_data.get("bitdepth", "")
+		current_data["samplerate"] = track_root.find('.//song:rate_hz', ns).text if track_root.find('.//song:rate_hz', ns) is not None else current_data.get("samplerate", "")
+		current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else current_data.get("bitrate", "")
+		current_data["actualQuality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else current_data.get("actualQuality", "")
 	except Exception as e:
 		log(f"⚠️ Fout bij parsen DIDL: {e}")
 	return current_data
@@ -335,8 +336,6 @@ def local_tick_loop():
 						if total_sec > 0 and elapsed_sec > total_sec:
 							elapsed_sec = total_sec
 							
-						formatted_rel = format_track_time(f"0:0: {elapsed_sec}" if elapsed_sec < 3600 else f"0:{elapsed_sec//60}:{elapsed_sec%60}")
-						# Alternatieve directere berekening voor m:ss:
 						m = elapsed_sec // 60
 						s = elapsed_sec % 60
 						rel_str = f"{m}:{s:02d}"
