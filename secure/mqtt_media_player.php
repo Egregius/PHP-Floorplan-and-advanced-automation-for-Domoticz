@@ -135,7 +135,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
                 $d['wiim']['score'] = '?';
                 $d['wiim']['genre'] = '?';
                 $d['wiim']['added_at'] = '?';
-                $resolvedTitle = '';
+                $resolvedTitle = 'UNKNOWN';
                 
                 $db = Database::getInstance();
                 $playlists_config = [
@@ -170,7 +170,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
 				// 2. Als track_id niets opleverde, probeer via clean_title exacte match
 				if ($d['wiim']['score'] === '?' && empty($resolvedTitle)) {
 					$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title = ? LIMIT 1");
-					$stmt->execute([$d['cleantitle']]);
+					$stmt->execute([$d['wiim']['cleantitle']]);
 					$row = $stmt->fetch(PDO::FETCH_ASSOC);
 					if ($row) {
 						$d['wiim']['score'] = (int)$row['score'];
@@ -189,7 +189,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
 							$resolvedTitle = $row['clean_title'];
 						} else {
 							// 4. Extra fallback: split op hoofdwoorden uit de track (bijv. artiest % deel1 % deel2)
-							$cleanArtist = cleanTitle($d['artist'], '');
+							$cleanArtist = cleanTitle($d['wiim']['artist'], '');
 							// Pak bijvoorbeeld de eerste 2 à 3 woorden uit de track na cleaning
 							$cleanTrackWords = cleanTitle('', $d['wiim']['title']);
 							if (!empty($cleanArtist) && !empty($cleanTrackWords)) {
@@ -219,7 +219,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
 													$bestMatch = $row;
 												}
 											}
-											if ($bestMatch && $highestSimilar >= 60) {
+											if ($bestMatch && $highestSimilar >= 90) {
 												$d['wiim']['score'] = (int)$bestMatch['score'];
 												$d['wiim']['added_at'] = formatBE($bestMatch['added_at']);
 												$d['wiim']['genre'] = $playlists_config[$bestMatch['playlist_id']];
