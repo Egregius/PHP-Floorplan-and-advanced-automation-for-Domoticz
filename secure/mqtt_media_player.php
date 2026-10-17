@@ -78,73 +78,100 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 },MqttClient::QOS_AT_LEAST_ONCE);
 
 $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$lastcheck, &$time, $user) {
-	$keys = ['artist', 'title', 'album', 'albumart', 'transportstate', 'trackduration', 'reltime', 'trackid', 'resolvedtitle', 'score', 'added_at', 'genre', 'bitdepth', 'samplerate', 'bitrate'];
-	static $last = [];
-	static $current = [];
+	static $lasttrackid = '';
+	static $lastartist = '';
+	static $lasttitle = '';
+	static $lastscore = '';
+	static $lastgenre = '';
+	static $lastadded_at = '';
+	
+	static $lastalbum = '';
+	static $lastalbumart = '';
+	static $lastbitdepth = '';
+	static $lastsamplerate = '';
+	static $lastbitrate = '';
 
-	if (empty($last)) {
-		foreach ($keys as $k) {
-			$last[$k] = ($k === 'score' || $k === 'added_at' || $k === 'genre') ? '?' : '';
-			$current[$k] = ($k === 'resolvedtitle') ? 'UNKNOWN' : (($k === 'score' || $k === 'added_at' || $k === 'genre') ? '?' : '');
-		}
-	}
+	static $current = [];
 
 	try {
 		$subtopic = str_replace('wiim_raw/', '', $topic);
 
+		// Behandel elk topic expliciet; geen blinde default meer
 		switch ($subtopic) {
-			case 'wiim_artist':
-				$time = time();
-				$current['artist'] = $status;
-				break;
-			case 'wiim_title':
-				$current['title'] = $status;
-				break;
-			case 'wiim_album':
-				$current['album'] = $status;
-				break;
-			case 'wiim_album_art':
-				$current['albumart'] = $status;
-				break;
-			case 'wiim_transportstate':
-				$current['transportstate'] = $status;
-				break;
-			case 'wiim_trackduration':
-				$current['trackduration'] = $status;
-				break;
-			case 'wiim_bitdepth':
-				$current['bitdepth'] = $status;
-				break;
-			case 'wiim_samplerate':
-				$current['samplerate'] = $status;
-				break;
-			case 'wiim_bitrate':
-				$current['bitrate'] = $status;
-				break;
 			case 'wiim_reltime':
 				publishmqtt("d/wiim/wiim_reltime", $status);
-				return; // Direct uit de callback; de rest van de track-logica is hier niet nodig
+				return;
+			case 'wiim_artist':
+				$time = time();
+				$current['wiim_artist'] = $status;
+				publishmqtt("d/wiim/wiim_artist", $status);
+				return;
+			case 'wiim_title':
+				$current['wiim_title'] = $status;
+				publishmqtt("d/wiim/wiim_title", $status);
+				return;
 			case 'wiim_currenttrackuri':
-				$current['trackid'] = str_replace('spotify:track:', '', $status);
-				break;
-		}
-
-		if (!empty($current['trackid']) && !empty($current['artist']) && !empty($current['title'])) {
-			if ($current['trackid'] !== $last['trackid'] || $current['artist'] !== $last['artist'] || $current['title'] !== $last['title']) {
-				
-				// Publiceer gewijzigde basisvelden inclusief audio-specs
-				foreach (['trackid', 'artist', 'title', 'album', 'albumart', 'bitdepth', 'samplerate', 'bitrate'] as $k) {
-					if ($current[$k] !== $last[$k]) {
-						publishmqtt("d/wiim/wiim_$k", $current[$k]);
-						$last[$k] = $current[$k];
-					}
+				$status=str_replace('spotify:track:', '', $status);
+				publishmqtt("d/wiim/wiim_trackid", $status);
+				$current['wiim_trackid'] = $status;
+				return;
+			case 'wiim_album':
+				$current['wiim_album'] = $status;
+				if ($status !== $lastalbum) {
+					publishmqtt("d/wiim/wiim_album", $status);
+					$lastalbum = $status;
 				}
+				return;
+			case 'wiim_album_art':
+				$current['wiim_album_art'] = $status;
+				if ($status !== $lastalbumart) {
+					publishmqtt("d/wiim/wiim_album_art", $status);
+					$lastalbumart = $status;
+				}
+				return;
+			case 'wiim_bitdepth':
+				$current['wiim_bitdepth'] = $status;
+				if ($status !== $lastbitdepth) {
+					publishmqtt("d/wiim/wiim_bitdepth", $status);
+					$lastbitdepth = $status;
+				}
+				return;
+			case 'wiim_samplerate':
+				$current['wiim_samplerate'] = $status;
+				if ($status !== $lastsamplerate) {
+					publishmqtt("d/wiim/wiim_samplerate", $status);
+					$lastsamplerate = $status;
+				}
+				return;
+			case 'wiim_bitrate':
+				$current['wiim_bitrate'] = $status;
+				if ($status !== $lastbitrate) {
+					publishmqtt("d/wiim/wiim_bitrate", $status);
+					$lastbitrate = $status;
+				}
+				return;
+			case 'wiim_transportstate':
+			case 'wiim_trackduration':
+				$current[$subtopic] = $status;
+				publishmqtt("d/wiim/{$subtopic}", $status);
+				return;
+			default:
+				return;
+		}
+		$trackid = $current['wiim_trackid'] ?? '';
+		$artist = $current['wiim_artist'] ?? '';
+		$title = $current['wiim_title'] ?? '';
+		if (!empty($trackid) && !empty($artist) && !empty($title)) {
+			if ($trackid !== $lasttrackid) {
+				$lasttrackid = $trackid;
+				$lastartist = $artist;
+				$lasttitle = $title;
 
-				$current['resolvedtitle'] = '';
-				$current['score'] = '?';
-				$current['genre'] = '?';
-				$current['added_at'] = '?';
-				
+				$resolvedtitle = 'UNKNOWN';
+				$score = '';
+				$genre = '';
+				$added_at = '';
+
 				$db = Database::getInstance();
 				$playlists_config = [
 					'4c0A3wTsAYGtPjuvnBSQVz' => 'EDM',
@@ -164,53 +191,53 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($st
 					'5NeUAm0FkXS3fWJGnCvzoE' => 'POP',
 				];
 
-				// 1. Probeer te matchen op track_id
+				// 1. Matchen op track_id
 				$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE track_id = ? LIMIT 1");
-				$stmt->execute([$current['trackid']]);
+				$stmt->execute([$trackid]);
 				$row = $stmt->fetch(PDO::FETCH_ASSOC);
 				if ($row) {
-					$current['score'] = (int)$row['score'];
-					$current['added_at'] = formatBE($row['added_at']);
-					$current['genre'] = $playlists_config[$row['playlist_id']] ?? '?';
-					$current['resolvedtitle'] = $row['clean_title'];
+					$score = (int)$row['score'];
+					$added_at = formatBE($row['added_at']);
+					$genre = $playlists_config[$row['playlist_id']] ?? '?';
+					$resolvedtitle = $row['clean_title'];
 				}
-			
+
 				// 2. Exacte clean_title match
-				if ($current['score'] === '?' && empty($current['resolvedtitle'])) {
+				if ($score === '?' && empty($resolvedtitle)) {
 					$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title = ? LIMIT 1");
-					$stmt->execute([$current['resolvedtitle']]);
+					$stmt->execute([$resolvedtitle]);
 					$row = $stmt->fetch(PDO::FETCH_ASSOC);
 					if ($row) {
-						$current['score'] = (int)$row['score'];
-						$current['added_at'] = formatBE($row['added_at']);
-						$current['genre'] = $playlists_config[$row['playlist_id']] ?? '?';
-						$current['resolvedtitle'] = $row['clean_title'];
+						$score = (int)$row['score'];
+						$added_at = formatBE($row['added_at']);
+						$genre = $playlists_config[$row['playlist_id']] ?? '?';
+						$resolvedtitle = $row['clean_title'];
 					} else {
 						// 3. Fallback LIKE
 						$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? LIMIT 1");
-						$stmt->execute(['%' . cleanTitle($current['artist'], '') . '%' . cleanTitle('', $current['title']) . '%']);
+						$stmt->execute(['%' . cleanTitle($artist, '') . '%' . cleanTitle('', $title) . '%']);
 						$row = $stmt->fetch(PDO::FETCH_ASSOC);
 						if ($row) {
-							$current['score'] = (int)$row['score'];
-							$current['added_at'] = formatBE($row['added_at']);
-							$current['genre'] = $playlists_config[$row['playlist_id']] ?? '?';
-							$current['resolvedtitle'] = $row['clean_title'];
+							$score = (int)$row['score'];
+							$added_at = formatBE($row['added_at']);
+							$genre = $playlists_config[$row['playlist_id']] ?? '?';
+							$resolvedtitle = $row['clean_title'];
 						} else {
 							// 4. Extra fallback
-							$cleanArtist = cleanTitle($current['artist'], '');
-							$cleanTrackWords = cleanTitle('', $current['title']);
+							$cleanArtist = cleanTitle($artist, '');
+							$cleanTrackWords = cleanTitle('', $title);
 							if (!empty($cleanArtist) && !empty($cleanTrackWords)) {
 								$stmt = $db->prepare("SELECT clean_title, score, playlist_id, added_at FROM track_mapping WHERE clean_title LIKE ? AND clean_title LIKE ? LIMIT 1");
 								$stmt->execute([$cleanArtist . '%', '%' . substr($cleanTrackWords, 0, 10) . '%']);
 								$row = $stmt->fetch(PDO::FETCH_ASSOC);
 								if ($row) {
-									$current['score'] = (int)$row['score'];
-									$current['added_at'] = formatBE($row['added_at']);
-									$current['genre'] = $playlists_config[$row['playlist_id']] ?? '?';
-									$current['resolvedtitle'] = $row['clean_title'];
+									$score = (int)$row['score'];
+									$added_at = formatBE($row['added_at']);
+									$genre = $playlists_config[$row['playlist_id']] ?? '?';
+									$resolvedtitle = $row['clean_title'];
 								} else {
-									if ($current['score'] === '?') {
-										$rawTrack = trim(explode('(', $current['title'])[0]);
+									if ($score === '?') {
+										$rawTrack = trim(explode('(', $title)[0]);
 										$rawTrack = trim(explode('-', $rawTrack)[0]);
 										$baseTrack = cleanTitle('', $rawTrack);
 										if (!empty($baseTrack)) {
@@ -218,7 +245,7 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($st
 											$stmt->execute(['%' . $baseTrack . '%']);
 											$bestMatch = null;
 											$highestSimilar = -1;
-											$searchTerm = cleanTitle($current['artist'], $current['title']);
+											$searchTerm = cleanTitle($artist, $title);
 											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 												similar_text($searchTerm, $row['clean_title'], $percent);
 												if ($percent > $highestSimilar) {
@@ -227,10 +254,10 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($st
 												}
 											}
 											if ($bestMatch && $highestSimilar >= 90) {
-												$current['score'] = (int)$bestMatch['score'];
-												$current['added_at'] = formatBE($bestMatch['added_at']);
-												$current['genre'] = $playlists_config[$bestMatch['playlist_id']] ?? '?';
-												$current['resolvedtitle'] = $bestMatch['clean_title'];
+												$score = (int)$bestMatch['score'];
+												$added_at = formatBE($bestMatch['added_at']);
+												$genre = $playlists_config[$bestMatch['playlist_id']] ?? '?';
+												$resolvedtitle = $bestMatch['clean_title'];
 											}
 										}
 									}
@@ -241,28 +268,36 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($st
 				}
 
 				// 5. Fallback check track_add
-				if (empty($current['resolvedtitle'])) {
-					$current['resolvedtitle'] = 'UNKNOWN';
+				if ($resolvedtitle === 'UNKNOWN') {
 					$stmt = $db->prepare("SELECT track_id FROM track_add WHERE track_id = ? LIMIT 1");
-					$stmt->execute([$current['trackid']]);
+					$stmt->execute([$trackid]);
 					if ($stmt->fetch(PDO::FETCH_ASSOC)) {
-						$current['resolvedtitle'] = 'NEW';
+						$resolvedtitle = 'NEW';
 					}
 				}
 
-				lg('resolvedTitle = ' . $current['resolvedtitle'], 'mediaplayer');
-
-				// Publiceer gewijzigde metavelden via de compacte foreach
-				foreach (['resolvedtitle', 'score', 'added_at', 'genre'] as $k) {
-					if ($current[$k] !== $last[$k]) {
-						publishmqtt("d/wiim/wiim_$k", $current[$k]);
-						$last[$k] = $current[$k];
-					}
-				}
+				lg('resolvedTitle = ' . $resolvedtitle, 'mediaplayer');
 				
+				// Publiceer resolvedtitle wel, maar exclusief via jouw eigen controle
+				publishmqtt('d/wiim/wiim_cleanttitle', $resolvedtitle);
+				
+				if ($score !== $lastscore) {
+					publishmqtt('d/wiim/wiim_score', $score);
+					$lastscore = $score;
+				}
+				if ($added_at !== $lastadded_at) {
+					publishmqtt('d/wiim/wiim_added_at', $added_at);
+					$lastadded_at = $added_at;
+				}
+				if ($genre !== $lastgenre) {
+					publishmqtt('d/wiim/wiim_genre', $genre);
+					$lastgenre = $genre;
+				}
+
+				// Spotify/Boseliving logica
 				$d = fetchdata();
 				if ($d['auto']->s == 'On' && substr($d['boseliving']->m, 0, 7) != 'NoScore') {
-					if ($current['score'] == 19) {
+					if ($score == 19) {
 						if ($d['spotify']->s != 'On' && $d['lgtv']->s != 'On' && past('spotify') > 6) {
 							sw('spotify', 'On', basename(__FILE__) . ':' . __LINE__, 'cron2');
 						}
