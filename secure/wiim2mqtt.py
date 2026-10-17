@@ -117,10 +117,9 @@ def mqtt_publish(subtopic, value, retain=True):
 	last_published_state[subtopic] = value
 	if mqtt_connected:
 		if subtopic in BOTH_KEYS:
-			# Voor de GUI sturen we de losse velden nog wel naar d/wiim/
 			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
 		elif subtopic == "currenttrackuri":
-			pass # Doen we via het JSON state pakket
+			pass
 		else:
 			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
 
@@ -159,7 +158,6 @@ def parse_and_publish_all(data_dict):
 							track_meta_changed = True
 						mqtt_publish(k_lower, val)
 
-		# Stuur één atomair JSON-pakket naar wiim_raw/wiim_state voor PHP
 		if track_meta_changed and mqtt_connected:
 			state_payload = {
 				"artist": current_playback_state.get("artist", ""),
@@ -179,7 +177,7 @@ def parse_and_publish_all(data_dict):
 			threading.Thread(target=delayed_fetch, daemon=True).start()
 
 def parse_didl_metadata(didl_xml, current_data):
-	if not didl_xml or didl_xml == 'NOT_IMPLEMENTED':
+	if not didl_xml or didl_xml == "NOT_IMPLEMENTED":
 		return current_data
 	try:
 		prev = None
@@ -188,10 +186,7 @@ def parse_didl_metadata(didl_xml, current_data):
 			prev = curr
 			curr = html.unescape(curr)
 			
-		# Filter eventuele ongeldige controlekarakters eruit die XML stukmaken
 		curr = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]', '', curr)
-		
-		# Fix losse ampersands die geen onderdeel zijn van een geldige entiteit
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
 		
 		track_root = ET.fromstring(fixed_xml)
@@ -210,8 +205,9 @@ def parse_didl_metadata(didl_xml, current_data):
 		current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else current_data.get("bitrate", "")
 		current_data["actualQuality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else current_data.get("actualQuality", "")
 	except Exception as e:
-		log(f"⚠️ Fout bij parsen DIDL: {e} (XML was: {didl_xml[:100]}...)")
+		log(f"⚠️ Fout bij parsen DIDL: {e}\n--- VOLLEDIGE PROBLEMATISCHE XML ---\n{didl_xml}\n-----------------------------------")
 	return current_data
+
 def process_event_xml(xml_content):
 	data = {}
 	try:
