@@ -1,8 +1,22 @@
 <?php
 foreach ($devices as $ip => $vol) {
+	if($d['guy']->s!='thuis'||$d['carplay']->s=='On') {
+		if($d['bose'.$ip]->s=='On') {
+			$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+			if (isset($status)) {
+				$status = json_decode(json_encode(simplexml_load_string(mb_convert_encoding($status, 'UTF-8', mb_detect_encoding($status, 'UTF-8, ISO-8859-1', true)))), true);
+				if (is_array($status)) {
+					if((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE')||(isset($status['@attributes']['source'])&&$status['@attributes']['source']=='UPNP')) {
+						bosekey("POWER", 0, $ip,basename(__FILE__).':'.__LINE__);
+						store('bose'.$ip, 'Off');
+					}
+				}
+			}
+		}
+		continue;
+	}
 //	continue;
 	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
-   
 	if (isset($status)) {
 		$status = json_decode(json_encode(simplexml_load_string(mb_convert_encoding($status, 'UTF-8', mb_detect_encoding($status, 'UTF-8, ISO-8859-1', true)))), true);
 		if (is_array($status)) {

@@ -1,5 +1,6 @@
 <?php
 if ($status=='On') {
-	$item='rkamerl';
-	if ($d[$item]->s<100) sl($item, 100, basename(__FILE__).':'.__LINE__);
+	sl('rkamerl', 100, basename(__FILE__).':'.__LINE__);
+	sl('rkamerr', 100, basename(__FILE__).':'.__LINE__);
+	sl('kamer', 0, basename(__FILE__).':'.__LINE__,true);
 }
