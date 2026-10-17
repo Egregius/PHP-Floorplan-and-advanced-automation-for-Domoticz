@@ -6,6 +6,7 @@ import threading
 import requests
 import re
 import html
+import json
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -27,7 +28,6 @@ RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
 ALLOWED_KEYS = {
 	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "reltime", "trackduration", "bitdepth", "samplerate", "bitrate", "actualQuality"
 }
-RAW_KEYS = {"currenttrackuri"}
 BOTH_KEYS = {"artist", "title"}
 
 mqtt_client = mqtt.Client(client_id="wiim_bridge", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
@@ -40,7 +40,9 @@ current_playback_state = {
 	"transportstate": "STOPPED",
 	"track_started_at": "",
 	"trackduration": "0:00",
-	"title": ""
+	"title": "",
+	"artist": "",
+	"currenttrackuri": ""
 }
 state_lock = threading.Lock()
 
@@ -94,7 +96,7 @@ def time_to_seconds(t_str):
 def format_track_time(time_str):
 	if not time_str or time_str == 'NOT_IMPLEMENTED':
 		return '0:00'
-	parts = time_str.split(':')
+	parts = str(time_str).split(':')
 	if len(parts) == 3:
 		try:
 			hours = int(parts[0])
@@ -115,10 +117,10 @@ def mqtt_publish(subtopic, value, retain=True):
 	last_published_state[subtopic] = value
 	if mqtt_connected:
 		if subtopic in BOTH_KEYS:
-			mqtt_client.publish(f"wiim_raw/wiim_{subtopic}", value, retain=retain, qos=1)
+			# Voor de GUI sturen we de losse velden nog wel naar d/wiim/
 			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
-		elif subtopic in RAW_KEYS:
-			mqtt_client.publish(f"wiim_raw/wiim_{subtopic}", value, retain=retain, qos=1)
+		elif subtopic == "currenttrackuri":
+			pass # Doen we via het JSON state pakket
 		else:
 			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
 
@@ -127,9 +129,6 @@ def parse_and_publish_all(data_dict):
 	with state_lock:
 		old_state = current_playback_state.get("transportstate")
 		new_state = data_dict.get("transportstate", old_state)
-		old_title = current_playback_state.get("title")
-		new_title = data_dict.get("title", old_title)
-
 		state_changed = (old_state != new_state)
 
 		if "trackduration" in data_dict:
@@ -148,13 +147,30 @@ def parse_and_publish_all(data_dict):
 			start_time = datetime.now()
 			current_playback_state["track_started_at"] = start_time.isoformat()
 
+		track_meta_changed = False
 		for key, val in data_dict.items():
 			if val is not None and val != "":
 				k_lower = key.lower()
 				if k_lower in ALLOWED_KEYS:
-					if k_lower != "reltime":
-						current_playback_state[k_lower] = val
-					mqtt_publish(k_lower, val)
+					if current_playback_state.get(k_lower) != val:
+						if k_lower != "reltime":
+							current_playback_state[k_lower] = val
+						if k_lower in BOTH_KEYS or k_lower == "currenttrackuri":
+							track_meta_changed = True
+						mqtt_publish(k_lower, val)
+
+		# Stuur één atomair JSON-pakket naar wiim_raw/wiim_state voor PHP
+		if track_meta_changed and mqtt_connected:
+			state_payload = {
+				"artist": current_playback_state.get("artist", ""),
+				"title": current_playback_state.get("title", ""),
+				"currenttrackuri": current_playback_state.get("currenttrackuri", "")
+			}
+			json_str = json.dumps(state_payload)
+			state_topic = "wiim_raw"
+			if last_published_state.get(state_topic) != json_str:
+				last_published_state[state_topic] = json_str
+				mqtt_client.publish(state_topic, json_str, retain=True, qos=1)
 
 		if state_changed and new_state == "PLAYING" and avtransport_control_url:
 			def delayed_fetch():
@@ -322,7 +338,7 @@ def subscription_loop():
 
 def position_poll_loop():
 	while True:
-		time.sleep(20)
+		time.sleep(60)
 		if avtransport_control_url:
 			fetch_position_info()
 
