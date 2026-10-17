@@ -77,7 +77,7 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$lastcheck, &$time, $user) {
     // Statische array om bij te houden wat we al hebben verwerkt voor de huidige track
     static $lastTrackId = '';
     static $lastArtist = '';
@@ -120,7 +120,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
         $currentTrackId = $d['wiim']['trackid'] ?? '';
         $currentArtist  = $d['wiim']['artist'] ?? '';
         $currentTitle   = $d['wiim']['title'] ?? '';
-
+		$resolvedTitle = 'UNKNOWN';
         if (!empty($currentTrackId) && !empty($currentArtist) && !empty($currentTitle)) {
             
             // Check of er daadwerkelijk een nieuw nummer is gestart
@@ -135,7 +135,6 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
                 $d['wiim']['score'] = '?';
                 $d['wiim']['genre'] = '?';
                 $d['wiim']['added_at'] = '?';
-                $resolvedTitle = 'UNKNOWN';
                 
                 $db = Database::getInstance();
                 $playlists_config = [
@@ -232,6 +231,13 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
 						}
 					}
 				}
+				if($resolvedTitle == 'UNKNOWN') {
+					$stmt = $db->prepare("SELECT track_id FROM track_add WHERE track_id = ? LIMIT 1");
+					$stmt->execute([$currentTrackId]);
+					$row = $stmt->fetch(PDO::FETCH_ASSOC);
+					if ($row) $resolvedTitle='NEW';
+					}
+				}
 				lg('resolvedTitle = '.$resolvedTitle, 'mediaplayer');
                 // Publiceer de verrijkte data door
                 publishmqtt('d/wiim/wiim_cleantitle', $resolvedTitle);
@@ -247,7 +253,7 @@ $mqtt->subscribe('d/wiim/+', function (string $topic, string $status) use ($star
 					}
 				}
             }
-        }
+        
 
     } catch (Throwable $e) {
         lg("Fout in MQTT {$user}: " . __LINE__ . ' ' . $topic . ' ' . $e->getMessage(), 'mediaplayer');
@@ -275,7 +281,7 @@ $mqtt->publish(
 while (true) {
 	$time = time();
     $mqtt->loopOnce($time);
-    usleep(500000);
+    usleep(300000);
 }
 $mqtt->disconnect();
 lg("🛑 MQTT {$user} loop stopped ".__FILE__,'mediaplayer');

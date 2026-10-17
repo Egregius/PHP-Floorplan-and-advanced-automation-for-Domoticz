@@ -112,7 +112,7 @@ def mqtt_publish(subtopic, value, retain=True):
 		return
 	last_published_state[subtopic] = value
 	if mqtt_connected:
-		topic = f"d/wiim/wiim_{subtopic}"
+		topic = f"wiim_raw/wiim_{subtopic}"
 		mqtt_client.publish(topic, value, retain=retain, qos=1)
 
 def parse_and_publish_all(data_dict):
