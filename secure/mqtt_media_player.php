@@ -77,26 +77,16 @@ $mqtt->subscribe('homeassistant/media_player/+/source',function (string $topic,s
 	}
 },MqttClient::QOS_AT_LEAST_ONCE);
 
-$mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($startloop, $validDevices, &$d, &$lastcheck, &$time, $user) {
+$mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use (&$d, &$lastcheck, &$time, $user) {
 	static $lasttrackid = '';
 	static $lastartist = '';
 	static $lasttitle = '';
 	static $lastscore = '';
 	static $lastgenre = '';
 	static $lastadded_at = '';
-	
-	static $lastalbum = '';
-	static $lastalbumart = '';
-	static $lastbitdepth = '';
-	static $lastsamplerate = '';
-	static $lastbitrate = '';
-
 	static $current = [];
-
 	try {
 		$subtopic = str_replace('wiim_raw/', '', $topic);
-
-		// Behandel elk topic expliciet; geen blinde default meer
 		switch ($subtopic) {
 			case 'wiim_reltime':
 				publishmqtt("d/wiim/wiim_reltime", $status);
@@ -105,54 +95,33 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($st
 				$time = time();
 				$current['wiim_artist'] = $status;
 				publishmqtt("d/wiim/wiim_artist", $status);
-				return;
+				break;
 			case 'wiim_title':
 				$current['wiim_title'] = $status;
 				publishmqtt("d/wiim/wiim_title", $status);
-				return;
+				break;
 			case 'wiim_currenttrackuri':
 				$status=str_replace('spotify:track:', '', $status);
 				publishmqtt("d/wiim/wiim_trackid", $status);
 				$current['wiim_trackid'] = $status;
-				return;
+				break;
 			case 'wiim_album':
-				$current['wiim_album'] = $status;
-				if ($status !== $lastalbum) {
-					publishmqtt("d/wiim/wiim_album", $status);
-					$lastalbum = $status;
-				}
+				publishmqtt("d/wiim/wiim_album", $status);
 				return;
 			case 'wiim_album_art':
-				$current['wiim_album_art'] = $status;
-				if ($status !== $lastalbumart) {
-					publishmqtt("d/wiim/wiim_album_art", $status);
-					$lastalbumart = $status;
-				}
+				publishmqtt("d/wiim/wiim_album_art", $status);
 				return;
 			case 'wiim_bitdepth':
-				$current['wiim_bitdepth'] = $status;
-				if ($status !== $lastbitdepth) {
-					publishmqtt("d/wiim/wiim_bitdepth", $status);
-					$lastbitdepth = $status;
-				}
+				publishmqtt("d/wiim/wiim_bitdepth", $status);
 				return;
 			case 'wiim_samplerate':
-				$current['wiim_samplerate'] = $status;
-				if ($status !== $lastsamplerate) {
-					publishmqtt("d/wiim/wiim_samplerate", $status);
-					$lastsamplerate = $status;
-				}
+				publishmqtt("d/wiim/wiim_samplerate", $status);
 				return;
 			case 'wiim_bitrate':
-				$current['wiim_bitrate'] = $status;
-				if ($status !== $lastbitrate) {
-					publishmqtt("d/wiim/wiim_bitrate", $status);
-					$lastbitrate = $status;
-				}
+				publishmqtt("d/wiim/wiim_bitrate", $status);
 				return;
 			case 'wiim_transportstate':
 			case 'wiim_trackduration':
-				$current[$subtopic] = $status;
 				publishmqtt("d/wiim/{$subtopic}", $status);
 				return;
 			default:
@@ -162,15 +131,16 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($st
 		$artist = $current['wiim_artist'] ?? '';
 		$title = $current['wiim_title'] ?? '';
 		if (!empty($trackid) && !empty($artist) && !empty($title)) {
-			if ($trackid !== $lasttrackid) {
+			lg($artist.' '.$title, 'mediaplayer');
+			if ($trackid !== $lasttrackid || $artist !== $lastartist || $title !== $lasttitle) {
 				$lasttrackid = $trackid;
 				$lastartist = $artist;
 				$lasttitle = $title;
 
 				$resolvedtitle = 'UNKNOWN';
-				$score = '';
-				$genre = '';
-				$added_at = '';
+				$score = '?';
+				$genre = '?';
+				$added_at = '?';
 
 				$db = Database::getInstance();
 				$playlists_config = [
@@ -279,7 +249,7 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use ($st
 				lg('resolvedTitle = ' . $resolvedtitle, 'mediaplayer');
 				
 				// Publiceer resolvedtitle wel, maar exclusief via jouw eigen controle
-				publishmqtt('d/wiim/wiim_cleanttitle', $resolvedtitle);
+				publishmqtt('d/wiim/wiim_cleantitle', $resolvedtitle);
 				
 				if ($score !== $lastscore) {
 					publishmqtt('d/wiim/wiim_score', $score);
