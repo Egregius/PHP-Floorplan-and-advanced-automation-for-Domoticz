@@ -98,6 +98,7 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use (&$d
 			case 'wiim_currenttrackuri':
 				$status=str_replace('spotify:track:', '', $status);
 				$current['wiim_trackid'] = $status;
+				publishmqtt('d/wiim/wiim_trackid', $status);
 				break;
 			default:
 				return;
@@ -198,7 +199,7 @@ $mqtt->subscribe('wiim_raw/+', function (string $topic, string $status) use (&$d
 													$bestMatch = $row;
 												}
 											}
-											if ($bestMatch && $highestSimilar >= 90) {
+											if ($bestMatch && $highestSimilar >= 70) {
 												$score = (int)$bestMatch['score'];
 												$added_at = formatBE($bestMatch['added_at']);
 												$genre = $playlists_config[$bestMatch['playlist_id']] ?? '?';

@@ -27,7 +27,8 @@ RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
 ALLOWED_KEYS = {
 	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "reltime", "trackduration", "bitdepth", "samplerate", "bitrate", "actualQuality"
 }
-RAW_KEYS = {"artist", "title", "currenttrackuri"}
+RAW_KEYS = {"currenttrackuri"}
+BOTH_KEYS = {"artist", "title"}
 
 mqtt_client = mqtt.Client(client_id="wiim_bridge", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
 mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
@@ -113,12 +114,13 @@ def mqtt_publish(subtopic, value, retain=True):
 		return
 	last_published_state[subtopic] = value
 	if mqtt_connected:
-		if subtopic in RAW_KEYS:
+		if subtopic in BOTH_KEYS:
 			mqtt_client.publish(f"wiim_raw/wiim_{subtopic}", value, retain=retain, qos=1)
 			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
+		elif subtopic in RAW_KEYS:
+			mqtt_client.publish(f"wiim_raw/wiim_{subtopic}", value, retain=retain, qos=1)
 		else:
 			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
-		
 
 def parse_and_publish_all(data_dict):
 	global current_playback_state
@@ -132,6 +134,9 @@ def parse_and_publish_all(data_dict):
 
 		if "trackduration" in data_dict:
 			data_dict["trackduration"] = format_track_time(data_dict["trackduration"])
+
+		if "reltime" in data_dict:
+			data_dict["reltime"] = format_track_time(data_dict["reltime"])
 
 		if "reltime" in data_dict and data_dict["reltime"] and data_dict["reltime"] != "NOT_IMPLEMENTED":
 			reltime_sec = time_to_seconds(data_dict["reltime"])
