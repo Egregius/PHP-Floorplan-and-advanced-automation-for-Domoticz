@@ -85,6 +85,7 @@ $mqtt->subscribe('wiim_raw', function (string $topic, string $payload) use (&$d,
 	static $lastscore = '';
 	static $lastgenre = '';
 	static $lastadded_at = '';
+	static $lastresolvedtitle = '';
 	static $current = [];
 	try {
 		$data = json_decode($payload, true);
@@ -100,7 +101,7 @@ $mqtt->subscribe('wiim_raw', function (string $topic, string $payload) use (&$d,
 		publishmqtt('d/wiim/wiim_trackid', $trackid);
 		$artist = $current['wiim_artist'] ?? '';
 		$title = $current['wiim_title'] ?? '';
-
+		$newtitle=false;
 		if (!empty($trackid) && !empty($artist) && !empty($title)) {
 			lg($artist.' '.$title, 'mediaplayer');
 			if ($trackid !== $lasttrackid || $artist !== $lastartist || $title !== $lasttitle) {
@@ -219,9 +220,13 @@ $mqtt->subscribe('wiim_raw', function (string $topic, string $payload) use (&$d,
 
 				lg('resolvedTitle = ' . $resolvedtitle, 'mediaplayer');
 				
-				publishmqtt('d/wiim/wiim_cleantitle', $resolvedtitle);
+				if ($resolvedtitle !== $lastresolvedtitle) {
+					publishmqtt('d/wiim/wiim_cleantitle', $resolvedtitle);
+					$lastresolvedtitle=$resolvedtitle;
+					$newtitle=true;
+				}
 				
-				if ($score !== $lastscore) {
+				if ($score !== $lastscore || $newtitle==true) {
 					publishmqtt('d/wiim/wiim_score', $score);
 					$lastscore = $score;
 				}
