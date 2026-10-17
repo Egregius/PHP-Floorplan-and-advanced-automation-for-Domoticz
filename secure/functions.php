@@ -1408,7 +1408,7 @@ function score($score) {
 		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
 		if(substr($d['boseliving']->m,0,7)=='NoScore'||$score==9999||$score==null) {
 			Wiim('setPlayerCmd:next');
-			usleep(1390000);
+			usleep(1300000);
 			Wiim('setPlayerCmd:seek:59');
 		}
 		publishmqtt('d/wiim/wiim_score', $score);

@@ -179,7 +179,7 @@ def parse_and_publish_all(data_dict):
 			threading.Thread(target=delayed_fetch, daemon=True).start()
 
 def parse_didl_metadata(didl_xml, current_data):
-	if not didl_xml or didl_xml == "NOT_IMPLEMENTED":
+	if not didl_xml or didl_xml == 'NOT_IMPLEMENTED':
 		return current_data
 	try:
 		prev = None
@@ -188,7 +188,12 @@ def parse_didl_metadata(didl_xml, current_data):
 			prev = curr
 			curr = html.unescape(curr)
 			
+		# Filter eventuele ongeldige controlekarakters eruit die XML stukmaken
+		curr = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]', '', curr)
+		
+		# Fix losse ampersands die geen onderdeel zijn van een geldige entiteit
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
+		
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
 			'dc': 'http://purl.org/dc/elements/1.1/',
@@ -205,9 +210,8 @@ def parse_didl_metadata(didl_xml, current_data):
 		current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else current_data.get("bitrate", "")
 		current_data["actualQuality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else current_data.get("actualQuality", "")
 	except Exception as e:
-		log(f"⚠️ Fout bij parsen DIDL: {e}")
+		log(f"⚠️ Fout bij parsen DIDL: {e} (XML was: {didl_xml[:100]}...)")
 	return current_data
-
 def process_event_xml(xml_content):
 	data = {}
 	try:
