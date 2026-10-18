@@ -186,8 +186,10 @@ def parse_didl_metadata(didl_xml, current_data):
 			prev = curr
 			curr = html.unescape(curr)
 			
-		curr = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]', '', curr)
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
+		
+		# Beveiliging: escape ontsnapte < tekens binnen element-tekst naar &lt;
+		fixed_xml = re.sub(r'>([^<]+)<', lambda m: '>' + m.group(1).replace('<', '&lt;') + '<', fixed_xml)
 		
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
