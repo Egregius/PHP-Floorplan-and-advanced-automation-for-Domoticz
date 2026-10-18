@@ -410,9 +410,9 @@ function publishmqtt($topic,$msg,$log='') {
 	}
 	if($log!='') lg('publishmqtt '.$topic.' '.$msg);
 }
-function storemode($name,$mode,$msg='',$log='store') {
+function storemode($name,$mode,$msg='',$log='store',$force=false) {
 	global $d,$user;
-    if((string)$d[$name]->m==(string)$mode) return;
+    if(!$force&&(string)$d[$name]->m==(string)$mode) return;
     for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			$d['time']??=time();

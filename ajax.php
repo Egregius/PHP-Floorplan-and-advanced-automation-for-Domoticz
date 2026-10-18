@@ -258,9 +258,9 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 			$dow = date("w");
 			if ($dow == 6 || $dow == 0) $pop=25;
 			else $pop=0;
-			storemode('boseliving', $pop, basename(__FILE__).':'.__LINE__);
+			storemode('boseliving', 'On;'.$pop, basename(__FILE__).':'.__LINE__,true);
 		} else {
-			storemode('boseliving', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
+			storemode('boseliving', $_REQUEST['action'], basename(__FILE__).':'.__LINE__,true);
 		}
 	} elseif ($_REQUEST['device']=='luifel'&&$_REQUEST['command']=='luifel') {
 		storemode('luifel', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
@@ -269,8 +269,6 @@ elseif (isset($_REQUEST['device'])&&isset($_REQUEST['command'])&&isset($_REQUEST
 	} elseif ($_REQUEST['command']=='water') {
 		storemode('water', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 		sw('water', 'On');
-	} elseif ($_REQUEST['command']=='autoshuffle') {
-		storemode('boseliving', $_REQUEST['action'], basename(__FILE__).':'.__LINE__);
 	} else {
 		if ($_REQUEST['device']=='nas') {
 			if ($_REQUEST['action']=='On') {
