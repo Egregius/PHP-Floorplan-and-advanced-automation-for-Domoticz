@@ -158,7 +158,7 @@ elseif (isset($_REQUEST['bose'])&&$_REQUEST['bose']>=101&&$_REQUEST['bose']<=109
 										$bestMatch = $row;
 									}
 								}
-								if ($bestMatch && $highestSimilar >= 60) {
+								if ($bestMatch && $highestSimilar >= 70) {
 									$d['score'] = (int)$bestMatch['score'];
 									$d['added_at'] = formatBE($bestMatch['added_at']);
 									$d['genre'] = $playlists_config[$bestMatch['playlist_id']];
