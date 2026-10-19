@@ -50,7 +50,7 @@ foreach ($devices as $ip => $vol) {
 									if($d['auto']->s=='On'&&substr($d['boseliving']->m,0,7)!='NoScore') {
 										$data=json_decode(curl('https://home.egregius.be/ajax.php?bose=101'),true);
 										if (isset($data['score'])) {
-											if ($data['score']==19) {
+											if ($data['score']==1) {
 												if($d['spotify']->s!='On'&&$d['lgtv']->s!='On'&&past('spotify')>6) sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
 											} else {
 												if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
