@@ -1412,11 +1412,6 @@ function score($score) {
 			Wiim('setPlayerCmd:seek:59');
 		}
 		publishmqtt('d/wiim/wiim_score', $score);
-		$db=Database::getInstance();
-		$stmt = $db->prepare("SELECT count(track_id) FROM track_mapping WHERE score = ?");
-		$stmt->execute([19]);
-		$aantal = $stmt->fetchColumn();
-		publishmqtt('d/wiim/wiim_noscore', $aantal);
 	} else lg('updatescore nok');
 }
 function updatescore($cleantitle, $score, $track_id) {

@@ -10,12 +10,12 @@ if(isset($_GET['bose'],$_GET['key'])) {
 	require 'functions.php';
 	$d=fetchdata();
 	if($_GET['bose']==101) {
-		if($_GET['key']==1) score(60);
-		elseif($_GET['key']==2)  score(100);
-		elseif($_GET['key']==3)  score(140);
-		elseif($_GET['key']==4)  score(200);
-		elseif($_GET['key']==5)  score(320);
-		elseif($_GET['key']==6)  score(null);
+		if($_GET['key']==1)		score(180);
+		elseif($_GET['key']==2) score(200);
+		elseif($_GET['key']==3) score(230);
+		elseif($_GET['key']==4) score(290);
+		elseif($_GET['key']==5) score(350);
+		elseif($_GET['key']==6) score(null);
 		elseif($_GET['key']=='aux') {
 
 		} elseif($_GET['key']=='power') {

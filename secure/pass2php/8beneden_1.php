@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	if(substr($d['boseliving']->m,0,7)=='NoScore') score(60);
+	if(substr($d['boseliving']->m,0,7)=='NoScore') score(140);
 	else {
 		if ($d['eettafel']->s==0) {
 			if ($d['time']<=strtotime('9:00')) sl('eettafel', 35, basename(__FILE__).':'.__LINE__);
