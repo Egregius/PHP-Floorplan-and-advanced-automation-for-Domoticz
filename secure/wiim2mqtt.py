@@ -180,13 +180,10 @@ def parse_didl_metadata(didl_xml, current_data):
 	if not didl_xml or didl_xml == "NOT_IMPLEMENTED":
 		return current_data
 	try:
-		prev = None
-		curr = didl_xml
-		while prev != curr:
-			prev = curr
-			curr = html.unescape(curr)
-			
-		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
+		# Fix enkel losse ampersands (bijv. "Dimitri Vegas & Like Mike" -> "Dimitri Vegas &amp; Like Mike")
+		# Laat &lt;, &gt;, &amp; etc. met rust zodat de XML-parser ze correct kan verwerken.
+		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', didl_xml)
+		
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
 			'dc': 'http://purl.org/dc/elements/1.1/',
@@ -197,6 +194,7 @@ def parse_didl_metadata(didl_xml, current_data):
 		def get_text(path):
 			node = track_root.find(path, ns)
 			if node is not None and node.text:
+				# Pas na het parsen unescapen we eventuele entiteiten naar normale tekst
 				return html.unescape(node.text)
 			return ""
 
@@ -209,7 +207,7 @@ def parse_didl_metadata(didl_xml, current_data):
 		current_data["bitrate"] = get_text('.//song:bitrate') or current_data.get("bitrate", "")
 		current_data["actualQuality"] = get_text('.//song:actualQuality') or current_data.get("actualQuality", "")
 	except Exception as e:
-		log(f"⚠️ Fout bij parsen DIDL: {e}")
+		log(f"⚠️ Fout bij parsen DIDL: {e}\n--- VOLLEDIGE PROBLEMATISCHE XML ---\n{didl_xml}\n-----------------------------------")
 	return current_data
 
 def process_event_xml(xml_content):
