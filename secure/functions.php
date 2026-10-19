@@ -1400,7 +1400,7 @@ function streborn($ip, $endpoint,$payload, $method='PUT') {
 }
 function score($score) {
 	global $d;
-	$data=curl('http://192.168.2.2/ajax.php?bose=101');
+	$data=curl('http://192.168.2.2/ajax.php?bose=101&details');
 	$data=json_decode($data,true);
 	if(isset($data['cleantitle'])&&updatescore($data['cleantitle'],$score,$data['track_id'])) {
 		lg('updatescore ok '.$data['cleantitle'].' '.$score);
