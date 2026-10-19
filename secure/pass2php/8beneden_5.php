@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	if(substr($d['boseliving']->m,0,7)=='NoScore') score(260);
+	if(substr($d['boseliving']->m,0,7)=='NoScore') score(230);
 	else {
 		if ($d['eettafel']->s==0) {
 			sl('eettafel', 35, basename(__FILE__).':'.__LINE__);

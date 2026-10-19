@@ -1,6 +1,6 @@
 <?php
 if ($status=='On') {
-	if(substr($d['boseliving']->m,0,7)=='NoScore') score(300);
+	if(substr($d['boseliving']->m,0,7)=='NoScore') score(290);
 	else {
 		if ($d['mac']->s=='Off') sw('mac', 'On', basename(__FILE__).':'.__LINE__, true);
 		if ($d['dag']->s<1&&$d['bureellinks']->s<30) {

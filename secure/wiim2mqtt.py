@@ -26,7 +26,7 @@ LOG_PATH = "/var/log/mqtt/wiim.log"
 RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
 
 ALLOWED_KEYS = {
-	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "reltime", "trackduration", "bitdepth", "samplerate", "bitrate", "actualQuality"
+	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "trackduration", "bitdepth", "samplerate", "bitrate", "actualQuality"
 }
 BOTH_KEYS = {"artist", "title"}
 
@@ -370,8 +370,6 @@ def local_tick_loop():
 if __name__ == "__main__":
 	log("🚀 WiiM UPnP to MQTT Bridge gestart")
 	threading.Thread(target=run_http_server, daemon=True).start()
-	threading.Thread(target=position_poll_loop, daemon=True).start()
-	threading.Thread(target=local_tick_loop, daemon=True).start()
 	try:
 		subscription_loop()
 	except KeyboardInterrupt:
