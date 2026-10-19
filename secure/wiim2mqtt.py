@@ -188,8 +188,14 @@ def parse_didl_metadata(didl_xml, current_data):
 			
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
 		
-		# Beveiliging: escape ontsnapte < tekens binnen element-tekst naar &lt;
-		fixed_xml = re.sub(r'>([^<]+)<', lambda m: '>' + m.group(1).replace('<', '&lt;') + '<', fixed_xml)
+		# Veilig maken van tekstinhoud binnen bekende metadata tags
+		for tag in ['dc:title', 'upnp:artist', 'upnp:album', 'upnp:albumArtURI']:
+			fixed_xml = re.sub(
+				f'(<{tag}[^>]*>)(.*?)(</{tag}>)',
+				lambda m: m.group(1) + m.group(2).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;') + m.group(3),
+				fixed_xml,
+				flags=re.DOTALL
+			)
 		
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
@@ -207,9 +213,9 @@ def parse_didl_metadata(didl_xml, current_data):
 		current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else current_data.get("bitrate", "")
 		current_data["actualQuality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else current_data.get("actualQuality", "")
 	except Exception as e:
-		log(f"⚠️ Fout bij parsen DIDL: {e}\n--- VOLLEDIGE PROBLEMATISCHE XML ---\n{didl_xml}\n-----------------------------------")
+		log(f"⚠️ Fout bij parsen DIDL: {e}")
 	return current_data
-
+	
 def process_event_xml(xml_content):
 	data = {}
 	try:

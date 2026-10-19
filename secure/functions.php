@@ -1340,8 +1340,7 @@ function cleanTitle(string $artists, string $title): string {
             'feat', 'ft', 'featuring','original',
             'festivalmix', 'mixedit', 'originalmix', 'mix',
             'radioedit', 'radiomix', 'radioversion', 'radio',
-            'remastered', 'remaster',
-            'remix', 'rework',
+            'remastered', 'remaster', 'remixed', 'remix', 'rework','reworked',
             'singleversion', 'version',
             'videoedit', '7"',
         ];
