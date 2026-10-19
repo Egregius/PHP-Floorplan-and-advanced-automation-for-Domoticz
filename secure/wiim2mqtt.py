@@ -187,16 +187,6 @@ def parse_didl_metadata(didl_xml, current_data):
 			curr = html.unescape(curr)
 			
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', curr)
-		
-		# Veilig maken van tekstinhoud binnen bekende metadata tags
-		for tag in ['dc:title', 'upnp:artist', 'upnp:album', 'upnp:albumArtURI']:
-			fixed_xml = re.sub(
-				f'(<{tag}[^>]*>)(.*?)(</{tag}>)',
-				lambda m: m.group(1) + m.group(2).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;') + m.group(3),
-				fixed_xml,
-				flags=re.DOTALL
-			)
-		
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
 			'dc': 'http://purl.org/dc/elements/1.1/',
@@ -204,18 +194,24 @@ def parse_didl_metadata(didl_xml, current_data):
 			'song': 'www.wiimu.com/song/'
 		}
 		
-		current_data["title"] = track_root.find('.//dc:title', ns).text if track_root.find('.//dc:title', ns) is not None else current_data.get("title", "")
-		current_data["artist"] = track_root.find('.//upnp:artist', ns).text if track_root.find('.//upnp:artist', ns) is not None else current_data.get("artist", "")
-		current_data["album"] = track_root.find('.//upnp:album', ns).text if track_root.find('.//upnp:album', ns) is not None else current_data.get("album", "")
-		current_data["album_art"] = track_root.find('.//upnp:albumArtURI', ns).text if track_root.find('.//upnp:albumArtURI', ns) is not None else current_data.get("album_art", "")
-		current_data["bitdepth"] = track_root.find('.//song:format_s', ns).text if track_root.find('.//song:format_s', ns) is not None else current_data.get("bitdepth", "")
-		current_data["samplerate"] = track_root.find('.//song:rate_hz', ns).text if track_root.find('.//song:rate_hz', ns) is not None else current_data.get("samplerate", "")
-		current_data["bitrate"] = track_root.find('.//song:bitrate', ns).text if track_root.find('.//song:bitrate', ns) is not None else current_data.get("bitrate", "")
-		current_data["actualQuality"] = track_root.find('.//song:actualQuality', ns).text if track_root.find('.//song:actualQuality', ns) is not None else current_data.get("actualQuality", "")
+		def get_text(path):
+			node = track_root.find(path, ns)
+			if node is not None and node.text:
+				return html.unescape(node.text)
+			return ""
+
+		current_data["title"] = get_text('.//dc:title') or current_data.get("title", "")
+		current_data["artist"] = get_text('.//upnp:artist') or current_data.get("artist", "")
+		current_data["album"] = get_text('.//upnp:album') or current_data.get("album", "")
+		current_data["album_art"] = get_text('.//upnp:albumArtURI') or current_data.get("album_art", "")
+		current_data["bitdepth"] = get_text('.//song:format_s') or current_data.get("bitdepth", "")
+		current_data["samplerate"] = get_text('.//song:rate_hz') or current_data.get("samplerate", "")
+		current_data["bitrate"] = get_text('.//song:bitrate') or current_data.get("bitrate", "")
+		current_data["actualQuality"] = get_text('.//song:actualQuality') or current_data.get("actualQuality", "")
 	except Exception as e:
 		log(f"⚠️ Fout bij parsen DIDL: {e}")
 	return current_data
-	
+
 def process_event_xml(xml_content):
 	data = {}
 	try:
