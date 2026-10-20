@@ -39,8 +39,8 @@ if (isset($_REQUEST['zon'])) {
 		$d=fetchdata();
 		if($_REQUEST['carplay']!=$d['carplay']->s) store('carplay',$_REQUEST['carplay'],basename(__FILE__).':'.__LINE__);
 		$dow = date("w");
-		if ($dow == 6 || $dow == 0) $pop='On;25';
-		else $pop='On;0';
+		if ($dow == 6 || $dow == 0) $pop='Carplay;25';
+		else $pop='Carplay;0';
 		if($d['boseliving']->s=='On') {
 			if($_REQUEST['carplay']=='On') {
 				sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__);
