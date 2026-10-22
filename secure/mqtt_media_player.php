@@ -87,6 +87,7 @@ $mqtt->subscribe('wiim_raw', function (string $topic, string $payload) use (&$d,
 	static $lastadded_at = '';
 	static $lastresolvedtitle = '';
 	static $current = [];
+	
 	try {
 		$data = json_decode($payload, true);
 		if (!is_array($data) || !isset($data['artist'], $data['title'], $data['currenttrackuri'])) {
@@ -218,7 +219,7 @@ $mqtt->subscribe('wiim_raw', function (string $topic, string $payload) use (&$d,
 					}
 				}
 
-				lg('resolvedTitle = ' . $resolvedtitle, 'mediaplayer');
+				lg('resolvedTitle = ' . $resolvedtitle.' score='.$score, 'mediaplayer');
 				
 				if ($resolvedtitle !== $lastresolvedtitle) {
 					publishmqtt('d/wiim/wiim_cleantitle', $resolvedtitle);
