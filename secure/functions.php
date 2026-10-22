@@ -155,6 +155,7 @@ function fhall() {
 		shell_exec('php /var/www/setSSID.php \'{"main24":1,"main5":1}\' > /dev/null 2>&1 &');
 		if($d['Egregius']->s!=1) store('Egregius',1,basename(__FILE__).':'.__LINE__);
 		if($d['Egregius5']->s!=1) store('Egregius5',1,basename(__FILE__).':'.__LINE__);
+		if($d['time']<$t+600&&$d['badkamerpower']->s=='Off') sw('badkamerpower', 'On', basename(__FILE__).':'.__LINE__);
 	}
 }
 function fbadkamer($level,$power=false) {
