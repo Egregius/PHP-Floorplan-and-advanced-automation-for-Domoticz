@@ -144,7 +144,7 @@ foreach ($devices as $ip => $vol) {
 									$actualvol = json_decode(json_encode(simplexml_load_string($actualvol)), true);
 									if (is_array($actualvol)) {
 										if($actualvol['actualvolume']<35) {
-											bosevolume(35,101, 'Bose pas ingeschakeld');
+											bosevolume(35,101, 'Bose pas ingeschakeld, volume was '.$actualvol['actualvolume']);
 											$boseSetVolume=1;
 										}
 									}
