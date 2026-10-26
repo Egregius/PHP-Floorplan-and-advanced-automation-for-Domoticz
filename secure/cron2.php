@@ -75,7 +75,7 @@ while (1) {
 		}
 		if ($lastping < $time - 60) {
 			$lastping = $time;
-			$mqtt->publish('p', 'p');
+			publishmqtt('p', 'p');
 		}
 		if ($lastcheck < $time - 300) {
 			$lastcheck = $time;
