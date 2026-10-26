@@ -8,7 +8,7 @@ require '/var/www/authentication.php';
 if (isset($_REQUEST['device'])&&$_REQUEST['device']=='runsync'&&$_REQUEST['command']=='runsync') {
 	$action = $_REQUEST['action'] ?? '';
 	$urls = [
-		'garmingpx' => 'http://192.168.30.2:9000/hooks/garmingpx',
+		'garmingpx' => 'http://192.168.20.21:9000/hooks/garmingpx',
 		'syncfotos' => 'http://192.168.30.2:9000/hooks/syncfotos',
 		'synccamera' => 'http://192.168.30.2:9000/hooks/synccamera',
 		'agendas' => 'http://192.168.20.21:9000/hooks/agendas',
