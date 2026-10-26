@@ -47,8 +47,11 @@ if (isset($_REQUEST['zon'])) {
 				if ($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
 			} elseif($_REQUEST['carplay']=='Off') {
 				if($d['weg']->s==0&&$d['guy']->s=='thuis') {
-					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
-					if ($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
+					$time=time();
+					if($time>strtotime('7:00')&&$time<strtotime('19:00')) {
+						sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
+						if ($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
+					}
 				} else {
 					if ($d['boseliving']->m!='Off') storemode('boseliving','Off',basename(__FILE__).':'.__LINE__);
 				}
@@ -58,8 +61,11 @@ if (isset($_REQUEST['zon'])) {
 				if ($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
 			} elseif($_REQUEST['carplay']=='Off') {
 				if($d['weg']->s==0&&$d['guy']->s=='thuis') {
-					sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
-					if ($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
+					$time=time();
+					if($time>strtotime('7:00')&&$time<strtotime('19:00')) {
+						sw('boseliving', 'On',basename(__FILE__).':'.__LINE__);
+						if ($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
+					}
 				} else {
 					if ($d['boseliving']->m!='Off') storemode('boseliving','Off',basename(__FILE__).':'.__LINE__);
 				}
