@@ -293,7 +293,7 @@ $currentHour = (int)date('G');
 $currentMinute = (int)date('i');
 $isPastDeadline = ($currentHour > $deadlineHour) || ($currentHour == $deadlineHour && $currentMinute >= $deadlineMinute);
 
-$mustForceGrohe = !$groheRuntime['automatisch'] && (($d['dag']->s < 7) || $isPastDeadline);
+$mustForceGrohe = (!$groheRuntime['automatisch'] && (($d['dag']->s < 7) || $isPastDeadline)||($d['grohered']->s=='On'&&past('8keuken_8')<1800));
 $onWindow = socAdjustedWindow($d['c'], 30, 12);
 $offWindow = socAdjustedWindow($d['c'], 12, 30);
 
