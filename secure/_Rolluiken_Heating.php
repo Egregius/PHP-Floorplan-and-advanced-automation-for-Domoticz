@@ -16,60 +16,57 @@ if ($d['auto']->s=='On') {
 		if ($d['lgtv']->s!='On'&&$d['rliving']->s>0&&($d['ralex']->s<=1||$time>=strtotime('8:30'))) sl('rliving', 0);
 		if ($d['dag']->s>$zonelevatie) {
 			if ($d['lgtv']->s!='On') {
-				foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) {
+				foreach (['rliving','rbureel','rkeukenl','rkeukenr'] as $i) {
 					if ($d[$i]->s>0&&past($i)>7200) sl($i, 0);
 				}
 			}
 		}
 	}
-	elseif ($time>=strtotime('15:00')&&$time<strtotime('16:00')&&$d['buiten_temp']->s<3) {
-		foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<12&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-		foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<12&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+	elseif ($time>=strtotime('15:00')&&$time<strtotime('16:00')&&$d['buiten_temp']->s<=3) {
+		foreach (['waskamer', 'alex'] as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<=12&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+		foreach (['kamerl', 'kamerr'] as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<=12&&$d['r'.$i]->s<50) sl('r'.$i, 100);
 	}
 	elseif ($time>=strtotime('16:00')&&$time<strtotime('18:00')) {
-		if ($d['dag']->s<$zonelevatie&&$d['buiten_temp']->s<10) {
-			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<13&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<13&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+		if ($d['dag']->s<=$zonelevatie&&$d['buiten_temp']->s<10) {
+			foreach (['waskamer', 'alex'] as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<=13&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (['kamerl', 'kamerr'] as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<=13&&$d['r'.$i]->s<50) sl('r'.$i, 100);
 
 			if ($d['dag']->s<0&&$d['buiten_temp']->s<5) {
-				foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
+				foreach (['rbureel','rkeukenl','rkeukenr'] as $i) if ($d[$i]->s<50) sl($i, 100);
 			} elseif ($d['dag']->s<-6&&$d['buiten_temp']->s<8) {
-				foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
+				foreach (['rbureel','rkeukenl','rkeukenr'] as $i) if ($d[$i]->s<50) sl($i, 100);
 			}
 		}
 	}
 	elseif ($time>=strtotime('18:00')&&$time<strtotime('22:00')) {
-		if ($d['dag']->s<-5) {
-			lg(__LINE__);
-			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<=16.5&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<=16.5&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+		if ($d['dag']->s<=-$zonelevatie) {
+			foreach (['waskamer', 'alex'] as $i) if ($d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (['kamerl', 'kamerr'] as $i) if ($d['r'.$i]->s<50) sl('r'.$i, 100);
 			if ($d['weg']->s>=1) {
-				foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
+				foreach (['rliving','rbureel','rkeukenl','rkeukenr'] as $i) if ($d[$i]->s<50) sl($i, 100);
 			} else {
-				foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) {
-					sl($i, 100);
-				}
+				foreach (['rbureel','rkeukenl','rkeukenr'] as $i) if ($d[$i]->s<50) sl($i, 100);
 			}
-		} elseif ($d['dag']->s<0) {
-			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<16&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<16&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+		} elseif ($d['dag']->s<=0) {
+			foreach (['waskamer', 'alex'] as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<=17&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (['kamerl', 'kamerr'] as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<=17&&$d['r'.$i]->s<50) sl('r'.$i, 100);
 			if ($d['weg']->s>=1) {
-				foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
+				foreach (['rliving','rbureel','rkeukenl','rkeukenr'] as $i) if ($d[$i]->s<50) sl($i, 100);
 			}
-		} elseif ($d['buiten_temp']->s<3) {
-			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+		} elseif ($d['buiten_temp']->s<=3) {
+			foreach (['waskamer', 'alex'] as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<=17&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (['kamerl', 'kamerr'] as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<=17&&$d['r'.$i]->s<50) sl('r'.$i, 100);
 		}
 	}
 	elseif ($time>=strtotime('22:00')) {
-		if ($d['weg']->s>0&&$d['dag']->s<0) {
-			foreach (array('rliving','rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
-			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-		} elseif ($d['dag']->s<0) {
-			foreach (array('rbureel','rkeukenl','rkeukenr') as $i) if ($d[$i]->s<50) sl($i, 100);
-			foreach (array('waskamer', 'alex') as $i) if ($d['raam'.$i]->s=='Open'&&$d[$i.'_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
-			foreach (array('kamerl', 'kamerr') as $i) if ($d['raamkamer']->s=='Open'&&$d['kamer_temp']->s<15&&$d['r'.$i]->s<50) sl('r'.$i, 100);
+		if ($d['weg']->s>0&&$d['dag']->s<=0) {
+			foreach (['rliving','rbureel','rkeukenl','rkeukenr'] as $i) if ($d[$i]->s<50) sl($i, 100);
+			foreach (['waskamer', 'alex'] as $i) if ($d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (['kamerl', 'kamerr'] as $i) if ($d['r'.$i]->s<50) sl('r'.$i, 100);
+		} elseif ($d['dag']->s<=0) {
+			foreach (['rbureel','rkeukenl','rkeukenr'] as $i) if ($d[$i]->s<50) sl($i, 100);
+			foreach (['waskamer', 'alex'] as $i) if ($d['r'.$i]->s<50) sl('r'.$i, 100);
+			foreach (['kamerl', 'kamerr'] as $i) if ($d['r'.$i]->s<50) sl('r'.$i, 100);
 		}
 	}
 }
