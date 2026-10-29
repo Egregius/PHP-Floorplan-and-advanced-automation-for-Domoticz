@@ -279,39 +279,3 @@ if ($d['steenterras']->s=='Off' && past('steenterras') > 60 && (
 file_put_contents('/dev/shm/cache/poolRuntime.json', json_encode($poolRuntime));
 */
 
-$groheFile = '/dev/shm/cache/groheRuntime.json';
-$groheRuntime = file_exists($groheFile) ? json_decode(file_get_contents($groheFile), true) : [];
-if (!isset($groheRuntime['date']) || $groheRuntime['date'] !== date('Y-m-d')) {
-	$groheRuntime = ['date' => date('Y-m-d'), 'automatisch' => false, 'lastCheck' => $time];
-}
-
-$dayOfWeek = (int)date('N');
-$isWorkDay = in_array($dayOfWeek, [1, 2, 4, 5]);
-$deadlineHour = $isWorkDay ? 18 : 12;
-$deadlineMinute = $isWorkDay ? 0 : 30;
-$currentHour = (int)date('G');
-$currentMinute = (int)date('i');
-$isPastDeadline = ($currentHour > $deadlineHour) || ($currentHour == $deadlineHour && $currentMinute >= $deadlineMinute);
-
-$mustForceGrohe = (!$groheRuntime['automatisch'] && (($d['dag']->s < 7) || $isPastDeadline)||($d['grohered']->s=='On'&&past('8keuken_8')<1800));
-$onWindow = socAdjustedWindow($d['c'], 30, 12);
-$offWindow = socAdjustedWindow($d['c'], 12, 30);
-
-if ($d['grohered']->s == 'Off' && past('grohered') > 60 && (
-		($d['c'] > 30 && rollingAbove('b', 0, $onWindow) && rollingBelow('n', -1200, $onWindow))
-		|| ($d['c'] > 26 && rollingAbove('b', 200, $onWindow) && rollingBelow('n', -1000, $onWindow))
-		|| ($d['c'] > 22 && rollingAbove('b', 400, $onWindow) && rollingBelow('n', -800, $onWindow))
-		|| ($d['c'] > 18 && rollingAbove('b', 600, $onWindow) && rollingBelow('n', -600, $onWindow))
-		|| $mustForceGrohe
-	)) {
-	sw('grohered', 'On', basename(__FILE__).':'.__LINE__);
-	$groheRuntime['automatisch'] = true;
-} elseif ($d['grohered']->s == 'On' && past('grohered') > 60 && !$mustForceGrohe && (
-		rollingAvg($rollingBuffers, 'n', $offWindow) > 300
-		|| ($d['c'] < 90 && rollingBelow('b', -20, $offWindow, 4))
-		|| $d['a'] > 1000
-	)) {
-	sw('grohered', 'Off', basename(__FILE__).':'.__LINE__);
-}
-
-file_put_contents($groheFile, json_encode($groheRuntime));

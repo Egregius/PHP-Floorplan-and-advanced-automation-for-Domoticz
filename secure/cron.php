@@ -30,13 +30,6 @@ if (file_exists('/dev/shm/cache/poolRuntime.json')) {
 }
 $steenautomatischaan = $poolRuntime['automatisch'] ?? false;
 
-$groheRuntime = ['date' => date('Y-m-d'), 'seconds' => 0, 'lastCheck' => $time, 'automatisch' => false];
-if (file_exists('/dev/shm/cache/poolRuntime.json')) {
-    $decoded = json_decode(file_get_contents('/dev/shm/cache/poolRuntime.json'), true);
-    if (is_array($decoded)) {
-        $groheRuntime = $decoded;
-    }
-}
 
 // Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
