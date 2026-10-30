@@ -73,7 +73,7 @@ while (1) {
 			$sleep = round($sleep * 1000000);
 			usleep($sleep);
 		}
-		if ($lastping < $time - 60) {
+		if ($lastping < $time - 60 && 1==2) {
 			$lastping = $time;
 			publishmqtt('p', 'p');
 		}
