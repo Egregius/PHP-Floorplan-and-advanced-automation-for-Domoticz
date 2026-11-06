@@ -72,6 +72,16 @@ if (isset($_REQUEST['zon'])) {
 			}
 		}
 		echo 'Carplay '.$_REQUEST['carplay'];
+	} elseif (isset($_REQUEST['vakantieplay'])) {
+		$d=fetchdata();
+		if($_REQUEST['vakantieplay']!=$d['carplay']->s) store('carplay',$_REQUEST['vakantieplay'],basename(__FILE__).':'.__LINE__);
+		if($_REQUEST['vakantieplay']=='On') {
+			$pop='On;33';
+			if ($d['boseliving']->m!=$pop) storemode('boseliving',$pop,basename(__FILE__).':'.__LINE__);
+		} elseif($_REQUEST['vakantieplay']=='Off') {
+			if ($d['boseliving']->m!='Off') storemode('boseliving','Off',basename(__FILE__).':'.__LINE__);
+		}
+		echo 'vakantieplay '.$_REQUEST['vakantieplay'];
 	} elseif (isset($_REQUEST['publishmqtt'])) {
 		print_r($_REQUEST);
 		publishmqtt($_REQUEST['topic'], $_REQUEST['msg']);
