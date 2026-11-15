@@ -83,8 +83,9 @@
 			<div class="abs z0" id="daikin_kwh"></div>
 			<div class="abs z1" id="dysonlader"></div>
 			<div class="abs z1 i48" id="daikin"></div>
-			<div class="abs z1 i48" id="badkamervuur1"></div>
-			<div class="abs z1 i48" id="badkamervuur2"></div>
+<!--			<div class="abs z1 i48" id="badkamervuur1"></div>
+			<div class="abs z1 i48" id="badkamervuur2"></div> -->
+			<div class="abs z1 i48" id="spotify"></div>
 			<div class="abs stamp" id="tpirliving"></div>
 			<div class="abs stamp" id="tpirkeuken"></div>
 			<div class="abs stamp" id="tpirgarage"></div>
