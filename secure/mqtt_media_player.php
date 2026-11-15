@@ -241,7 +241,7 @@ $mqtt->subscribe('wiim_raw', function (string $topic, string $payload) use (&$d,
 				}
 
 				// Spotify/Boseliving logica
-				$d = fetchdata();
+/*				$d = fetchdata();
 				if (isset($d['auto']) && $d['auto']->s == 'On' && substr($d['boseliving']->m, 0, 7) != 'NoScore') {
 					if ($score == 1) {
 						if ($d['spotify']->s != 'On' && $d['lgtv']->s != 'On' && past('spotify') > 6) {
@@ -252,7 +252,7 @@ $mqtt->subscribe('wiim_raw', function (string $topic, string $payload) use (&$d,
 							sw('spotify', 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 						}
 					}
-				}
+				}*/
 			}
 		} else lg('Iets staat niet juist', 'mediaplayer');
 

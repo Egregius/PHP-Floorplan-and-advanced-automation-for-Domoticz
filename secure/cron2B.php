@@ -22,7 +22,7 @@ foreach ($devices as $ip => $vol) {
 		$status = json_decode(json_encode(simplexml_load_string(mb_convert_encoding($status, 'UTF-8', mb_detect_encoding($status, 'UTF-8, ISO-8859-1', true)))), true);
 		if (is_array($status)) {
 			if ($ip==101) {
-				if(substr($d['boseliving']->m,0,7)=='NoScore'&&$d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+//				if(substr($d['boseliving']->m,0,7)=='NoScore'&&$d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE')||(isset($status['@attributes']['source'])&&$status['@attributes']['source']=='UPNP')) {
 					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&$d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off'))) {
@@ -47,7 +47,7 @@ foreach ($devices as $ip => $vol) {
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
 									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
-									if($d['auto']->s=='On'&&substr($d['boseliving']->m,0,7)!='NoScore') {
+/*									if($d['auto']->s=='On'&&substr($d['boseliving']->m,0,7)!='NoScore') {
 										$data=json_decode(curl('https://home.egregius.be/ajax.php?bose=101'),true);
 										if (isset($data['score'])) {
 											if ($data['score']==1) {
@@ -56,7 +56,7 @@ foreach ($devices as $ip => $vol) {
 												if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 											}
 										}
-									}
+									}*/
 								} else {
 									$wiimunknown++;
 									lg('wiim data not set '.$wiimunknown,'cron2');
@@ -226,7 +226,7 @@ if ($d['bose101']->s=='On'
 				if ($d['bose108']->s!='Off') store('bose108', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['bose109']->s!='Off') store('bose109', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
+//				if ($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 				$boseSetVolume=0;
 			}
 		}

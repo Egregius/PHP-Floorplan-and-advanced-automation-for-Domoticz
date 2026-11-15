@@ -1405,7 +1405,7 @@ function score($score) {
 	$data=json_decode($data,true);
 	if(isset($data['cleantitle'])&&updatescore($data['cleantitle'],$score,$data['track_id'])) {
 		lg('updatescore ok '.$data['cleantitle'].' '.$score);
-		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
+//		if($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__);
 		if(substr($d['boseliving']->m,0,7)=='NoScore'||$score==9999||$score==null) {
 			Wiim('setPlayerCmd:next');
 			usleep(1380000);
