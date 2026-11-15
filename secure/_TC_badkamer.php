@@ -90,7 +90,7 @@ if ($d['weg']->s>2&&$d['badkamer_set']->m==0&&$d['n']>-50) {
 			$avgMinPerDegBath = array_sum($allData) / count($allData);
 		}
 	}
-	$avgMinPerDegBath ??= 20;
+	$avgMinPerDegBath ??= 40;
 	$tempDelta   = max(0, $target - $badkamer);
 	$leadMinutes = $avgMinPerDegBath * $tempDelta;
 	$t_start     = round($t - ($leadMinutes * 60));
