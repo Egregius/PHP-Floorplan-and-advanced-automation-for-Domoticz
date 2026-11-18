@@ -93,7 +93,7 @@ if ($d['weg']->s>2&&$d['badkamer_set']->m==0&&$d['n']>-50) {
 	$avgMinPerDegBath ??= 40;
 	$tempDelta   = max(0, $target - $badkamer);
 	$leadMinutes = $avgMinPerDegBath * $tempDelta;
-	$t_start     = round($t - ($leadMinutes * 60));
+	$t_start     = round(($t + 900) - ($leadMinutes * 60));
 	$t_end       = $t + 1800;
 	if ($prevSetbath >= 1) {
 		$setBath = $target;
