@@ -11,31 +11,25 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import paho.mqtt.client as mqtt
-
 MQTT_HOST = "192.168.30.22"
 MQTT_PORT = 1883
 MQTT_USER = "mqtt"
 MQTT_PASS = "mqtt"
-
 WIIM_IP = "192.168.2.9"
 WIIM_UPNP_PORT = 49152
 LOCAL_IP = "192.168.2.2"
 LOCAL_PORT = 5000
-
 LOG_PATH = "/var/log/mqtt/wiim.log"
 RAW_LOG_PATH = "/var/log/mqtt/wiim_raw.log"
-
 ALLOWED_KEYS = {
 	"artist", "title", "album", "album_art", "transportstate", "currenttrackuri", "trackduration", "bitdepth", "samplerate", "bitrate", "actualQuality"
 }
 BOTH_KEYS = {"artist", "title"}
-
 mqtt_client = mqtt.Client(client_id="wiim_bridge", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
 mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
 mqtt_connected = False
 avtransport_control_url = None
 last_published_state = {}
-
 current_playback_state = {
 	"transportstate": "STOPPED",
 	"track_started_at": "",
@@ -45,7 +39,6 @@ current_playback_state = {
 	"currenttrackuri": ""
 }
 state_lock = threading.Lock()
-
 def log(*args):
 	now = datetime.now()
 	timestamp = now.strftime('%d-%m %H:%M:%S') + f".{now.microsecond // 1000:03d}"
@@ -57,7 +50,6 @@ def log(*args):
 			f.write(msg + "\n")
 	except:
 		pass
-
 def log_raw(raw_data):
 	try:
 		os.makedirs(os.path.dirname(RAW_LOG_PATH), exist_ok=True)
@@ -65,7 +57,6 @@ def log_raw(raw_data):
 			f.write(f"--- {datetime.now()} ---\n{raw_data}\n\n")
 	except:
 		pass
-
 def on_connect(client, userdata, flags, reason_code, properties):
 	global mqtt_connected
 	if reason_code == 0:
@@ -75,11 +66,9 @@ def on_connect(client, userdata, flags, reason_code, properties):
 			threading.Thread(target=fetch_position_info, daemon=True).start()
 	else:
 		log(f"❌ MQTT connect fout: reason_code={reason_code}")
-
 mqtt_client.on_connect = on_connect
 mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
 mqtt_client.loop_start()
-
 def time_to_seconds(t_str):
 	try:
 		if not t_str or t_str == 'NOT_IMPLEMENTED':
@@ -92,7 +81,6 @@ def time_to_seconds(t_str):
 	except:
 		pass
 	return 0
-
 def format_track_time(time_str):
 	if not time_str or time_str == 'NOT_IMPLEMENTED':
 		return '0:00'
@@ -109,7 +97,6 @@ def format_track_time(time_str):
 	elif len(parts) == 2:
 		return time_str
 	return time_str
-
 def mqtt_publish(subtopic, value, retain=True):
 	global last_published_state
 	if last_published_state.get(subtopic) == value:
@@ -122,30 +109,24 @@ def mqtt_publish(subtopic, value, retain=True):
 			pass
 		else:
 			mqtt_client.publish(f"d/wiim/wiim_{subtopic}", value, retain=retain, qos=1)
-
 def parse_and_publish_all(data_dict):
 	global current_playback_state
 	with state_lock:
 		old_state = current_playback_state.get("transportstate")
 		new_state = data_dict.get("transportstate", old_state)
 		state_changed = (old_state != new_state)
-
 		if "trackduration" in data_dict:
 			data_dict["trackduration"] = format_track_time(data_dict["trackduration"])
-
 		if "reltime" in data_dict:
 			data_dict["reltime"] = format_track_time(data_dict["reltime"])
-
 		if "reltime" in data_dict and data_dict["reltime"] and data_dict["reltime"] != "NOT_IMPLEMENTED":
 			reltime_sec = time_to_seconds(data_dict["reltime"])
 			if reltime_sec > 0:
 				start_time = datetime.now() - timedelta(seconds=reltime_sec)
 				current_playback_state["track_started_at"] = start_time.isoformat()
-
 		if not current_playback_state.get("track_started_at"):
 			start_time = datetime.now()
 			current_playback_state["track_started_at"] = start_time.isoformat()
-
 		track_meta_changed = False
 		for key, val in data_dict.items():
 			if val is not None and val != "":
@@ -157,7 +138,6 @@ def parse_and_publish_all(data_dict):
 						if k_lower in BOTH_KEYS or k_lower == "currenttrackuri":
 							track_meta_changed = True
 						mqtt_publish(k_lower, val)
-
 		if track_meta_changed and mqtt_connected:
 			state_payload = {
 				"artist": current_playback_state.get("artist", ""),
@@ -169,35 +149,27 @@ def parse_and_publish_all(data_dict):
 			if last_published_state.get(state_topic) != json_str:
 				last_published_state[state_topic] = json_str
 				mqtt_client.publish(state_topic, json_str, retain=True, qos=1)
-
 		if state_changed and new_state == "PLAYING" and avtransport_control_url:
 			def delayed_fetch():
 				time.sleep(1)
 				fetch_position_info()
 			threading.Thread(target=delayed_fetch, daemon=True).start()
-
 def parse_didl_metadata(didl_xml, current_data):
 	if not didl_xml or didl_xml == "NOT_IMPLEMENTED":
 		return current_data
 	try:
-		# Fix enkel losse ampersands (bijv. "Dimitri Vegas & Like Mike" -> "Dimitri Vegas &amp; Like Mike")
-		# Laat &lt;, &gt;, &amp; etc. met rust zodat de XML-parser ze correct kan verwerken.
 		fixed_xml = re.sub(r'&(?!([a-zA-Z0-9#]+;))', '&amp;', didl_xml)
-		
 		track_root = ET.fromstring(fixed_xml)
 		ns = {
 			'dc': 'http://purl.org/dc/elements/1.1/',
 			'upnp': 'urn:schemas-upnp-org:metadata-1-0/upnp/',
 			'song': 'www.wiimu.com/song/'
 		}
-		
 		def get_text(path):
 			node = track_root.find(path, ns)
 			if node is not None and node.text:
-				# Pas na het parsen unescapen we eventuele entiteiten naar normale tekst
 				return html.unescape(node.text)
 			return ""
-
 		current_data["title"] = get_text('.//dc:title') or current_data.get("title", "")
 		current_data["artist"] = get_text('.//upnp:artist') or current_data.get("artist", "")
 		current_data["album"] = get_text('.//upnp:album') or current_data.get("album", "")
@@ -209,7 +181,6 @@ def parse_didl_metadata(didl_xml, current_data):
 	except Exception as e:
 		log(f"⚠️ Fout bij parsen DIDL: {e}\n--- VOLLEDIGE PROBLEMATISCHE XML ---\n{didl_xml}\n-----------------------------------")
 	return current_data
-
 def process_event_xml(xml_content):
 	data = {}
 	try:
@@ -233,7 +204,6 @@ def process_event_xml(xml_content):
 			parse_and_publish_all(data)
 	except Exception as e:
 		log(f"⚠️ Fout bij verwerken XML: {e}")
-
 def fetch_position_info():
 	global avtransport_control_url
 	if not avtransport_control_url:
@@ -271,7 +241,6 @@ def fetch_position_info():
 				parse_and_publish_all(data)
 	except Exception as e:
 		log(f"⚠️ SOAP fout: {e}")
-
 class UPnPNotificationHandler(BaseHTTPRequestHandler):
 	def do_NOTIFY(self):
 		content_length = int(self.headers.get('Content-Length', 0))
@@ -280,16 +249,13 @@ class UPnPNotificationHandler(BaseHTTPRequestHandler):
 		process_event_xml(body)
 		self.send_response(200)
 		self.end_headers()
-
 	def log_message(self, format, *args):
 		return
-
 def run_http_server():
 	server_address = ('', LOCAL_PORT)
 	httpd = HTTPServer(server_address, UPnPNotificationHandler)
 	log(f"🌐 UPnP Event Listener gestart op poort {LOCAL_PORT}")
 	httpd.serve_forever()
-
 def discover_wiim_urls():
 	global avtransport_control_url
 	desc_url = f"http://{WIIM_IP}:{WIIM_UPNP_PORT}/description.xml"
@@ -312,12 +278,19 @@ def discover_wiim_urls():
 	except Exception as e:
 		log(f"⚠️ Fout bij ophalen description.xml: {e}")
 	return None
-
+def reset_state_on_disconnect():
+	global last_published_state
+	with state_lock:
+		current_playback_state["transportstate"] = "STOPPED"
+		current_playback_state["track_started_at"] = ""
+	last_published_state.clear()
+	mqtt_publish("transportstate", "STOPPED")
 def subscription_loop():
 	callback_url = f"http://{LOCAL_IP}:{LOCAL_PORT}/"
 	while True:
 		sub_url = discover_wiim_urls()
 		if not sub_url:
+			reset_state_on_disconnect()
 			time.sleep(10)
 			continue
 		headers = {
@@ -328,22 +301,36 @@ def subscription_loop():
 		try:
 			resp = requests.request("SUBSCRIBE", sub_url, headers=headers, timeout=5)
 			if resp.status_code == 200:
-				sid = resp.headers.get("SID", "Onbekend")
+				sid = resp.headers.get("SID")
+				if not sid:
+					log("⚠️ Geen SID ontvangen bij SUBSCRIBE")
+					time.sleep(10)
+					continue
 				log(f"✅ UPnP abonnement gelukt! SID: {sid}")
 				fetch_position_info()
 				while True:
 					time.sleep(240)
-					requests.request("SUBSCRIBE", sub_url, headers={"SID": sid, "TIMEOUT": "Second-300"}, timeout=5)
-		except Exception:
-			pass
+					renew_resp = requests.request("SUBSCRIBE", sub_url, headers={"SID": sid, "TIMEOUT": "Second-300"}, timeout=5)
+					if renew_resp.status_code == 200:
+						new_sid = renew_resp.headers.get("SID")
+						if new_sid:
+							sid = new_sid
+					else:
+						log(f"⚠️ UPnP renew mislukt (HTTP {renew_resp.status_code}), opnieuw abonneren...")
+						reset_state_on_disconnect()
+						break
+			else:
+				log(f"⚠️ UPnP SUBSCRIBE mislukt (HTTP {resp.status_code})")
+				reset_state_on_disconnect()
+		except Exception as e:
+			log(f"⚠️ UPnP fout tijdens subscriben/vernieuwen: {e}")
+			reset_state_on_disconnect()
 		time.sleep(10)
-
 def position_poll_loop():
 	while True:
 		time.sleep(60)
 		if avtransport_control_url:
 			fetch_position_info()
-
 def local_tick_loop():
 	while True:
 		time.sleep(5)
@@ -353,23 +340,21 @@ def local_tick_loop():
 					try:
 						start_time = datetime.fromisoformat(current_playback_state["track_started_at"])
 						elapsed_sec = int((datetime.now() - start_time).total_seconds())
-						
 						dur_str = current_playback_state.get("trackduration", "0:00")
 						total_sec = time_to_seconds(dur_str)
 						if total_sec > 0 and elapsed_sec > total_sec:
 							elapsed_sec = total_sec
-							
 						m = elapsed_sec // 60
 						s = elapsed_sec % 60
 						rel_str = f"{m}:{s:02d}"
-						
 						mqtt_publish("reltime", rel_str)
 					except Exception:
 						pass
-
 if __name__ == "__main__":
 	log("🚀 WiiM UPnP to MQTT Bridge gestart")
 	threading.Thread(target=run_http_server, daemon=True).start()
+	threading.Thread(target=position_poll_loop, daemon=True).start()
+	threading.Thread(target=local_tick_loop, daemon=True).start()
 	try:
 		subscription_loop()
 	except KeyboardInterrupt:
