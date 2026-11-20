@@ -92,13 +92,9 @@ function stoploop() {
 		if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 		exit;
 	}
-	if (filemtime(__DIR__ . '/cron2B.php') > LOOP_START) {
-		lg('🛑 cron2B.php gewijzigd → restarting cron2 loop...','cron2');
-		if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
-		exit;
-	}
+
 	static $cycles=0;
-	if($cycles>=50) {
+	if($cycles>=250) {
 		gc_collect_cycles();
 		$cycles=0;
 	} else $cycles++;
