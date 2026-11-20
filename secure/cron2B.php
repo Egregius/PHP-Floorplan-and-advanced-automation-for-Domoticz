@@ -1,5 +1,6 @@
 <?php
 foreach ($devices as $ip => $vol) {
+	continue;
 	$key = 'bose' . $ip;
 	if($d['guy']->s!='thuis'||$d['carplay']->s=='On') {
 		if($d[$key]->s=='On') {
