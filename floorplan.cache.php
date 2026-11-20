@@ -37,8 +37,8 @@ uasort($d, function ($a, $b) {
 	<meta name="theme-color" content="#121212">
 	<link rel="icon" type="image/png" href="icon.png">
 	<link rel="apple-touch-icon" href="icon.png">
-	<script src="https://mynetpay.be/js/jquery-3.5.1.min.js"></script>
-	<script src="https://mynetpay.be/js/jQuery.dataTables.min.js"></script>
+	<script src="<?php echo getVer('jquery.js'); ?>"></script>
+	<script src="<?php echo getVer('jquery.datatables.js'); ?>"></script>
 	<style>
 		:root {
 			--bg-color: #121212;
