@@ -25,7 +25,7 @@ if ($d['auto']->s=='On') {
 		}
 	}
 	$i=5;
-	if ($d['weg']->s==0&&$d['pirhall']->s=='Off'&&$d['hall']->s>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deurwaskamer')>$i&&past('deuralex')>$i) {
+	if ($d['weg']->s==0&&$d['pirhall']->s=='Off'&&$d['hall']->s>0&&past('hall')>$i&&past('pirhall')>$i&&past('deurbadkamer')>$i&&past('deurkamer')>$i&&past('deuralex')>$i) {
 		foreach (array(29,27,0) as $i) {
 			if ($d['hall']->s>$i) {
 					sl('hall', $i);

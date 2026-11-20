@@ -386,8 +386,8 @@ function store($name='',$status='',$msg='',$log='store') {
 			throw $e;
 		}
 	}
-	if($affected>0/*&&!in_array($name,['dag'])*/){
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+	if($affected>0/*&&!in_array($name,['dag'])*/){	
 		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -434,8 +434,8 @@ function storemode($name,$mode,$msg='',$log='store',$force=false) {
 			throw $e;
 		}
 	}
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if($affected>0&&!in_array($name,['dag'])) {
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		lg('💾 STOREM	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -464,8 +464,8 @@ function storesm($name,$s,$m,$msg='',$log='store') {
 			throw $e;
 		}
 	}
-	if($affected>0) {
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+	if($affected>0) {		
 		lg('💾 STORESM   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -495,8 +495,8 @@ function storesmi($name,$s,$m,$i,$msg='',$log='store') {
 			throw $e;
 		}
 	}
+	if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 	if($affected>0) {
-		if($d[$name]->f===1) publishmqtt('d/'.$name,json_encode(toJsonClean($d[$name])),$msg);
 		lg('💾 STORESMI  '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -527,8 +527,8 @@ function storesmip($name,$s,$m,$i,$p,$msg='',$log='store') {
 			throw $e;
 		}
 	}
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if($affected>0) {
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		lg('💾 STORESMIP '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.' I='.$i.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -557,8 +557,8 @@ function storesp($name,$s,$p,$msg='',$log='store') {
 			throw $e;
 		}
 	}
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if($affected>0) {
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		lg('💾 STORESP   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' P='.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -592,8 +592,8 @@ function storep($name,$p,$msg='',$log='store',$updatetime=true) {
 			throw $e;
 		}
 	}
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if($affected>0) {
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		lg('💾 STOREP	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -621,9 +621,8 @@ function storeicon($name,$i,$msg='',$log='store') {
 			throw $e;
 		}
 	}
-
+	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if($affected>0) {
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 		if (str_ends_with($name, '_temp')) return;
 		lg('💾 STOREIC	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$i.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	}
