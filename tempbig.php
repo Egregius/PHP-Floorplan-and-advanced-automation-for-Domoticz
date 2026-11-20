@@ -83,7 +83,7 @@ $max_val = ($max_val == -100) ? 25 : ceil($max_val + 1);
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Big Temp - <?php echo $titel; ?></title>
     <link href="/styles/temp.css?v=6" rel="stylesheet" type="text/css"/>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="<?php echo getVer('chart.js'); ?>"></script>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; overflow: hidden; }
 

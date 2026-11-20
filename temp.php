@@ -105,7 +105,7 @@ $maandData = getChartData($db, $q_maand, $sensors, $active_sensors, true);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Temperaturen</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="<?php echo getVer('chart.js'); ?>"></script>
     <style>
         body {
 			background-color: #000;

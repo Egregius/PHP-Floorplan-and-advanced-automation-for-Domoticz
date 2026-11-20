@@ -32,6 +32,31 @@ if (isset($_GET['mode']) && in_array($_GET['mode'], ['0','1','2','3'], true)) {
         }
     }
 }
+function getVer(string $file, ?string $type = null): string {
+    $cleanFile = strtolower(ltrim($file, '/'));
+    if ($type === null) {
+        $ext = pathinfo($cleanFile, PATHINFO_EXTENSION);
+        if ($ext === 'gz') {
+            $innerExt = pathinfo(substr($cleanFile, 0, -3), PATHINFO_EXTENSION);
+            $type = ($innerExt === 'css') ? 'css' : 'js';
+        } else {
+            $type = ($ext === 'css') ? 'css' : 'js';
+        }
+    } else {
+        $type = (strtolower($type) === 'css') ? 'css' : 'js';
+    }
+    $diskPath = "/var/www/shared/{$type}/{$cleanFile}";
+    $gzDiskPath = $diskPath . '.gz';
+    $webPath = "/shared/{$type}/{$cleanFile}";
+    if (is_file($gzDiskPath)) {
+        $ver = filemtime($gzDiskPath);
+    } elseif (is_file($diskPath)) {
+        $ver = filemtime($diskPath);
+    } else {
+        $ver = time();
+    }
+    return htmlspecialchars("{$webPath}?v={$ver}", ENT_QUOTES, 'UTF-8');
+}
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -41,7 +66,7 @@ if (isset($_GET['mode']) && in_array($_GET['mode'], ['0','1','2','3'], true)) {
     <title>Lead Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/styles/leaddata.css?v=<?=filemtime('styles/floorplan.css.gz')?>">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="<?php echo getVer('chart.js'); ?>"></script>
 </head>
 <body>
 <div class="container-fluid">
