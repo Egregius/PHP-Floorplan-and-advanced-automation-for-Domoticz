@@ -1439,24 +1439,15 @@ function getVer(string $file, ?string $type = null): string {
     $cleanFile = strtolower(ltrim($file, '/'));
     if ($type === null) {
         $ext = pathinfo($cleanFile, PATHINFO_EXTENSION);
-        if ($ext === 'gz') {
-            $innerExt = pathinfo(substr($cleanFile, 0, -3), PATHINFO_EXTENSION);
-            $type = ($innerExt === 'css') ? 'css' : 'js';
-        } else {
-            $type = ($ext === 'css') ? 'css' : 'js';
-        }
+        $innerExt = ($ext === 'gz') ? pathinfo(substr($cleanFile, 0, -3), PATHINFO_EXTENSION) : $ext;
+        $type = ($innerExt === 'css') ? 'css' : 'js';
     } else {
         $type = (strtolower($type) === 'css') ? 'css' : 'js';
     }
     $diskPath = "/var/www/shared/{$type}/{$cleanFile}";
     $gzDiskPath = $diskPath . '.gz';
     $webPath = "/shared/{$type}/{$cleanFile}";
-    if (is_file($gzDiskPath)) {
-        $ver = filemtime($gzDiskPath);
-    } elseif (is_file($diskPath)) {
-        $ver = filemtime($diskPath);
-    } else {
-        $ver = time();
-    }
-    return htmlspecialchars("{$webPath}?v={$ver}", ENT_QUOTES, 'UTF-8');
+    $ver = is_file($gzDiskPath) ? filemtime($gzDiskPath) : (is_file($diskPath) ? filemtime($diskPath) : time());
+    $shortVer = base_convert((string)$ver, 10, 36);
+    return htmlspecialchars("{$webPath}?v={$shortVer}", ENT_QUOTES, 'UTF-8');
 }
