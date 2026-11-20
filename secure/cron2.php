@@ -1,7 +1,6 @@
 #!/usr/bin/php
 <?php
 pcntl_async_signals(true);
-
 $saveAndExit = function ($signo) use (&$history) {
 	lg("🛑 Signaal $signo ontvangen. Geschiedenis opslaan en afsluiten...", 'cron2');
 	if (!empty($history)) {
@@ -12,7 +11,6 @@ $saveAndExit = function ($signo) use (&$history) {
 gc_enable();
 pcntl_signal(SIGTERM, $saveAndExit);
 pcntl_signal(SIGINT, $saveAndExit);
-
 require '/var/www/html/secure/functions.php';
 lg('🟢 Starting cron2 loop...','cron2');
 $time=time();
@@ -21,11 +19,9 @@ $lastcheck=$time;
 $lastping=$time;
 define('LOOP_START', $time);
 $invalidcounter=$lastplay=$playlisttries=$wiimunknown=$historyruns=$lastCleanKey=$lastdate=$boseSetVolume=0;
-
 $skipped=false;
 $history = file_exists('/var/www/spotifyhistory.json') ? json_decode(file_get_contents('/var/www/spotifyhistory.json'), true) : [];
 $prevcleantitle = !empty($history) ? array_key_last($history) : null;
-
 $ctx=stream_context_create(array('http'=>array('timeout' =>0.5)));
 $devices = [
 	101 => 36,
@@ -33,8 +29,8 @@ $devices = [
 	103 => 35,
 	104 => 35,
 	105 => 35,
-	106 => 40,// Garage
-	107 => 40,// Keuken
+	106 => 40,
+	107 => 40,
 	108 => 35,
 	109 => 35,
 ];
@@ -50,7 +46,6 @@ $boses=array(
 	108=>'ST-30-2',
 	109=>'ST-20-2',
 );
-// Using https://github.com/php-mqtt/client
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
@@ -84,7 +79,6 @@ while (1) {
 		}
 	}
 }
-
 function stoploop() {
 	global $history;
 	$script = __FILE__;
@@ -95,6 +89,11 @@ function stoploop() {
 	}
 	if (filemtime(__DIR__ . '/cron2.php') > LOOP_START) {
 		lg('🛑 cron2.php gewijzigd → restarting cron2 loop...','cron2');
+		if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
+		exit;
+	}
+	if (filemtime(__DIR__ . '/cron2B.php') > LOOP_START) {
+		lg('🛑 cron2B.php gewijzigd → restarting cron2 loop...','cron2');
 		if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 		exit;
 	}

@@ -1,62 +1,56 @@
 <?php
 foreach ($devices as $ip => $vol) {
-	
+	$key = 'bose' . $ip;
 	if($d['guy']->s!='thuis'||$d['carplay']->s=='On') {
-		if($d['bose'.$ip]->s=='On') {
-			$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
-			if (isset($status)) {
-				$status = json_decode(json_encode(simplexml_load_string(mb_convert_encoding($status, 'UTF-8', mb_detect_encoding($status, 'UTF-8, ISO-8859-1', true)))), true);
+		if($d[$key]->s=='On') {
+			$raw = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+			if ($raw !== false && $raw !== '') {
+				$xml = @simplexml_load_string(@mb_convert_encoding($raw, 'UTF-8', 'UTF-8, ISO-8859-1') ?: $raw);
+				$status = $xml !== false ? json_decode(json_encode($xml), true) : null;
 				if (is_array($status)) {
 					if((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE')||(isset($status['@attributes']['source'])&&$status['@attributes']['source']=='UPNP')) {
 						bosekey("POWER", 0, $ip,basename(__FILE__).':'.__LINE__);
-						store('bose'.$ip, 'Off');
+						store($key, 'Off');
+						$d[$key]->s = 'Off';
 					}
+				}
+			} else {
+				if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
+					storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+					$d[$key]->s = 'Off';
+					$d[$key]->m = 0;
 				}
 			}
 		}
 		continue;
 	}
-//	continue;
-	$status = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
-	if (isset($status)) {
-		$status = json_decode(json_encode(simplexml_load_string(mb_convert_encoding($status, 'UTF-8', mb_detect_encoding($status, 'UTF-8, ISO-8859-1', true)))), true);
+	$raw = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
+	if ($raw !== false && $raw !== '') {
+		$xml = @simplexml_load_string(@mb_convert_encoding($raw, 'UTF-8', 'UTF-8, ISO-8859-1') ?: $raw);
+		$status = $xml !== false ? json_decode(json_encode($xml), true) : null;
 		if (is_array($status)) {
 			if ($ip==101) {
-//				if(substr($d['boseliving']->m,0,7)=='NoScore'&&$d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
 				if((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE')||(isset($status['@attributes']['source'])&&$status['@attributes']['source']=='UPNP')) {
 					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&$d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off'))) {
-						$actualvol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
-						if (isset($actualvol)) {
-							$actualvol = json_decode(json_encode(simplexml_load_string($actualvol)), true);
-							if (is_array($actualvol)) {
-								if($actualvol['actualvolume']>0) bosevolume(0,101, 'TV aan');
+						$volRaw = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
+						if ($volRaw !== false && $volRaw !== '') {
+							$volXml = @simplexml_load_string($volRaw);
+							$actualvol = $volXml !== false ? json_decode(json_encode($volXml), true) : null;
+							if (is_array($actualvol) && isset($actualvol['actualvolume']) && $actualvol['actualvolume']>0) {
+								bosevolume(0,101, 'TV aan');
 							}
 						}
 					} else {
 						$start = hrtime(true);
-//						lg(__LINE__,'cron2');
-						if($d['boseliving']->m != 'Off' && (isset($status['artist'],$status['track'])||$status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP')) {
-//							lg(__LINE__,'cron2');
-							if($status['@attributes']['source']=='AUX'||$status['@attributes']['source']=='UPNP'||($status['artist']=='wiim'&&$status['track']=='dlna cast')) {
-//								lg(__LINE__,'cron2');
+						if($d['boseliving']->m != 'Off' && (isset($status['artist'],$status['track'])||($status['@attributes']['source']??'')=='AUX'||($status['@attributes']['source']??'')=='UPNP')) {
+							if(($status['@attributes']['source']??'')=='AUX'||($status['@attributes']['source']??'')=='UPNP'||(($status['artist']??'')=='wiim'&&($status['track']??'')=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
-//								lg(print_r($wiim,true),'cron2');
 								if(isset($wiim->metaData->artist)) {
 									$status['artist']=$wiim->metaData->artist;
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
 									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
-/*									if($d['auto']->s=='On'&&substr($d['boseliving']->m,0,7)!='NoScore') {
-										$data=json_decode(curl('https://home.egregius.be/ajax.php?bose=101'),true);
-										if (isset($data['score'])) {
-											if ($data['score']==1) {
-												if($d['spotify']->s!='On'&&$d['lgtv']->s!='On'&&past('spotify')>6) sw('spotify','On',basename(__FILE__).':'.__LINE__,'cron2');
-											} else {
-												if($d['spotify']->s!='Off'||$d['lgtv']->s=='On') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
-											}
-										}
-									}*/
 								} else {
 									$wiimunknown++;
 									lg('wiim data not set '.$wiimunknown,'cron2');
@@ -94,7 +88,6 @@ foreach ($devices as $ip => $vol) {
 										}
 									}
 								} elseif (isset($wiim)) {
-//									lg(print_r($wiim,true),'cron2');
 									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
 										$wiimunknown++;
 										lg('$wiimunknown = '.$wiimunknown,'cron2');
@@ -109,12 +102,8 @@ foreach ($devices as $ip => $vol) {
 							}
 							$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['artist']));
 							$title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['track']));
-//							$title   = preg_replace('/\b(19|20)\d{2}\b/', '', $title);
-//							$arr     = array_map('trim', explode(',', $artists));
-//							sort($arr);
-//							$cleanKey = preg_replace('/[^a-z0-9]/', '', implode('', $arr) . $title);
 							$cleanKey = cleanTitle($artists,$title);
-							if ($cleanKey !== $lastCleanKey && $title!='unknow') {
+							if ($cleanKey !== $lastCleanKey && $title!='unknow' && !empty($apiUrl) && !empty($secretToken)) {
 								$data = [
 									'artist' => $status['artist'],
 									'title' => $status['track'],
@@ -139,63 +128,71 @@ foreach ($devices as $ip => $vol) {
 						}
 						if($d['boseliving']->s=='On') {
 							if($boseSetVolume==0) {
-								$actualvol = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
-								if (isset($actualvol)) {
-									$actualvol = json_decode(json_encode(simplexml_load_string($actualvol)), true);
-									if (is_array($actualvol)) {
-										if($actualvol['actualvolume']<35) {
-											bosevolume(35,101, 'Bose pas ingeschakeld, volume was '.$actualvol['actualvolume']);
-											$boseSetVolume=1;
-										}
+								$volRaw = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
+								if ($volRaw !== false && $volRaw !== '') {
+									$volXml = @simplexml_load_string($volRaw);
+									$actualvol = $volXml !== false ? json_decode(json_encode($volXml), true) : null;
+									if (is_array($actualvol) && isset($actualvol['actualvolume']) && $actualvol['actualvolume']<35) {
+										bosevolume(35,101, 'Bose pas ingeschakeld, volume was '.$actualvol['actualvolume']);
+										$boseSetVolume=1;
 									}
 								}
 							}
 						}
 					}
-				} elseif ($status['@attributes']['source']=="STANDBY"||$status['@attributes']['source']=="SETUP") {
-//					streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
+				} elseif (($status['@attributes']['source']??'')=="STANDBY"||($status['@attributes']['source']??'')=="SETUP") {
 					bosekey("AUX_INPUT", 0, 101);
 					usleep(100000);
 					bosekey("AUX_INPUT", 0, 101);
-				} elseif ($status['@attributes']['source']=="BLUETOOTH") {
+				} elseif (($status['@attributes']['source']??'')=="BLUETOOTH") {
 					bosekey("AUX_INPUT", 0, 101);
-				} elseif ($status['@attributes']['source']=="INVALID_SOURCE") {
+				} elseif (($status['@attributes']['source']??'')=="INVALID_SOURCE") {
 					bosekey("AUX_INPUT", 0, 101);
-				}// else lg('cron2 line '.__LINE__.' '.print_r($status,true),'cron2');
-				
+				}
 			}
 			if (isset($status['@attributes']['source'])) {
-				if (/*$d['bose'.$ip]->m != 'Online' && */$d['boseliving']->s != 'On'&&($d['lgtv']->s=='Off'||($d['lgtv']->s=='On'&&$d['time']<strtotime('8:00')))) {
-//					lg(basename(__FILE__).':'.__LINE__);
-	//				sw('boseliving', 'On');
-				} elseif ($d['bose'.$ip]->m != 1) {
-					storemode('bose'.$ip, 1,basename(__FILE__).':'.__LINE__,'cron2');
-					$d['bose'.$ip]->m=1;
-
+				if ((string)$d[$key]->m !== '1') {
+					storemode($key, 1,basename(__FILE__).':'.__LINE__,'cron2');
+					$d[$key]->m=1;
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||(isset($status['playStatus'])&&$status['playStatus'] == 'STOP_STATE')) && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					bosezone($ip,$vol);
 				}
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
-					if ($d['bose'.$ip]->s == 'Off') {
-						store('bose'.$ip, 'On');
+					if ($d[$key]->s == 'Off') {
+						store($key, 'On');
+						$d[$key]->s = 'On';
 					}
 				}
 			} else {
-				if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+				if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
+					storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+					$d[$key]->s = 'Off';
+					$d[$key]->m = 0;
+				}
 			}
 		} else {
-			if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) {
-				if($ip>101) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+			if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
+				storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+				$d[$key]->s = 'Off';
+				$d[$key]->m = 0;
 			}
 		}
-		unset($status);
+		unset($status, $xml, $raw);
 	} else {
-		if ($d['bose'.$ip]->s == 'On' || $d['bose'.$ip]->m != 0) storesm('bose'.$ip, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+		if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
+			storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+			$d[$key]->s = 'Off';
+			$d[$key]->m = 0;
+		}
 	}
 }
 if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
-	if ($d['bose101']->s == 'On' || $d['bose101']->m != 'Off') storesm('bose101', 'Off', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+	if ($d['bose101']->s == 'On' || (string)$d['bose101']->m !== 'Off') {
+		storesm('bose101', 'Off', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+		$d['bose101']->s = 'Off';
+		$d['bose101']->m = 'Off';
+	}
 	$boseSetVolume=0;
 }
 if ($d['bose101']->s=='On'
@@ -211,25 +208,28 @@ if ($d['bose101']->s=='On'
 	&&past('bose101')>300
 	&&past('boseliving')>1800
 ) {
-	$status=json_decode(json_encode(simplexml_load_string(@file_get_contents("http://192.168.2.101:8090/now_playing"))),true);
-	if (!empty($status)) {
-		if (isset($status['@attributes']['source'])) {
-			if ($status['@attributes']['source']!='STANDBY') {
-				bosekey("POWER", 0, 101,basename(__FILE__).':'.__LINE__);
-				if ($d['bose101']->s!='Off') store('bose101', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose102']->s!='Off') store('bose102', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose103']->s!='Off') store('bose103', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose104']->s!='Off') store('bose104', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose105']->s!='Off') store('bose105', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose106']->s!='Off') store('bose106', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose107']->s!='Off') store('bose107', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose108']->s!='Off') store('bose108', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['bose109']->s!='Off') store('bose109', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-				if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-//				if ($d['spotify']->s!='Off') sw('spotify','Off',basename(__FILE__).':'.__LINE__,'cron2');
-				$boseSetVolume=0;
+	$raw101 = @file_get_contents("http://192.168.2.101:8090/now_playing", false, $ctx);
+	if ($raw101 !== false && $raw101 !== '') {
+		$xml101 = @simplexml_load_string(@mb_convert_encoding($raw101, 'UTF-8', 'UTF-8, ISO-8859-1') ?: $raw101);
+		$status101 = $xml101 !== false ? json_decode(json_encode($xml101), true) : null;
+		if (!empty($status101) && isset($status101['@attributes']['source']) && $status101['@attributes']['source']!='STANDBY') {
+			bosekey("POWER", 0, 101,basename(__FILE__).':'.__LINE__);
+			foreach (array_keys($devices) as $devIp) {
+				if ($d['bose'.$devIp]->s!='Off') {
+					store('bose'.$devIp, 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+					$d['bose'.$devIp]->s = 'Off';
+				}
 			}
+			if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+			$boseSetVolume=0;
 		}
+	} else {
+		if ($d['bose101']->s == 'On' || (string)$d['bose101']->m !== '0') {
+			storesm('bose101', 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+			$d['bose101']->s = 'Off';
+			$d['bose101']->m = 0;
+		}
+		$boseSetVolume=0;
 	}
 }
 if ($d['weg']->s==0&&$d['auto']->s=='On') {
