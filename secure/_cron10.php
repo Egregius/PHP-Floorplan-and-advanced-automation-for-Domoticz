@@ -61,7 +61,7 @@ if ($d['auto']->s=='On') {
 			if ($d['pirkeuken']->s=='On') $i=300;
 			elseif ($d['pirkeuken']->s=='Off') $i=150;
 		}
-		if ($d['pirkeuken']->s=='Off'&&$d['snijplank']->s==0&&$d['wasbak']->s>0&&past('wasbak')>$i) {
+		if ($d['pirkeuken']->s=='Off'&&$d['snijplank']->s==0&&$d['wasbak']->s>0&&$d['wasbak']->s<38&&past('wasbak')>$i) {
 			foreach (array(5,0) as $y) {
 //				lg(basename(__FILE__).':'.__LINE__.'	'.$d['wasbak']->s.' '.$i);
 				if ($d['wasbak']->s>$y) {
