@@ -19,7 +19,6 @@ $lastcheck=$time;
 $lastping=$time;
 define('LOOP_START', $time);
 $invalidcounter=$lastplay=$playlisttries=$wiimunknown=$historyruns=$lastCleanKey=$lastdate=$boseSetVolume=0;
-$skipped=false;
 $history = file_exists('/var/www/spotifyhistory.json') ? json_decode(file_get_contents('/var/www/spotifyhistory.json'), true) : [];
 $prevcleantitle = !empty($history) ? array_key_last($history) : null;
 $ctx=stream_context_create(array('http'=>array('timeout' =>0.5)));
@@ -68,23 +67,20 @@ while (1) {
 	$d['time'] = $time;
 	$d = fetchdata();
 	include 'cron2B.php';
-	if ($skipped === false) {
-		$elapsed = microtime(true) - $loopStart;
-		$remaining = 10.0 - $elapsed;
-		if ($remaining > 0) {
-			usleep((int)round($remaining * 1000000));
-		} else {
-			usleep(500000);
-		}
-		if ($lastping < $time - 60 && 1 == 2) {
-			$lastping = $time;
-			publishmqtt('p', 'p');
-		}
-		if ($lastcheck < $time - 60) {
-			$lastcheck = $time;
-			stoploop();
-			$d = fetchdata(0);
-		}
+	$elapsed = microtime(true) - $loopStart;
+	$remaining = 10.0 - $elapsed;
+	if ($remaining > 0) {
+		usleep((int)round($remaining * 1000000));
+	} else {
+		usleep(500000);
+	}
+	if ($lastping < $time - 60 && 1 == 2) {
+		$lastping = $time;
+		publishmqtt('p', 'p');
+	}
+	if ($lastcheck < $time - 60) {
+		$lastcheck = $time;
+		stoploop();
 	}
 }
 function stoploop() {
