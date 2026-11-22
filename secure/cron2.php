@@ -23,6 +23,7 @@ $skipped=false;
 $history = file_exists('/var/www/spotifyhistory.json') ? json_decode(file_get_contents('/var/www/spotifyhistory.json'), true) : [];
 $prevcleantitle = !empty($history) ? array_key_last($history) : null;
 $ctx=stream_context_create(array('http'=>array('timeout' =>0.5)));
+$user='cron2B';
 $devices = [
 	101 => 36,
 	102 => 35,
@@ -34,7 +35,11 @@ $devices = [
 	108 => 35,
 	109 => 35,
 ];
-$user='cron2B';
+$powerSwitches = [
+	101 => 'boseliving',
+	103 => 'badkamerpower',
+	107 => 'bosekeuken',
+];
 $boses=array(
 	101=>'Living',
 	102=>'102',
@@ -49,38 +54,41 @@ $boses=array(
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 require '/var/www/vendor/autoload.php';
-$connectionSettings=(new ConnectionSettings)
+$mqttSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt')
 	->setKeepAliveInterval(60);
-$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__),MqttClient::MQTT_3_1,null,null);
-$mqtt->connect($connectionSettings,true);
+$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1,null,null);
+$mqtt->connect($mqttSettings,true);
 $db = Database::getInstance();
+
 while (1) {
-	$time = time();
+	$loopStart = microtime(true);
+	$time = (int)$loopStart;
 	$d['time'] = $time;
 	$d = fetchdata();
 	include 'cron2B.php';
-	if($skipped===false) {
-		$time_elapsed_secs = microtime(true) - $time;
-		$sleep = 20 - $time_elapsed_secs;
-		if ($sleep > 0) {
-			$sleep = round($sleep * 1000000);
-			usleep($sleep);
+	if ($skipped === false) {
+		$elapsed = microtime(true) - $loopStart;
+		$remaining = 10.0 - $elapsed;
+		if ($remaining > 0) {
+			usleep((int)round($remaining * 1000000));
+		} else {
+			usleep(500000);
 		}
-		if ($lastping < $time - 30) {
+		if ($lastping < $time - 60 && 1 == 2) {
 			$lastping = $time;
 			publishmqtt('p', 'p');
 		}
 		if ($lastcheck < $time - 60) {
 			$lastcheck = $time;
 			stoploop();
+			$d = fetchdata(0);
 		}
 	}
 }
 function stoploop() {
 	global $history;
-	$script = __FILE__;
 	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
 		lg('🛑 functions.php gewijzigd → restarting cron2 loop...','cron2');
 		if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));

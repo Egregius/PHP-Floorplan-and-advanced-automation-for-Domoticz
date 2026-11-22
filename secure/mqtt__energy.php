@@ -23,13 +23,12 @@ $lastcheck = $time;
 date_default_timezone_set('Europe/Brussels');
 $startloop = microtime(true);
 define('LOOP_START', $startloop);
-$connectionSettings = (new ConnectionSettings)
+$mqttSettings=(new ConnectionSettings)
 	->setUsername('mqtt')
 	->setPassword('mqtt')
 	->setKeepAliveInterval(60);
-
-$mqtt = new MqttClient('192.168.30.22', 1883, basename(__FILE__) . '_' . getmypid(), MqttClient::MQTT_3_1);
-$mqtt->connect($connectionSettings, true);
+$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1,null,null);
+$mqtt->connect($mqttSettings,true);
 
 $dbverbruik = new Database('192.168.30.23', 'dbuser', 'dbuser', 'verbruik');
 $dbzonphp = new Database('192.168.30.23', 'dbuser', 'dbuser', 'zon');
@@ -376,11 +375,27 @@ function getCache(string $key, $default = false) {
 	$data = @file_get_contents('/dev/shm/cache/' . $key .'.txt');
 	return $data === false ? $default : $data;
 }
-function publishmqtt($topic,$msg) {
-	global $mqtt;
-	$mqtt->publish($topic,(string)$msg,1,true);
-//	lg("🟢 {$topic} {$msg}");
-	return;
+function publishmqtt($topic,$msg,$log='') {
+	global $mqtt,$mqttSettings;
+	static $baseClientId = null;
+	$baseClientId ??= basename(__FILE__) . '_' . getmypid();
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			if (!$mqtt || !$mqtt->isConnected() || $attempt > 0) {
+				$clientId = $attempt > 0 ? $baseClientId . '_' . $attempt : $baseClientId;
+				$mqtt = new MqttClient('192.168.30.22',1883,$clientId,MqttClient::MQTT_3_1,null,null);
+				$mqtt->connect($mqttSettings,true);
+			}
+			$mqtt->publish($topic,(string)$msg,1,true);
+			if (PHP_SAPI !== 'cli') $mqtt->disconnect();
+			if($log!='') lg('publishmqtt '.$topic.' '.$msg,'cron2');
+			return;
+		} catch (Throwable $e) {
+			lg('♻ MQTT reconnect na fout: '.$e->getMessage(),'cron2');
+			$mqtt = null;
+			sleep($attempt);
+		}
+	}
 }
 function alert($name,$msg,$time) {
 	$last=0;

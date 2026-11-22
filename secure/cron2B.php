@@ -1,6 +1,15 @@
 <?php
+$lastStatus101 = null;
 foreach ($devices as $ip => $vol) {
 	$key = 'bose' . $ip;
+	if (isset($powerSwitches[$ip]) && ($d[$powerSwitches[$ip]]->s ?? 'Off') != 'On') {
+		if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
+			storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
+			$d[$key]->s = 'Off';
+			$d[$key]->m = 0;
+		}
+		continue;
+	}
 	if($d['guy']->s!='thuis'||$d['carplay']->s=='On') {
 		if($d[$key]->s=='On') {
 			$raw = @file_get_contents("http://192.168.2.$ip:8090/now_playing", false, $ctx);
@@ -30,6 +39,7 @@ foreach ($devices as $ip => $vol) {
 		$status = $xml !== false ? json_decode(json_encode($xml), true) : null;
 		if (is_array($status)) {
 			if ($ip==101) {
+				$lastStatus101 = $status;
 				if((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE')||(isset($status['@attributes']['source'])&&$status['@attributes']['source']=='UPNP')) {
 					if($playlisttries>0) $playlisttries=0;
 					if ($d['media']->s=='On'&&$d['eettafel']->s==0&&($d['lgtv']->s=='On'||($d['nvidia']->s!='Unavailable'&&$d['nvidia']->s!='Off'))) {
@@ -42,7 +52,6 @@ foreach ($devices as $ip => $vol) {
 							}
 						}
 					} else {
-						$start = hrtime(true);
 						if($d['boseliving']->m != 'Off' && (isset($status['artist'],$status['track'])||($status['@attributes']['source']??'')=='AUX'||($status['@attributes']['source']??'')=='UPNP')) {
 							if(($status['@attributes']['source']??'')=='AUX'||($status['@attributes']['source']??'')=='UPNP'||(($status['artist']??'')=='wiim'&&($status['track']??'')=='dlna cast')) {
 								$wiim=json_decode(Wiim('getMetaInfo'));
@@ -50,7 +59,7 @@ foreach ($devices as $ip => $vol) {
 									$status['artist']=$wiim->metaData->artist;
 									$status['track']=$wiim->metaData->title;
 									$wiimplaying=true;
-									if($status['artist']!='unknow'&&$status['track']!='unknow') $wiimunknown=0;
+									if(!in_array($status['artist'],['unknow','unknown'],true)&&!in_array($status['track'],['unknow','unknown'],true)) $wiimunknown=0;
 								} else {
 									$wiimunknown++;
 									lg('wiim data not set '.$wiimunknown,'cron2');
@@ -73,9 +82,9 @@ foreach ($devices as $ip => $vol) {
 							} else $wiimplaying=false;
 							if(isset($status['artist'],$status['track'])) {
 								$cleantitle=cleanTitle($status['artist'],$status['track']);
-								if (substr($d['boseliving']->m,0,7)!='NoScore' && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownaturalaudio','unknowroomcorrectionaudio'])) {
+								if (substr($d['boseliving']->m,0,7)!='NoScore' && $cleantitle && $cleantitle!=$prevcleantitle && !in_array($cleantitle,['unknowunknow','unknownunknown','unknownaturalaudio','unknowroomcorrectionaudio'],true)) {
 									$prevcleantitle=$cleantitle;
-									if (isset($history[$cleantitle])&&1==1) {
+									if (isset($history[$cleantitle])) {
 										lg($cleantitle.' skipped op cleantitle','cron2');
 										if($wiimplaying===true) Wiim('setPlayerCmd:next');
 									} else {
@@ -88,7 +97,7 @@ foreach ($devices as $ip => $vol) {
 										}
 									}
 								} elseif (isset($wiim)) {
-									if($wiim->metaData->artist=='unknow'&&$wiim->metaData->album=='unknow') {
+									if(in_array($wiim->metaData->artist??'',['unknow','unknown'],true)&&in_array($wiim->metaData->album??'',['unknow','unknown'],true)) {
 										$wiimunknown++;
 										lg('$wiimunknown = '.$wiimunknown,'cron2');
 										if($wiimunknown>10) {
@@ -103,7 +112,7 @@ foreach ($devices as $ip => $vol) {
 							$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['artist']));
 							$title   = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['track']));
 							$cleanKey = cleanTitle($artists,$title);
-							if ($cleanKey !== $lastCleanKey && $title!='unknow' && !empty($apiUrl) && !empty($secretToken)) {
+							if ($cleanKey !== $lastCleanKey && !in_array($title,['unknow','unknown'],true) && !empty($apiUrl) && !empty($secretToken)) {
 								$data = [
 									'artist' => $status['artist'],
 									'title' => $status['track'],
@@ -180,6 +189,7 @@ foreach ($devices as $ip => $vol) {
 		}
 		unset($status, $xml, $raw);
 	} else {
+		if ($ip == 101) $lastStatus101 = null;
 		if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
 			storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
 			$d[$key]->s = 'Off';
@@ -208,27 +218,15 @@ if ($d['bose101']->s=='On'
 	&&past('bose101')>300
 	&&past('boseliving')>1800
 ) {
-	$raw101 = @file_get_contents("http://192.168.2.101:8090/now_playing", false, $ctx);
-	if ($raw101 !== false && $raw101 !== '') {
-		$xml101 = @simplexml_load_string(@mb_convert_encoding($raw101, 'UTF-8', 'UTF-8, ISO-8859-1') ?: $raw101);
-		$status101 = $xml101 !== false ? json_decode(json_encode($xml101), true) : null;
-		if (!empty($status101) && isset($status101['@attributes']['source']) && $status101['@attributes']['source']!='STANDBY') {
-			bosekey("POWER", 0, 101,basename(__FILE__).':'.__LINE__);
-			foreach (array_keys($devices) as $devIp) {
-				if ($d['bose'.$devIp]->s!='Off') {
-					store('bose'.$devIp, 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-					$d['bose'.$devIp]->s = 'Off';
-				}
+	if (!empty($lastStatus101) && isset($lastStatus101['@attributes']['source']) && $lastStatus101['@attributes']['source']!='STANDBY') {
+		bosekey("POWER", 0, 101,basename(__FILE__).':'.__LINE__);
+		foreach (array_keys($devices) as $devIp) {
+			if ($d['bose'.$devIp]->s!='Off') {
+				store('bose'.$devIp, 'Off',basename(__FILE__).':'.__LINE__,'cron2');
+				$d['bose'.$devIp]->s = 'Off';
 			}
-			if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
-			$boseSetVolume=0;
 		}
-	} else {
-		if ($d['bose101']->s == 'On' || (string)$d['bose101']->m !== '0') {
-			storesm('bose101', 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
-			$d['bose101']->s = 'Off';
-			$d['bose101']->m = 0;
-		}
+		if ($d['boseliving']->s!='Off') sw('boseliving', 'Off',basename(__FILE__).':'.__LINE__,'cron2');
 		$boseSetVolume=0;
 	}
 }

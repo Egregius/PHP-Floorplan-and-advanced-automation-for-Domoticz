@@ -386,8 +386,14 @@ function store($name='',$status='',$msg='',$log='store') {
 			throw $e;
 		}
 	}
-	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-	if($affected>0/*&&!in_array($name,['dag'])*/){	
+	if($d[$name]->f===1) {
+		try {
+			publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+		} catch (Throwable $e) {
+			lg('⚠ MQTT publish fout voor d/'.$name.': '.$e->getMessage(), $log);
+		}
+	}
+	if($affected>0){
 		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),$log);
 	}
 	return $affected ?? 0;
@@ -395,21 +401,27 @@ function store($name='',$status='',$msg='',$log='store') {
 function isCli(): bool {
     return PHP_SAPI === 'cli';
 }
-
 function publishmqtt($topic,$msg,$log='') {
-	global $mqtt,$user;
-	if($mqtt&&$mqtt->isConnected()) {
-		$mqtt->publish($topic,$msg,1,true);
-	} else {
-		$connectionSettings=(new ConnectionSettings)
-		->setUsername('mqtt')
-		->setPassword('mqtt');
-		$mqtt=new MqttClient('192.168.30.22',1883,basename(__FILE__) . '_' . getmypid(),MqttClient::MQTT_3_1);
-		$mqtt->connect($connectionSettings,true);
-		$mqtt->publish($topic,$msg,1,true);
-		if (PHP_SAPI !== 'cli') $mqtt->disconnect();
+	global $mqtt,$mqttSettings;
+	static $baseClientId = null;
+	$baseClientId ??= basename(__FILE__) . '_' . getmypid();
+	for ($attempt = 0; $attempt <= 4; $attempt++) {
+		try {
+			if (!$mqtt || !$mqtt->isConnected() || $attempt > 0) {
+				$clientId = $attempt > 0 ? $baseClientId . '_' . $attempt : $baseClientId;
+				$mqtt = new MqttClient('192.168.30.22',1883,$clientId,MqttClient::MQTT_3_1,null,null);
+				$mqtt->connect($mqttSettings,true);
+			}
+			$mqtt->publish($topic,$msg,1,true);
+			if (PHP_SAPI !== 'cli') $mqtt->disconnect();
+			if($log!='') lg('publishmqtt '.$topic.' '.$msg,'cron2');
+			return;
+		} catch (Throwable $e) {
+			lg('♻ MQTT reconnect na fout: '.$e->getMessage(),'cron2');
+			$mqtt = null;
+			sleep($attempt);
+		}
 	}
-	if($log!='') lg('publishmqtt '.$topic.' '.$msg);
 }
 function storemode($name,$mode,$msg='',$log='store',$force=false) {
 	global $d,$user;
