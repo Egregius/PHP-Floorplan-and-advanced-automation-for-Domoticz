@@ -57,16 +57,16 @@ cleanup() {
             if [ "$age" -ge 30 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:6}" != "${prev:0:6}" ]] && keep=1
-            elif [ "$age" -ge 14 ]; then
+            elif [ "$age" -ge 20 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:7}" != "${prev:0:7}" ]] && keep=1
-            elif [ "$age" -ge 7 ]; then
+            elif [ "$age" -ge 10 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:8}" != "${prev:0:8}" ]] && keep=1
-            elif [ "$age" -ge 2 ]; then
+            elif [ "$age" -ge 4 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:9}" != "${prev:0:9}" ]] && keep=1
-            elif [ "$age" -ge 1 ]; then
+            elif [ "$age" -ge 2 ]; then
                 prev="${dirs[$((i-1))]}"
                 [[ "${d:0:10}" != "${prev:0:10}" ]] && keep=1
             else

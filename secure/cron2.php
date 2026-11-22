@@ -68,14 +68,13 @@ while (1) {
 			$sleep = round($sleep * 1000000);
 			usleep($sleep);
 		}
-		if ($lastping < $time - 60 && 1==2) {
+		if ($lastping < $time - 30) {
 			$lastping = $time;
 			publishmqtt('p', 'p');
 		}
-		if ($lastcheck < $time - 300) {
+		if ($lastcheck < $time - 60) {
 			$lastcheck = $time;
 			stoploop();
-			$d=fetchdata(0);
 		}
 	}
 }
@@ -92,9 +91,8 @@ function stoploop() {
 		if (!empty($history)) file_put_contents('/var/www/spotifyhistory.json', json_encode($history));
 		exit;
 	}
-
 	static $cycles=0;
-	if($cycles>=250) {
+	if($cycles>=50) {
 		gc_collect_cycles();
 		$cycles=0;
 	} else $cycles++;

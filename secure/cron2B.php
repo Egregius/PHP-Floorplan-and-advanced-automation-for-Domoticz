@@ -11,14 +11,14 @@ foreach ($devices as $ip => $vol) {
 					if((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE')||(isset($status['@attributes']['source'])&&$status['@attributes']['source']=='UPNP')) {
 						bosekey("POWER", 0, $ip,basename(__FILE__).':'.__LINE__);
 						store($key, 'Off');
-
+						$d[$key]->s = 'Off';
 					}
 				}
 			} else {
 				if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
 					storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
-
-
+					$d[$key]->s = 'Off';
+					$d[$key]->m = 0;
 				}
 			}
 		}
@@ -153,7 +153,7 @@ foreach ($devices as $ip => $vol) {
 			if (isset($status['@attributes']['source'])) {
 				if ((string)$d[$key]->m !== '1') {
 					storemode($key, 1,basename(__FILE__).':'.__LINE__,'cron2');
-
+					$d[$key]->m=1;
 				}
 				if (($status['@attributes']['source'] == 'STANDBY'||(isset($status['playStatus'])&&$status['playStatus'] == 'STOP_STATE')) && ($d['weg']->s==0||($d['weg']->s==1&&$d['badkamerpower']->s=='On'))) {
 					bosezone($ip,$vol);
@@ -161,29 +161,29 @@ foreach ($devices as $ip => $vol) {
 				if (isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') {
 					if ($d[$key]->s == 'Off') {
 						store($key, 'On');
-
+						$d[$key]->s = 'On';
 					}
 				}
 			} else {
-				if ($d[$key]->s == 'On' || $d[$key]->m != 0) {
+				if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
 					storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
-
-
+					$d[$key]->s = 'Off';
+					$d[$key]->m = 0;
 				}
 			}
 		} else {
-			if ($d[$key]->s == 'On' || $d[$key]->m != 0) {
+			if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
 				storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
-
-
+				$d[$key]->s = 'Off';
+				$d[$key]->m = 0;
 			}
 		}
 		unset($status, $xml, $raw);
 	} else {
 		if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
 			storesm($key, 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
-
-
+			$d[$key]->s = 'Off';
+			$d[$key]->m = 0;
 		}
 	}
 }
