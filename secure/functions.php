@@ -302,7 +302,7 @@ function sl(string|array $name, int $level, ?string $msg = null): void {
 	$d['time']??=time();
 	$d[$name]->s=$level;
 	$d[$name]->t=$d['time'];
-	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+//	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 	if ($name==='rbureel' /*&& $level===100*/) {
 		usleep(200000);
 		hass('cover', 'set_cover_position', $entity, ['position' => $level]);
@@ -343,7 +343,7 @@ function sw($name,$action='Toggle',$msg=null) {
 		$d['time']??=time();
 		$d[$name]->s=$action;
 		$d[$name]->t=$d['time'];
-		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+//		if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
 //		if($d[$name]->s==$action) return;
 //		$d[$name]->t=$d['time'];
 //		$d[$name]->s=$action;
@@ -364,35 +364,74 @@ function setpoint($name, $value,$msg='') {
 	$msg='(SETPOINT)'.str_pad($user, 9, ' ', STR_PAD_LEFT).' => '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' => '.$value.' ('.$msg.')';
 	store($name, $value, $msg);
 }
-function store($name='',$status='',$msg='',$log='store') {
-	global $d,$user;
+function _persistDevice(string $name, ?string $s, $m, string $msg = '', string $log = 'store', string $prefix = 'STORE'): int {
+	global $d, $user;
+	$d['time'] ??= time();
+	$affected = 0;
+
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
-			$d['time']??=time();
-			$d[$name]->s=$status;
-			$d[$name]->t=$d['time'];
-			$db=Database::getInstance();
-			$stmt=$db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
-			$stmt->execute([':s'=>$status,':t'=>$d['time'],':n'=>$name]);
-			$affected=$stmt->rowCount();
+			$d[$name]->t = $d['time'];
+			$db = Database::getInstance();
+			if ($s !== null && $m !== null) {
+				$d[$name]->s = $s;
+				$d[$name]->m = $m;
+				$stmt = $db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
+				$stmt->execute([':s' => $s, ':m' => $m, ':t' => $d['time'], ':n' => $name]);
+			} elseif ($s !== null) {
+				$d[$name]->s = $s;
+				$stmt = $db->prepare("UPDATE devices SET s = :s, t = :t WHERE n = :n");
+				$stmt->execute([':s' => $s, ':t' => $d['time'], ':n' => $name]);
+			} else {
+				$d[$name]->m = $m;
+				$stmt = $db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
+				$stmt->execute([':m' => $m, ':t' => $d['time'], ':n' => $name]);
+			}
+			$affected = $stmt->rowCount();
 			break;
 		} catch (PDOException $e) {
-			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
+			if (in_array($e->getCode(), [2006, 'HY000']) && $attempt < 4) {
 				lg('♻ DB gone away → reconnect & retry', $log);
 				Database::reset();
-				if($attempt>0) sleep($attempt);
+				if ($attempt > 0) sleep($attempt);
 				continue;
 			}
 			throw $e;
 		}
 	}
-	if($d[$name]->f===1) {
-		publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
+
+	if ($affected > 0) {
+		if (($d[$name]->f ?? 0) === 1) {
+			publishmqtt('d/' . $name, toJsonClean($d[$name]), $msg);
+		}
+		if (!($s === null && in_array($name, ['dag'], true))) {
+			$detail = ($s !== null && $m !== null) ? "S=$s M=$m" : ($s !== null ? (string)$s : (string)$m);
+			lg('💾 ' . str_pad($prefix, 7) . ' ' . ($user ?? '') . ' ' . str_pad($name, 13, ' ', STR_PAD_RIGHT) . ' ' . $detail . (strlen($msg) > 0 ? "\t(" . $msg . ')' : ''), $log);
+		}
 	}
-	if($affected>0){
-		lg('💾 STORE     '.str_pad($user??'',9).' '.str_pad($name??'',13).' '.$status.($msg?' ('.$msg.')':''),$log);
-	}
-	return $affected ?? 0;
+
+	return $affected;
+}
+
+function store($name = '', $status = '', $msg = '', $log = 'store') {
+	global $d;
+	if ($name === '' || !isset($d[$name])) return 0;
+	if ((string)($d[$name]->s ?? '') === (string)$status) return 0;
+	return _persistDevice($name, (string)$status, null, $msg, $log, 'STORE');
+}
+
+function storemode($name, $mode, $msg = '', $log = 'store', $force = false) {
+	global $d;
+	if (!isset($d[$name])) return 0;
+	if (!$force && (string)($d[$name]->m ?? '') === (string)$mode) return 0;
+	return _persistDevice($name, null, $mode, $msg, $log, 'STOREM');
+}
+
+function storesm($name, $s, $m, $msg = '', $log = 'store') {
+	global $d;
+	if (!isset($d[$name])) return 0;
+	if ((string)($d[$name]->s ?? '') === (string)$s && (string)($d[$name]->m ?? '') === (string)$m) return 0;
+	return _persistDevice($name, (string)$s, $m, $msg, $log, 'STORESM');
 }
 function isCli(): bool {
     return PHP_SAPI === 'cli';
@@ -424,65 +463,7 @@ function publishmqtt($topic,$msg,$log='') {
 	lg('❌ MQTT publish definitief mislukt na 5 pogingen voor '.$topic,'cron2');
 	return false;
 }
-function storemode($name,$mode,$msg='',$log='store',$force=false) {
-	global $d,$user;
-    if(!$force&&(string)$d[$name]->m==(string)$mode) return;
-    for ($attempt = 0; $attempt <= 4; $attempt++) {
-		try {
-			$d['time']??=time();
-			$d[$name]->m=$mode;
-			$d[$name]->t=$d['time'];
-			$db=Database::getInstance();
-			$stmt=$db->prepare("UPDATE devices SET m = :m, t = :t WHERE n = :n");
-			$stmt->execute([':m'=>$mode,':t'=>$d['time'],':n'=>$name]);
-			$affected=$stmt->rowCount();
-			break;
-		} catch (PDOException $e) {
-			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', $log);
-				Database::reset();
-				if($attempt>0) sleep($attempt);
-				continue;
-			}
-			throw $e;
-		}
-	}
-	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-	if($affected>0&&!in_array($name,['dag'])) {
-		lg('💾 STOREM	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$mode.(strlen($msg>0)?'	('.$msg.')':''),$log);
-	}
-	return $affected ?? 0;
-}
-function storesm($name,$s,$m,$msg='',$log='store') {
-	global $d,$user;
-    if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m) return;
-    for ($attempt = 0; $attempt <= 4; $attempt++) {
-		try {
-			$d['time']??=time();
-			$d[$name]->s=$s;
-			$d[$name]->m=$m;
-			$d[$name]->t=$d['time'];
-			$db=Database::getInstance();
-			$stmt=$db->prepare("UPDATE devices SET s = :s, m = :m, t = :t WHERE n = :n");
-			$stmt->execute([':s'=>$s,':m'=>$m,':t'=>$d['time'],':n'=>$name]);
-			$affected=$stmt->rowCount();
-			break;
-		} catch (PDOException $e) {
-			if (in_array($e->getCode(),[2006,'HY000']) && $attempt < 4) {
-				lg('♻ DB gone away → reconnect & retry', $log);
-				Database::reset();
-				if($attempt>0) sleep($attempt);
-				continue;
-			}
-			throw $e;
-		}
-	}
-	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-	if($affected>0) {		
-		lg('💾 STORESM   '.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' S='.$s.' M='.$m.(strlen($msg>0)?'	('.$msg.')':''),$log);
-	}
-	return $affected ?? 0;
-}
+
 function storesmi($name,$s,$m,$i,$msg='',$log='store') {
 	global $d,$user;
     if((string)$d[$name]->s==(string)$s&&(string)$d[$name]->m==(string)$m&&(string)$d[$name]->i==(string)$i) return;
