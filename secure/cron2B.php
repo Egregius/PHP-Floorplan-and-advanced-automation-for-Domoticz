@@ -198,7 +198,7 @@ foreach ($devices as $ip => $vol) {
 	}
 }
 if($d['boseliving']->s!='On'&&$d['boseliving']->s!='Playing'&&$d['boseliving']->s!='Unavailable') {
-	if ($d['bose101']->s == 'On' || (string)$d['bose101']->m !== 'Off') {
+	if ($d['bose101']->s == 'On' || (string)$d['bose101']->m !== '0') {
 		storesm('bose101', 'Off', 0,basename(__FILE__).':'.__LINE__,'cron2');
 		$d['bose101']->s = 'Off';
 		$d['bose101']->m = 0;

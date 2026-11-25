@@ -455,12 +455,12 @@ function publishmqtt($topic,$msg,$log='') {
 			if($log!='') lg('publishmqtt '.$topic.' '.$msg,'cron2');
 			return true;
 		} catch (Throwable $e) {
-			lg('♻ MQTT poging '.$attempt.' mislukt voor '.$topic.': '.$e->getMessage(),'cron2');
+			lg('♻ MQTT reconnect na fout: '.$e->getMessage(),'cron2');
 			$mqtt = null;
 			if ($attempt < 4) sleep($attempt + 1);
 		}
 	}
-	lg('❌ MQTT publish definitief mislukt na 5 pogingen voor '.$topic,'cron2');
+	lg('❌ MQTT publish mislukt voor '.$topic,'cron2');
 	return false;
 }
 
