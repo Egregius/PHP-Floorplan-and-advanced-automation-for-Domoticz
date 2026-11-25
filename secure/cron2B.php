@@ -1,6 +1,7 @@
 <?php
 $lastStatus101 = null;
 foreach ($devices as $ip => $vol) {
+	continue;
 	$key = 'bose' . $ip;
 	if (isset($powerSwitches[$ip]) && ($d[$powerSwitches[$ip]]->s ?? 'Off') != 'On') {
 		if ($d[$key]->s == 'On' || (string)$d[$key]->m !== '0') {
