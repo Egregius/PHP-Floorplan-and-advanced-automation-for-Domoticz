@@ -4,7 +4,7 @@ $tvActive = ($d['media']->s == 'On' && $d['eettafel']->s == 0 && ($d['lgtv']->s 
 foreach ($devices as $ip => $vol) {
 	$key = 'bose' . $ip;
 	if (isset($powerSwitches[$ip]) && ($d[$powerSwitches[$ip]]->s ?? 'Off') != 'On') {
-		store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+		if($d[$key]->s!='Off') store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 		continue;
 	}
 	if ($d['guy']->s != 'thuis' || $d['carplay']->s == 'On') {
@@ -17,7 +17,7 @@ foreach ($devices as $ip => $vol) {
 					bosekey("POWER", 0, $ip, basename(__FILE__) . ':' . __LINE__);
 				}
 			}
-			store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+			if($d[$key]->s!='Off') store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 		}
 		continue;
 	}
@@ -144,18 +144,18 @@ foreach ($devices as $ip => $vol) {
 				}
 			}
 			if ((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') || (isset($status['@attributes']['source']) && $status['@attributes']['source'] == 'UPNP')) {
-				store($key, 'On', basename(__FILE__) . ':' . __LINE__, 'cron2');
+				if($d[$key]->s!='On') store($key, 'On', basename(__FILE__) . ':' . __LINE__, 'cron2');
 			} elseif (($status['@attributes']['source'] == 'STANDBY' || (isset($status['playStatus']) && $status['playStatus'] == 'STOP_STATE')) && !$tvActive && ($d['weg']->s == 0 || ($d['weg']->s == 1 && $d['badkamerpower']->s == 'On'))) {
 				bosezone($ip, $vol);
 			}
 		} else {
 			if ($ip == 101) $lastStatus101 = null;
-			store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+			if($d[$key]->s!='Off') store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 		}
 		unset($status, $xml, $raw);
 	} else {
 		if ($ip == 101) $lastStatus101 = null;
-		store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+		if($d[$key]->s!='Off') store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 	}
 }
 if ($d['boseliving']->s != 'On' && $d['boseliving']->s != 'Playing' && $d['boseliving']->s != 'Unavailable') {
@@ -178,7 +178,7 @@ if ($d['bose101']->s == 'On'
 	if (!empty($lastStatus101) && isset($lastStatus101['@attributes']['source']) && $lastStatus101['@attributes']['source'] != 'STANDBY') {
 		bosekey("POWER", 0, 101, basename(__FILE__) . ':' . __LINE__);
 		foreach (array_keys($devices) as $devIp) {
-			store('bose' . $devIp, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+			if($d['bose' . $devIp]->s!='Off') store('bose' . $devIp, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 		}
 		if ($d['boseliving']->s != 'Off') sw('boseliving', 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 		$boseSetVolume = 0;

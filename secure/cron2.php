@@ -74,9 +74,9 @@ while (1) {
 	} else {
 		usleep(500000);
 	}
-	if ($lastping < $time - 60 && 1 == 2) {
+	if ($lastping < $time - 60) {
 		$lastping = $time;
-		publishmqtt('p', 'p');
+		$mqtt->publish('d/t',json_encode(1));
 	}
 	if ($lastcheck < $time - 60) {
 		$lastcheck = $time;

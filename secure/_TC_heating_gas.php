@@ -14,10 +14,10 @@ if (    $bigdif<=-0.2&&$d['brander']->s=="Off"&&past('brander')>$aanna*0.6)	sw('
 elseif ($bigdif<=-0.1&&$d['brander']->s=="Off"&&past('brander')>$aanna*0.8)	sw('brander', 'On', 'Aan na = '.$aanna*0.8);
 elseif ($bigdif<= 0  &&$d['brander']->s=="Off"&&past('brander')>$aanna)		sw('brander','On', 'Aan na = '.$aanna);
 elseif ($bigdif<= 0.1&&$d['brander']->s=="Off"&&past('brander')>$aanna*1.5)	sw('brander','On', 'Aan na = '.$aanna);
-elseif ($bigdif>= 0.1&&$d['brander']->s=="On"&&(past('brander')>$uitna*0.75||$d['living_temp']['icon']>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna*0.75);
-elseif ($bigdif>= 0 &&$d['brander']->s=="On"&&(past('brander')>$uitna||$d['living_temp']['icon']>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna);
-elseif ($bigdif>=-0.1&&$d['brander']->s=="On"&&(past('brander')>$uitna*1.25||$d['living_temp']['icon']>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna*2 );
-elseif ($bigdif>=-0.2&&$d['brander']->s=="On"&&(past('brander')>$uitna*1.5||$d['living_temp']['icon']>=0.3)) sw('brander','Off', 'Uit na = '.$uitna*4 );
+elseif ($bigdif>= 0.1&&$d['brander']->s=="On"&&(past('brander')>$uitna*0.75||$d['living_temp']->icon>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna*0.75);
+elseif ($bigdif>= 0 &&$d['brander']->s=="On"&&(past('brander')>$uitna||$d['living_temp']->icon>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna);
+elseif ($bigdif>=-0.1&&$d['brander']->s=="On"&&(past('brander')>$uitna*1.25||$d['living_temp']->icon>=0.2)) sw('brander', 'Off', 'Uit na = '.$uitna*2 );
+elseif ($bigdif>=-0.2&&$d['brander']->s=="On"&&(past('brander')>$uitna*1.5||$d['living_temp']->icon>=0.3)) sw('brander','Off', 'Uit na = '.$uitna*4 );
 
 if ($d['daikin']->m==1) {
 	$daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];

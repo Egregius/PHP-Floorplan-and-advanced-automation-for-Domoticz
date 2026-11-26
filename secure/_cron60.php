@@ -233,7 +233,7 @@ if (isset($daikin)) {
 	) sw('daikin', 'Off', basename(__FILE__).':'.__LINE__);
 }
 
-$mqtt->loopOnce($time);
+//$mqtt->loopOnce($time);
 unset($query, $row, $sql, $i, $result, $k, $v);
 
 /*

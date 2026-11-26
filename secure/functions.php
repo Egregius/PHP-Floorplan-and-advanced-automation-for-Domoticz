@@ -463,25 +463,20 @@ function publishmqtt($topic,$msg,$log='') {
 	for ($attempt = 0; $attempt <= 4; $attempt++) {
 		try {
 			if (!$mqtt || !$mqtt->isConnected() || $attempt > 0) {
-				if ($mqtt) {
-					try { $mqtt->disconnect(); } catch (Throwable $ignored) {}
-				}
-				$clientId = $attempt === 0 ? $baseClientId : $baseClientId . '_' . $attempt . '_' . random_int(100, 999);
+				$clientId = $attempt > 0 ? $baseClientId . '_' . $attempt : $baseClientId;
 				$mqtt = new MqttClient('192.168.30.22',1883,$clientId,MqttClient::MQTT_3_1,null,null);
 				$mqtt->connect($mqttSettings,true);
 			}
 			$mqtt->publish($topic,$msg,1,true);
 			if (PHP_SAPI !== 'cli') $mqtt->disconnect();
-//			if($log!='') lg('publishmqtt '.$topic.' '.$msg,'cron2');
-			return true;
+			if($log!='') lg('publishmqtt '.$topic.' '.$msg,'cron2');
+			return;
 		} catch (Throwable $e) {
 			lg('♻ MQTT reconnect na fout: '.$e->getMessage(),'cron2');
 			$mqtt = null;
-			if ($attempt < 4) sleep($attempt + 1);
+			sleep($attempt);
 		}
 	}
-	lg('❌ MQTT publish mislukt voor '.$topic,'cron2');
-	return false;
 }
 
 function storesmi($name,$s,$m,$i,$msg='',$log='store') {
