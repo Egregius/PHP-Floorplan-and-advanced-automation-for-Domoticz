@@ -68,7 +68,7 @@ while (1) {
 	$d = fetchdata();
 	include 'cron2B.php';
 	$elapsed = microtime(true) - $loopStart;
-	$remaining = 10.0 - $elapsed;
+	$remaining = 5 - $elapsed;
 	if ($remaining > 0) {
 		usleep((int)round($remaining * 1000000));
 	} else {
