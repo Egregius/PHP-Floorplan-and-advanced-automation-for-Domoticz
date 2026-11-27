@@ -15,13 +15,8 @@ require 'functions.php';
 //$d=fetchdata();
 //$startloop=microtime(true);
 //$d['time']=$startloop;
-
-$wiim=json_decode(Wiim('getMetaInfo'));
-print_r($wiim);
-
-
-$wiim=json_decode(Wiim('getPlayerStatus'));
-print_r($wiim);
+$target=17;
+hass('climate', 'set_temperature', 'climate.zbadkamer', ['temperature' => $target]);
 
 //echo streborn(101,'box/source','{"source":"AUX","sourceAccount":"AUX"}');
 //echo Wiim("playPromptUrl:".urlencode("http://192.168.2.2/sounds/doorbell.mp3"));

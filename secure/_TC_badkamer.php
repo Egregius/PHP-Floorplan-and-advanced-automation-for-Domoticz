@@ -169,33 +169,33 @@ if (isset($setBath)&&$d['heating']->s>=0) {
 		$d['badkamer_set']->s=$setBath;
 	}
 }
-if ($d['heating']->s>=2) {
-
-	if ($d['weg']->s<=1&&$d['badkamer_temp']->s<=$d['badkamer_set']->s+2) {
-		if ($d['badkamer_set']->i!=true) {
-			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
-			storeicon('badkamer_set',true);
-		}
-		if($d['badkamer_temp']->s<11&&$d['brander']->s=='Off'&&past('brander')>900) sw('brander', 'On',basename(__FILE__) . ':' . __LINE__);
-	} elseif (($setBath>13&&$d['weg']->s<=1)||$d['living_set']->s<=17) {
-		if ($d['badkamer_set']->i!=true) {
-			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
-			storeicon('badkamer_set',true);
-		}
-	} else {
-		if($d['badkamer_set']->i!=false&&$d['living_set']->s>17&&$d['brander']->s=='On'&&$d['badkamer_temp']->s>=$d['badkamer_set']->s+7) {
-			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 15]);
-			storeicon('badkamer_set',false);
-		}
+$temp = (float)$d['badkamer_temp']->s;
+$set = (float)$d['badkamer_set']->s;
+$difbadkamer = $set - $temp;
+if ($d['heating']->s >= 2) {
+	$target = 17;
+	if ($d['weg']->s <= 1 && $temp <= $set + 2) {
+		if ($difbadkamer >= 3) $target = 28;
+		elseif ($difbadkamer >= 1) $target = 25;
+		elseif ($difbadkamer >= 0) $target = 23;
+		else $target = 21;
+		if ($temp < 11 && $d['brander']->s == 'Off' && past('brander') > 900) sw('brander', 'On', basename(__FILE__) . ':' . __LINE__);
+	} elseif (($setBath > 13 && $d['weg']->s <= 1) || $d['living_set']->s <= 17) {
+		$target = $difbadkamer >= 2 ? 28 : 24;
+	} elseif ($d['living_set']->s > 17 && $d['brander']->s == 'On' && $temp >= $set + 7) {
+		$target = 15;
+	}
+	if ($target !== null && $d['badkamer_set']->i!=$target) {
+		hass('climate', 'set_temperature', 'climate.zbadkamer', ['temperature' => (int)$target]);
+		storeicon('badkamer_set', $target);
 	}
 }
 //lg($d['badkamervuur1']->s,'badk');
-$difbadkamer=$d['badkamer_temp']->s-$d['badkamer_set']->s;
-if ($d['weg']->s<=2&&($difbadkamer<=-0.5||($prevSetbath==1&&$difbadkamer<=0.1))) { 
+if ($d['weg']->s<=2&&($difbadkamer>=-0.5||($prevSetbath==1&&$difbadkamer>=0.1))) { 
 	if ($d['spotify']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('spotify', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer.' '.$m2);
 //	if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer.' '.$m2);
 //	if ($d['badkamervuur1']->s=='On'&&$d['badkamervuur2']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur2', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer.' '.$m2);
-} elseif ($difbadkamer<=0||($prevSetbath==1&&$difbadkamer<=0)) {
+} elseif ($difbadkamer>=0||($prevSetbath==1&&$difbadkamer>=0)) {
 	if ($d['spotify']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('spotify', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer.' '.$m2);
 //	if ($d['badkamervuur1']->s=='Off'&&$d['deurbadkamer']->s=='Closed') sw('badkamervuur1', 'On', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer.' '.$m2);
 //	if ($d['badkamervuur2']->s=='On') sw('badkamervuur2', 'Off', basename(__FILE__) . ':' . __LINE__.' net='.$d['n'].' dif='.$difbadkamer.' '.$m2);
