@@ -475,10 +475,10 @@ function publishmqtt($topic,$msg,$log='') {
 			}
 			$mqtt->publish($topic,$msg,1,true);
 			if (PHP_SAPI !== 'cli') $mqtt->disconnect();
-			if($log!='') lg('publishmqtt '.$topic.' '.$msg,'cron2');
+//			if($log!='') lg('publishmqtt '.$topic.' '.$msg,'cron2');
 			return;
 		} catch (Throwable $e) {
-			lg('♻ MQTT reconnect na fout: '.$e->getMessage(),'cron2');
+			//lg('♻ MQTT reconnect na fout: '.$e->getMessage(),'cron2');
 			$mqtt = null;
 			sleep($attempt);
 		}
