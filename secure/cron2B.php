@@ -158,8 +158,8 @@ foreach ($devices as $ip => $vol) {
 		if($d[$key]->s!='Off') store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 	}
 }
-if ($d['boseliving']->s != 'On' && $d['boseliving']->s != 'Playing' && $d['boseliving']->s != 'Unavailable') {
-	store('bose101', 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+if ($d['boseliving']->s != 'On' && $d['boseliving']->s != 'Playing' && $d['boseliving']->s != 'Unavailable' ) {
+	//store('bose101', 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 	$boseSetVolume = 0;
 }
 if ($d['bose101']->s == 'On'
