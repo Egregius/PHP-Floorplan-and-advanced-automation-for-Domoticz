@@ -183,7 +183,7 @@ if ($d['heating']->s>=2) {
 			storeicon('badkamer_set',true);
 		}
 	} else {
-		if($d['badkamer_set']->i!=false&&$d['living_set']->s>17&&$d['brander']->s=='On'&&$d['badkamer_temp']->s>=$d['badkamer_set']->s+5) {
+		if($d['badkamer_set']->i!=false&&$d['living_set']->s>17&&$d['brander']->s=='On'&&$d['badkamer_temp']->s>=$d['badkamer_set']->s+7) {
 			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 15]);
 			storeicon('badkamer_set',false);
 		}

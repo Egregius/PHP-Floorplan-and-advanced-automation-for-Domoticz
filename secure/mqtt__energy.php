@@ -105,7 +105,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 				$kwartierpiek = $row['wH'] ?? 2500;
 			}
 			if ($prevavg > 2500) {
-				if ($newavg > $kwartierpiek - 2500) {
+				if ($newavg > 3000) {
 					alert('Kwartierpiek',
 						'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL .
 						'Piek deze maand = ' . $kwartierpiek . ' Wh', $time);
@@ -115,19 +115,20 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 				
 			}// else lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
 		}
-		if ($newavg < $prevavg && $newavg>2500) {
+		if ($newavg < $prevavg && $prevavg>2000) {
 //			lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
-			$kwartierpiek = 2500;
+			$kwartierpiek = 2000;
 			$q	= "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
 			$stmt = $dbverbruik->query($q, [':date' => date('Y-m', $time) . '-%']);
 			if ($row = $stmt->fetch()) {
-				$kwartierpiek = $row['wH'] ?? 2500;
+				$kwartierpiek = $row['wH'] ?? 2000;
 			}
 			try {
 //				lg('kwartierpiek lijn '.__LINE__);
-				$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
-				$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
-				if ($prevavg > $kwartierpiek - 2500) {
+				
+				if ($prevavg > $kwartierpiek) {
+					$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
+					$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
 //					lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
 					alert('KwartierpiekB',
 						'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL .
