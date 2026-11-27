@@ -170,19 +170,20 @@ if (isset($setBath)&&$d['heating']->s>=0) {
 	}
 }
 if ($d['heating']->s>=2) {
-	if ($d['weg']->s<=1&&$d['badkamer_temp']->s<13.5) {
+
+	if ($d['weg']->s<=1&&$d['badkamer_temp']->s<=$d['badkamer_set']->s+2) {
 		if ($d['badkamer_set']->i!=true) {
 			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
 			storeicon('badkamer_set',true);
 		}
-		if($d['badkamer_temp']->s<11&&$d['brander']->s=='Off'&&past('brander')>900) sw('brander', 'On');
+		if($d['badkamer_temp']->s<11&&$d['brander']->s=='Off'&&past('brander')>900) sw('brander', 'On',basename(__FILE__) . ':' . __LINE__);
 	} elseif (($setBath>13&&$d['weg']->s<=1)||$d['living_set']->s<=17) {
 		if ($d['badkamer_set']->i!=true) {
 			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 28]);
 			storeicon('badkamer_set',true);
 		}
 	} else {
-		if($d['badkamer_set']->i!=false&&$d['living_set']->s>17&&$d['brander']->s=='On') {
+		if($d['badkamer_set']->i!=false&&$d['living_set']->s>17&&$d['brander']->s=='On'&&$d['badkamer_temp']->s>=$d['badkamer_set']->s+5) {
 			hass('climate','set_temperature','climate.zbadkamer',['temperature' => 15]);
 			storeicon('badkamer_set',false);
 		}

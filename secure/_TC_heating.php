@@ -268,4 +268,4 @@ elseif ($d['heating']->s==2) {require ('_TC_heating_gasairco.php');require ('_TC
 elseif ($d['heating']->s==3) require ('_TC_heating_gas.php');
 require('_TC_badkamer.php');
 
-if ($d['heating']->s<=1&&$d['brander']->s=='On'&&past('brander')>1195) sw('brander','Off','Brander niet nodig '.basename(__FILE__) . ':' . __LINE__);
+if ($d['heating']->s<=1&&$d['brander']->s=='On'&&past('brander')>1195) sw('brander','Off','Brander niet nodig, heating='.$d['heating']->s.' '.basename(__FILE__) . ':' . __LINE__);

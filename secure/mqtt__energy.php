@@ -86,6 +86,7 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 	static $z = 0;
 	static $b = 0;
 	static $a = 0;
+	static $prevavg = 0;
 	static $timestamps  = ['n' => 0, 'z' => 0, 'b' => 0];
 	static $powerBuffer = [];
 
@@ -95,7 +96,6 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 	// --- Kwartierpiek (altijd uitvoeren, onafhankelijk van buffer) ---
 	if ($topic === 'a') {
 		$newavg  = $a;
-		$prevavg = (float)getCache('energy_prevavg');
 
 		if ($a > 250) {
 			$kwartierpiek = 250;
@@ -111,17 +111,16 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 						'Piek deze maand = ' . $kwartierpiek . ' Wh', $time);
 				}
 
-				lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
 
 				if ($newavg < $prevavg) {
-					lg('kwartierpiek lijn '.__LINE__);
+					lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
 
 					try {
 						lg('kwartierpiek lijn '.__LINE__);
 						$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
 						$dbverbruik->query($q, [':date' => date('Y-m-d H:i:s'), ':wh' => $prevavg]);
 						if ($prevavg > $kwartierpiek - 2000) {
-							lg('kwartierpiek lijn '.__LINE__);
+							lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
 							alert('KwartierpiekB',
 								'Kwartierpiek = ' . $prevavg . ' Wh' . PHP_EOL .
 								'Vorige piek deze maand = ' . $kwartierpiek . ' Wh', $time);
@@ -130,10 +129,10 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 					} catch (Exception $e) {
 						lg("Error updating kwartierpiek: " . $e->getMessage());
 					}
-				}
-			}
+				} else lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
+			} else lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
 		}
-		setCache('energy_prevavg', $newavg);
+		$prevavg=$newavg;
 	}
 
 	// --- Alwayson: wacht tot alle meters recent zijn ---
