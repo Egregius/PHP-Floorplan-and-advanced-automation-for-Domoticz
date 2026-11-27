@@ -45,10 +45,10 @@ define('MIN_BUFFER_FILL', 8);   // wacht tot buffer minstens half gevuld is
 // CRUCIAAL: Initialiseer de array met default waarden uit cache om count mismatch te voorkomen
 $storedTeller = json_decode(getCache('teller'), true);
 $newData = [
-	'import' => $storedTeller['import'],
-	'export' => $storedTeller['export'],
-	'gas'	=> $storedTeller['gas'],
-	'water'  => $storedTeller['water']
+	'import' => $storedTeller['import'] ?? 0,
+	'export' => $storedTeller['export'] ?? 0,
+	'gas'	=> $storedTeller['gas'] ?? 0,
+	'water'  => $storedTeller['water'] ?? 0
 ];
 $alwayson	= (int)getCache('alwayson');
 $mqtt->subscribe('t/+', function (string $topic, string $status) use (&$time, &$lastcheck, &$newData, $dbverbruik, $dbzonphp, &$force, &$mqtt, &$alwayson) {
@@ -97,21 +97,25 @@ $mqtt->subscribe('d/e/+', function (string $topic, string $status)
 		$newavg  = $a;
 		$prevavg = (float)getCache('energy_prevavg');
 
-		if ($a > 2500) {
-			$kwartierpiek = 2500;
+		if ($a > 250) {
+			$kwartierpiek = 250;
 			$q	= "SELECT MAX(wH) AS wH FROM `kwartierpiek` WHERE date LIKE :date";
 			$stmt = $dbverbruik->query($q, [':date' => date('Y-m', $time) . '-%']);
 			if ($row = $stmt->fetch()) {
 				$kwartierpiek = $row['wH'] ?? 2500;
 			}
-			if ($prevavg > 2500) {
+			if ($prevavg > 250) {
 				if ($newavg > $kwartierpiek - 200) {
 					alert('Kwartierpiek',
 						'Kwartierpiek momenteel al ' . $newavg . ' Wh!' . PHP_EOL .
 						'Piek deze maand = ' . $kwartierpiek . ' Wh', $time);
 				}
+
 				lg('kwartierpiek lijn '.__LINE__.' new='.$newavg.' prev='.$prevavg);
+
 				if ($newavg < $prevavg) {
+					lg('kwartierpiek lijn '.__LINE__);
+
 					try {
 						lg('kwartierpiek lijn '.__LINE__);
 						$q = "INSERT INTO `kwartierpiek` (`date`, `wh`) VALUES (:date, :wh)";
@@ -359,7 +363,6 @@ function processEnergyData($dbverbruik, $dbzonphp, &$force, $newData, &$mqtt, $t
 	$force = false;
 }
 function lg($msg) {
-	echo $msg."\n";
 	$fp = fopen('/var/log/mqtt/energy.log', "a+");
 	$time = microtime(true);
 	$dFormat = "d-m H:i:s";
@@ -515,14 +518,6 @@ class Database {
 function stoploop() {
 	global $mqtt,$lock_file;
 	$script = __FILE__;
-	if (filemtime(__DIR__ . '/functions.php') > LOOP_START) {
-		lg('🛑 functions.php gewijzigd → restarting '.basename($script).' loop...');
-		$mqtt->disconnect();
-		ftruncate($lock_file, 0);
-		flock($lock_file, LOCK_UN);
-		exec("nice -n 5 /usr/bin/php8.2 $script > /dev/null 2>&1 &");
-		exit;
-	}
 	if (filemtime($script) > LOOP_START) {
 		lg('🛑 '.basename($script) . ' gewijzigd → restarting ...');
 		$mqtt->disconnect();

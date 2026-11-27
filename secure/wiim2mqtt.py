@@ -245,7 +245,7 @@ class UPnPNotificationHandler(BaseHTTPRequestHandler):
 	def do_NOTIFY(self):
 		content_length = int(self.headers.get('Content-Length', 0))
 		body = self.rfile.read(content_length).decode('utf-8')
-		log_raw(body)
+		#log_raw(body)
 		process_event_xml(body)
 		self.send_response(200)
 		self.end_headers()

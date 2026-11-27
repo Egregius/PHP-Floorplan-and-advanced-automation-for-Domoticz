@@ -136,7 +136,7 @@ def mqtt_publish_key(key, value):
 def mqtt_publish_teller(key, value):
     if mqtt_connected:
         result = mqtt_client.publish(f"t/{key}", value, retain=True, qos=1)
-        log(f"t/{key} {value}")
+        # log(f"t/{key} {value}")
         if result.rc != 0:
             log(f"Publish failed with code {result.rc}, script stopt.")
             sys.exit(1)

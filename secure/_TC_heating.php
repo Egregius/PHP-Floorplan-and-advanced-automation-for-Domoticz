@@ -52,11 +52,11 @@ if ($d['kamer_set']->m==1) $Setkamer=$d['kamer_set']->s;
 if ($d['alex_set']->m==1) $Setalex=$d['alex_set']->s;
 
 if ($d['kamer_set']->s!=$Setkamer) {
-	setpoint('kamer_set', $Setkamer, basename(__FILE__).':'.__LINE__);
+	setpoint('kamer_set',$Setkamer,basename(__FILE__).':'.__LINE__);
 	$d['kamer_set']->s=$Setkamer;
 }
 if ($d['alex_set']->s!=$Setalex) {
-	setpoint('alex_set', $Setalex, basename(__FILE__).':'.__LINE__);
+	setpoint('alex_set',$Setalex,basename(__FILE__).':'.__LINE__);
 	$alex_set=$Setalex;
 	$d['alex_set']->s=$Setalex;
 }
@@ -70,22 +70,22 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 	$buitenTempStart = round($d['buiten_temp']->s / 0.5) * 0.5;
 	if(!isset($leadDataLiving)) {
 		$content = @file_get_contents('/var/www/leadDataLiving.json');
-		$leadDataLiving = $content ? json_decode($content, true) ?? [] : [];
+		$leadDataLiving = $content ? json_decode($content,true) ?? [] : [];
 		lg('leadDataLiving read from file');
 	}
 	if (!empty($leadDataLiving[$mode])) {
 		$temps = array_keys($leadDataLiving[$mode]);
 		sort($temps);
 		$allData = [];
-		$keyExists = in_array($buitenTempStart, $temps);
+		$keyExists = in_array($buitenTempStart,$temps);
 		if ($keyExists) {
-			$currentIndex = array_search($buitenTempStart, $temps);
+			$currentIndex = array_search($buitenTempStart,$temps);
 			if ($currentIndex > 0) {
-				$allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex - 1]]);
+				$allData = array_merge($allData,$leadDataLiving[$mode][$temps[$currentIndex - 1]]);
 			}
-			$allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex]]);
+			$allData = array_merge($allData,$leadDataLiving[$mode][$temps[$currentIndex]]);
 			if ($currentIndex < count($temps) - 1) {
-				$allData = array_merge($allData, $leadDataLiving[$mode][$temps[$currentIndex + 1]]);
+				$allData = array_merge($allData,$leadDataLiving[$mode][$temps[$currentIndex + 1]]);
 			}
 		} else {
 			$lower = null;
@@ -99,10 +99,10 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 				}
 			}
 			if ($lower !== null) {
-				$allData = array_merge($allData, $leadDataLiving[$mode][$lower]);
+				$allData = array_merge($allData,$leadDataLiving[$mode][$lower]);
 			}
 			if ($higher !== null) {
-				$allData = array_merge($allData, $leadDataLiving[$mode][$higher]);
+				$allData = array_merge($allData,$leadDataLiving[$mode][$higher]);
 			}
 		}
 		if (!empty($allData)) {
@@ -136,27 +136,27 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
  	$comfortEnd = strtotime('20:30');
 //	$comfortAfternoon = strtotime('7:45');
 	$target = 21;
-	$tempDelta   = max(0, $target - $living);
+	$tempDelta   = max(0,$target - $living);
 	$leadMinutes = $avgMinPerDeg * $tempDelta;
 	$t_start = round($comfortAfternoon - ($leadMinutes * 60));
 	if ($daikin->living->power!=1) $t_start -= 300;
-	if ($time >= $comfortEnd || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg], 16);
+	if ($time >= $comfortEnd || $time < strtotime('04:00')) $Setliving = min($baseSet[$weg],16);
 	else $Setliving = $baseSet[$weg];
 	if ($prevSet >= 1) {
 		$Setliving = $target;
 		if ($time > $comfortEnd) {
-			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			storemode('living_start_temp',0,basename(__FILE__) . ':' . __LINE__);
 			$prevSet=0;
 		}
-		if ($d['living_set']->m==2) storemode('living_set', 0, basename(__FILE__) . ':' . __LINE__);
+		if ($d['living_set']->m==2) storemode('living_set',0,basename(__FILE__) . ':' . __LINE__);
 	}
 	elseif ($time >= $t_start && $time < $comfortAfternoon && $weg <= 1) {
-		$Setliving = max($Setliving, $target);
+		$Setliving = max($Setliving,$target);
 		if ($daikin->living->power!=1) {
-			storesmip('living_start_temp', $living, 1, $buitenTempStart, 200, basename(__FILE__) . ':' . __LINE__);
+			storesmip('living_start_temp',$living,1,$buitenTempStart,200,basename(__FILE__) . ':' . __LINE__);
 		} else {
-			if ($d['daikin']->p>100) storesmip('living_start_temp', $living, 1, $buitenTempStart, 0, basename(__FILE__) . ':' . __LINE__);
-			else storesmip('living_start_temp', $living, 1, $buitenTempStart, 60, basename(__FILE__) . ':' . __LINE__);
+			if ($d['daikin']->p>100) storesmip('living_start_temp',$living,1,$buitenTempStart,0,basename(__FILE__) . ':' . __LINE__);
+			else storesmip('living_start_temp',$living,1,$buitenTempStart,60,basename(__FILE__) . ':' . __LINE__);
 		}
 		$prevSet=1;
 		lg('🔥 _TC_living: '.
@@ -174,12 +174,12 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 //		lg('GET_DEFINED_VARS='.print_r(GET_DEFINED_VARS(),true));
 	}
 	elseif ($time >= $comfortAfternoon && $time < $comfortEnd && $weg == 0) {
-		$Setliving = max($Setliving, $target);
+		$Setliving = max($Setliving,$target);
 	}
 	else {
 		$Setliving = $Setliving;
 		if ($prevSet != 0) {
-			storemode('living_start_temp', 0, basename(__FILE__) . ':' . __LINE__);
+			storemode('living_start_temp',0,basename(__FILE__) . ':' . __LINE__);
 			$prevSet=0;
 		}
 	}
@@ -210,14 +210,14 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			$minPerDeg   = $minutesUsed / $tempRise;
 			$minPerDeg = round(clamp($minPerDeg,$avgMinPerDeg - 5,$avgMinPerDeg +5),1);
 			$leadDataLiving[$mode][$buitenTempStart][] = $minPerDeg;
-			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart], -20);
+			$leadDataLiving[$mode][$buitenTempStart] = array_slice($leadDataLiving[$mode][$buitenTempStart],-20);
 			$avgMinPerDeg = round(array_sum($leadDataLiving[$mode][$buitenTempStart]) / count($leadDataLiving[$mode][$buitenTempStart]),1);
-			ksort($leadDataLiving, SORT_NUMERIC);
+			ksort($leadDataLiving,SORT_NUMERIC);
 			foreach ($leadDataLiving as &$innerArray) {
-				ksort($innerArray, SORT_NUMERIC);
+				ksort($innerArray,SORT_NUMERIC);
 			}
 			unset($innerArray);
-			file_put_contents('/var/www/leadDataLiving.json', json_encode($leadDataLiving), LOCK_EX);
+			file_put_contents('/var/www/leadDataLiving.json',json_encode($leadDataLiving),LOCK_EX);
 			$lastWriteleadDataLiving=$time;
 			$minutesUsed=round($minutesUsed,1);
 			$msg="🔥 _TC_living: Einde ΔT=" . round($tempRise,1) . "° in {$minutesUsed} min → ".round($minutesUsed / $tempRise,1)." min/°C (gemiddeld nu {$avgMinPerDeg} min/°C | buitenTempStart={$buitenTempStart})";
@@ -229,7 +229,7 @@ if (($d['living_set']->m==0 || $d['living_set']->m==2) && $d['weg']->s<=1) {
 			telegram($msg);
 			unset($t_start);
 		}
-		storemode('living_start_temp', 2, basename(__FILE__) . ':' . __LINE__);
+		storemode('living_start_temp',2,basename(__FILE__) . ':' . __LINE__);
 		$prevSet=2;
 		$$prevSetTime=$time;
 	}
@@ -247,13 +247,13 @@ if($d['living_set']->m==0&&$d['weg']->s==2&&$d['heating']->s==1&&$d['living_temp
 	elseif($d['n']<-400&&$d['b']>=0&&$d['c']>=30) $Setliving=22;
 	elseif($d['n']<-600&&$d['b']>=0&&$d['c']>=10) $Setliving=22;
 	if($d['living_set']->s!=$Setliving&&past('living_set')>50) {
-		lg('Setliving='.$Setliving.', net='.$d['n'].', bat='.$d['b'].', charge='.$d['c'],'daikin');
+		lg('Setliving='.$Setliving.',net='.$d['n'].',bat='.$d['b'].',charge='.$d['c'],'daikin');
 		$lastautosetliving=$time;
 	}
 }
 
 if ($d['living_set']->s!=$Setliving&&past('living_set')>50) {
-	setpoint('living_set', $Setliving, basename(__FILE__).':'.__LINE__);
+	setpoint('living_set',$Setliving,basename(__FILE__).':'.__LINE__);
 	$living_set=$Setliving;
 	$d['living_set']->s=$Setliving;
 //	telegram('Setliving = '.$Setliving);
@@ -264,8 +264,8 @@ $bigdif=100;
 $difgas=100;
 $user = 'heating';
 if ($d['heating']->s==1) require ('_TC_heating_airco.php');
-elseif ($d['heating']->s==2) require ('_TC_heating_gasairco.php');
+elseif ($d['heating']->s==2) {require ('_TC_heating_gasairco.php');require ('_TC_heating_airco.php');}
 elseif ($d['heating']->s==3) require ('_TC_heating_gas.php');
 require('_TC_badkamer.php');
 
-if ($d['heating']->s<=1&&$d['brander']->s=='On'&&past('brander')>1195) sw('brander', 'Off', 'Brander niet nodig');
+if ($d['heating']->s<=1&&$d['brander']->s=='On'&&past('brander')>1195) sw('brander','Off','Brander niet nodig '.basename(__FILE__) . ':' . __LINE__);

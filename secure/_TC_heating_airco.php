@@ -131,5 +131,5 @@ foreach (array('living','kamer','alex') as $k) {
 }
 
 // --- brander fallback ---
-if ($d['brander']->s=='On' && $d['badkamer_temp']->s>10 && past('brander')>=595) sw('brander','Off');
-elseif ($d['brander']->s=='Off' && $d['badkamer_temp']->s<10 && past('brander')>=595) sw('brander','On');
+if ($d['brander']->s=='On' && $d['badkamer_temp']->s>10 && past('brander')>=595) sw('brander','Off',basename(__FILE__) . ':' . __LINE__);
+elseif ($d['brander']->s=='Off' && $d['badkamer_temp']->s<10 && past('brander')>=595) sw('brander','On',basename(__FILE__) . ':' . __LINE__);

@@ -1,6 +1,6 @@
 <?php
 $user=basename(__FILE__);
-if ($d['brander']->s!='Off') sw('brander', 'Off', $user.':'.__LINE__);
+if ($d['brander']->s!='Off') sw('brander','Off',$user.':'.__LINE__);
 $bigdif=0;
 $daikinDefaults = ['power'=>99,'mode'=>99,'set'=>99,'fan'=>99,'spmode'=>99];
 $daikin ??= new stdClass();
@@ -88,7 +88,7 @@ foreach (['living','kamer','alex'] as $k) {
 	if($minmode==3&&$mode<3) $mode=3;
 	if ($d['daikin']->s=='On') {
 		if ((($daikin->$k->set!=$set||$daikin->$k->power!=$power||$daikin->$k->mode!=$mode||$daikin->$k->spmode!=$spmode||$daikin->$k->fan!=$fan)&&$spmode<2)||(($d['daikin']->s=='On'&&$power!=0&&$daikin->$k->lastset <= $time-291)||($d['daikin']->s=='On'&&$power==0&&$daikin->$k->lastset <= $time-291))) {
-			if(daikinset($k, $power, $mode, $set, '', $fan, $spmode, $maxpow)) {
+			if(daikinset($k,$power,$mode,$set,'',$fan,$spmode,$maxpow)) {
 				$daikin->$k->power=$power;
 				$daikin->$k->mode=$mode;
 				$daikin->$k->fan=$fan;

@@ -608,9 +608,7 @@ function storep($name,$p,$msg='',$log='store',$updatetime=true) {
 		}
 	}
 	if($d[$name]->f===1) publishmqtt('d/'.$name,toJsonClean($d[$name]),$msg);
-	if($affected>0) {
-		lg('💾 STOREP	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
-	}
+//	if($affected>0) lg('💾 STOREP	'.($user??'').' '.str_pad($name, 13, ' ', STR_PAD_RIGHT).' '.$p.(strlen($msg>0)?'	('.$msg.')':''),$log);
 	return $affected ?? 0;
 }
 function storeicon($name,$i,$msg='',$log='store') {
