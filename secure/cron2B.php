@@ -67,10 +67,15 @@ foreach ($devices as $ip => $vol) {
 									}
 									continue;
 								}
-							} else $wiimplaying = false;
+							} else {
+								lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
+								$wiimplaying = false;
+							}
 							if (isset($status['artist'], $status['track'])) {
+								lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 								$cleantitle = cleanTitle($status['artist'], $status['track']);
 								if (substr($d['boseliving']->m, 0, 7) != 'NoScore' && $cleantitle && $cleantitle != $prevcleantitle && !in_array($cleantitle, ['unknowunknow', 'unknownunknown', 'unknownaturalaudio', 'unknowroomcorrectionaudio'], true)) {
+									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 									$prevcleantitle = $cleantitle;
 									if (isset($history[$cleantitle])) {
 										lg($cleantitle . ' skipped op cleantitle', 'cron2');
@@ -85,6 +90,8 @@ foreach ($devices as $ip => $vol) {
 										}
 									}
 								} elseif (isset($wiim)) {
+									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
+									lg(json_encode($wiim));
 									if (in_array($wiim->metaData->artist ?? '', ['unknow', 'unknown'], true) && in_array($wiim->metaData->album ?? '', ['unknow', 'unknown'], true)) {
 										$wiimunknown++;
 										lg('$wiimunknown = ' . $wiimunknown, 'cron2');
@@ -122,6 +129,8 @@ foreach ($devices as $ip => $vol) {
 								curl_close($ch);
 								$lastCleanKey = $cleanKey;
 							}
+						} else {
+							lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 						}
 						if ($d['boseliving']->s == 'On' && $boseSetVolume == 0) {
 							$volRaw = @file_get_contents("http://192.168.2.101:8090/volume", false, $ctx);
@@ -136,6 +145,7 @@ foreach ($devices as $ip => $vol) {
 						}
 					}
 				} elseif (in_array(($status['@attributes']['source'] ?? ''), ['STANDBY', 'SETUP', 'BLUETOOTH', 'INVALID_SOURCE'], true) && $d['boseliving']->s == 'On' && !$tvActive) {
+					lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 					bosekey("AUX_INPUT", 0, 101);
 					if (in_array(($status['@attributes']['source'] ?? ''), ['STANDBY', 'SETUP'], true)) {
 						usleep(100000);
