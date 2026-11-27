@@ -71,13 +71,13 @@ foreach ($devices as $ip => $vol) {
 									continue;
 								}
 							} else {
-								lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
+//								lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 								$wiimplaying = false;
 							}
 							if (isset($status['artist'], $status['track'])) {
 								$cleantitle = cleanTitle($status['artist'], $status['track']);
 								if (substr($d['boseliving']->m, 0, 7) != 'NoScore' && $cleantitle && $cleantitle != $prevcleantitle && !in_array($cleantitle, ['unknowunknow', 'unknownunknown', 'unknownaturalaudio', 'unknowroomcorrectionaudio'], true)) {
-									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
+//									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 									$prevcleantitle = $cleantitle;
 									if (isset($history[$cleantitle])) {
 										lg($cleantitle . ' skipped op cleantitle', 'cron2');
@@ -92,8 +92,8 @@ foreach ($devices as $ip => $vol) {
 										}
 									}
 								} elseif (isset($wiim)) {
-									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
-									lg(json_encode($wiim));
+//									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
+//									lg(json_encode($wiim));
 									$metaHash = md5(($wiim->metaData->artist ?? '') . '|' . ($wiim->metaData->album ?? '') . '|' . ($wiim->metaData->title ?? ''));
 									if ($metaHash !== $wiimMetaHash) {
 										$wiimMetaHash = $metaHash;
