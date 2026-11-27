@@ -1,5 +1,7 @@
 <?php
 $lastStatus101 = null;
+$wiimMetaHash = null;
+$wiimMetaSince = 0;
 $tvActive = ($d['media']->s == 'On' && $d['eettafel']->s == 0 && ($d['lgtv']->s == 'On' || ($d['nvidia']->s != 'Unavailable' && $d['nvidia']->s != 'Off')));
 foreach ($devices as $ip => $vol) {
 	$key = 'bose' . $ip;
@@ -27,6 +29,7 @@ foreach ($devices as $ip => $vol) {
 		$status = $xml !== false ? json_decode(json_encode($xml), true) : null;
 		if (is_array($status) && isset($status['@attributes']['source'])) {
 			if ($ip == 101) {
+				$wiim=$wiimstatus=null;
 				$lastStatus101 = $status;
 				if ((isset($status['playStatus']) && $status['playStatus'] == 'PLAY_STATE') || (isset($status['@attributes']['source']) && $status['@attributes']['source'] == 'UPNP')) {
 					if ($playlisttries > 0) $playlisttries = 0;
@@ -72,7 +75,6 @@ foreach ($devices as $ip => $vol) {
 								$wiimplaying = false;
 							}
 							if (isset($status['artist'], $status['track'])) {
-								lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 								$cleantitle = cleanTitle($status['artist'], $status['track']);
 								if (substr($d['boseliving']->m, 0, 7) != 'NoScore' && $cleantitle && $cleantitle != $prevcleantitle && !in_array($cleantitle, ['unknowunknow', 'unknownunknown', 'unknownaturalaudio', 'unknowroomcorrectionaudio'], true)) {
 									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
@@ -92,6 +94,11 @@ foreach ($devices as $ip => $vol) {
 								} elseif (isset($wiim)) {
 									lg(basename(__FILE__) . ':' . __LINE__, 'cron2');
 									lg(json_encode($wiim));
+									$metaHash = md5(($wiim->metaData->artist ?? '') . '|' . ($wiim->metaData->album ?? '') . '|' . ($wiim->metaData->title ?? ''));
+									if ($metaHash !== $wiimMetaHash) {
+										$wiimMetaHash = $metaHash;
+										$wiimMetaSince = time();
+									}
 									if (in_array($wiim->metaData->artist ?? '', ['unknow', 'unknown'], true) && in_array($wiim->metaData->album ?? '', ['unknow', 'unknown'], true)) {
 										$wiimunknown++;
 										lg('$wiimunknown = ' . $wiimunknown, 'cron2');
@@ -100,8 +107,16 @@ foreach ($devices as $ip => $vol) {
 											$preset = wiimplaylist();
 											Wiim("MCUKeyShortClick:$preset");
 										}
+									} elseif ($wiimMetaSince > 0 && (time() - $wiimMetaSince) >= 360) {
+										usleep(100000);
+										$wiimstatus = json_decode(Wiim('getPlayerStatus'));
+										lg(json_encode($wiimstatus));
+										if (($wiimstatus->status ?? '') == 'stop') {
+											$preset = wiimplaylist();
+											Wiim("MCUKeyShortClick:$preset");
+											$wiimMetaSince = time();
+										}
 									}
-									unset($wiim);
 								}
 							}
 							$artists = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $status['artist']));
@@ -168,19 +183,18 @@ foreach ($devices as $ip => $vol) {
 		if($d[$key]->s!='Off') store($key, 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 	}
 }
-if ($d['boseliving']->s != 'On' && $d['boseliving']->s != 'Playing' && $d['boseliving']->s != 'Unavailable' ) {
+if ($d['boseliving']->s != 'On' && $d['boseliving']->s != 'Playing' && $d['boseliving']->s != 'Unavailable') {
 	//store('bose101', 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
 	$boseSetVolume = 0;
 }
-if ($d['bose101']->s == 'On'
-	&& $d['bose102']->s == 'Off'
-	&& $d['bose103']->s == 'Off'
-	&& $d['bose104']->s == 'Off'
-	&& $d['bose105']->s == 'Off'
-	&& $d['bose106']->s == 'Off'
-	&& $d['bose107']->s == 'Off'
-	&& $d['bose108']->s == 'Off'
-	&& $d['bose109']->s == 'Off'
+$otherSpeakersOff = ($d['bose102']->s == 'Off' && $d['bose103']->s == 'Off' && $d['bose104']->s == 'Off' && $d['bose105']->s == 'Off' && $d['bose106']->s == 'Off' && $d['bose107']->s == 'Off' && $d['bose108']->s == 'Off' && $d['bose109']->s == 'Off');
+if ($tvActive && $d['bose101']->s == 'On' && $otherSpeakersOff && past('bose101') > 120 && !empty($lastStatus101) && isset($lastStatus101['@attributes']['source']) && $lastStatus101['@attributes']['source'] != 'STANDBY') {
+	bosekey("POWER", 0, 101, basename(__FILE__) . ':' . __LINE__);
+	if($d['bose101']->s!='Off') store('bose101', 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+	if ($d['boseliving']->s != 'Off') sw('boseliving', 'Off', basename(__FILE__) . ':' . __LINE__, 'cron2');
+	$boseSetVolume = 0;
+} elseif ($d['bose101']->s == 'On'
+	&& $otherSpeakersOff
 	&& ($d['weg']->s > 0 || ($d['eettafel']->s == 0 && ($d['lgtv']->s == 'On' || $d['nvidia']->s == 'On')))
 	&& past('bose101') > 300
 	&& past('boseliving') > 1800
